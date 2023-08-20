@@ -1,1 +1,3 @@
-# RSS_algo
+# rss_algo
+
+# About
