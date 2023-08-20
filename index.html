@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>My Alogrithmic RSS Reader</title>
+    <style>
+        /* Your custom styles can go here */
+        .read-article .card {
+            opacity: 0.5; /* Slightly transparent for read items */
+        }
+        .read-article .card-title,
+        .read-article .card-text,
+        .read-article .feed-tag {
+            color: black; /* Standard black text for read items */
+        }
+        .card-title {
+            float:left;
+            width:100%;
+        }
+
+        .feed-tag {
+            font-size: 12px;
+            color: #666;
+        }
+        .thumbs-up {
+            color: green;
+        }
+        .thumbs-down {
+            color: red;
+        }
+        .priority-rating {
+            font-size: 18px;
+            margin-right: 5px;
+            float:left;
+            width:100%;
+        }
+        #read-count,
+        #unread-count {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .thumbnail-image {
+            object-position: center 33%;
+            max-height: 200px;
+            object-fit: cover;
+        }
+
+        .row-equal-height {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Make the card grow to the full height of its container */
+        }
+
+        .card-body {
+            flex: 1; /* Allow the card body to grow and fill the remaining space */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Space between the title and other elements */
+        }
+
+        .card-title {
+            font-size: 1.25rem; /* Larger font size for the title */
+            margin-bottom: 0.5rem; /* Add some spacing below the title */
+        }
+
+        .card-text {
+            flex-grow: 1; /* Allow the description to expand to fill space */
+            margin-bottom: 1rem; /* Add spacing at the bottom of the description */
+        }
+
+        .feed-tag {
+            margin-top: auto; /* Push the feed tag to the bottom of the card */
+        }
+
+        .btn-group {
+            margin-top: auto; /* Push the button group to the bottom of the card */
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">My Alogrithmic RSS Reader</h1>
+        <div class="my-3">
+            <span id="unread-count" class="text-danger">Unread: 0</span>
+            <span id="read-count" class="text-success">Read/Skiped: 0</span>
+            <button id="add-feed" class="btn btn-primary">Add A Feed</button>
+            <button id="manage-feeds" class="btn btn-secondary">Manage Feeds</button>
+        </div>
+        <div id="news-feed" class="row">
+            <!-- News articles will be dynamically added here -->
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let rssFeeds = JSON.parse(localStorage.getItem("feeds")) || [
+                "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"
+                // Add more default RSS feed URLs here
+            ];
+
+            const newsFeedContainer = document.getElementById("news-feed");
+
+            const upvotes = JSON.parse(localStorage.getItem("upvotes")) || {};
+            const downvotes = JSON.parse(localStorage.getItem("downvotes")) || {};
+            const readArticles = JSON.parse(localStorage.getItem("read")) || {};
+
+            function updateFeedList() {
+                localStorage.setItem("feeds", JSON.stringify(rssFeeds));
+                loadNews();
+            }
+
+            function loadNews() {
+                newsFeedContainer.innerHTML = "";
+
+                const articles = [];
+
+                rssFeeds.forEach(feedUrl => {
+                    fetchFeed(feedUrl)
+                        .then(data => {
+                            const parser = new DOMParser();
+                            const xml = parser.parseFromString(data, "application/xml");
+
+                            const feedTitle = xml.querySelector("channel title").textContent;
+
+                            const items = xml.querySelectorAll("item");
+
+                            items.forEach(item => {
+                                const title = item.querySelector("title").textContent;
+                                const link = item.querySelector("link").textContent;
+                                const description = item.querySelector("description").textContent;
+                                const pubDate = new Date(item.querySelector("pubDate").textContent);
+                                const image = item.querySelector("image"); // Assuming image tag is present
+                                const mediaContent = item.querySelector("media\\:content, content");
+                                const mediaThumbnail = mediaContent ? mediaContent.getAttribute("url") : null;
+                                const itemId = link; // Using link as a unique identifier for items
+                                const isRead = readArticles[itemId] || false;
+
+                                // Placeholder function to assign priority rating
+                                const priorityRating = getRandomRating(); // Assign a random rating between 1 and 5 stars
+
+                                articles.push({
+                                    title,
+                                    link,
+                                    description,
+                                    pubDate,
+                                    image: image ? image.textContent : null,
+                                    mediaThumbnail,
+                                    itemId,
+                                    isRead,
+                                    feedTitle,
+                                    hasUpvote: upvotes[itemId] || false,
+                                    hasDownvote: downvotes[itemId] || false,
+                                    priorityRating
+                                });
+                            });
+
+                            displayArticles(articles);
+                            updateItemCount();
+                        })
+                        .catch(error => {
+                            // Display a warning popup for error cases
+                            const feedTitle = "Unknown Feed";
+                            const errorMessage = `Error fetching RSS feed: ${error.message}`;
+                            displayErrorPopup(feedTitle, feedUrl, errorMessage);
+                        });
+                });
+            }
+
+            async function fetchFeed(feedUrl) {
+                const response = await fetch(feedUrl);
+                if (!response.ok) {
+                    throw new Error(`Request failed with status ${response.status}`);
+                }
+                const data = await response.text();
+                return data;
+            }
+
+            
+            var n_articles = 0; 
+            function displayArticles(articles) {    
+                const uniqueArticles = [];
+                const uniqueArticleIds = new Set();
+
+                articles.forEach(articleData => {
+                    if (!uniqueArticleIds.has(articleData.itemId)) {
+                        uniqueArticleIds.add(articleData.itemId);
+                        uniqueArticles.push(articleData);
+                    }
+                });
+
+                n_articles = uniqueArticles.length;
+
+                uniqueArticles.sort((a, b) => {
+                    if (a.isRead && !b.isRead) return 1;
+                    if (!a.isRead && b.isRead) return -1;
+                    if (a.priorityRating !== b.priorityRating) return b.priorityRating - a.priorityRating;
+                    return b.pubDate - a.pubDate;
+                });
+
+                newsFeedContainer.innerHTML = "";
+
+                uniqueArticles.forEach(articleData => {
+                    const { title, link, description, pubDate, image, mediaThumbnail, itemId, isRead, feedTitle, hasUpvote, hasDownvote, priorityRating } = articleData;
+
+                    const article = document.createElement("div");
+                    article.className = `col-xl-4 col-lg-5 col-md-6 col-sm-12 ${isRead ? 'read-article' : ''}`;
+                    article.innerHTML = `
+                        <div class="card">
+                            ${mediaThumbnail ? `<img src="${mediaThumbnail}" class="card-img-top thumbnail-image" alt="Thumbnail Image">` : '<img src="images/placeholder.png" class="card-img-top thumbnail-image" alt="Thumbnail Image">'}
+                            <div class="card-body">
+                                    <div class="priority-rating">${getRatingStars(priorityRating)}</div>
+                                    <h5 class="card-title">${title}</h5>
+                                    <p class="card-text">${description}</p>
+                                    <p class="card-text"><small class="text-muted">${pubDate.toLocaleString()}</small></p>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <button class="btn btn-success upvote ${hasUpvote ? 'thumbs-up' : ''}" data-item-id="${itemId}">👍</button>
+                                        <button class="btn btn-danger downvote ${hasDownvote ? 'thumbs-down' : ''}" data-item-id="${itemId}">👎</button>
+                                        <button class="btn btn-secondary skip ${isRead ? 'skip-read' : ''}" data-item-id="${itemId}">Skip</button>
+                                    </div>
+                                    <a href="${link}" class="btn btn-${isRead ? 'secondary' : 'primary'} read-button" target="_blank">${isRead ? 'Read Again' : 'Read More'}</a>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <small class="feed-tag">${feedTitle}</small>
+                            </div>
+                        </div>
+                    `;
+
+                    newsFeedContainer.appendChild(article);
+
+                    const upvoteButton = article.querySelector(".upvote");
+                    const downvoteButton = article.querySelector(".downvote");
+                    const skipButton = article.querySelector(".skip");
+                    const readButton = article.querySelector(".read-button");
+
+                    upvoteButton.addEventListener("click", function() {
+                        upvotes[itemId] = true;
+                        readArticles[itemId] = new Date().toISOString();
+                        localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                        localStorage.setItem("read", JSON.stringify(readArticles));
+                        updateFeedList();
+                    });
+
+                    downvoteButton.addEventListener("click", function() {
+                        downvotes[itemId] = true;
+                        readArticles[itemId] = new Date().toISOString();
+                        localStorage.setItem("downvotes", JSON.stringify(downvotes));
+                        localStorage.setItem("read", JSON.stringify(readArticles));
+                        updateFeedList();
+                    });
+                    
+                    skipButton.addEventListener("click", function() {
+                        readArticles[itemId] = new Date().toISOString();
+                        localStorage.setItem("read", JSON.stringify(readArticles));
+                        updateFeedList();
+                    });
+
+                    readButton.addEventListener("click", function() {
+                        if (!isRead) {
+                            readArticles[itemId] = new Date().toISOString();
+                            localStorage.setItem("read", JSON.stringify(readArticles));
+                            updateFeedList();
+                        }
+                    });
+                });
+            }
+
+            function getRatingStars(rating) {
+                const starIcon = "⭐️";
+                return starIcon.repeat(rating);
+            }
+
+            function getRandomRating() {
+                return Math.floor(Math.random() * 5) + 1;
+            }
+
+            function displayErrorPopup(feedTitle, feedUrl, errorMessage) {
+                const errorModal = `
+                    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="errorModalLabel">Error Fetching Feed</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Feed:</strong> ${feedTitle}</p>
+                                    <p><strong>Feed URL:</strong> ${feedUrl}</p>
+                                    <p><strong>Error Message:</strong> ${errorMessage}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.insertAdjacentHTML("beforeend", errorModal);
+
+                const errorModalElement = document.getElementById("errorModal");
+                errorModalElement.addEventListener("hidden.bs.modal", function() {
+                    errorModalElement.remove();
+                });
+
+                new bootstrap.Modal(errorModalElement).show();
+            }
+
+            function updateItemCount() {
+                const readCount = Object.keys(readArticles).length;
+                const unreadCount = n_articles - readCount; // Assuming each feed has 10 articles
+                const readCountElement = document.getElementById("read-count");
+                const unreadCountElement = document.getElementById("unread-count");
+                readCountElement.textContent = `Read/Skiped: ${readCount}`;
+                unreadCountElement.textContent = `Unread: ${unreadCount}`;
+            }
+
+            loadNews();
+
+            const addFeedButton = document.getElementById("add-feed");
+            const manageFeedsButton = document.getElementById("manage-feeds");
+
+            addFeedButton.addEventListener("click", function() {
+                const newFeedUrl = prompt("Enter a new RSS feed URL:");
+                if (newFeedUrl) {
+                    rssFeeds.push(newFeedUrl);
+                    updateFeedList();
+                }
+            });
+
+            manageFeedsButton.addEventListener("click", function() {
+                const feedList = rssFeeds.map((feed, index) => `
+                    <li>
+                        <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
+                        ${feed}
+                    </li>
+                `).join("");
+
+                const feedListModal = `
+                    <div class="modal fade" id="feedListModal" tabindex="-1" aria-labelledby="feedListModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="feedListModalLabel">Manage Feeds</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <ul>${feedList}</ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.insertAdjacentHTML("beforeend", feedListModal);
+
+                const feedListModalElement = document.getElementById("feedListModal");
+                feedListModalElement.addEventListener("hidden.bs.modal", function() {
+                    feedListModalElement.remove();
+                });
+
+                feedListModalElement.querySelector(".modal-body").addEventListener("click", function(event) {
+                    if (event.target.classList.contains("remove-feed")) {
+                        const feedIndex = event.target.getAttribute("data-feed-index");
+                        rssFeeds.splice(feedIndex, 1);
+                        updateFeedList();
+                        feedListModalElement.querySelector("ul").innerHTML = rssFeeds.map((feed, index) => `
+                            <li>
+                                <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
+                                ${feed}
+                            </li>
+                        `).join("");
+                    }
+                });
+
+                new bootstrap.Modal(feedListModalElement).show();
+            });
+        });
+    </script>
+</body>
+</html>
