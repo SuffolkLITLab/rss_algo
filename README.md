@@ -5,4 +5,4 @@
 # Mirriored Feeds
 
 - https://colarusso.pythonanywhere.com/washpo/
-- https://colarusso.pythonanywhere.com/economist_tech
+- https://colarusso.pythonanywhere.com/economist_tech/
