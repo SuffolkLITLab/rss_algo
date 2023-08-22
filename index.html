@@ -170,7 +170,7 @@
             </div>
             <div style="float:left;"><h1 class="my-1">RSS Algo</h1></div>
             <div style="float:left;width:100%;padding-top: 8px;">No tracking? No problem. Your data and your algo, living on your device. <a href="https://github.com/colarusso/rss_algo#rss_algo" target="_blank">Learn More</a> </div>
-            <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;color:black;margin-top: 10px;"><i>Loading...</i></span>
+            <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;color:black;margin-top: 10px;"><i>&nbsp;Loading...&nbsp;</i></span>
         <div class="my-3" style="float:left;width:100%;">
             <span style="float:right"><a href="#my_data">My Data</a></span>
             <span id="unread-count" class="text-danger">Unread: ?</span>
@@ -218,6 +218,8 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+
+        history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
         function reset_all() {
             let text = "This will erase all of your data and rest the list of feeds to default values. Choose OK to continue.";
@@ -300,7 +302,7 @@
                 if (n_feeds>=rssFeeds.length) {
                     document.getElementById('loading').style.display = "none";
                 } else {
-                    document.getElementById('loading').innerHTML = "<i>Loading feed "+(1+n_feeds)+" of "+rssFeeds.length+".</i>" 
+                    document.getElementById('loading').innerHTML = "<i>&nbsp;Loading feed "+(1+n_feeds)+" of "+rssFeeds.length+".&nbsp;</i>" 
                 }
                 return data;
             }
