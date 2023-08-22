@@ -365,7 +365,7 @@
 
                 const lastLoad = localStorage.getItem("lastLoad") || 0;
                 var time_padding = Date.parse(new Date())-300000
-                console.log(lastLoad, time_padding)
+                //console.log(lastLoad, time_padding)
                 if (lastLoad>time_padding) {
                     loadFeeds = false;
                 }
@@ -646,7 +646,7 @@
                     score = 0
                 }
 
-                console.log(score)
+                //console.log(score)
 
                 return score;
             }
@@ -855,8 +855,7 @@
                 document.getElementById('upwords').innerHTML = topWords(upTFIDF);
                 document.getElementById('downwords').innerHTML = topWords(downTFIDF);
 
-                console.log("TF-IDF: "+readArticleData.length+" 'read' documents","\nUp: "+upvotedArticleData.length+" documents, "+Object.keys(upTFIDF).length+" words"
-,"\nDown: "+downvotedArticleData.length+" documents, "+Object.keys(downTFIDF).length+" words\n");
+                //console.log("TF-IDF: "+readArticleData.length+" 'read' documents","\nUp: "+upvotedArticleData.length+" documents, "+Object.keys(upTFIDF).length+" words","\nDown: "+downvotedArticleData.length+" documents, "+Object.keys(downTFIDF).length+" words\n");
 
                 localStorage.setItem("articles", JSON.stringify(articles.slice(-1000)));
             }
@@ -915,7 +914,6 @@
             addFeedButton.addEventListener("click", function() {
                 const newFeedUrl = prompt("Enter a new RSS feed URL:");
                 if (newFeedUrl) {
-                    console.log("New Feed")
                     let lastLoad = 0;
                     localStorage.setItem("lastLoad", 0);
                     rssFeeds.push(newFeedUrl);
