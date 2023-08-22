@@ -282,9 +282,18 @@
             var n_feeds = 0;
             async function fetchFeed(feedUrl) {
                 document.getElementById('loading').style.display = "block";
+
                 const response = await fetch(feedUrl);
+                
                 if (!response.ok) {
-                    throw new Error(`Request failed with status ${response.status}`);
+                    console.log("Trying proxy.")
+                    const response_too = await fetch("https://colarusso.pythonanywhere.com/rss_proxy/?url="+encodeURIComponent(feedUrl));
+                    if (!response_too.ok) {
+                        console.log("Proxy failed!")
+                        throw new Error(`Request failed with status ${response_too.status}`);
+                    } else {
+                        let response = response_too;
+                    }
                 }
                 const data = await response.text();
                 n_feeds += 1;
