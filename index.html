@@ -96,10 +96,10 @@
         .btn-group {
             margin-top: auto; /* Push the button group to the bottom of the card */
         }
-        .my-4 {
-            margin-top: 0;
-            padding-top: 0;
-            line-height: 0;
+        .my-1 {
+            font-size: 35px;
+            line-height: 30px;
+            margin-bottom: 20px;
         }
         .btn-block{
             width:100%;
@@ -111,19 +111,40 @@
             padding: 10px 5px;
             text-align: right;
         }
+        
+        /* Dark mode styles */
+        .dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+                
+        .dark-mode .card {
+            background-color: #333;
+            color: #fff;
+        }               
 
+        .dark-mode .read-article .card {
+            opacity: 0.6;
+        }
+
+        .dark-mode .read-article .card-title,
+        .dark-mode .read-article .card-text,
+        .dark-mode .read-article .feed-tag {
+            color: #ccc;
+        }
     </style>
     </head>
 <body>
     <div class="container">
         <div style="float:left;width:100%;margin-top: 20px;">
             <div style="float:right;">
+                <button id="toggle-mode" class="btn btn-secondary" aria-label="Toggle Dark Mode" style="display:none;">🌗</button>
                 <button id="manage-feeds" class="btn btn-secondary">My Feeds</button>
                 <button id="add-feed" class="btn btn-primary">+</button>
             </div>
-            <div style="float:left;"><h1 class="my-4">My RSS Algo</h1></div>
-            <div style="float:left;width:100%;">No tracking? No problem. Your data lives on your device. <a href="https://github.com/colarusso/rss_algo#rss_algo" target="_blank">Learn More</a></div>
-            <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;"><i>Loading...</i></span>
+            <div style="float:left;"><h1 class="my-1">RSS Algo</h1></div>
+            <div style="float:left;width:100%;padding-top: 8px;">No tracking? No problem. Your data lives on your device. <a href="https://github.com/colarusso/rss_algo#rss_algo" target="_blank">Learn More</a> </div>
+            <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;color:black;"><i>Loading...</i></span>
         <div class="my-3" style="float:left;width:100%;">
             <span style="float:right"><a href="#my_data">My Data</a></span>
             <span id="unread-count" class="text-danger">Unread: ?</span>
@@ -137,16 +158,27 @@
         <div class="container mt-4">
             <a name="my_data"></a>
             <h2>My Data</h2>
-            <p>Lorum ipsum. You can manage your feeds by clicking "Manage Feeds" at the <a href="javascript:void('')" onClick="window.scrollTo(0, 0);">top</a> </p>
+            <p>You can manage your feeds by clicking "My Feeds" at the <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">top</a> of this page. See additional controls below. To determine what articles you like, we make use of <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">TF-IDF</a>. FWIW, I hope to write up an explination sometime. When I do, I'll put a link here.</p>
             <div class="row">
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
+                    <h4>Postive</h4>
+                    <p>Here are your top most-postive words: <span id="upwords">not enough data</span></p>
                     <button id="clear-upvotes" class="btn btn-danger btn-block">Clear Upvotes</button>
                 </div>
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
+                    <h4>Negative</h4>
+                    <p>Here are your top most-negative words: <span id="downwords">not enough data</span></p>
                     <button id="clear-downvotes" class="btn btn-danger btn-block">Clear Downvotes</button>
                 </div>
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
+                    <h4>History</h4>
+                    Display content from the last <span id="lookback-value">7</span> days. <i>Refresh page to see results</i>.
+                    <p>
+                        <input type="range" id="lookback-slider" min="1" max="30" value="14" style="width:100%;">
+                    </p>
+                    <p>If you clear you reading history, it will effect your recomendations since they're based on how you've interacted with old articles. That is, we'll only be able to use data from old artiles if they get downloaded again.</p>
                     <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
+                    <button id="factory-reset" class="btn btn-danger btn-block factory-reset" onClick="reset_all();"><b>RESET ALL</b></button>
                 </div>
             </div>
             <div class="footer">
@@ -158,9 +190,26 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
 
+        function reset_all() {
+            let text = "This will erase all of your data and rest the list of feeds to default values. Choose OK to continue.";
+            if (confirm(text) == true) {
+                history.replaceState('', document.title, window.location.pathname);
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.reload(true);
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             let rssFeeds = JSON.parse(localStorage.getItem("feeds")) || [
-                "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"
+                "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml",
+                "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
+                "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml",
+                "https://rss.nytimes.com/services/xml/rss/nyt/Space.xml",
+                "https://rss.nytimes.com/services/xml/rss/nyt/Books/Review.xml",
+                "https://rss.nytimes.com/services/xml/rss/nyt/MostEmailed.xml",
+                "https://rss.nytimes.com/services/xml/rss/nyt/MostShared.xml",
+                "https://rss.nytimes.com/services/xml/rss/nyt/MostViewed.xml"
                 // Add more default RSS feed URLs here
             ];
 
@@ -203,6 +252,7 @@
 
             var n_feeds = 0;
             async function fetchFeed(feedUrl) {
+                document.getElementById('loading').style.display = "block";
                 const response = await fetch(feedUrl);
                 if (!response.ok) {
                     throw new Error(`Request failed with status ${response.status}`);
@@ -250,6 +300,45 @@
                 });
             }
 
+            const lookbackSlider = document.getElementById("lookback-slider");
+            const lookbackValueElement = document.getElementById("lookback-value");
+            
+            // Retrieve lookback value from localStorage (if available)
+            const savedLookback = localStorage.getItem("lookback") || 14;
+            if (savedLookback) {
+                lookbackSlider.value = savedLookback;
+                lookbackValueElement.textContent = savedLookback;
+            }
+
+            // Update lookback value and save to localStorage when slider value changes
+            lookbackSlider.addEventListener("input", function () {
+                const newLookback = lookbackSlider.value;
+                lookbackValueElement.textContent = newLookback;
+                localStorage.setItem("lookback", newLookback);
+            });
+
+            const toggleModeButton = document.getElementById("toggle-mode");
+            const body = document.body;
+
+            // Retrieve dark mode state from localStorage (if available)
+            const darkModeState = localStorage.getItem("darkMode");
+            if (darkModeState === "enabled") {
+                body.classList.add("dark-mode");
+                toggleModeButton.innerHTML = "💡"; // Light bulb emoji
+            }
+
+            // Toggle between light and dark mode
+            toggleModeButton.addEventListener("click", function () {
+                body.classList.toggle("dark-mode");
+                if (body.classList.contains("dark-mode")) {
+                    localStorage.setItem("darkMode", "enabled");
+                    toggleModeButton.innerHTML = "💡"; // Light bulb emoji
+                } else {
+                    localStorage.removeItem("darkMode");
+                    toggleModeButton.innerHTML = "🌗"; // Moon emoji
+                }
+            });
+
             function dedup_articles() {
                 var uniqueArticles = [];
                 var uniqueArticleIds = new Set();
@@ -265,8 +354,18 @@
             }
 
             function loadNews(loadFeeds = true) {
+
+                const lastLoad = localStorage.getItem("lastLoad") || 0;
+                var time_padding = Date.parse(new Date())-300000
+                console.log(lastLoad, time_padding)
+                if (lastLoad>time_padding) {
+                    loadFeeds = false;
+                }
+
                 if (loadFeeds) {
-                    document.getElementById('loading').style.display = "block";
+
+                    localStorage.setItem("lastLoad", Date.parse(new Date()));
+
                     localStorage.setItem("feeds", JSON.stringify(rssFeeds));
                         
                     newsFeedContainer.innerHTML = "";
@@ -367,7 +466,7 @@
                     } else {
                         openButton.classList.remove("btn-primary");
                         openButton.classList.add("btn-secondary");
-                        openButton.textContent = "Open Again";
+                        openButton.textContent = "View Again";
                     }
                 }
             }
@@ -385,13 +484,12 @@
 
                 newsFeedContainer.innerHTML = "";
 
-
                 articles.forEach((articleData, index) => {
 
                     const { title, link, description, pubDate, image, mediaThumbnail, itemId, isRead, feedTitle, hasUpvote, hasDownvote, priorityRating } = articleData;
 
                     const twoWeeksAgo = new Date();
-                    twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+                    twoWeeksAgo.setDate(twoWeeksAgo.getDate() - savedLookback);
 
                     if (Date.parse(pubDate) >= Date.parse(twoWeeksAgo)) {
 
@@ -413,7 +511,7 @@
                                             <button class="btn btn-danger downvote ${hasDownvote ? 'thumbs-down' : ''}" data-item-id="${itemId}">👎</button>
                                             <button class="btn btn-secondary skip ${isRead ? 'skip-read' : ''}" data-item-id="${itemId}">Seen</button>
                                         </div>
-                                        <a href="${link}" class="btn btn-${isRead ? 'secondary' : 'primary'} read-button" target="_blank">${isRead ? 'Open Again' : 'Open'}</a>
+                                        <a href="${link}" class="btn btn-${isRead ? 'secondary' : 'primary'} read-button" target="_blank">${isRead ? 'View Again' : 'Open'}</a>
                                     </div>
                                 </div>
                                 <div class="card-footer">
@@ -605,6 +703,8 @@
             }
 
             function calculateTFIDF(votedArticles,df) {
+
+                n_composite_docs = votedArticles.length;
                 
                 const documents = votedArticles.map(article => article.feedTitle+' '+article.title+' '+article.description);
                 const doc = documents.join(' ');
@@ -612,7 +712,7 @@
                 tf = countWords(doc)
 
                 tf_idf = {}
-                if (df["n_docs"]>10) {
+                if ((df["n_docs"]>20) && (n_composite_docs>10)) {
                     for (const [key, value] of Object.entries(tf)) {
                         if (isNaN(key)) {
                             df["df_arr"][key]=1;
@@ -625,7 +725,45 @@
                 return tf_idf;
             }
 
-        
+            function topWords(wordObj) {            
+
+                const pickHighest = (wordObj, num = 1) => {
+                    const requiredObj = {};
+                    if(num > Object.keys(wordObj).length){
+                        return false;
+                    };
+                    Object.keys(wordObj).sort((a, b) => wordObj[b] - wordObj[a]).forEach((key, ind) =>
+                    {
+                        if(ind < num){
+                            requiredObj[key] = wordObj[key];
+                        }
+                    });
+                    return requiredObj;
+                };
+
+                n = 50;
+                word_list = pickHighest(wordObj, n)
+                if (Object.keys(word_list).length>0) {
+                    i = 0
+                    words = ""
+                    for (word in word_list) {
+                        if (i==0){
+                            words += " "
+                        } else if (i<(n-1)) {
+                            words += ", "
+                        } else {
+                            words += ", &amp; "
+                        }
+                        words += word
+                        i+=1
+                    }
+                } else {
+                    words = "<i>not enough data</i>"
+                }
+
+                return words+". "
+            }
+                    
             function displayErrorPopup(feedTitle, feedUrl, errorMessage) {
                 const errorModal = `
                     <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
@@ -706,10 +844,11 @@
                 localStorage.setItem("upTFIDF", JSON.stringify(upTFIDF));
                 localStorage.setItem("downTFIDF", JSON.stringify(downTFIDF));
 
+                document.getElementById('upwords').innerHTML = topWords(upTFIDF);
+                document.getElementById('downwords').innerHTML = topWords(downTFIDF);
+
                 console.log("TF-IDF: "+readArticleData.length+" 'read' documents","\nUp: "+upvotedArticleData.length+" documents, "+Object.keys(upTFIDF).length+" words"
 ,"\nDown: "+downvotedArticleData.length+" documents, "+Object.keys(downTFIDF).length+" words\n");
-
-                console.log(upTFIDF,downTFIDF)
 
                 localStorage.setItem("articles", JSON.stringify(articles.slice(-1000)));
             }
@@ -746,13 +885,18 @@
                 // Clear the read status of all articles in the readArticles object
                 for (var member in readArticles) delete readArticles[member];
 
-                resetReadStatus();
+                articles = [];
+                localStorage.setItem("articles", JSON.stringify(articles));
+                let lastLoad = 0;
+                localStorage.setItem("lastLoad", 0);
+
+                //resetReadStatus();
 
                 // Reorder the articles to reflect the changes
-                reorderArticles();
+                //reorderArticles();
 
                 // Update article styles and the feed list
-                updateFeedList();
+                updateFeedList(true);
             });            
             
             loadNews(true);
@@ -763,6 +907,9 @@
             addFeedButton.addEventListener("click", function() {
                 const newFeedUrl = prompt("Enter a new RSS feed URL:");
                 if (newFeedUrl) {
+                    console.log("New Feed")
+                    let lastLoad = 0;
+                    localStorage.setItem("lastLoad", 0);
                     rssFeeds.push(newFeedUrl);
                     updateFeedList(true);
                 }
@@ -781,10 +928,11 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="feedListModalLabel">Manage Feeds</h5>
+                                    <h5 class="modal-title" id="feedListModalLabel">My Feeds</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
+                                    <p>Note: If you remove a feed, old articles will remain on your timeline and in your history.</p>
                                     <table cellpadding="10px">${feedList}</table>
                                 </div>
                             </div>
@@ -804,11 +952,11 @@
                         const feedIndex = event.target.getAttribute("data-feed-index");
                         rssFeeds.splice(feedIndex, 1);
                         updateFeedList(true);
-                        feedListModalElement.querySelector("ul").innerHTML = rssFeeds.map((feed, index) => `
-                            <li>
-                                <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
-                                ${feed}
-                            </li>
+                        feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
+                            <tr><td>
+                            <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
+                            </td><td>
+                            ${feed}</td></tr>
                         `).join("");
                     }
                 });
