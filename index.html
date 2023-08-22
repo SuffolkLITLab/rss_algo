@@ -122,12 +122,26 @@
             background-color: #333;
             color: #fff;
         }
-                
+        .dark-mode a {
+            color: #88e3ff;
+        }
+        .dark-mode .btn-primary {
+            color: #ffffff;
+        }
         .dark-mode .card {
             background-color: #333;
+            border-color: #4e4e4e;
             color: #fff;
         }               
-
+        .dark-mode .text-muted {
+            color: #6a6a6a !important;
+        }     
+        .dark-mode .card-footer {
+            background-color: #4e4e4e;
+        }  
+        .dark-mode .feed-tag {
+            color: #fff;
+        }  
         .dark-mode .read-article .card {
             opacity: 0.6;
         }
@@ -143,12 +157,12 @@
     <div class="container">
         <div style="float:left;width:100%;margin-top: 20px;">
             <div style="float:right;">
-                <button id="toggle-mode" class="btn btn-secondary" aria-label="Toggle Dark Mode" style="display:none;">🌗</button>
+                <button id="toggle-mode" class="btn btn-secondary" aria-label="Toggle Dark Mode">🌗</button>
                 <button id="manage-feeds" class="btn btn-secondary">My Feeds</button>
                 <button id="add-feed" class="btn btn-primary">+</button>
             </div>
             <div style="float:left;"><h1 class="my-1">RSS Algo</h1></div>
-            <div style="float:left;width:100%;padding-top: 8px;">No tracking? No problem. Your data lives on your device. <a href="https://github.com/colarusso/rss_algo#rss_algo" target="_blank">Learn More</a> </div>
+            <div style="float:left;width:100%;padding-top: 8px;">No tracking? No problem. Your data, your algo, living on your device. <a href="https://github.com/colarusso/rss_algo#rss_algo" target="_blank">Learn More</a> </div>
             <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;color:black;"><i>Loading...</i></span>
         <div class="my-3" style="float:left;width:100%;">
             <span style="float:right"><a href="#my_data">My Data</a></span>
