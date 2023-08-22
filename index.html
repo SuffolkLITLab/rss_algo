@@ -2,9 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>RSS Algo</title>
+	<meta property="og:site_name" content="RSS Algo"/>
+	<meta property="og:type" content="website"/>
+	<meta property="og:title" content="RSS Algo"/>
+	<meta property="og:description" content="An algorithmic RSS reader where your data stays on your device."/>
+	<meta property="og:image" content="images/placeholder.png"/>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>My RSS Algo</title>
     <style>
         /* Your custom styles can go here */
         .read-article .card {
@@ -109,7 +115,6 @@
             border-top: 1px solid #555;
             margin: 20px 0 40px 0;
             padding: 10px 5px;
-            text-align: right;
         }
         
         /* Dark mode styles */
@@ -158,31 +163,34 @@
         <div class="container mt-4">
             <a name="my_data"></a>
             <h2>My Data</h2>
-            <p>You can manage your feeds by clicking "My Feeds" at the <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">top</a> of this page. See additional controls below. To determine what articles you like, we make use of <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">TF-IDF</a>. FWIW, I hope to write up an explination sometime. When I do, I'll put a link here.</p>
+            <p>You can manage your feeds by clicking "My Feeds" at the <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">top</a> of this page. See additional controls below. To determine what articles you like, we make use of <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">TF-IDF</a>, comparing all the text from the cards you vote up or down with everything you've "seen." FWIW, recomendations won't kick in until you've seen north of 100 cards. I hope to write a more complete explanation sometime. When I do, I'll put a link here. Until then, you can always look at <a href="https://github.com/colarusso/rss_algo" target="_blank">the code</a>.</p>
             <div class="row">
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
                     <h4>Postive</h4>
-                    <p>Here are your top most-postive words: <span id="upwords">not enough data</span></p>
+                    <p>Here are your <b><i>most-postive</i></b> words: <span id="upwords">not enough data</span></p>
                     <button id="clear-upvotes" class="btn btn-danger btn-block">Clear Upvotes</button>
                 </div>
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
                     <h4>Negative</h4>
-                    <p>Here are your top most-negative words: <span id="downwords">not enough data</span></p>
+                    <p>Here are your <b><i>most-negative</i></b> words: <span id="downwords">not enough data</span></p>
                     <button id="clear-downvotes" class="btn btn-danger btn-block">Clear Downvotes</button>
                 </div>
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
                     <h4>History</h4>
-                    Display content from the last <span id="lookback-value">7</span> days. <i>Refresh page to see results</i>.
+                    Display content from the last <b><i><span id="lookback-value">7</span> days</i></b>. <i>Refresh page to see results</i>.
                     <p>
                         <input type="range" id="lookback-slider" min="1" max="30" value="14" style="width:100%;">
                     </p>
-                    <p>If you clear you reading history, it will effect your recomendations since they're based on how you've interacted with old articles. That is, we'll only be able to use data from old artiles if they get downloaded again.</p>
+                    <p>You can limit how much you see in your timeline by adjusting the slider above. If you clear you reading history, it will effect your recomendations since they're based on interactions with old articles. That is, we'll only be able to use data from old artiles if they get downloaded again.</p>
                     <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
                     <button id="factory-reset" class="btn btn-danger btn-block factory-reset" onClick="reset_all();"><b>RESET ALL</b></button>
                 </div>
             </div>
             <div class="footer">
-                <a href="https://github.com/colarusso/rss_algo" target="_blank">GitHub Repo</a>
+                <span style="float:right">
+                    <a href="https://github.com/colarusso/rss_algo" target="_blank">GitHub Repo</a>
+                </span>
+                Made by <a href="https://mastodon.social/@Colarusso" target="_blank">David Colarusso</a>
             </div>
         </div>            
 
@@ -712,7 +720,7 @@
                 tf = countWords(doc)
 
                 tf_idf = {}
-                if ((df["n_docs"]>20) && (n_composite_docs>10)) {
+                if ((df["n_docs"]>100) && (n_composite_docs>10)) {
                     for (const [key, value] of Object.entries(tf)) {
                         if (isNaN(key)) {
                             df["df_arr"][key]=1;
@@ -777,7 +785,7 @@
                                     <p><strong>Feed:</strong> ${feedTitle}</p>
                                     <p><strong>Feed URL:</strong> ${feedUrl}</p>
                                     <p><strong>Error Message:</strong> ${errorMessage}</p>
-                                    <p>FWIW, you can remove this feed by clicking the "My Feeds" button.</p>
+                                    <p>If this error persists, you can remove this feed using the "My Feeds" button.</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button id="manage-feeds" class="btn btn-primary" style="width:100%" onClick="window.open('https://github.com/colarusso/rss_algo/tree/main#troubleshooting');">Troubleshoot this error</button>
