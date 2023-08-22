@@ -10,10 +10,17 @@
         .read-article .card {
             opacity: 0.5; /* Slightly transparent for read items */
         }
+        .read-article .skip {
+            display:none;
+        }
         .read-article .card-title,
         .read-article .card-text,
         .read-article .feed-tag {
-            color: black; /* Standard black text for read items */
+            color: black; /* Standard blac
+            k text for read items */
+        }
+        .article-container {
+            margin-bottom: 15px;
         }
         .card-title {
             float:left;
@@ -22,13 +29,19 @@
 
         .feed-tag {
             font-size: 12px;
-            color: #666;
+            color: #fff0f0;
+        }
+        .upvote {
+            background: rgb(212, 255, 212)
+        }
+        .downvote {
+            background: rgb(255, 216, 216);
         }
         .thumbs-up {
-            color: green;
+            background: green
         }
         .thumbs-down {
-            color: red;
+            background: red;
         }
         .priority-rating {
             font-size: 18px;
@@ -76,6 +89,7 @@
         }
 
         .feed-tag {
+            color: black;
             margin-top: auto; /* Push the feed tag to the bottom of the card */
         }
 
@@ -87,212 +101,529 @@
             padding-top: 0;
             line-height: 0;
         }
-
+        .btn-block{
+            width:100%;
+            margin-bottom: 12px;
+        }
+        .footer {
+            border-top: 1px solid #555;
+            margin: 20px 0 40px 0;
+            padding: 10px 5px;
+            text-align: right;
+        }
 
     </style>
-</head>
+    </head>
 <body>
     <div class="container">
         <div style="float:left;width:100%;margin-top: 20px;">
-            <div style="float:left"><h1 class="my-4">My RSS Algo</h1></div>
             <div style="float:right;">
-                <button id="add-feed" class="btn btn-primary">+</button>
                 <button id="manage-feeds" class="btn btn-secondary">My Feeds</button>
+                <button id="add-feed" class="btn btn-primary">+</button>
             </div>
+            <div style="float:left;"><h1 class="my-4">My RSS Algo</h1></div>
+            <div style="float:left;width:100%;">No tracking? No problem. Your data lives on your device. <a href="https://github.com/colarusso/rss_algo#rss_algo" target="_blank">Learn More</a></div>
         <div class="my-3" style="float:left;width:100%;">
-            <span id="unread-count" class="text-danger">Unread: 0</span>
-            <span id="read-count" class="text-success">Read/Skiped: 0</span>
+            <span style="float:right"><a href="#my_data">My Data</a></span>
+            <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;"><i>Loading...</i></span>
+            <span id="unread-count" class="text-danger">Unread: ?</span>
+            <span id="read-count" class="text-success">Seen: ?</span>
         </div>
         </div>
         <div id="news-feed" class="row">
             <!-- News articles will be dynamically added here -->
         </div>
+
+        <div class="container mt-4">
+            <a name="my_data"></a>
+            <h2>My Data</h2>
+            <p>Lorum ipsum. You can manage your feeds by clicking "Manage Feeds" at the <a href="javascript:void('')" onClick="window.scrollTo(0, 0);">top</a> </p>
+            <div class="row">
+                <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
+                    <button id="clear-upvotes" class="btn btn-danger btn-block">Clear Upvotes</button>
+                </div>
+                <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
+                    <button id="clear-downvotes" class="btn btn-danger btn-block">Clear Downvotes</button>
+                </div>
+                <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
+                    <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
+                </div>
+            </div>
+            <div class="footer">
+                <a href="https://github.com/colarusso/rss_algo" target="_blank">GitHub Repo</a>
+            </div>
+        </div>            
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+
         document.addEventListener("DOMContentLoaded", function() {
             let rssFeeds = JSON.parse(localStorage.getItem("feeds")) || [
                 "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"
                 // Add more default RSS feed URLs here
             ];
 
+            function arr2obj(arr) {
+                return arr.reduce(
+                    (acc, curr) => {
+            
+                        // Extract the key and the value
+                        let key = curr[0];
+                        let value = curr[1];
+            
+                        // Assign key and value
+                        // to the accumulator
+                        acc[key] = value;
+            
+                        // Return the accumulator
+                        return acc;
+                    },
+            
+                    // Initialize with an empty object
+                    {}
+                );
+            }
+
             const newsFeedContainer = document.getElementById("news-feed");
-
-            const upvotes = JSON.parse(localStorage.getItem("upvotes")) || {};
+            const upvotes =  JSON.parse(localStorage.getItem("upvotes")) || {};
             const downvotes = JSON.parse(localStorage.getItem("downvotes")) || {};
-            const readArticles = JSON.parse(localStorage.getItem("read")) || {};
+            const upTFIDF =  JSON.parse(localStorage.getItem("upTFIDF")) || {};
+            const downTFIDF =  JSON.parse(localStorage.getItem("downTFIDF")) || {};
+            const readArticles = filterOldEntries(JSON.parse(localStorage.getItem("read")) || {});
 
-            function updateFeedList() {
+            var articles =  JSON.parse(localStorage.getItem("articles")) || [];
+
+            function updateFeedList(loadFeeds = false) {
                 localStorage.setItem("feeds", JSON.stringify(rssFeeds));
-                loadNews();
+                let upTFIDF =  JSON.parse(localStorage.getItem("upTFIDF")) || {};
+                let downTFIDF =  JSON.parse(localStorage.getItem("downTFIDF")) || {};
+                loadNews(loadFeeds);
             }
 
-            function loadNews() {
-                newsFeedContainer.innerHTML = "";
-
-                const articles = [];
-
-                rssFeeds.forEach(feedUrl => {
-                    fetchFeed(feedUrl)
-                        .then(data => {
-                            const parser = new DOMParser();
-                            const xml = parser.parseFromString(data, "application/xml");
-
-                            const feedTitle = xml.querySelector("channel title").textContent;
-
-                            const items = xml.querySelectorAll("item");
-
-                            items.forEach(item => {
-                                const title = item.querySelector("title").textContent;
-                                const link = item.querySelector("link").textContent;
-                                const description = item.querySelector("description").textContent;
-                                const pubDate = new Date(item.querySelector("pubDate").textContent);
-                                const image = item.querySelector("image"); // Assuming image tag is present
-                                const mediaContent = item.querySelector("media\\:content, content");
-                                const mediaThumbnail = mediaContent ? mediaContent.getAttribute("url") : null;
-                                const itemId = link; // Using link as a unique identifier for items
-                                const isRead = readArticles[itemId] || false;
-
-                                // Placeholder function to assign priority rating
-                                const priorityRating = getRandomRating(); // Assign a random rating between 1 and 5 stars
-
-                                articles.push({
-                                    title,
-                                    link,
-                                    description,
-                                    pubDate,
-                                    image: image ? image.textContent : null,
-                                    mediaThumbnail,
-                                    itemId,
-                                    isRead,
-                                    feedTitle,
-                                    hasUpvote: upvotes[itemId] || false,
-                                    hasDownvote: downvotes[itemId] || false,
-                                    priorityRating
-                                });
-                            });
-
-                            displayArticles(articles);
-                            updateItemCount();
-                        })
-                        .catch(error => {
-                            // Display a warning popup for error cases
-                            const feedTitle = "Unknown Feed";
-                            const errorMessage = `Error fetching RSS feed: ${error.message}`;
-                            displayErrorPopup(feedTitle, feedUrl, errorMessage);
-                        });
-                });
-            }
-
+            var n_feeds = 0;
             async function fetchFeed(feedUrl) {
                 const response = await fetch(feedUrl);
                 if (!response.ok) {
                     throw new Error(`Request failed with status ${response.status}`);
                 }
                 const data = await response.text();
+                n_feeds += 1;
+                if (n_feeds>=rssFeeds.length) {
+                    document.getElementById('loading').style.display = "none";
+                }
                 return data;
             }
 
-            
-            var n_articles = 0; 
-            function displayArticles(articles) {    
-                const uniqueArticles = [];
-                const uniqueArticleIds = new Set();
+            function updateArticleStyles() {
+                const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
 
-                articles.forEach(articleData => {
+                articleContainers.forEach(articleContainer => {
+                    const itemId = articleContainer.getAttribute("data-item-id");
+
+                    if (readArticles[itemId]) {
+                        articleContainer.classList.add("read-article");
+                    } else {
+                        articleContainer.classList.remove("read-article");
+                    }
+
+                    const upvoteButton = articleContainer.querySelector(".upvote");
+                    const downvoteButton = articleContainer.querySelector(".downvote");
+                    const skipButton = articleContainer.querySelector(".skip");
+
+
+                    if (upvotes[itemId]) {
+                        upvoteButton.classList.add("thumbs-up");
+                    } else {
+                        upvoteButton.classList.remove("thumbs-up");
+                    }
+
+                    if (downvotes[itemId]) {
+                        downvoteButton.classList.add("thumbs-down");
+                    } else {
+                        downvoteButton.classList.remove("thumbs-down");
+                    }
+
+              
+                });
+            }
+
+            function dedup_articles() {
+                var uniqueArticles = [];
+                var uniqueArticleIds = new Set();
+
+                articles.reverse().forEach(articleData => {
                     if (!uniqueArticleIds.has(articleData.itemId)) {
                         uniqueArticleIds.add(articleData.itemId);
                         uniqueArticles.push(articleData);
-                    }
+                    } 
                 });
 
-                n_articles = uniqueArticles.length;
+                articles = uniqueArticles.reverse();
+            }
 
-                uniqueArticles.sort((a, b) => {
+            function loadNews(loadFeeds = true) {
+                if (loadFeeds) {
+                    document.getElementById('loading').style.display = "block";
+                    localStorage.setItem("feeds", JSON.stringify(rssFeeds));
+                        
+                    newsFeedContainer.innerHTML = "";
+
+                    rssFeeds.forEach(feedUrl => {
+                        fetchFeed(feedUrl)
+                            .then(data => {
+                                const parser = new DOMParser();
+                                const xml = parser.parseFromString(data, "application/xml");
+
+                                const feedTitle = xml.querySelector("channel title").textContent;
+
+                                const items = xml.querySelectorAll("item");
+
+                                items.forEach(item => {
+                                    //const pubDate = new Date(item.querySelector("pubDate").textContent);
+                                    //const lookback = new Date();
+                                    //lookback.setDate(lookback.getDate() - 30);
+
+                                    //if (pubDate >= lookback) {
+                                        
+                                        const title = item.querySelector("title").textContent;
+                                        const link = item.querySelector("link").textContent;
+                                        const description = item.querySelector("description").textContent;
+                                        const pubDate = new Date(item.querySelector("pubDate").textContent);
+                                        const image = item.querySelector("image"); // Assuming image tag is present
+                                        const mediaContent = item.querySelector("media\\:content, content");
+                                        const mediaThumbnail = mediaContent ? mediaContent.getAttribute("url") : null;
+                                        const itemId = link; // Using link as a unique identifier for items
+                                        const isRead = readArticles[itemId] || false;
+
+                                        // Placeholder function to assign priority rating
+                                        const priorityRating = getRating(feedTitle+": "+title+" "+description); 
+
+                                        articles.push({
+                                            title,
+                                            link,
+                                            description,
+                                            pubDate,
+                                            image: image ? image.textContent : null,
+                                            mediaThumbnail,
+                                            itemId,
+                                            isRead,
+                                            feedTitle,
+                                            hasUpvote: upvotes[itemId] || false,
+                                            hasDownvote: downvotes[itemId] || false,
+                                            priorityRating
+                                        });
+                                    //}
+                                });
+
+                                dedup_articles();
+                                reorderArticles();
+                                displayArticles();
+                                updateItemCount();
+                            })
+                            .catch(error => {
+                                // Display a warning popup for error cases
+                                const feedTitle = "Unknown Feed";
+                                const errorMessage = `Error fetching RSS feed: ${error.message}`;
+                                displayErrorPopup(feedTitle, feedUrl, errorMessage);
+                            });
+                
+                    });
+
+                } else {
+
+                    dedup_articles();
+                    reorderArticles();
+                    displayArticles();
+                    updateItemCount();
+                }
+
+            }        
+
+            function resetReadStatus() {
+                articles.forEach(article => {
+                    article.isRead = false;
+                });
+            }
+
+            function reorderArticles() {
+                articles.sort((a, b) => {
                     if (a.isRead && !b.isRead) return 1;
                     if (!a.isRead && b.isRead) return -1;
                     if (a.priorityRating !== b.priorityRating) return b.priorityRating - a.priorityRating;
                     return b.pubDate - a.pubDate;
                 });
+            }
+
+            function updateOpenButton(card) {
+                const openButton = card.querySelector(".read-button");
+                if (openButton) {
+                    if (card.classList.contains("read-article")) {
+                        openButton.classList.remove("btn-secondary");
+                        openButton.classList.add("btn-primary");
+                        openButton.textContent = "Open";
+                    } else {
+                        openButton.classList.remove("btn-primary");
+                        openButton.classList.add("btn-secondary");
+                        openButton.textContent = "Open Again";
+                    }
+                }
+            }
+
+            function moveCardToEnd(card) {
+                // Move the card to the end of the list
+                newsFeedContainer.appendChild(card);
+
+                // Update article styles after the move
+                updateArticleStyles();
+            }
+
+
+            function displayArticles() {  
 
                 newsFeedContainer.innerHTML = "";
 
-                uniqueArticles.forEach(articleData => {
+
+                articles.forEach((articleData, index) => {
+
                     const { title, link, description, pubDate, image, mediaThumbnail, itemId, isRead, feedTitle, hasUpvote, hasDownvote, priorityRating } = articleData;
 
-                    const article = document.createElement("div");
-                    article.className = `col-xl-4 col-lg-5 col-md-6 col-sm-12 ${isRead ? 'read-article' : ''}`;
-                    article.innerHTML = `
-                        <div class="card">
-                            ${mediaThumbnail ? `<img src="${mediaThumbnail}" class="card-img-top thumbnail-image" alt="Thumbnail Image">` : '<img src="images/placeholder.png" class="card-img-top thumbnail-image" alt="Thumbnail Image">'}
-                            <div class="card-body">
-                                    <div class="priority-rating">${getRatingStars(priorityRating)}</div>
-                                    <h5 class="card-title">${title}</h5>
-                                    <p class="card-text">${description}</p>
-                                    <p class="card-text"><small class="text-muted">${pubDate.toLocaleString()}</small></p>
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <button class="btn btn-success upvote ${hasUpvote ? 'thumbs-up' : ''}" data-item-id="${itemId}">👍</button>
-                                        <button class="btn btn-danger downvote ${hasDownvote ? 'thumbs-down' : ''}" data-item-id="${itemId}">👎</button>
-                                        <button class="btn btn-secondary skip ${isRead ? 'skip-read' : ''}" data-item-id="${itemId}">Pass</button>
+                    const twoWeeksAgo = new Date();
+                    twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+
+                    if (Date.parse(pubDate) >= Date.parse(twoWeeksAgo)) {
+
+                        const article = document.createElement("div");
+                        article.setAttribute("data-article-index", index); 
+                        article.setAttribute("data-item-id", itemId);
+                        article.className = `col-xl-4 col-lg-5 col-md-6 col-sm-12 article-container ${isRead ? 'read-article' : ''}`;
+                        article.innerHTML = `
+                            <div class="card">
+                                <div style="postion:relative:z-index:0;top:0">${mediaThumbnail ? `<img src="${mediaThumbnail}" class="card-img-top thumbnail-image" alt="Thumbnail Image">` : '<img src="images/placeholder.png" class="card-img-top thumbnail-image" alt="Thumbnail Image">'}</div>
+                                <div class="card-body">
+                                        <!--<div class="priority-rating">${priorityRating}</div>-->
+                                        <h5 class="card-title">${title}</h5>
+                                        <p class="card-text">${description}</p>
+                                        <p class="card-text"><small class="text-muted">${pubDate.toLocaleString()}</small></p>
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <button class="btn btn-success upvote ${hasUpvote ? 'thumbs-up' : ''}" data-item-id="${itemId}">👍</button>
+                                            <button class="btn btn-danger downvote ${hasDownvote ? 'thumbs-down' : ''}" data-item-id="${itemId}">👎</button>
+                                            <button class="btn btn-secondary skip ${isRead ? 'skip-read' : ''}" data-item-id="${itemId}">Seen</button>
+                                        </div>
+                                        <a href="${link}" class="btn btn-${isRead ? 'secondary' : 'primary'} read-button" target="_blank">${isRead ? 'Open Again' : 'Open'}</a>
                                     </div>
-                                    <a href="${link}" class="btn btn-${isRead ? 'secondary' : 'primary'} read-button" target="_blank">${isRead ? 'Read Again' : 'Read'}</a>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="feed-tag">${feedTitle}</small>
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <small class="feed-tag">${feedTitle}</small>
-                            </div>
-                        </div>
-                    `;
+                        `;
 
-                    newsFeedContainer.appendChild(article);
+                        newsFeedContainer.appendChild(article);
 
-                    const upvoteButton = article.querySelector(".upvote");
-                    const downvoteButton = article.querySelector(".downvote");
-                    const skipButton = article.querySelector(".skip");
-                    const readButton = article.querySelector(".read-button");
+                        const upvoteButton = article.querySelector(".upvote");
+                        const downvoteButton = article.querySelector(".downvote");
+                        const skipButton = article.querySelector(".skip");
+                        const readButton = article.querySelector(".read-button");
 
-                    upvoteButton.addEventListener("click", function() {
-                        upvotes[itemId] = true;
-                        readArticles[itemId] = new Date().toISOString();
-                        localStorage.setItem("upvotes", JSON.stringify(upvotes));
-                        localStorage.setItem("read", JSON.stringify(readArticles));
-                        updateFeedList();
-                    });
+                        upvoteButton.addEventListener("click", function() {
+                            if (downvotes[itemId]) {
+                                delete downvotes[itemId];
+                                localStorage.setItem("downvotes", JSON.stringify(downvotes));
+                            }
+                            
+                            if (upvotes[itemId]) {
+                                delete upvotes[itemId];
+                                localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                            } else {
+                                upvotes[itemId] = true;
+                                localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                                //localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-1))));
+                            }
+                            
+                            updateArticleStyles();
+                        });
 
-                    downvoteButton.addEventListener("click", function() {
-                        downvotes[itemId] = true;
-                        readArticles[itemId] = new Date().toISOString();
-                        localStorage.setItem("downvotes", JSON.stringify(downvotes));
-                        localStorage.setItem("read", JSON.stringify(readArticles));
-                        updateFeedList();
-                    });
-                    
-                    skipButton.addEventListener("click", function() {
-                        readArticles[itemId] = new Date().toISOString();
-                        localStorage.setItem("read", JSON.stringify(readArticles));
-                        updateFeedList();
-                    });
+                        downvoteButton.addEventListener("click", function() {
+                            if (upvotes[itemId]) {
+                                delete upvotes[itemId];
+                                localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                            }
+                            
+                            if (downvotes[itemId]) {
+                                delete downvotes[itemId];
+                                localStorage.setItem("downvotes", JSON.stringify(downvotes));
+                            } else {
+                                downvotes[itemId] = true;
+                                localStorage.setItem("downvotes", JSON.stringify(downvotes));
+                                //localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-1))));
+                            }
+                            
+                            updateArticleStyles();
+                        });
 
-                    readButton.addEventListener("click", function() {
-                        if (!isRead) {
+                        skipButton.addEventListener("click", function () {
+                            const articleIndex = parseInt(article.getAttribute("data-article-index"));
                             readArticles[itemId] = new Date().toISOString();
                             localStorage.setItem("read", JSON.stringify(readArticles));
-                            updateFeedList();
-                        }
-                    });
+
+                            // Mark the article as read in the articles array
+                            articles[articleIndex].isRead = true;
+
+                            // Get the parent container of the clicked skip button
+                            const articleContainer = skipButton.closest(".article-container");
+
+                            // Update the Open button behavior
+                            updateOpenButton(articleContainer);
+
+                            // Move the article container to the end of the list
+                            moveCardToEnd(articleContainer);
+
+                            // Update the unread count
+                            updateItemCount();
+                        });
+
+                        readButton.addEventListener("click", function() {
+                            const articleIndex = parseInt(article.getAttribute("data-article-index"));
+                            if (!isRead) {
+                                readArticles[itemId] = new Date().toISOString();
+                                localStorage.setItem("read", JSON.stringify(readArticles));
+
+                                // Mark the article as read in the articles array
+                                articles[articleIndex].isRead = true;
+
+                                // Get the parent container of the clicked skip button
+                                const articleContainer = skipButton.closest(".article-container");
+
+                                // Update the Open button behavior
+                                updateOpenButton(articleContainer);
+
+                                // Move the article container to the end of the list
+                                moveCardToEnd(articleContainer);
+
+                                // Update the unread count
+                                updateItemCount();
+                            }
+                        });
+                        
+                    }
                 });
+
+                // After all articles are displayed, update their styles
+                updateArticleStyles();
+
             }
 
-            function getRatingStars(rating) {
-                const starIcon = "⭐️";
-                return starIcon.repeat(rating);
+            function getRating(inputString) {
+
+                const words = inputString.toLowerCase().match(/\b\w+\b/g);
+                score = 0;
+                for (word in words) {
+                    if (isNaN(upTFIDF[words[word]])) {
+                        // no action
+                    } else {
+                        score += upTFIDF[words[word]]*1
+                    }
+                }
+                for (word in words) {
+                    if (isNaN(downTFIDF[words[word]])) {
+                        // no action
+                    } else {
+                        score -= downTFIDF[words[word]]*0.5
+                    }
+                }
+
+                if (score<0){
+                    score = 0
+                }
+
+                console.log(score)
+
+                return score;
             }
 
-            function getRandomRating() {
-                return Math.floor(Math.random() * 5) + 1;
+            function countWords(inputString) {
+                const words = inputString.toLowerCase().match(/\b\w+\b/g);
+
+                if (!words) {
+                    return {};
+                }
+
+                const wordCount = {};
+                words.forEach(word => {
+                    if (wordCount[word]) {
+                        wordCount[word]++;
+                    } else {
+                        wordCount[word] = 1;
+                    }
+                });
+
+                return wordCount;
             }
 
+            function countWordsInArray(arrayOfStrings) {
+                const wordCount = {};
+
+                arrayOfStrings.forEach(inputString => {
+                    const words = inputString.toLowerCase().match(/\b\w+\b/g);
+
+                    if (words) {
+                        const uniqueWords = new Set(words);
+
+                        uniqueWords.forEach(word => {
+                            if (wordCount[word]) {
+                                wordCount[word]++;
+                            } else {
+                                wordCount[word] = 1;
+                            }
+                        });
+                    }
+                });
+
+                return wordCount;
+            }
+
+            function extractText(articles) {
+                const extractedTexts = [];
+
+                articles.forEach(article => {
+                    const { title, description } = article;
+                    const extractedText = `${title}\n${description}`;
+                    extractedTexts.push(extractedText);
+                });
+
+                return extractedTexts;
+            }
+
+            function calculateDF(readArticleData) {
+                const read_docs = extractText(readArticleData)
+                const df = countWordsInArray(read_docs)
+                return {"df_arr":df,"n_docs":read_docs.length}
+            }
+
+            function calculateTFIDF(votedArticles,df) {
+                
+                const documents = votedArticles.map(article => article.feedTitle+' '+article.title+' '+article.description);
+                const doc = documents.join(' ');
+
+                tf = countWords(doc)
+
+                tf_idf = {}
+                if (df["n_docs"]>10) {
+                    for (const [key, value] of Object.entries(tf)) {
+                        if (isNaN(key)) {
+                            df["df_arr"][key]=1;
+                        }
+                        idf = Math.log(1+df["df_arr"][key]/df["n_docs"]);
+                        tf_idf[key] = value*idf;
+                    }
+                }
+
+                return tf_idf;
+            }
+
+        
             function displayErrorPopup(feedTitle, feedUrl, errorMessage) {
                 const errorModal = `
                     <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
@@ -306,6 +637,10 @@
                                     <p><strong>Feed:</strong> ${feedTitle}</p>
                                     <p><strong>Feed URL:</strong> ${feedUrl}</p>
                                     <p><strong>Error Message:</strong> ${errorMessage}</p>
+                                    <p>FWIW, you can remove this feed by clicking the "My Feeds" button.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="manage-feeds" class="btn btn-primary" style="width:100%" onClick="window.open('https://github.com/colarusso/rss_algo/tree/main#troubleshooting');">Troubleshoot this error</button>
                                 </div>
                             </div>
                         </div>
@@ -322,16 +657,103 @@
                 new bootstrap.Modal(errorModalElement).show();
             }
 
-            function updateItemCount() {
-                const readCount = Object.keys(readArticles).length;
-                const unreadCount = n_articles - readCount; // Assuming each feed has 10 articles
-                const readCountElement = document.getElementById("read-count");
-                const unreadCountElement = document.getElementById("unread-count");
-                readCountElement.textContent = `Read/Skiped: ${readCount}`;
-                unreadCountElement.textContent = `Unread: ${unreadCount}`;
+            function filterOldEntries(entries) {
+                
+                const currentDate = new Date();
+                const twoWeeksAgo = new Date();
+                twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 60);
+
+                const filteredEntries = {};
+
+                for (const link in entries) {
+                    const entryDate = new Date(entries[link]);
+                    if (entryDate >= twoWeeksAgo) {
+                        filteredEntries[link] = entries[link];
+                    }
+                }
+
+                return filteredEntries;
             }
 
-            loadNews();
+            function countUnreadArticles() {
+                const cardElements = document.querySelectorAll(".article-container");
+                let unreadCount = 0;
+                cardElements.forEach(card => {
+                    if (!card.classList.contains("read-article")) {
+                        unreadCount++;
+                    }
+                });
+                return unreadCount;
+            }
+
+            function updateItemCount() {
+                const readCount = Object.keys(readArticles).length;
+                const unreadCount = countUnreadArticles(); 
+                const readCountElement = document.getElementById("read-count");
+                const unreadCountElement = document.getElementById("unread-count");
+                readCountElement.textContent = `Seen: ${readCount}+`;
+                unreadCountElement.textContent = `Unread: ${unreadCount}`;
+
+                var readArticleData = articles.filter(article => readArticles[article.itemId]);
+                var upvotedArticleData = articles.filter(article => upvotes[article.itemId]);
+                var downvotedArticleData = articles.filter(article => downvotes[article.itemId]);
+                let dfreq = calculateDF(readArticleData)
+                let upTFIDF = calculateTFIDF(upvotedArticleData,dfreq);
+                let downTFIDF = calculateTFIDF(downvotedArticleData,dfreq);
+
+                localStorage.setItem("upTFIDF", JSON.stringify(upTFIDF));
+                localStorage.setItem("downTFIDF", JSON.stringify(downTFIDF));
+
+                console.log("TF-IDF: "+readArticleData.length+" 'read' documents","\nUp: "+upvotedArticleData.length+" documents, "+Object.keys(upTFIDF).length+" words"
+,"\nDown: "+downvotedArticleData.length+" documents, "+Object.keys(downTFIDF).length+" words\n");
+
+                console.log(upTFIDF,downTFIDF)
+
+                localStorage.setItem("articles", JSON.stringify(articles.slice(-1000)));
+            }
+
+            const clearUpvotesButton = document.getElementById("clear-upvotes");
+            clearUpvotesButton.addEventListener("click", function() {
+                // Clear the "read" key from localStorage
+                localStorage.removeItem("upvotes");
+
+                // Clear the read status of all articles in the upvotes object
+                for (var member in upvotes) delete upvotes[member];
+
+                // Update article styles and the feed list
+                updateFeedList();            
+            });
+
+            const clearDownvotesButton = document.getElementById("clear-downvotes");
+            clearDownvotesButton.addEventListener("click", function() {
+                // Clear the "read" key from localStorage
+                localStorage.removeItem("downvotes");
+
+                // Clear the read status of all articles in the downvotes object
+                for (var member in downvotes) delete downvotes[member];
+
+                // Update article styles and the feed list
+                updateFeedList();
+            });
+
+            const clearReadHistoryButton = document.getElementById("clear-read-history");
+            clearReadHistoryButton.addEventListener("click", function() {
+                // Clear the "read" key from localStorage
+                localStorage.removeItem("read");
+
+                // Clear the read status of all articles in the readArticles object
+                for (var member in readArticles) delete readArticles[member];
+
+                resetReadStatus();
+
+                // Reorder the articles to reflect the changes
+                reorderArticles();
+
+                // Update article styles and the feed list
+                updateFeedList();
+            });            
+            
+            loadNews(true);
 
             const addFeedButton = document.getElementById("add-feed");
             const manageFeedsButton = document.getElementById("manage-feeds");
@@ -340,16 +762,16 @@
                 const newFeedUrl = prompt("Enter a new RSS feed URL:");
                 if (newFeedUrl) {
                     rssFeeds.push(newFeedUrl);
-                    updateFeedList();
+                    updateFeedList(true);
                 }
             });
 
             manageFeedsButton.addEventListener("click", function() {
                 const feedList = rssFeeds.map((feed, index) => `
-                    <li>
+                        <tr><td>
                         <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
-                        ${feed}
-                    </li>
+                        </td><td>
+                        ${feed}</td></tr>
                 `).join("");
 
                 const feedListModal = `
@@ -361,7 +783,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <ul>${feedList}</ul>
+                                    <table cellpadding="10px">${feedList}</table>
                                 </div>
                             </div>
                         </div>
@@ -379,7 +801,7 @@
                     if (event.target.classList.contains("remove-feed")) {
                         const feedIndex = event.target.getAttribute("data-feed-index");
                         rssFeeds.splice(feedIndex, 1);
-                        updateFeedList();
+                        updateFeedList(true);
                         feedListModalElement.querySelector("ul").innerHTML = rssFeeds.map((feed, index) => `
                             <li>
                                 <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
@@ -392,6 +814,10 @@
                 new bootstrap.Modal(feedListModalElement).show();
             });
         });
+
+        
+     
     </script>
+    
 </body>
 </html>
