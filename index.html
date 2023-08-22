@@ -123,9 +123,9 @@
             </div>
             <div style="float:left;"><h1 class="my-4">My RSS Algo</h1></div>
             <div style="float:left;width:100%;">No tracking? No problem. Your data lives on your device. <a href="https://github.com/colarusso/rss_algo#rss_algo" target="_blank">Learn More</a></div>
+            <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;"><i>Loading...</i></span>
         <div class="my-3" style="float:left;width:100%;">
             <span style="float:right"><a href="#my_data">My Data</a></span>
-            <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;"><i>Loading...</i></span>
             <span id="unread-count" class="text-danger">Unread: ?</span>
             <span id="read-count" class="text-success">Seen: ?</span>
         </div>
@@ -211,6 +211,8 @@
                 n_feeds += 1;
                 if (n_feeds>=rssFeeds.length) {
                     document.getElementById('loading').style.display = "none";
+                } else {
+                    document.getElementById('loading').innerHTML = "<i>Loading feed "+(1+n_feeds)+" of "+rssFeeds.length+".</i>" 
                 }
                 return data;
             }
