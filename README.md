@@ -1,10 +1,6 @@
-# rss_algo
+# RSS Algo
 
-# About
 
 # Troubleshooting
 
-# Mirriored Feeds
-
-- https://colarusso.pythonanywhere.com/washpo_national/
-- https://colarusso.pythonanywhere.com/economist_tech/
+Make sure that your url is a properly formated url (e.g. `https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml`).
