@@ -256,6 +256,39 @@
 
         history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
+        function report() {
+            new_check = 5000;
+            if (localStorage.lastLoad) {
+                console.log("Last Sync: "+((Date.parse(new Date) - localStorage.lastLoad)/60000).toFixed(2)+" min. ago")
+            }
+            if (localStorage.feeds) {
+                console.log("Feeds: "+Object.keys(JSON.parse(localStorage.feeds)).length)
+            }
+            if (localStorage.read) {
+                console.log("Stored Cards: "+Object.keys(JSON.parse(localStorage.read)).length)
+            }
+            console.log("MEMORY REPORT");
+            var _lsTotal = 0,
+            _xLen, _x;
+            for (_x in localStorage) {
+                if (!localStorage.hasOwnProperty(_x)) {
+                    continue;
+                }
+                _xLen = ((localStorage[_x].length + _x.length) * 2);
+                _lsTotal += _xLen;
+                if (new_check) {
+                    console.log(" - " + _x.substr(0, 50) + " = " + (_xLen / 1024).toFixed(2) + " KB")
+                }
+            };
+            kbs = (_lsTotal / 1024).toFixed(2)
+            percentage = (_lsTotal / 1024).toFixed(2)/new_check	
+            console.log("Memory Check: " + Math.round(percentage*10000)/100 + "% (" + kbs + "KB/" + new_check + "KB)");
+
+            if (percentage>=10.5) {
+                alert('Your saved data is about '+ kbs + " KB. This is more than 80% the default limit of 5000 kbs. Consider clearing up some space.")
+            }
+        }
+
         /* Generate a share link for the user's Mastodon domain */
         function MastodonShare(target){
 
@@ -1154,8 +1187,7 @@
             });
         });
 
-        
-     
+        report();
     </script>
     
 </body>
