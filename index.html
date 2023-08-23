@@ -425,7 +425,7 @@
             function loadNews(loadFeeds = true) {
 
                 const lastLoad = localStorage.getItem("lastLoad") || 0;
-                var time_padding = Date.parse(new Date())-600000
+                var time_padding = Date.parse(new Date())-750000
                 //console.log(lastLoad, time_padding)
                 if (lastLoad>time_padding) {
                     loadFeeds = false;
@@ -1044,12 +1044,16 @@
             const manageFeedsButton = document.getElementById("manage-feeds");
 
             addFeedButton.addEventListener("click", function() {
-                const newFeedUrl = prompt("Enter a new RSS feed URL:");
-                if (newFeedUrl) {
-                    let lastLoad = 0;
-                    localStorage.setItem("lastLoad", 0);
-                    rssFeeds.push(newFeedUrl);
-                    updateFeedList(true);
+                if (rssFeeds.length>50) {
+                    alert("For performance reasons, we only support 50 feeds at this time. To add a feed you will first need to make space by removing one or more of your current feeds.")
+                } else {
+                    const newFeedUrl = prompt("Enter a new RSS feed URL:");
+                    if (newFeedUrl) {
+                        let lastLoad = 0;
+                        localStorage.setItem("lastLoad", 0);
+                        rssFeeds.push(newFeedUrl);
+                        updateFeedList(true);
+                    }
                 }
             });
 
