@@ -22,8 +22,7 @@
         .read-article .card-title,
         .read-article .card-text,
         .read-article .feed-tag {
-            color: black; /* Standard blac
-            k text for read items */
+            color: black; /* Standard black text for read items */
         }
         .article-container {
             margin-bottom: 15px;
@@ -169,11 +168,11 @@
                 <button id="add-feed" class="btn btn-primary">+</button>
             </div>
             <div style="float:left;"><h1 class="my-1">RSS Algo</h1></div>
-            <div style="float:left;width:100%;padding-top: 8px;">No tracking? No problem. Your data and your algo, living on your device. <a href="https://github.com/colarusso/rss_algo#rss_algo" target="_blank">Learn More</a> </div>
+            <div style="float:left;width:100%;padding-top: 8px;">An algo built for you, living with your data, on your device. <a href="https://github.com/colarusso/rss_algo#rss-algo" target="_blank">Learn More</a> </div>
             <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;color:black;margin-top: 10px;"><i>&nbsp;Loading...&nbsp;</i></span>
         <div class="my-3" style="float:left;width:100%;">
             <span style="float:right"><a href="#my_data">My Data</a></span>
-            <span id="unread-count" class="text-danger">Unread: ?</span>
+            <span id="unread-count" class="text-danger">Unseen: ?</span>
             <span id="read-count" class="text-success">Seen: ?</span>
         </div>
         </div>
@@ -396,7 +395,7 @@
             function loadNews(loadFeeds = true) {
 
                 const lastLoad = localStorage.getItem("lastLoad") || 0;
-                var time_padding = Date.parse(new Date())-300000
+                var time_padding = Date.parse(new Date())-600000
                 //console.log(lastLoad, time_padding)
                 if (lastLoad>time_padding) {
                     loadFeeds = false;
@@ -872,7 +871,7 @@
                 const readCountElement = document.getElementById("read-count");
                 const unreadCountElement = document.getElementById("unread-count");
                 readCountElement.textContent = `Seen: ${readCount}+`;
-                unreadCountElement.textContent = `Unread: ${unreadCount}`;
+                unreadCountElement.textContent = `Unseen: ${unreadCount}`;
 
                 var readArticleData = articles.filter(article => readArticles[article.itemId]);
                 var upvotedArticleData = articles.filter(article => upvotes[article.itemId]);
