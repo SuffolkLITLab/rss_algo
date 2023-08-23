@@ -303,7 +303,7 @@
                 "https://www.wired.com/feed/tag/ai/latest/rss",
                 "https://www.economist.com/science-and-technology/rss.xml",
                 "https://www.lawnext.com/feed",
-                "https://xkcd.com/rss.xml",
+                "https://xkcd.com/rss.xml"
                 // Add more default RSS feed URLs here
             ];
 
@@ -498,7 +498,12 @@
 
                                     //if (pubDate >= lookback) {
                                         
-                                        const title = item.querySelector("title").textContent;
+                                        try {
+                                            title = item.querySelector("title").textContent;
+                                        } catch (error) {
+                                            title = ""
+                                        }
+
                                         const link = item.querySelector("link").textContent;
                                         description = item.querySelector("description").textContent;
 
@@ -512,7 +517,8 @@
 
                                         const pubDate = new Date(item.querySelector("pubDate").textContent);
                                         
-                                        const image = item.querySelector("image"); // Assuming image tag is present
+                                        //const image = item.querySelector("image"); 
+
                                         //const mediaContent = item.querySelector("media\\:content, content");
                                         //const mediaThumbnail = mediaContent ? mediaContent.getAttribute("url") : null;
 
@@ -546,8 +552,6 @@
                                                 } catch (error) {}
                                         }                                        
                                     
-                                        //console.log(item.querySelector("content\\:encoded, encoded").textContent)
-
                                         const itemId = link; // Using link as a unique identifier for items
                                         const isRead = readArticles[itemId] || false;
 
@@ -559,7 +563,7 @@
                                             link,
                                             description,
                                             pubDate,
-                                            image: image ? image.textContent : null,
+                                            //image: image ? image.textContent : null,
                                             mediaThumbnail,
                                             itemId,
                                             isRead,
