@@ -112,9 +112,25 @@
         }
         .footer {
             border-top: 1px solid #555;
-            margin: 20px 0 40px 0;
+            margin: 20px 0 75px 0;
             padding: 10px 5px;
         }
+        #footer_logo_long {
+            height:35px;
+        }
+        #footer_logo_sqr {
+            display:none;
+            height:35px;
+        }
+        @media only screen and (max-width: 520px) {
+            #footer_logo_long {
+                display:none;
+            }
+            #footer_logo_sqr {
+                display:block;
+            }
+        }
+
         
         /* Dark mode styles */
         .dark-mode {
@@ -207,10 +223,13 @@
                 </div>
             </div>
             <div class="footer">
+                <a href="https://suffolklitlab.org/" alt="LIT Lab" target="_blank">
+                    <img id="footer_logo_long" src="images/lit_suffolk.png" border="0" height="35px" alt="LIT and Suffolk University Law School Logos" align="left"/>
+                    <img id="footer_logo_sqr" src="images/blue_logo.png" border="0" alt="LIT and Suffolk University Law School Logos" align="left"/>
+                </a>
                 <span style="float:right">
                     <a href="https://github.com/colarusso/rss_algo" target="_blank">GitHub Repo</a>
                 </span>
-                Made by <a href="https://mastodon.social/@Colarusso" target="_blank">David Colarusso</a>
             </div>
         </div>            
 
@@ -284,9 +303,12 @@
             async function fetchFeed(feedUrl) {
                 document.getElementById('loading').style.display = "block";
 
-                //const response = await fetch(feedUrl);
-                const response = await fetch("https://tools.suffolklitlab.org/rss_proxy/?url="+encodeURIComponent(feedUrl));
-                
+                if (!String(feedUrl).startsWith("https://rss.nytimes.com/")) {
+                    feedUrl = "https://tools.suffolklitlab.org/rss_proxy/?url="+encodeURIComponent(feedUrl)
+                } 
+                    
+                const response = await fetch(feedUrl);
+                                
                 if (!response.ok) {
                     throw new Error(`Request failed with status ${response.status}`);
                 }
@@ -320,13 +342,17 @@
                     if (upvotes[itemId]) {
                         upvoteButton.classList.add("thumbs-up");
                     } else {
-                        upvoteButton.classList.remove("thumbs-up");
+                        try {
+                            upvoteButton.classList.remove("thumbs-up");
+                        } catch (error) {}
                     }
 
                     if (downvotes[itemId]) {
                         downvoteButton.classList.add("thumbs-down");
                     } else {
-                        downvoteButton.classList.remove("thumbs-down");
+                        try {
+                            downvoteButton.classList.remove("thumbs-down");
+                        } catch (error) {}
                     }
 
               
@@ -517,12 +543,37 @@
 
                 newsFeedContainer.innerHTML = "";
 
+                i=0
                 articles.forEach((articleData, index) => {
 
                     const { title, link, description, pubDate, image, mediaThumbnail, itemId, isRead, feedTitle, hasUpvote, hasDownvote, priorityRating } = articleData;
 
                     const twoWeeksAgo = new Date();
                     twoWeeksAgo.setDate(twoWeeksAgo.getDate() - savedLookback);
+
+                    if (i==2 && Math.random()<=0.1) {
+                        const sponsor = document.createElement("div");
+                        sponsor.setAttribute("data-article-index", "sponsor"); 
+                        sponsor.setAttribute("data-item-id", "sponsor");
+                        sponsor.className = `col-xl-4 col-lg-5 col-md-6 col-sm-12 article-container`;
+                        sponsor.innerHTML = `
+                            <div class="card">
+                                <div style="postion:relative:z-index:0;top:0"><img src="images/sargent.jpg" class="card-img-top thumbnail-image" alt="Thumbnail Image"></div>
+                                <div class="card-body">
+                                        <h5 class="card-title">Support the People Who Built <i>RSS Algo</i>!</h5>
+                                        <p class="card-text">Through its Affiliates Program, Suffolk University Law School's Legal Innovation and Technology (LIT) Lab provides members with connections to experts and law students working with emerging legal services technologies, while growing the Lab's capacity to serve disadvantaged communities.</p>
+                                    <div style="text-align:right;">
+                                        <a href="https://suffolklitlab.org/docs/affiliates.pdf" class="btn btn-primary" target="_blank">Become an Affiliate</a>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="feed-tag">FROM THE MAKERS OF THIS SITE</small>
+                                </div>
+                            </div>
+                        `;                        
+                        newsFeedContainer.appendChild(sponsor);
+                    }
+
 
                     if (Date.parse(pubDate) >= Date.parse(twoWeeksAgo)) {
 
@@ -641,6 +692,9 @@
                         });
                         
                     }
+                    
+                    i+=1;
+
                 });
 
                 // After all articles are displayed, update their styles
