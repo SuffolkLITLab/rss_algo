@@ -307,6 +307,7 @@
                 document.getElementById('loading').style.display = "block";
 
                 if (!String(feedUrl).startsWith("https://rss.nytimes.com/")) {
+                    //If forking this repo, please use your own CORS proxy
                     feedUrl = "https://tools.suffolklitlab.org/rss_proxy/?url="+encodeURIComponent(feedUrl)
                 } 
                     
