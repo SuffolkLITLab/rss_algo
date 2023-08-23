@@ -412,6 +412,12 @@
                 articles = uniqueArticles.reverse();
             }
 
+            function extractContent(s) {
+                var span = document.createElement('span');
+                span.innerHTML = s;
+                return span.textContent || span.innerText;
+            };
+
             function loadNews(loadFeeds = true) {
 
                 const lastLoad = localStorage.getItem("lastLoad") || 0;
@@ -448,11 +454,54 @@
                                         
                                         const title = item.querySelector("title").textContent;
                                         const link = item.querySelector("link").textContent;
-                                        const description = item.querySelector("description").textContent;
+                                        description = item.querySelector("description").textContent;
+
+                                        const re = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i;
+                                        possible_img = description.match(re)
+                                        if (possible_img) {
+                                            possible_img = possible_img[0]
+                                        }
+
+                                        description = extractContent(description)
+
                                         const pubDate = new Date(item.querySelector("pubDate").textContent);
+                                        
                                         const image = item.querySelector("image"); // Assuming image tag is present
-                                        const mediaContent = item.querySelector("media\\:content, content");
-                                        const mediaThumbnail = mediaContent ? mediaContent.getAttribute("url") : null;
+                                        //const mediaContent = item.querySelector("media\\:content, content");
+                                        //const mediaThumbnail = mediaContent ? mediaContent.getAttribute("url") : null;
+
+                                        try {
+                                            mediaThumbnail = item.querySelector("media\\:content, content").getAttribute("url");
+                                        } catch(error) {
+                                            mediaThumbnail = null
+                                        }
+
+                                        if (Object.is(mediaThumbnail, null)) {
+                                            mediaContent = item.querySelector("media\\:thumbnail, thumbnail");
+                                            if (mediaContent) {
+                                                mediaThumbnail = mediaContent.getAttribute("url");
+                                            } else {
+                                                mediaThumbnail = null
+                                            }
+                                        }
+
+                                        if (Object.is(mediaThumbnail, null)) {
+                                            mediaThumbnail = possible_img
+                                        }
+
+                                        if (Object.is(mediaThumbnail, null)) {
+                                            try {
+                                                blob_of_text = item.querySelector("content\\:encoded, encoded").textContent
+                                                possible_img = blob_of_text.match(re)
+                                                if (possible_img) {
+                                                    possible_img = possible_img[0]
+                                                    mediaThumbnail = possible_img
+                                                }
+                                                } catch (error) {}
+                                        }                                        
+                                    
+                                        //console.log(item.querySelector("content\\:encoded, encoded").textContent)
+
                                         const itemId = link; // Using link as a unique identifier for items
                                         const isRead = readArticles[itemId] || false;
 
