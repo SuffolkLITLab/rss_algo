@@ -720,8 +720,8 @@
                             } else {
                                 upvotes[itemId] = true;
                                 localStorage.setItem("upvotes", JSON.stringify(upvotes));
-                                //localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-1))));
                             }
+                            localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-10000))));
                             
                             updateArticleStyles();
                         });
@@ -738,8 +738,8 @@
                             } else {
                                 downvotes[itemId] = true;
                                 localStorage.setItem("downvotes", JSON.stringify(downvotes));
-                                //localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-1))));
                             }
+                            localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-10000))));
                             
                             updateArticleStyles();
                         });
@@ -1033,7 +1033,7 @@
 
                 //console.log("TF-IDF: "+readArticleData.length+" 'read' documents","\nUp: "+upvotedArticleData.length+" documents, "+Object.keys(upTFIDF).length+" words","\nDown: "+downvotedArticleData.length+" documents, "+Object.keys(downTFIDF).length+" words\n");
 
-                localStorage.setItem("articles", JSON.stringify(articles.slice(-1000)));
+                localStorage.setItem("articles", JSON.stringify(articles.slice(-10000)));
             }
 
             const clearUpvotesButton = document.getElementById("clear-upvotes");
