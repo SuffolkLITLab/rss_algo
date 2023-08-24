@@ -658,7 +658,6 @@
                                         const itemId = link; // Using link as a unique identifier for items
                                         const isRead = readArticles[itemId] || false;
 
-                                        // Placeholder function to assign priority rating
                                         const priorityRating = getRating(feedTitle+": "+title+" "+description); 
 
                                         articles.push({
@@ -708,6 +707,7 @@
                 });
             }
 
+
             function reorderArticles() {
                 articles.sort((a, b) => {
                     if (a.isRead && !b.isRead) return 1;
@@ -715,6 +715,12 @@
                     if (a.priorityRating !== b.priorityRating) return b.priorityRating - a.priorityRating;
                     return b.pubDate - a.pubDate;
                 });
+                var order_arr = []
+                for (article in articles){
+                    // articles[article].isRead not always true or false?
+                    order_arr.push([articles[article].isRead,articles[article].priorityRating,articles[article].pubDate])
+                }
+                console.log(order_arr)
             }
 
             function updateOpenButton(card) {
@@ -786,6 +792,8 @@
                         article.className = `col-xl-4 col-lg-5 col-md-6 col-sm-12 article-container ${isRead ? 'read-article' : ''}`;
 
                         local_pubDate = new Date(pubDate).toLocaleString();
+
+                        article.priorityRating = getRating(feedTitle+": "+title+" "+description); 
 
                         article.innerHTML = `
                             <div class="card">
