@@ -292,6 +292,7 @@
             }
             if (localStorage.read) {
                 console.log("Read Cards: "+Object.keys(JSON.parse(localStorage.read)).length)
+                //console.log(localStorage.read)
             }
             if (localStorage.upvotes) {
                 console.log("Upvotes: "+Object.keys(JSON.parse(localStorage.upvotes)).length)
@@ -454,6 +455,7 @@
                     const itemId = articleContainer.getAttribute("data-item-id");
 
                     if (readArticles[itemId]) {
+                        console.log(readArticles[itemId],itemId)
                         articleContainer.classList.add("read-article");
                     } else {
                         articleContainer.classList.remove("read-article");
@@ -656,7 +658,7 @@
                                         }
                                     
                                         const itemId = link; // Using link as a unique identifier for items
-                                        const isRead = false //readArticles[itemId] || false;
+                                        const isRead = readArticles[itemId] || false;
 
                                         const priorityRating = getRating(feedTitle+": "+title+" "+description); 
 
@@ -712,6 +714,7 @@
                 for (article in articles){
                     articles[article]["priorityRating"] = getRating(articles[article]['feedTitle']+": "+articles[article]['title']+" "+articles[article]['description']); 
                 }
+
                 articles.sort((a, b) => {
                     if (a.isRead && !b.isRead) return 1;
                     if (!a.isRead && b.isRead) return -1;
