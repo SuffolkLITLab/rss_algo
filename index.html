@@ -290,9 +290,6 @@
             if (localStorage.lastLoad) {
                 console.log("Last Sync: "+((Date.parse(new Date) - localStorage.lastLoad)/60000).toFixed(2)+" min. ago")
             }
-            if (localStorage.feeds) {
-                console.log("Feeds: "+Object.keys(JSON.parse(localStorage.feeds)).length)
-            }
             if (localStorage.articles) {
                 stored_art = JSON.parse(localStorage.articles).length
                 console.log("Stored Articles: "+stored_art)
@@ -329,9 +326,11 @@
             kbs = (_lsTotal / 1024).toFixed(2)
             percentage = (_lsTotal / 1024).toFixed(2)/new_check	
             console.log("Memory Check: " + Math.round(percentage*10000)/100 + "% (" + kbs + "KB/" + new_check + "KB)");
-
-            if (percentage>=10.5) {
-                alert('Your saved data is about '+ kbs + " KB. This is more than 80% the default limit of 5000 kbs. Consider clearing up some space.")
+            if (localStorage.feeds) {                
+                console.log("Feeds ("+Object.keys(JSON.parse(localStorage.feeds)).length+"):");
+                for (feed in JSON.parse(localStorage.feeds)){
+                    console.log("- "+JSON.parse(localStorage.feeds)[feed]);
+                }
             }
         }
 
