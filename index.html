@@ -376,11 +376,12 @@
                 "http://feeds.washingtonpost.com/rss/national?itid=lk_inline_manual_32",
                 "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
                 "http://www.newyorker.com/feed/everything",
-                "https://feeds.arstechnica.com/arstechnica/features",
-                "https://www.wired.com/feed/category/science/latest/rss",
-                "https://www.wired.com/feed/tag/ai/latest/rss",
                 "https://www.economist.com/leaders/rss.xml",
                 "https://www.economist.com/science-and-technology/rss.xml",
+                "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
+                "https://feeds.arstechnica.com/arstechnica/index",
+                "https://www.wired.com/feed/category/science/latest/rss",
+                "https://www.wired.com/feed/tag/ai/latest/rss",
                 "https://www.lawnext.com/feed",
                 "https://xkcd.com/rss.xml"
                 //"https://pluralistic.net/feed/"
@@ -562,6 +563,9 @@
                     rssFeeds.forEach(feedUrl => {
                         fetchFeed(feedUrl)
                             .then(data => {
+
+                                //console.log(data)
+
                                 const parser = new DOMParser();
                                 const xml = parser.parseFromString(data, "application/xml");
 
@@ -646,6 +650,8 @@
                                             } else if (link.includes("nytimes.com")) {
                                                 // source: https://commons.wikimedia.org/wiki/File:Nytimes_hq.jpg
                                                 mediaThumbnail = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Nytimes_hq.jpg/640px-Nytimes_hq.jpg"
+                                            } else if (link.includes("wsj.com")) {
+                                                mediaThumbnail = "https://s.wsj.net/img/meta/wsj-social-share.png"
                                             }
                                         }
                                     
