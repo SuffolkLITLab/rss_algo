@@ -204,7 +204,7 @@
             <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;color:black;margin-top: 10px;"><i>&nbsp;Loading...&nbsp;</i></span>
         <div class="my-3" style="float:left;width:100%;">
             <span style="float:right"><a href="#my_data">My Data</a></span>
-            <span id="unread-count" class="text-danger">Unseen: ?</span>
+            <span id="unread-count" class="text-danger">New: ?</span>
             <span id="read-count" class="text-success">Seen: ?</span>
         </div>
         </div>
@@ -256,6 +256,18 @@
 
         history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
+            function readArticles_in_window(){
+                articls_in_window = 0
+                JSON.parse(localStorage.articles).forEach(card => {
+                    if (Date.parse(card.pubDate)>(new Date()-(1*60000*60*60*24))) {
+                        articls_in_window++;
+                    }
+                });
+                return articls_in_window
+            }
+
+            
+
         function report() {
             new_check = 5000;
             if (localStorage.lastLoad) {
@@ -264,8 +276,18 @@
             if (localStorage.feeds) {
                 console.log("Feeds: "+Object.keys(JSON.parse(localStorage.feeds)).length)
             }
+            if (localStorage.articles) {
+                console.log("Stored Articles: "+JSON.parse(localStorage.articles).length)
+                //console.log("Articles/day: "+readArticles_in_window())
+            }
             if (localStorage.read) {
-                console.log("Stored Cards: "+Object.keys(JSON.parse(localStorage.read)).length)
+                console.log("Read Cards: "+Object.keys(JSON.parse(localStorage.read)).length)
+            }
+            if (localStorage.upvotes) {
+                console.log("Upvotes: "+Object.keys(JSON.parse(localStorage.upvotes)).length)
+            }
+            if (localStorage.downvotes) {
+                console.log("Downvotes: "+Object.keys(JSON.parse(localStorage.downvotes)).length)
             }
             console.log("MEMORY REPORT");
             var _lsTotal = 0,
@@ -336,7 +358,8 @@
                 "https://www.wired.com/feed/tag/ai/latest/rss",
                 "https://www.economist.com/science-and-technology/rss.xml",
                 "https://www.lawnext.com/feed",
-                "https://xkcd.com/rss.xml"
+                "https://xkcd.com/rss.xml",
+                //"https://pluralistic.net/feed/"
                 // Add more default RSS feed URLs here
             ];
 
@@ -520,6 +543,8 @@
                                 const parser = new DOMParser();
                                 const xml = parser.parseFromString(data, "application/xml");
 
+                                //console.log(xml)
+
                                 const feedTitle = xml.querySelector("channel title").textContent;
 
                                 const items = xml.querySelectorAll("item");
@@ -540,13 +565,17 @@
                                         const link = item.querySelector("link").textContent;
                                         description = item.querySelector("description").textContent;
 
-                                        const re = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i;
+                                        const re = /(https?:\/\/[^\s]+\.(?:png|jpg|jpeg|gif))/i;
                                         possible_img = description.match(re)
                                         if (possible_img) {
                                             possible_img = possible_img[0]
                                         }
 
                                         description = extractContent(description)
+
+                                        if (description.length>400) {
+                                            description = description.slice(0,400)+" [...]";
+                                        }
 
                                         const pubDate = new Date(item.querySelector("pubDate").textContent);
                                         
@@ -583,7 +612,17 @@
                                                     mediaThumbnail = possible_img
                                                 }
                                                 } catch (error) {}
-                                        }                                        
+                                        }                 
+                                        
+                                        if (Object.is(mediaThumbnail, null)) {
+                                            if(link.includes("washingtonpost.com")){
+                                                mediaThumbnail = "https://www.washingtonpost.com/wp-apps/imrs.php?src=https://www.washingtonpost.com/wp-stat/store/newspaper.jpg&w=700&h=525&t=20191113b"
+                                            } else if (link.includes("economist.com")) {
+                                                mediaThumbnail = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/The_Economist_Logo.svg/640px-The_Economist_Logo.svg.png"
+                                            } else if (link.includes("nytimes.com")) {
+                                                mediaThumbnail = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Nytimes_hq.jpg/640px-Nytimes_hq.jpg"
+                                            }
+                                        }
                                     
                                         const itemId = link; // Using link as a unique identifier for items
                                         const isRead = readArticles[itemId] || false;
@@ -1054,7 +1093,7 @@
                 const readCountElement = document.getElementById("read-count");
                 const unreadCountElement = document.getElementById("unread-count");
                 readCountElement.textContent = `Seen: ${readCount}+`;
-                unreadCountElement.textContent = `Unseen: ${unreadCount}`;
+                unreadCountElement.textContent = `New: ${unreadCount}`;
 
                 var readArticleData = articles.filter(article => readArticles[article.itemId]);
                 var upvotedArticleData = articles.filter(article => upvotes[article.itemId]);
