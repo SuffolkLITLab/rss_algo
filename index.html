@@ -616,10 +616,13 @@
                                         
                                         if (Object.is(mediaThumbnail, null)) {
                                             if(link.includes("washingtonpost.com")){
+                                                // source: https://www.washingtonpost.com/reprints-permissions/
                                                 mediaThumbnail = "https://www.washingtonpost.com/wp-apps/imrs.php?src=https://www.washingtonpost.com/wp-stat/store/newspaper.jpg&w=700&h=525&t=20191113b"
                                             } else if (link.includes("economist.com")) {
+                                                // source: https://commons.wikimedia.org/wiki/File:The_Economist_Logo.svg
                                                 mediaThumbnail = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/The_Economist_Logo.svg/640px-The_Economist_Logo.svg.png"
                                             } else if (link.includes("nytimes.com")) {
+                                                // source: https://commons.wikimedia.org/wiki/File:Nytimes_hq.jpg
                                                 mediaThumbnail = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Nytimes_hq.jpg/640px-Nytimes_hq.jpg"
                                             }
                                         }
