@@ -916,22 +916,30 @@
 
             function getRating(inputString) {
 
-                const words = inputString.toLowerCase().match(/\b\w+\b/g);
-                score = 0;
-                for (word in words) {
-                    if (isNaN(upTFIDF[words[word]])) {
-                        // no action
-                    } else {
-                        score += upTFIDF[words[word]]*1
+                tf = countWords(inputString)
+
+                up_score = 0;
+                for (const [key, value] of Object.entries(tf)) {
+                    if (!isNaN(upTFIDF[key])) {
+                        //console.log(key,tf[key],upTFIDF[key])
+                        up_score += Math.pow(tf[key],2) + Math.pow(upTFIDF[key],2)
                     }
                 }
-                for (word in words) {
-                    if (isNaN(downTFIDF[words[word]])) {
-                        // no action
-                    } else {
-                        score -= downTFIDF[words[word]]*0.5
+                if (up_score>0) {
+                    up_score = Math.sqrt(up_score)
+                }
+                
+                down_score = 0;
+                for (const [key, value] of Object.entries(tf)) {
+                    if (!isNaN(downTFIDF[key])) {
+                        down_score += Math.pow(tf[key],2) + Math.pow(downTFIDF[key],2)
                     }
                 }
+                if (down_score>0) {
+                    down_score = Math.sqrt(down_score)
+                }
+
+                score = up_score - down_score*0.5;
 
                 if (score<0){
                     score = 0
