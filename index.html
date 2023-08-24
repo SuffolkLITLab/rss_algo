@@ -780,6 +780,8 @@
                         article.setAttribute("data-item-id", itemId);
                         article.className = `col-xl-4 col-lg-5 col-md-6 col-sm-12 article-container ${isRead ? 'read-article' : ''}`;
 
+                        local_pubDate = new Date(pubDate).toLocaleString();
+
                         article.innerHTML = `
                             <div class="card">
                                 <div class="masto_share"><a href="javascript:void('')" onclick="MastodonShare('${title};url=${link}');">Mastodon</a></div>
@@ -788,7 +790,7 @@
                                         <!--<div class="priority-rating">${priorityRating}</div>-->
                                         <h5 class="card-title">${title}</h5>
                                         <p class="card-text">${description}</p>
-                                        <p class="card-text"><small class="text-muted">${pubDate.toLocaleString()}</small></p>
+                                        <p class="card-text"><small class="text-muted">${local_pubDate}</small></p>
                                     <div class="d-flex justify-content-between">
                                         <div>
                                             <button class="btn btn-success upvote ${hasUpvote ? 'thumbs-up' : ''}" data-item-id="${itemId}">👍</button>
