@@ -91,7 +91,25 @@
             font-size: 13px;
             opacity: 0.66;
         }
-
+        #unread-count {
+            padding: 0.2rem 0.6rem 0.3rem;
+            background: #db1818;
+            color: white !important;
+            border-radius: 0.3rem;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+            margin-right: 3px;
+        }
+        #read-count {
+            padding: 0.2rem 0.6rem 0.3rem;
+            background: #109f08;
+            color: white !important;
+            border-radius: 0.3rem;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+        }
         .card-body {
             flex: 1; /* Allow the card body to grow and fill the remaining space */
             display: flex;
@@ -200,7 +218,7 @@
                 <button id="add-feed" class="btn btn-primary">+</button>
             </div>
             <div style="float:left;"><h1 class="my-1">RSS Algo</h1></div>
-            <div style="float:left;width:100%;padding-top: 8px;">An algo built for you, living with your data on your device. <a href="https://github.com/colarusso/rss_algo#rss-algo" target="_blank">Learn More</a> </div>
+            <div style="float:left;width:100%;padding-top: 8px;">An algo built for you, living with your data on your device. FYI, we're currently in beta. <a href="https://github.com/colarusso/rss_algo#rss-algo" target="_blank">Learn More</a> </div>
             <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;color:black;margin-top: 10px;"><i>&nbsp;Loading...&nbsp;</i></span>
         <div class="my-3" style="float:left;width:100%;">
             <span style="float:right"><a href="#my_data">My Data</a></span>
@@ -265,9 +283,8 @@
                 });
                 return articls_in_window
             }
-
             
-
+        var max_arts = 2500;
         function report() {
             new_check = 5000;
             if (localStorage.lastLoad) {
@@ -277,8 +294,15 @@
                 console.log("Feeds: "+Object.keys(JSON.parse(localStorage.feeds)).length)
             }
             if (localStorage.articles) {
-                console.log("Stored Articles: "+JSON.parse(localStorage.articles).length)
-                //console.log("Articles/day: "+readArticles_in_window())
+                stored_art = JSON.parse(localStorage.articles).length
+                console.log("Stored Articles: "+stored_art)
+                if (stored_art>100) {
+                    _xLen = ((localStorage["articles"].length + "articles".length) * 2);
+                    size = (_xLen / 1024).toFixed(2);
+                    size_per_art = (0.45+size/stored_art)*1.05;
+                    max_arts = Math.round(5000/size_per_art)
+                    console.log("Article Cap: "+max_arts);
+                }
             }
             if (localStorage.read) {
                 console.log("Read Cards: "+Object.keys(JSON.parse(localStorage.read)).length)
@@ -350,15 +374,16 @@
                 "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml",
                 "https://rss.nytimes.com/services/xml/rss/nyt/Space.xml",
                 "https://rss.nytimes.com/services/xml/rss/nyt/Books/Review.xml",
-                "https://rss.nytimes.com/services/xml/rss/nyt/MostViewed.xml",
                 "http://feeds.washingtonpost.com/rss/national?itid=lk_inline_manual_32",
+                "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
                 "http://www.newyorker.com/feed/everything",
                 "https://feeds.arstechnica.com/arstechnica/features",
                 "https://www.wired.com/feed/category/science/latest/rss",
                 "https://www.wired.com/feed/tag/ai/latest/rss",
+                "https://www.economist.com/leaders/rss.xml",
                 "https://www.economist.com/science-and-technology/rss.xml",
                 "https://www.lawnext.com/feed",
-                "https://xkcd.com/rss.xml",
+                "https://xkcd.com/rss.xml"
                 //"https://pluralistic.net/feed/"
                 // Add more default RSS feed URLs here
             ];
@@ -404,11 +429,9 @@
             async function fetchFeed(feedUrl) {
                 document.getElementById('loading').style.display = "block";
 
-                if (!String(feedUrl).startsWith("https://rss.nytimes.com/")) {
-                    //If forking this repo, please use your own CORS proxy
-                    feedUrl = "https://tools.suffolklitlab.org/rss_proxy/?url="+encodeURIComponent(feedUrl)
-                } 
-                    
+                //If forking this repo, please use your own CORS proxy
+                feedUrl = "https://tools.suffolklitlab.org/rss_proxy/?url="+encodeURIComponent(feedUrl)
+                
                 const response = await fetch(feedUrl);
                                 
                 if (!response.ok) {
@@ -801,7 +824,7 @@
                                 upvotes[itemId] = true;
                                 localStorage.setItem("upvotes", JSON.stringify(upvotes));
                             }
-                            localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-10000))));
+                            localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts))));
                             
                             updateArticleStyles();
                         });
@@ -819,7 +842,7 @@
                                 downvotes[itemId] = true;
                                 localStorage.setItem("downvotes", JSON.stringify(downvotes));
                             }
-                            localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-10000))));
+                            localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-max_arts))));
                             
                             updateArticleStyles();
                         });
@@ -1091,11 +1114,15 @@
             }
 
             function updateItemCount() {
-                const readCount = Object.keys(readArticles).length;
-                const unreadCount = countUnreadArticles(); 
+                const readCount = Object.keys(readArticles).length.toLocaleString("en-US");;
+                const unreadCount = countUnreadArticles().toLocaleString("en-US");; 
                 const readCountElement = document.getElementById("read-count");
                 const unreadCountElement = document.getElementById("unread-count");
-                readCountElement.textContent = `Seen: ${readCount}+`;
+                if (readCount<=1000) {
+                    readCountElement.textContent = `Seen: ${readCount}`;
+                } else {
+                    readCountElement.textContent = `Seen: 1,000+`;
+                }
                 unreadCountElement.textContent = `New: ${unreadCount}`;
 
                 var readArticleData = articles.filter(article => readArticles[article.itemId]);
@@ -1113,7 +1140,7 @@
 
                 //console.log("TF-IDF: "+readArticleData.length+" 'read' documents","\nUp: "+upvotedArticleData.length+" documents, "+Object.keys(upTFIDF).length+" words","\nDown: "+downvotedArticleData.length+" documents, "+Object.keys(downTFIDF).length+" words\n");
 
-                localStorage.setItem("articles", JSON.stringify(articles.slice(-10000)));
+                localStorage.setItem("articles", JSON.stringify(articles.slice(-max_arts)));
             }
 
             const clearUpvotesButton = document.getElementById("clear-upvotes");
