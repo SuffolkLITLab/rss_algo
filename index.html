@@ -709,6 +709,9 @@
 
 
             function reorderArticles() {
+                for (article in articles){
+                    articles[article]["priorityRating"] = getRating(articles[article]['feedTitle']+": "+articles[article]['title']+" "+articles[article]['description']); 
+                }
                 articles.sort((a, b) => {
                     if (a.isRead && !b.isRead) return 1;
                     if (!a.isRead && b.isRead) return -1;
@@ -786,8 +789,6 @@
                         article.className = `col-xl-4 col-lg-5 col-md-6 col-sm-12 article-container ${isRead ? 'read-article' : ''}`;
 
                         local_pubDate = new Date(pubDate).toLocaleString();
-
-                        article.priorityRating = getRating(feedTitle+": "+title+" "+description); 
 
                         article.innerHTML = `
                             <div class="card">
@@ -1169,7 +1170,7 @@
                 var order_arr = []
                 for (article in articles){
                     console.log("Updating Order")
-                    order_arr.push([articles[article].isRead,articles[article].priorityRating,Date.parse(articles[article].pubDate),articles[article].itemId])
+                    order_arr.push([articles[article].isRead,articles[article].priorityRating,Date.parse(articles[article].pubDate),articles[article].title,articles[article].itemId])
                 }
                 console.log(order_arr)
             }
