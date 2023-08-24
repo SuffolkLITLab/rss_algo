@@ -1170,7 +1170,7 @@
                 var order_arr = []
                 for (article in articles){
                     console.log("Updating Order")
-                    order_arr.push([articles[article].isRead,articles[article].priorityRating,Date.parse(articles[article].pubDate),articles[article].title,articles[article].itemId])
+                    order_arr.push([articles[article].isRead,articles[article].priorityRating,new Date(articles[article].pubDate).toLocaleString(),articles[article].title,articles[article].itemId])
                 }
                 console.log(order_arr)
             }
