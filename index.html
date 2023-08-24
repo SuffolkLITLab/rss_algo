@@ -656,7 +656,7 @@
                                         }
                                     
                                         const itemId = link; // Using link as a unique identifier for items
-                                        const isRead = readArticles[itemId] || false;
+                                        const isRead = false //readArticles[itemId] || false;
 
                                         const priorityRating = getRating(feedTitle+": "+title+" "+description); 
 
@@ -715,12 +715,6 @@
                     if (a.priorityRating !== b.priorityRating) return b.priorityRating - a.priorityRating;
                     return b.pubDate - a.pubDate;
                 });
-                var order_arr = []
-                for (article in articles){
-                    // articles[article].isRead not always true or false?
-                    order_arr.push([articles[article].isRead,articles[article].priorityRating,articles[article].pubDate])
-                }
-                console.log(order_arr)
             }
 
             function updateOpenButton(card) {
@@ -1172,6 +1166,12 @@
                 //console.log("TF-IDF: "+readArticleData.length+" 'read' documents","\nUp: "+upvotedArticleData.length+" documents, "+Object.keys(upTFIDF).length+" words","\nDown: "+downvotedArticleData.length+" documents, "+Object.keys(downTFIDF).length+" words\n");
 
                 localStorage.setItem("articles", JSON.stringify(articles.slice(-max_arts)));
+                var order_arr = []
+                for (article in articles){
+                    console.log("Updating Order")
+                    order_arr.push([articles[article].isRead,articles[article].priorityRating,Date.parse(articles[article].pubDate),articles[article].itemId])
+                }
+                console.log(order_arr)
             }
 
             const clearUpvotesButton = document.getElementById("clear-upvotes");
