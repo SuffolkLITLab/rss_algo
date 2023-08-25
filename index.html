@@ -342,10 +342,10 @@
                 stored_art = 0
             }
             if (localStorage.feeds) {                
-                console.log("Feeds ("+Object.keys(JSON.parse(localStorage.feeds)).length+"):");
-                for (feed in JSON.parse(localStorage.feeds)){
-                    console.log("- "+JSON.parse(localStorage.feeds)[feed]);
-                }
+                console.log("Feeds ("+Object.keys(JSON.parse(localStorage.feeds)).length+"):",JSON.parse(localStorage.feeds));
+                //for (feed in JSON.parse(localStorage.feeds)){
+                //    console.log("- "+JSON.parse(localStorage.feeds)[feed]);
+                //}
             }
         }
 
