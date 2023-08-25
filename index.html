@@ -338,6 +338,8 @@
                     //max_arts = 100
                     console.log("Article Cap: "+max_arts);
                 }
+            } else {
+                stored_art = 0
             }
             if (localStorage.feeds) {                
                 console.log("Feeds ("+Object.keys(JSON.parse(localStorage.feeds)).length+"):");
@@ -728,7 +730,8 @@
                                 displayArticles();
                                 updateItemCount();
                                 if (crunch_numbers) {
-                                    console.log("Displayed Cards:",newsFeedContainer.childNodes.length)
+                                    displayed_cards = newsFeedContainer.childNodes.length
+                                    console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
                                 }
                             })
                             .catch(error => {
@@ -747,7 +750,8 @@
                     reorderArticles();
                     displayArticles();
                     updateItemCount();
-                    console.log("Displayed Cards:",newsFeedContainer.childNodes.length)
+                    displayed_cards = newsFeedContainer.childNodes.length
+                    console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
                     crunch_numbers = false;
                 }
 
