@@ -407,23 +407,31 @@
 
 
             let rssFeeds = JSON.parse(localStorage.getItem("feeds")) || [
-                "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml",
+                "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
+                "https://rss.nytimes.com/services/xml/rss/nyt/US.xml",
                 "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
                 "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml",
                 "https://rss.nytimes.com/services/xml/rss/nyt/Space.xml",
-                "https://rss.nytimes.com/services/xml/rss/nyt/Books/Review.xml",
+                "https://rss.nytimes.com/services/xml/rss/nyt/Arts.xml",
                 "http://feeds.washingtonpost.com/rss/national?itid=lk_inline_manual_32",
                 "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
+                "http://feeds.washingtonpost.com/rss/business/technology?itid=lk_inline_manual_31",
                 "http://www.newyorker.com/feed/everything",
+                "https://www.economist.com/the-world-this-week/rss.xml",
                 "https://www.economist.com/leaders/rss.xml",
+                "https://www.economist.com/briefing/rss.xml",
                 "https://www.economist.com/science-and-technology/rss.xml",
                 "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
-                "https://feeds.arstechnica.com/arstechnica/index",
+                "https://feeds.arstechnica.com/arstechnica/features",
+                "https://feeds.arstechnica.com/arstechnica/technology-lab",
+                "https://feeds.arstechnica.com/arstechnica/tech-policy",
+                "https://feeds.arstechnica.com/arstechnica/science",
                 "https://www.wired.com/feed/category/science/latest/rss",
+                "https://www.wired.com/feed/category/ideas/latest/rss",
                 "https://www.wired.com/feed/tag/ai/latest/rss",
                 "https://www.lawnext.com/feed",
-                "https://xkcd.com/rss.xml"
-                //"https://pluralistic.net/feed/"
+                "https://xkcd.com/rss.xml",
+                "https://pluralistic.net/feed/"
                 // Add more default RSS feed URLs here
             ];
 
@@ -1064,7 +1072,7 @@
                 }
                 down_score = cosinesim(array1, array2);
                 
-                score = up_score - down_score*0.25;
+                score = up_score - down_score*1.10;
                 //console.log(score)
                 
                 return score;
@@ -1350,7 +1358,7 @@
             const manageFeedsButton = document.getElementById("manage-feeds");
 
             addFeedButton.addEventListener("click", function() {
-                if (rssFeeds.length>25) {
+                if (rssFeeds.length>=25) {
                     alert("For performance reasons, we only support 25 feeds at this time. To add a feed you will first need to make space by removing one or more of your current feeds.")
                 } else {
                     const newFeedUrl = prompt("Enter a new RSS feed URL:");
