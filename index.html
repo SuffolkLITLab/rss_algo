@@ -1083,7 +1083,11 @@
                 return tf;
             }
 
-            function topWords(wordObj) {            
+            function topWords(wordObj) {         
+                
+                for (word in wordObj){
+                    wordObj[word] = wordObj[word]/dfreq["df_arr"][word]
+                }
 
                 const pickHighest = (wordObj, num = 1) => {
                     const requiredObj = {};
@@ -1099,7 +1103,7 @@
                     return requiredObj;
                 };
 
-                n = 50;
+                n = 60;
                 word_list = pickHighest(wordObj, n)
                 if (Object.keys(word_list).length>0) {
                     i = 0
