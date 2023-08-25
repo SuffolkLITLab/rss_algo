@@ -235,8 +235,12 @@
             <h2>My Data</h2>
             <p>You can manage your feeds by clicking "My Feeds" at the <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">top</a> of this page. See additional controls below. To determine what articles you like, we make use of insights from <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">TF-IDF</a>, comparing all the text from the cards you vote up or down with everything you've "seen." FWIW, recomendations won't kick in until you've seen north of 100 cards. I hope to write a more complete explanation sometime. When I do, I'll put a link here. Until then, you can always look at <a href="https://github.com/colarusso/rss_algo" target="_blank">the code</a>.</p>
             <h4>Ratings Cutoff</h4>
-                    After the recomendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and postive numbers are above average. 
-                    Z-Score for cutoff <b><i><span id="cutoff-value">-2.5</span></i></b>. <i>Refresh page to see results</i>.
+                    <p>
+                        After the recomendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and postive numbers are above average. 
+                    </p>
+                    <p>
+                    Z-Score for cutoff: <b><i><span id="cutoff-value">-2.5</span></i></b>. <i>Refresh page to see results</i>.
+                    </p>
                     <p>
                         <input type="range" id="cutoff-slider" min="-3.5" max="3.5" value="-2.5" step="0.01" style="width:100%;">
                     </p>
