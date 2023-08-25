@@ -6,7 +6,7 @@
 	<meta property="og:site_name" content="RSS Algo"/>
 	<meta property="og:type" content="website"/>
 	<meta property="og:title" content="RSS Algo"/>
-	<meta property="og:description" content="An algorithmic RSS reader where your data stays on your device."/>
+	<meta property="og:description" content="An algorithmically-driven RSS reader built for you, living with your data on your device."/>
 	<meta property="og:image" content="images/placeholder.png"/>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -218,10 +218,10 @@
                 <button id="add-feed" class="btn btn-primary">+</button>
             </div>
             <div style="float:left;"><h1 class="my-1">RSS Algo</h1></div>
-            <div style="float:left;width:100%;padding-top: 8px;">An algo built for you, living with your data on your device. FYI, we're currently in beta. <a href="https://github.com/colarusso/rss_algo#rss-algo" target="_blank">Learn More</a> </div>
+            <div style="float:left;width:100%;padding-top: 8px;">An algorithmically-driven RSS reader built for you, living with your data on your device. Follow <a href="https://mastodon.social/deck/tags/suffolkrssalgo" target="_blank">#SuffolkRSSalgo</a> on Mastodon for project updates. FYI, we're currently in beta. <a href="https://github.com/colarusso/rss_algo#rss-algo" target="_blank">Learn More</a>.</div>
             <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;color:black;margin-top: 10px;"><i>&nbsp;Loading...&nbsp;</i></span>
         <div class="my-3" style="float:left;width:100%;">
-            <span style="float:right"><a href="#my_data">My Data</a></span>
+            <span style="float:right"><a href="#settings">Settings &amp; Data</a></span>
             <span id="unread-count" class="text-danger">New: ?</span>
             <span id="read-count" class="text-success">Seen: ?</span>
         </div>
@@ -231,8 +231,8 @@
         </div>
 
         <div class="container mt-4">
-            <a name="my_data"></a>
-            <h2>My Data</h2>
+            <a name="settings"></a>
+            <h2>Settings &amp; Data</h2>
             <p>You can manage your feeds by clicking "My Feeds" at the <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">top</a> of this page. See additional controls below. To determine what articles you like, we make use of insights from <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">TF-IDF</a>, comparing all the text from the cards you vote up or down with everything you've "seen." FWIW, recomendations won't kick in until you've seen north of 100 cards. I hope to write a more complete explanation sometime. When I do, I'll put a link here. Until then, you can always look at <a href="https://github.com/colarusso/rss_algo" target="_blank">the code</a>.</p>
             <h4>Ratings Cutoff</h4>
                     <p>
@@ -453,6 +453,7 @@
 
             var articles =  JSON.parse(localStorage.getItem("articles")) || [];
             var dfreq = calculateDF(articles.filter(article => readArticles[article.itemId]))
+            var crunch_numbers = false
 
             var ratings_mean = 0;
             var ratings_std = 0;
@@ -483,6 +484,11 @@
                 } else {
                     document.getElementById('loading').innerHTML = "<i>&nbsp;Loading feed "+(1+n_feeds)+" of "+rssFeeds.length+".&nbsp;</i>" 
                 }
+
+                if (n_feeds>=(rssFeeds.length)) {
+                    crunch_numbers = true;
+                }
+
                 return data;
             }
 
@@ -695,7 +701,7 @@
                                         const itemId = link; // Using link as a unique identifier for items
                                         const isRead = readArticles[itemId] || false;
 
-                                        const priorityRating = getRating(feedTitle+": "+title+" "+description); 
+                                        const priorityRating = getRating(feedTitle.replace(/[^a-zA-Z]/g,"")+": "+title+" "+description); 
 
                                         articles.push({
                                             title,
@@ -730,12 +736,15 @@
 
                 } else {
 
+                    crunch_numbers = true;
                     dedup_articles();
                     reorderArticles();
                     displayArticles();
                     updateItemCount();
+                    crunch_numbers = false;
                 }
 
+                crunch_numbers = false;
             }        
 
             function resetReadStatus() {
@@ -744,19 +753,21 @@
                 });
             }
 
-
             function reorderArticles() {
-                tmp_ratings = []
-                for (article in articles){
-                    rating = getRating(articles[article]['feedTitle']+": "+articles[article]['title']+" "+articles[article]['description'])
-                    articles[article]["priorityRating"] = rating; 
-                    tmp_ratings.push(rating)
-                }
 
-                stats = StandardDeviation(tmp_ratings)
-                ratings_mean = stats[0];
-                ratings_std = stats[1];
-                console.log("Ratings: mean", ratings_mean,"std",ratings_std)
+                if (crunch_numbers) {
+                    tmp_ratings = []
+                    for (article in articles){
+                        rating = getRating(articles[article]['feedTitle'].replace(/[^a-zA-Z]/g,"")+": "+articles[article]['title']+" "+articles[article]['description'])
+                        articles[article]["priorityRating"] = rating; 
+                        tmp_ratings.push(rating)
+                    }
+
+                    stats = StandardDeviation(tmp_ratings)
+                    ratings_mean = stats[0];
+                    ratings_std = stats[1];
+                    console.log("Ratings: mean", ratings_mean,"std",ratings_std)
+                }
 
                 articles.sort((a, b) => {
                     if (a.isRead && !b.isRead) return 1;
@@ -980,45 +991,71 @@
                 return [mean, Math.sqrt(sum / arr.length)]
             }
 
+            function cosinesim(A, B) {
+
+                var dotproduct = 0;
+                var mA = 0;
+                var mB = 0;
+
+                for(var i = 0; i < A.length; i++) {
+                    dotproduct += A[i] * B[i];
+                    mA += A[i] * A[i];
+                    mB += B[i] * B[i];
+                }
+
+
+                mA = Math.sqrt(mA);
+                mB = Math.sqrt(mB);
+
+
+                var similarity = dotproduct / (mA * mB);
+
+                if (isNaN(similarity)) {
+                    similarity = 0
+                }
+
+                return similarity;
+            }
+
             function getRating(inputString) {
+
+                //console.log(inputString)
 
                 tf = countWords(inputString)
 
-                word_string = Object.entries(dfreq["df_arr"])
-
-                up_score = 0;
-                for (word in word_string) {
-                    idf = Math.log(1+word_string[word][1]/dfreq["n_docs"]);
-                    if (tf[word_string[word][0]] && upTFIDF[word_string[word][0]]) {
-                        //console.log(word_string[word][0])
-                        up_score += Math.pow((tf[word_string[word][0]]-upTFIDF[word_string[word][0]])*idf,2)
-                    } else if (tf[word_string[word][0]]) {
-                        up_score += Math.pow((tf[word_string[word][0]]-0)*idf,2)                        
-                    } else if (upTFIDF[word_string[word][0]]) {
-                        up_score += Math.pow((0-upTFIDF[word_string[word][0]])*idf,2)
+                var array1 = [];
+                var array2 = [];
+                for (word in upTFIDF) {
+                    if (dfreq["df_arr"][word]) {
+                        idf = Math.log(1+dfreq["df_arr"][word]/dfreq["n_docs"]);
+                        if (tf[word] && idf) {
+                            array1.push(tf[word]*idf)
+                        } else {
+                            array1.push(0)
+                        }
+                        array2.push(upTFIDF[word]*idf)
                     }
                 }
-                up_score = Math.sqrt(up_score)
-
-                down_score = 0;
-                for (word in word_string) {
-                    idf = Math.log(1+word_string[word][1]/dfreq["n_docs"]);
-                    if (tf[word_string[word][0]] && downTFIDF[word_string[word][0]]) {
-                        down_score += Math.pow((tf[word_string[word][0]]-downTFIDF[word_string[word][0]])*idf,2)
-                    } else if (tf[word_string[word][0]]) {
-                        down_score += Math.pow((tf[word_string[word][0]]-0)*idf,2)                        
-                    } else if (downTFIDF[word_string[word][0]]) {
-                        down_score += Math.pow((0-downTFIDF[word_string[word][0]])*idf,2)
+                up_score = cosinesim(array1, array2);
+                
+                var array1 = [];
+                var array2 = [];
+                for (word in downTFIDF) {
+                    if (dfreq["df_arr"][word]) {
+                        idf = Math.log(1+dfreq["df_arr"][word]/dfreq["n_docs"]);
+                        if (tf[word] && idf) {
+                            array1.push(tf[word]*idf)
+                        } else {
+                            array1.push(0)
+                        }
+                        array2.push(downTFIDF[word]*idf)
                     }
                 }
-                down_score = Math.sqrt(down_score)
-
-                score = -1*(up_score)+(down_score*0.5);
-
-                if (score>0){
-                    score = 0;
-                }               
-
+                down_score = cosinesim(array1, array2);
+                
+                score = up_score - down_score*0.25;
+                //console.log(score)
+                
                 return score;
             }
 
@@ -1085,8 +1122,8 @@
 
                 n_composite_docs = votedArticles.length;
                 
-                const documents = votedArticles.map(article => article.feedTitle+' '+article.title+' '+article.description);
-                const doc = documents.join(' ');
+                const documents = votedArticles.map(article => article.feedTitle.replace(/[^a-zA-Z]/g,"")+' '+article.title+' '+article.description);
+                const doc = documents.join(' ').replace(/[^a-zA-Z]\d+[^a-zA-Z]/g,"");
 
                 tf = countWords(doc)
 
