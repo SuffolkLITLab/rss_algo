@@ -374,6 +374,30 @@
         }
 
         document.addEventListener("DOMContentLoaded", function() {
+
+            const toggleModeButton = document.getElementById("toggle-mode");
+            const body = document.body;
+
+            // Retrieve dark mode state from localStorage (if available)
+            const darkModeState = localStorage.getItem("darkMode");
+            if (darkModeState === "enabled") {
+                body.classList.add("dark-mode");
+                toggleModeButton.innerHTML = "💡"; // Light bulb emoji
+            }
+
+            // Toggle between light and dark mode
+            toggleModeButton.addEventListener("click", function () {
+                body.classList.toggle("dark-mode");
+                if (body.classList.contains("dark-mode")) {
+                    localStorage.setItem("darkMode", "enabled");
+                    toggleModeButton.innerHTML = "💡"; // Light bulb emoji
+                } else {
+                    localStorage.removeItem("darkMode");
+                    toggleModeButton.innerHTML = "🌗"; // Moon emoji
+                }
+            });
+
+
             let rssFeeds = JSON.parse(localStorage.getItem("feeds")) || [
                 "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml",
                 "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
@@ -530,27 +554,7 @@
             });
 
 
-            const toggleModeButton = document.getElementById("toggle-mode");
-            const body = document.body;
 
-            // Retrieve dark mode state from localStorage (if available)
-            const darkModeState = localStorage.getItem("darkMode");
-            if (darkModeState === "enabled") {
-                body.classList.add("dark-mode");
-                toggleModeButton.innerHTML = "💡"; // Light bulb emoji
-            }
-
-            // Toggle between light and dark mode
-            toggleModeButton.addEventListener("click", function () {
-                body.classList.toggle("dark-mode");
-                if (body.classList.contains("dark-mode")) {
-                    localStorage.setItem("darkMode", "enabled");
-                    toggleModeButton.innerHTML = "💡"; // Light bulb emoji
-                } else {
-                    localStorage.removeItem("darkMode");
-                    toggleModeButton.innerHTML = "🌗"; // Moon emoji
-                }
-            });
 
             function dedup_articles() {
                 var uniqueArticles = [];
@@ -1005,9 +1009,11 @@
                 }
                 down_score = Math.sqrt(down_score)
 
-                score = -1*(up_score + down_score*0.5);
+                score = -1*(up_score)+(down_score*0.5);
 
-                
+                if (score>0){
+                    score = 0;
+                }               
 
                 return score;
             }
