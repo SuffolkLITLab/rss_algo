@@ -234,6 +234,12 @@
             <a name="my_data"></a>
             <h2>My Data</h2>
             <p>You can manage your feeds by clicking "My Feeds" at the <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">top</a> of this page. See additional controls below. To determine what articles you like, we make use of insights from <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">TF-IDF</a>, comparing all the text from the cards you vote up or down with everything you've "seen." FWIW, recomendations won't kick in until you've seen north of 100 cards. I hope to write a more complete explanation sometime. When I do, I'll put a link here. Until then, you can always look at <a href="https://github.com/colarusso/rss_algo" target="_blank">the code</a>.</p>
+            <h4>Ratings Cutoff</h4>
+                    After the recomendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and postive numbers are above average. 
+                    Z-Score for cutoff <b><i><span id="cutoff-value">-2.5</span></i></b>. <i>Refresh page to see results</i>.
+                    <p>
+                        <input type="range" id="cutoff-slider" min="-3.5" max="3.5" value="-2.5" step="0.01" style="width:100%;">
+                    </p>
             <div class="row">
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
                     <h4>Postive</h4>
@@ -418,6 +424,10 @@
             const readArticles = filterOldEntries(JSON.parse(localStorage.getItem("read")) || {});
 
             var articles =  JSON.parse(localStorage.getItem("articles")) || [];
+            var dfreq = calculateDF(articles.filter(article => readArticles[article.itemId]))
+
+            var ratings_mean = 0;
+            var ratings_std = 0;
 
             function updateFeedList(loadFeeds = false) {
                 localStorage.setItem("feeds", JSON.stringify(rssFeeds));
@@ -501,6 +511,24 @@
                 lookbackValueElement.textContent = newLookback;
                 localStorage.setItem("lookback", newLookback);
             });
+
+            const cutoffSlider = document.getElementById("cutoff-slider");
+            const cutoffValueElement = document.getElementById("cutoff-value");
+            
+            // Retrieve cutoff value from localStorage (if available)
+            const savedcutoff = localStorage.getItem("cutoff") || -2.5;
+            if (savedcutoff) {
+                cutoffSlider.value = savedcutoff;
+                cutoffValueElement.textContent = savedcutoff;
+            }
+
+            // Update cutoff value and save to localStorage when slider value changes
+            cutoffSlider.addEventListener("input", function () {
+                const newcutoff = cutoffSlider.value;
+                cutoffValueElement.textContent = newcutoff;
+                localStorage.setItem("cutoff", newcutoff);
+            });
+
 
             const toggleModeButton = document.getElementById("toggle-mode");
             const body = document.body;
@@ -710,9 +738,17 @@
 
 
             function reorderArticles() {
+                tmp_ratings = []
                 for (article in articles){
-                    articles[article]["priorityRating"] = getRating(articles[article]['feedTitle']+": "+articles[article]['title']+" "+articles[article]['description']); 
+                    rating = getRating(articles[article]['feedTitle']+": "+articles[article]['title']+" "+articles[article]['description'])
+                    articles[article]["priorityRating"] = rating; 
+                    tmp_ratings.push(rating)
                 }
+
+                stats = StandardDeviation(tmp_ratings)
+                ratings_mean = stats[0];
+                ratings_std = stats[1];
+                console.log("Ratings: mean", ratings_mean,"std",ratings_std)
 
                 articles.sort((a, b) => {
                     if (a.isRead && !b.isRead) return 1;
@@ -783,7 +819,7 @@
                     }
 
 
-                    if (Date.parse(pubDate) >= Date.parse(twoWeeksAgo)) {
+                    if ((Date.parse(pubDate) >= Date.parse(twoWeeksAgo)) && priorityRating >= ratings_mean+ratings_std*(savedcutoff)) {
 
                         const article = document.createElement("div");
                         article.setAttribute("data-article-index", index); 
@@ -914,38 +950,64 @@
 
             }
 
+            function StandardDeviation(arr) {
+                // Creating the mean with Array.reduce
+                let mean = arr.reduce((acc, curr) => {
+                    return acc + curr
+                }, 0) / arr.length;
+
+                // Assigning (value - mean) ^ 2 to
+                // every array item
+                arr = arr.map((k) => {
+                    return (k - mean) ** 2
+                });
+
+                // Calculating the sum of updated array
+                let sum = arr.reduce((acc, curr) => acc + curr, 0);
+
+                // Calculating the variance
+                let variance = sum / arr.length
+
+                // Returning the standard deviation
+                return [mean, Math.sqrt(sum / arr.length)]
+            }
+
             function getRating(inputString) {
 
                 tf = countWords(inputString)
 
+                word_string = Object.entries(dfreq["df_arr"])
+
                 up_score = 0;
-                for (const [key, value] of Object.entries(tf)) {
-                    if (!isNaN(upTFIDF[key])) {
-                        //console.log(key,tf[key],upTFIDF[key])
-                        up_score += Math.pow(tf[key],2) + Math.pow(upTFIDF[key],2)
+                for (word in word_string) {
+                    idf = Math.log(1+word_string[word][1]/dfreq["n_docs"]);
+                    if (tf[word_string[word][0]] && upTFIDF[word_string[word][0]]) {
+                        //console.log(word_string[word][0])
+                        up_score += Math.pow((tf[word_string[word][0]]-upTFIDF[word_string[word][0]])*idf,2)
+                    } else if (tf[word_string[word][0]]) {
+                        up_score += Math.pow((tf[word_string[word][0]]-0)*idf,2)                        
+                    } else if (upTFIDF[word_string[word][0]]) {
+                        up_score += Math.pow((0-upTFIDF[word_string[word][0]])*idf,2)
                     }
                 }
-                if (up_score>0) {
-                    up_score = Math.sqrt(up_score)
-                }
-                
+                up_score = Math.sqrt(up_score)
+
                 down_score = 0;
-                for (const [key, value] of Object.entries(tf)) {
-                    if (!isNaN(downTFIDF[key])) {
-                        down_score += Math.pow(tf[key],2) + Math.pow(downTFIDF[key],2)
+                for (word in word_string) {
+                    idf = Math.log(1+word_string[word][1]/dfreq["n_docs"]);
+                    if (tf[word_string[word][0]] && downTFIDF[word_string[word][0]]) {
+                        down_score += Math.pow((tf[word_string[word][0]]-downTFIDF[word_string[word][0]])*idf,2)
+                    } else if (tf[word_string[word][0]]) {
+                        down_score += Math.pow((tf[word_string[word][0]]-0)*idf,2)                        
+                    } else if (downTFIDF[word_string[word][0]]) {
+                        down_score += Math.pow((0-downTFIDF[word_string[word][0]])*idf,2)
                     }
                 }
-                if (down_score>0) {
-                    down_score = Math.sqrt(down_score)
-                }
+                down_score = Math.sqrt(down_score)
 
-                score = up_score - down_score*0.5;
+                score = -1*(up_score + down_score*0.5);
 
-                if (score<0){
-                    score = 0
-                }
-
-                //console.log(score)
+                
 
                 return score;
             }
@@ -1018,18 +1080,7 @@
 
                 tf = countWords(doc)
 
-                tf_idf = {}
-                if ((df["n_docs"]>100) && (n_composite_docs>10)) {
-                    for (const [key, value] of Object.entries(tf)) {
-                        if (isNaN(key)) {
-                            df["df_arr"][key]=1;
-                        }
-                        idf = Math.log(1+df["df_arr"][key]/df["n_docs"]);
-                        tf_idf[key] = value*idf;
-                    }
-                }
-
-                return tf_idf;
+                return tf;
             }
 
             function topWords(wordObj) {            
@@ -1164,7 +1215,7 @@
                 var readArticleData = articles.filter(article => readArticles[article.itemId]);
                 var upvotedArticleData = articles.filter(article => upvotes[article.itemId]);
                 var downvotedArticleData = articles.filter(article => downvotes[article.itemId]);
-                let dfreq = calculateDF(readArticleData)
+                dfreq = calculateDF(readArticleData)
                 let upTFIDF = calculateTFIDF(upvotedArticleData,dfreq);
                 let downTFIDF = calculateTFIDF(downvotedArticleData,dfreq);
 
@@ -1178,11 +1229,11 @@
 
                 localStorage.setItem("articles", JSON.stringify(articles.slice(-max_arts)));
                 var order_arr = []
+                //console.log("Updating Order")
                 for (article in articles){
-                    console.log("Updating Order")
                     order_arr.push([articles[article].isRead,articles[article].priorityRating,new Date(articles[article].pubDate).toLocaleString(),articles[article].title,articles[article].itemId])
                 }
-                console.log(order_arr)
+                //console.log(order_arr)
             }
 
             const clearUpvotesButton = document.getElementById("clear-upvotes");
