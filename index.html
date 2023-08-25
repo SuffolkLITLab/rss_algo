@@ -465,6 +465,7 @@
                 let upTFIDF =  JSON.parse(localStorage.getItem("upTFIDF")) || {};
                 let downTFIDF =  JSON.parse(localStorage.getItem("downTFIDF")) || {};
                 loadNews(loadFeeds);
+                
             }
 
             var n_feeds = 0;
@@ -726,6 +727,9 @@
                                 reorderArticles();
                                 displayArticles();
                                 updateItemCount();
+                                if (crunch_numbers) {
+                                    console.log("Displayed Cards:",newsFeedContainer.childNodes.length)
+                                }
                             })
                             .catch(error => {
                                 // Display a warning popup for error cases
@@ -743,10 +747,12 @@
                     reorderArticles();
                     displayArticles();
                     updateItemCount();
+                    console.log("Displayed Cards:",newsFeedContainer.childNodes.length)
                     crunch_numbers = false;
                 }
 
                 crunch_numbers = false;
+                
             }        
 
             function resetReadStatus() {
@@ -764,11 +770,10 @@
                         articles[article]["priorityRating"] = rating; 
                         tmp_ratings.push(rating)
                     }
-
                     stats = StandardDeviation(tmp_ratings)
                     ratings_mean = stats[0];
                     ratings_std = stats[1];
-                    console.log("Ratings: mean", ratings_mean,"std",ratings_std)
+                    console.log("Ratings: mean", ratings_mean,"std",ratings_std);                    
                 }
 
                 articles.sort((a, b) => {
@@ -1286,7 +1291,7 @@
                 for (article in articles){
                     order_arr.push([articles[article].isRead,articles[article].priorityRating,new Date(articles[article].pubDate).toLocaleString(),articles[article].title,articles[article].itemId])
                 }
-                //console.log(order_arr)
+                
             }
 
             const clearUpvotesButton = document.getElementById("clear-upvotes");
