@@ -1227,12 +1227,12 @@
 
                 // Convert the object into an array of key-value pairs
                 const dataArray = Object.entries(filteredEntries);
-                if (dataArray.length>max_arts) {
+                if (dataArray.length>max_arts*5) {
                     // Sort the array based on the date values
                     dataArray.sort((a, b) => new Date(a[1]) - new Date(b[1]));
                     // Convert the sorted array back into an object
                     alert("To free up space we're forgetting about some of your older articles. If they're still in the live RSS feed, you may see them again.")
-                    keep_last = Math.round(max_arts*0.1);
+                    keep_last = Math.round(max_arts*5);
                     lastn_filteredEntries = Object.fromEntries(dataArray.slice(-keep_last));
                 } else {
                     lastn_filteredEntries = filteredEntries
