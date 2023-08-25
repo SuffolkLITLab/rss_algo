@@ -1210,11 +1210,11 @@
 
             function filterOldEntries(entries) {
 
-                console.log(entries)
+                //console.log(entries)
                 
                 const currentDate = new Date();
                 const twoWeeksAgo = new Date();
-                twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 180);
+                twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 90);
 
                 const filteredEntries = {};
 
@@ -1227,10 +1227,16 @@
 
                 // Convert the object into an array of key-value pairs
                 const dataArray = Object.entries(filteredEntries);
-                // Sort the array based on the date values
-                dataArray.sort((a, b) => new Date(a[1]) - new Date(b[1]));
-                // Convert the sorted array back into an object
-                lastn_filteredEntries = Object.fromEntries(dataArray.slice(-max_arts));
+                if (dataArray.length>max_arts) {
+                    // Sort the array based on the date values
+                    dataArray.sort((a, b) => new Date(a[1]) - new Date(b[1]));
+                    // Convert the sorted array back into an object
+                    alert("To free up space we're forgetting about some of your older articles. If they're still in the live RSS feed, you may see them again.")
+                    keep_last = Math.round(max_arts*0.1);
+                    lastn_filteredEntries = Object.fromEntries(dataArray.slice(-keep_last));
+                } else {
+                    lastn_filteredEntries = filteredEntries
+                }
 
                 localStorage.setItem("read", JSON.stringify(lastn_filteredEntries));
                 return lastn_filteredEntries;
@@ -1335,8 +1341,8 @@
             const manageFeedsButton = document.getElementById("manage-feeds");
 
             addFeedButton.addEventListener("click", function() {
-                if (rssFeeds.length>50) {
-                    alert("For performance reasons, we only support 50 feeds at this time. To add a feed you will first need to make space by removing one or more of your current feeds.")
+                if (rssFeeds.length>25) {
+                    alert("For performance reasons, we only support 25 feeds at this time. To add a feed you will first need to make space by removing one or more of your current feeds.")
                 } else {
                     const newFeedUrl = prompt("Enter a new RSS feed URL:");
                     if (newFeedUrl) {
