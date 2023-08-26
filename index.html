@@ -260,12 +260,12 @@
             <div class="row">
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
                     <h4>Postive</h4>
-                    <p>Here are your <b><i>most-postive</i></b> words: <span id="upwords">not enough data</span></p>
+                    <p>Here are your <b><i>most-postive</i></b> words and their TF-IDF, assuming all up-voted cards are a single document: <span id="upwords">not enough data</span></p>
                     <button id="clear-upvotes" class="btn btn-danger btn-block">Clear Upvotes</button>
                 </div>
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
                     <h4>Negative</h4>
-                    <p>Here are your <b><i>most-negative</i></b> words: <span id="downwords">not enough data</span></p>
+                    <p>Here are your <b><i>most-negative</i></b> words and their TF-IDF, assuming all down-voted cards are a single document: <span id="downwords">not enough data</span></p>
                     <button id="clear-downvotes" class="btn btn-danger btn-block">Clear Downvotes</button>
                 </div>
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
@@ -1113,15 +1113,15 @@
                 var array2 = [];
                 for (word in upTFIDF) {
                     if (dfreq["df_arr"][word]) {
-                        idf = Math.log(1+dfreq["df_arr"][word]/dfreq["n_docs"]);
+                        idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
                         if (tf[word] && idf) {
-                            if (downTFIDF[word]*savednegativity<=tf[word]) {
-                                array1.push((tf[word]-downTFIDF[word]*savednegativity)*idf)
-                            } else if (downTFIDF[word]*savednegativity>tf[word]) {
-                                array1.push(0)
-                            } else {
+                            //if (downTFIDF[word]*savednegativity<=tf[word]) {
+                            //    array1.push((tf[word]-downTFIDF[word]*savednegativity)*idf)
+                            //} else if (downTFIDF[word]*savednegativity>tf[word]) {
+                            //    array1.push(0)
+                            //} else {
                                 array1.push((tf[word])*idf)
-                            }
+                            //}
                         } else {
                             array1.push(0)
                         }
@@ -1134,15 +1134,15 @@
                 var array2 = [];
                 for (word in downTFIDF) {
                     if (dfreq["df_arr"][word]) {
-                        idf = Math.log(1+dfreq["df_arr"][word]/dfreq["n_docs"]);
+                        idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
                         if (tf[word] && idf) {
-                            if (upTFIDF[word]*(2-savednegativity)<=tf[word]) {
-                                array1.push((tf[word]-upTFIDF[word]*(2-savednegativity))*idf)
-                            } else if (upTFIDF[word]*(2-savednegativity)>tf[word]) {
-                                array1.push(0)
-                            } else {
+                            //if (upTFIDF[word]*(2-savednegativity)<=tf[word]) {
+                            //    array1.push((tf[word]-upTFIDF[word]*(2-savednegativity))*idf)
+                            //} else if (upTFIDF[word]*(2-savednegativity)>tf[word]) {
+                            //    array1.push(0)
+                            //} else {
                                 array1.push((tf[word])*idf)
-                            }
+                            //}
                         } else {
                             array1.push(0)
                         }
@@ -1202,8 +1202,8 @@
                 const extractedTexts = [];
 
                 articles.forEach(article => {
-                    const { title, description } = article;
-                    const extractedText = `${title}\n${description}`;
+                    const { feedTitle, title, description } = article;
+                    const extractedText = `${feedTitle.replace(/[^a-zA-Z]/g,"")}\n${title}\n${description}`;
                     extractedTexts.push(extractedText);
                 });
 
@@ -1229,15 +1229,18 @@
             }
 
             function topWords(wordObj,exclude) {         
+
+                //console.log(wordObj)
                 
                 for (word in wordObj){
-                    if (exclude[word]<=wordObj[word]) {
-                        wordObj[word] = (wordObj[word]-exclude[word])/dfreq["df_arr"][word]
-                    } else if (exclude[word]>wordObj[word]) {
-                        wordObj[word] = 0
-                    } else {
-                        wordObj[word] = (wordObj[word])/dfreq["df_arr"][word]
-                    }
+                    //if (exclude[word]<=wordObj[word]) {
+                    //    wordObj[word] = (wordObj[word]-exclude[word])/dfreq["df_arr"][word]
+                    //} else if (exclude[word]>wordObj[word]) {
+                    //    wordObj[word] = 0
+                    //} else {
+                        idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
+                        wordObj[word] = wordObj[word]*idf;
+                    //}
                 }
 
                 const pickHighest = (wordObj, num = 1) => {
@@ -1267,7 +1270,7 @@
                         } else {
                             words += ", &amp; "
                         }
-                        words += word
+                        words += word + " ("+Math.round(word_list[word]*100)/100+")"
                         i+=1
                     }
                 } else {
