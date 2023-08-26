@@ -144,8 +144,9 @@
             width:100%;
             margin-bottom: 12px;
         }
-        .feed-tag {
-            line-height: 20px;
+        .card-footer {
+            display: flex;
+            line-height: 18px;
         }
         .footer {
             border-top: 1px solid #555;
@@ -1091,7 +1092,13 @@
                     if (dfreq["df_arr"][word]) {
                         idf = Math.log(1+dfreq["df_arr"][word]/dfreq["n_docs"]);
                         if (tf[word] && idf) {
-                            array1.push(tf[word]*idf)
+                            if (downTFIDF[word]<=tf[word]) {
+                                array1.push((tf[word]-downTFIDF[word])*idf)
+                            } else if (downTFIDF[word]>tf[word]) {
+                                array1.push(0)
+                            } else {
+                                array1.push((tf[word])*idf)
+                            }
                         } else {
                             array1.push(0)
                         }
@@ -1106,7 +1113,13 @@
                     if (dfreq["df_arr"][word]) {
                         idf = Math.log(1+dfreq["df_arr"][word]/dfreq["n_docs"]);
                         if (tf[word] && idf) {
-                            array1.push(tf[word]*idf)
+                            if (upTFIDF[word]<=tf[word]) {
+                                array1.push((tf[word]-upTFIDF[word])*idf)
+                            } else if (upTFIDF[word]>tf[word]) {
+                                array1.push(0)
+                            } else {
+                                array1.push((tf[word])*idf)
+                            }
                         } else {
                             array1.push(0)
                         }
@@ -1192,10 +1205,16 @@
                 return tf;
             }
 
-            function topWords(wordObj) {         
+            function topWords(wordObj,exclude) {         
                 
                 for (word in wordObj){
-                    wordObj[word] = wordObj[word]/dfreq["df_arr"][word]
+                    if (exclude[word]<=wordObj[word]) {
+                        wordObj[word] = (wordObj[word]-exclude[word])/dfreq["df_arr"][word]
+                    } else if (exclude[word]>wordObj[word]) {
+                        wordObj[word] = 0
+                    } else {
+                        wordObj[word] = (wordObj[word])/dfreq["df_arr"][word]
+                    }
                 }
 
                 const pickHighest = (wordObj, num = 1) => {
@@ -1335,8 +1354,8 @@
                 localStorage.setItem("upTFIDF", JSON.stringify(upTFIDF));
                 localStorage.setItem("downTFIDF", JSON.stringify(downTFIDF));
 
-                document.getElementById('upwords').innerHTML = topWords(upTFIDF);
-                document.getElementById('downwords').innerHTML = topWords(downTFIDF);
+                document.getElementById('upwords').innerHTML = topWords(upTFIDF,downTFIDF);
+                document.getElementById('downwords').innerHTML = topWords(downTFIDF,upTFIDF);
 
                 //console.log("TF-IDF: "+readArticleData.length+" 'read' documents","\nUp: "+upvotedArticleData.length+" documents, "+Object.keys(upTFIDF).length+" words","\nDown: "+downvotedArticleData.length+" documents, "+Object.keys(downTFIDF).length+" words\n");
 
