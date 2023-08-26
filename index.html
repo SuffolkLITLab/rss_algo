@@ -332,8 +332,8 @@
                 console.log("Stored Articles: "+stored_art)
                 if (stored_art>100) {
                     _xLen = ((localStorage["articles"].length + "articles".length) * 2);
-                    size = (_xLen / 1024).toFixed(2);
-                    size_per_art = (0.18*3+size/stored_art)*1.05; // size of (votes+read + stored articles)*1.05
+                    size = (_xLen / 1024)/stored_art;
+                    size_per_art = (0.18*2+size*0.20+size)*1.05; // size of (votes+read + sizer per stored article)*1.05
                     max_arts = Math.round((5000*0.9-200)/size_per_art)  // 90% of default size minus 200 for both TF-IDF objects
                     //max_arts = 100
                     console.log("Article Cap: "+max_arts);
@@ -416,6 +416,9 @@
                 "http://feeds.washingtonpost.com/rss/national?itid=lk_inline_manual_32",
                 "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
                 "http://feeds.washingtonpost.com/rss/business/technology?itid=lk_inline_manual_31",
+                "https://feeds.npr.org/1001/rss.xml",
+                "https://feeds.npr.org/1014/rss.xml",
+                "https://feeds.npr.org/1007/rss.xml",
                 "http://www.newyorker.com/feed/everything",
                 "https://www.economist.com/leaders/rss.xml",
                 "https://www.economist.com/briefing/rss.xml",
@@ -649,7 +652,13 @@
                                         const re = /(https?:\/\/[^\s]+\.(?:png|jpg|jpeg|gif))/i;
                                         possible_img = description.match(re)
                                         if (possible_img) {
-                                            possible_img = possible_img[0]
+                                            if (!possible_img[0].match("tracking")) {
+                                                possible_img = possible_img[0]
+                                            } else if (possible_img[0].match("tracking") && possible_img[1] && !possible_img[1].match("tracking")) {
+                                                possible_img = possible_img[1]
+                                            } else {
+                                                possible_img = null
+                                            }
                                         }
 
                                         description = extractContent(description)
@@ -689,7 +698,13 @@
                                                 blob_of_text = item.querySelector("content\\:encoded, encoded").textContent
                                                 possible_img = blob_of_text.match(re)
                                                 if (possible_img) {
-                                                    possible_img = possible_img[0]
+                                                    if (!possible_img[0].match("tracking")) {
+                                                        possible_img = possible_img[0]
+                                                    } else if (possible_img[0].match("tracking") && possible_img[1] && !possible_img[1].match("tracking")) {
+                                                        possible_img = possible_img[1]
+                                                    } else {
+                                                        possible_img = null
+                                                    }                                                    
                                                     mediaThumbnail = possible_img
                                                 }
                                                 } catch (error) {}
@@ -707,6 +722,9 @@
                                                 mediaThumbnail = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Nytimes_hq.jpg/640px-Nytimes_hq.jpg"
                                             } else if (link.includes("wsj.com")) {
                                                 mediaThumbnail = "https://s.wsj.net/img/meta/wsj-social-share.png"
+                                            } else if (link.includes("npr.org")) {
+                                                // source: https://www.npr.org/about-npr/182675632/photos-and-logos
+                                                mediaThumbnail = "https://media.npr.org/assets/img/2019/06/17/nprlogo_rgb_whiteborder_custom-7c06f2837fb5d2e65e44de702968d1fdce0ce748-s1300-c85.webp";
                                             }
                                         }
                                     
@@ -1243,12 +1261,12 @@
 
                 // Convert the object into an array of key-value pairs
                 const dataArray = Object.entries(filteredEntries);
-                if (dataArray.length>max_arts*5) {
+                if (dataArray.length>max_arts*15) {
                     // Sort the array based on the date values
                     dataArray.sort((a, b) => new Date(a[1]) - new Date(b[1]));
                     // Convert the sorted array back into an object
                     alert("To free up space we're forgetting about some of your older articles. If they're still in the live RSS feed, you may see them again.")
-                    keep_last = Math.round(max_arts*5);
+                    keep_last = Math.round(max_arts*15);
                     lastn_filteredEntries = Object.fromEntries(dataArray.slice(-keep_last));
                 } else {
                     lastn_filteredEntries = filteredEntries
@@ -1357,8 +1375,8 @@
             const manageFeedsButton = document.getElementById("manage-feeds");
 
             addFeedButton.addEventListener("click", function() {
-                if (rssFeeds.length>=25) {
-                    alert("For performance reasons, we only support 25 feeds at this time. To add a feed you will first need to make space by removing one or more of your current feeds.")
+                if (rssFeeds.length>=30) {
+                    alert("For performance reasons, we only support 30 feeds at this time. To add a feed you will first need to make space by removing one or more of your current feeds.")
                 } else {
                     const newFeedUrl = prompt("Enter a new RSS feed URL:");
                     if (newFeedUrl) {
