@@ -144,6 +144,9 @@
             width:100%;
             margin-bottom: 12px;
         }
+        .feed-tag {
+            line-height: 20px;
+        }
         .footer {
             border-top: 1px solid #555;
             margin: 20px 0 75px 0;
@@ -419,7 +422,12 @@
                 "https://feeds.npr.org/1001/rss.xml",
                 "https://feeds.npr.org/1014/rss.xml",
                 "https://feeds.npr.org/1007/rss.xml",
-                "http://www.newyorker.com/feed/everything",
+                "http://www.newyorker.com/feed/news",
+                "http://www.newyorker.com/feed/culture",
+                "http://www.newyorker.com/feed/humor",
+                "http://www.newyorker.com/feed/tag/books/rss",
+                "http://www.newyorker.com/feed/tech",
+                "http://www.newyorker.com/feed/news/sporting-scene",
                 "https://www.economist.com/leaders/rss.xml",
                 "https://www.economist.com/briefing/rss.xml",
                 "https://www.economist.com/science-and-technology/rss.xml",
@@ -432,8 +440,8 @@
                 "https://www.wired.com/feed/category/ideas/latest/rss",
                 "https://www.wired.com/feed/tag/ai/latest/rss",
                 "https://www.lawnext.com/feed",
-                "https://xkcd.com/rss.xml"
-                //"https://pluralistic.net/feed/"
+                "https://xkcd.com/rss.xml",
+                "https://pluralistic.net/feed/"
                 // Add more default RSS feed URLs here
             ];
 
@@ -840,6 +848,18 @@
                 updateArticleStyles();
             }
 
+            function domain_from_url(url) {
+                var result
+                var match
+                if (match = url.match(/^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n\?\=]+)/im)) {
+                    result = match[1]
+                    if (match = result.match(/^[^\.]+\.(.+\..+)$/)) {
+                        result = match[1]
+                    }
+                }
+                return result
+            }
+
 
             function displayArticles() {  
 
@@ -887,6 +907,8 @@
 
                         local_pubDate = new Date(pubDate).toLocaleString();
 
+                        domain_for_img = domain_from_url(link);
+
                         article.innerHTML = `
                             <div class="card">
                                 <div class="masto_share"><a href="javascript:void('')" onclick="MastodonShare('${title};url=${link}');">Mastodon</a></div>
@@ -906,7 +928,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <small class="feed-tag">${feedTitle}</small>
+                                    <img src="https://${domain_for_img}/favicon.ico" height="18px" align="left/> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small>
                                 </div>
                             </div>
                         `;
@@ -1379,8 +1401,8 @@
             const manageFeedsButton = document.getElementById("manage-feeds");
 
             addFeedButton.addEventListener("click", function() {
-                if (rssFeeds.length>=30) {
-                    alert("For performance reasons, we only support 30 feeds at this time. To add a feed you will first need to make space by removing one or more of your current feeds.")
+                if (rssFeeds.length>=50) {
+                    alert("For performance reasons, we only support 50 feeds at this time. To add a feed you will first need to make space by removing one or more of your current feeds.")
                 } else {
                     const newFeedUrl = prompt("Enter a new RSS feed URL:");
                     if (newFeedUrl) {
