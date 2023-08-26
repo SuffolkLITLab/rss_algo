@@ -255,7 +255,7 @@
                     When calculating ratings, how much influence should <i>down votes</i> have compared to <i>up votes</i>? If you choose 0, they don't count at all. If you choose 2, that makes them roughly twice as important as <i>up votes</i>. Current value: <b><i><span id="negativity-value">0.25</span></i></b>. <i>Refresh page to see results</i>.
                     </p>
                     <p>
-                        <input type="range" id="negativity-slider" min="0" max="2" value="0.25" step="0.01" style="width:100%;">
+                        <input type="range" id="negativity-slider" min="0" max="2" value="1" step="0.01" style="width:100%;">
                     </p>
             <div class="row">
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
@@ -599,7 +599,7 @@
             const negativityValueElement = document.getElementById("negativity-value");
             
             // Retrieve negativity value from localStorage (if available)
-            const savednegativity = localStorage.getItem("negativity") || 0.25;
+            const savednegativity = localStorage.getItem("negativity") || 1;
             if (savednegativity) {
                 negativitySlider.value = savednegativity;
                 negativityValueElement.textContent = savednegativity;
