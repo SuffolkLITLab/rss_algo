@@ -635,11 +635,11 @@
                                 const items = xml.querySelectorAll("item");
 
                                 items.forEach(item => {
-                                    //const pubDate = new Date(item.querySelector("pubDate").textContent);
-                                    //const lookback = new Date();
-                                    //lookback.setDate(lookback.getDate() - 30);
+                                    const pubDate = new Date(item.querySelector("pubDate").textContent);
+                                    const lookback = new Date();
+                                    lookback.setDate(lookback.getDate() - 30);
 
-                                    //if (pubDate >= lookback) {
+                                    if (pubDate >= lookback) {
                                         
                                         try {
                                             title = item.querySelector("title").textContent;
@@ -748,7 +748,7 @@
                                             hasDownvote: downvotes[itemId] || false,
                                             priorityRating
                                         });
-                                    //}
+                                    }
                                 });
 
                                 dedup_articles();
