@@ -634,12 +634,15 @@
 
                                 const items = xml.querySelectorAll("item");
 
+                                j=0;
                                 items.forEach(item => {
                                     const pubDate = new Date(item.querySelector("pubDate").textContent);
                                     const lookback = new Date();
                                     lookback.setDate(lookback.getDate() - 30);
 
-                                    if (pubDate >= lookback) {
+                                    console.log(rssFeeds.length)
+
+                                    if ((pubDate >= lookback) && (j<(max_arts/rssFeeds.length))) {
                                         
                                         try {
                                             title = item.querySelector("title").textContent;
@@ -749,6 +752,7 @@
                                             priorityRating
                                         });
                                     }
+                                    j+=1
                                 });
 
                                 dedup_articles();
