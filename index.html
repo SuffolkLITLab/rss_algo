@@ -148,6 +148,9 @@
             display: flex;
             line-height: 18px;
         }
+        .highlighted {
+            background: yellow;
+        }
         .footer {
             border-top: 1px solid #555;
             margin: 20px 0 75px 0;
@@ -205,6 +208,10 @@
         .dark-mode .read-article .card {
             opacity: 0.6;
         }
+        .dark-mode .highlighted {
+            background: rgb(200, 95, 29);
+        }
+
 
         .dark-mode .read-article .card-title,
         .dark-mode .read-article .card-text,
@@ -242,7 +249,7 @@
             <h4>Cooldown Clock</h4>
                 <p></p>
                     <p>
-                    There's no need to download evey feed everytime you hit refresh. So this site waits for a defined period before downloading content. If you refresh the page before the end of this cooldown period, it will recalulate ratings based on recent votes, but it won't download your feeds. Currently the period is set to <b><i><span id="cooldown-value">0.25</span></i> hours</b>. <i>Refresh page to see results. <span style="background:yellow"><b>If you set a new cooldown period that is shorter than the current value, you will have to wait for the old period to pass before the one takes effect!</b></span></i>
+                    There's no need to download evey feed everytime you hit refresh. So this site waits for a defined period before downloading content. If you refresh the page before the end of this cooldown period, it will recalulate ratings based on recent votes, but it won't download your feeds. Currently the period is set to <b><i><span id="cooldown-value">0.25</span></i> hours</b>. <i>Refresh page to see results. <span class="highlighted"><b>If you set a new cooldown period that is shorter than the current value, you will have to wait for the old period to pass before the one takes effect!</b></span></i>
                     </p>
                     <p>
                         <input type="range" id="cooldown-slider" min="0.25" max="4" value="0.25" step="0.25" style="width:100%;">
