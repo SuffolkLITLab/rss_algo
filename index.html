@@ -486,7 +486,6 @@
 
             var articles =  JSON.parse(localStorage.getItem("articles")) || [];
             var dfreq = calculateDF(articles.filter(article => readArticles[article.itemId]))
-            console.log(dfreq)
             var crunch_numbers = false
 
             var ratings_mean = 0;
