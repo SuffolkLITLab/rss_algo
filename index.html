@@ -239,6 +239,14 @@
             <h2>Settings &amp; Data</h2>
             <p>You can manage your feeds by clicking "My Feeds" at the <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">top</a> of this page. See additional controls below. To determine what articles you like, we make use of insights from <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">TF-IDF</a>, comparing all the text from the cards you vote up or down with everything you've "seen." FWIW, recomendations won't kick in until you've seen north of 100 cards. I hope to write a more complete explanation sometime. When I do, I'll put a link here. Until then, you can always look at <a href="https://github.com/colarusso/rss_algo" target="_blank">the code</a>.</p>
             <p><i>Note: when figuring out what you "like" we look only at the card's title, description, and the RSS Feed's name. We don't look at the content of the article, and we also compress all feed titles into single words. That's why you might see things like nyttopstories (NYT > Top Stories) in the word lists below.</i></p>
+            <h4>Cooldown Clock</h4>
+                <p></p>
+                    <p>
+                    There's no need to download evey feed everytime you hit refresh. So this site waits for a defined period before downloading content. If you refresh the page before the end of this cooldown period, it will recalulate ratings based on recent votes, but it won't download your feeds. Currently the period is set to <b><i><span id="cooldown-value">0.25</span></i> hours</b>. <i>Refresh page to see results. <span style="background:yellow"><b>If you set a new cooldown period that is shorter than the current value, you will have to wait for the old period to pass before the one takes effect!</b></span></i>
+                    </p>
+                    <p>
+                        <input type="range" id="cooldown-slider" min="0.25" max="4" value="0.25" step="0.25" style="width:100%;">
+                    </p>
             <h4>Ratings Cutoff</h4>
                 <p>
                     After the recomendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and postive numbers are above average. 
@@ -252,7 +260,7 @@
             <h4>Positive vs. Negative</h4>
                 <p></p>
                     <p>
-                    When calculating ratings, how much influence should <i>down votes</i> have compared to <i>up votes</i>? If you choose 0, they don't count at all. If you choose 2, that makes them roughly twice as important as <i>up votes</i>. Current value: <b><i><span id="negativity-value">0.25</span></i></b>. <i>Refresh page to see results</i>.
+                    When calculating ratings, how much influence should <i>down votes</i> have compared to <i>up votes</i>? If you choose 0, they don't count at all. If you choose 2, that makes them roughly twice as important as <i>up votes</i>. Current value: <b><i><span id="negativity-value">1.25</span></i></b>. <i>Refresh page to see results</i>.
                     </p>
                     <p>
                         <input type="range" id="negativity-slider" min="0" max="2" value="1.25" step="0.01" style="width:100%;">
@@ -312,6 +320,9 @@
             new_check = 5000;
             if (localStorage.lastLoad) {
                 console.log("Last Sync: "+((Date.parse(new Date) - localStorage.lastLoad)/60000).toFixed(2)+" min. ago")
+            }
+            if (localStorage.cooldown) {
+                console.log("Cooldown: "+localStorage.cooldown+" hours")
             }
             if (localStorage.read) {
                 console.log("Read Cards: "+Object.keys(JSON.parse(localStorage.read)).length)
@@ -561,7 +572,26 @@
 
               
                 });
+
             }
+
+
+            const cooldownSlider = document.getElementById("cooldown-slider");
+            const cooldownValueElement = document.getElementById("cooldown-value");
+            
+            // Retrieve cooldown value from localStorage (if available)
+            const savedcooldown = localStorage.getItem("cooldown") || 0.25;
+            if (savedcooldown) {
+                cooldownSlider.value = savedcooldown;
+                cooldownValueElement.textContent = savedcooldown;
+            }
+
+            // Update cooldown value and save to localStorage when slider value changes
+            cooldownSlider.addEventListener("input", function () {
+                const newcooldown = cooldownSlider.value;
+                cooldownValueElement.textContent = newcooldown;
+                localStorage.setItem("cooldown", newcooldown);
+            });
 
             const lookbackSlider = document.getElementById("lookback-slider");
             const lookbackValueElement = document.getElementById("lookback-value");
@@ -638,7 +668,17 @@
             function loadNews(loadFeeds = true) {
 
                 const lastLoad = localStorage.getItem("lastLoad") || 0;
-                var time_padding = Date.parse(new Date())-750000
+                const lastcooldown = localStorage.getItem("lastcooldown") || 0.25;
+
+                //console.log("new cooldown",savedcooldown,"old cooldown",lastcooldown)
+                
+                if (savedcooldown>=lastcooldown) {
+                    var time_padding = Date.parse(new Date())-savedcooldown*60*60*1000 //750000
+                    localStorage.setItem("lastcooldown", savedcooldown);
+                } else {
+                    var time_padding = Date.parse(new Date())-lastcooldown*60*60*1000 //750000
+                }
+
                 //console.log(lastLoad, time_padding)
                 if (lastLoad>time_padding) {
                     loadFeeds = false;
