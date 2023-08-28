@@ -75,10 +75,19 @@
             flex-direction: column;
             height: 100%; /* Make the card grow to the full height of its container */
         }
-        .masto_share{
+        .pocket_share{
             position: absolute;
             top: 5px;
             right: 5px;
+            z-index:100;
+        }
+        .pocket_share a {
+            text-decoration: none;
+        }
+        .masto_share{
+            position: absolute;
+            top: 5px;
+            right: 50px;
             z-index:100;
         }
         .masto_share a {
@@ -311,15 +320,22 @@
 
         history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
-            function readArticles_in_window(){
-                articls_in_window = 0
-                JSON.parse(localStorage.articles).forEach(card => {
-                    if (Date.parse(card.pubDate)>(new Date()-(1*60000*60*60*24))) {
-                        articls_in_window++;
-                    }
-                });
-                return articls_in_window
-            }
+        function readArticles_in_window(){
+            articls_in_window = 0
+            JSON.parse(localStorage.articles).forEach(card => {
+                if (Date.parse(card.pubDate)>(new Date()-(1*60000*60*60*24))) {
+                    articls_in_window++;
+                }
+            });
+            return articls_in_window
+        }
+
+        async function save_to_poeket(url){
+            var win = window.open( "https://getpocket.com/edit?url="+ encodeURIComponent(url), "pocket" );
+            //setTimeout( function() {
+            //    win.close();
+            //}, 1000);
+        }
             
         var max_arts = 2000;
         function report() {
@@ -987,6 +1003,8 @@
                         article.innerHTML = `
                             <div class="card">
                                 <div class="masto_share"><a href="javascript:void('')" onclick="MastodonShare('${title};url=${link}');">Mastodon</a></div>
+                                <div class="pocket_share"><a href="javascript:void('')" onClick="save_to_poeket(\`${link}\`)"><div style="background: url('https://getpocket.com/i/v3/pocket_logo.png');background-position: 0px -10px; width:35px;height:40px;"></div></a></div>
+
                                 <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img src="${mediaThumbnail}" class="card-img-top thumbnail-image" alt="Thumbnail Image">` : '<img src="images/placeholder.png" class="card-img-top thumbnail-image" alt="Thumbnail Image">'}</div>
                                 <div class="card-body">
                                         <!--<div class="priority-rating">${priorityRating}</div>-->
@@ -999,7 +1017,9 @@
                                             <button class="btn btn-danger downvote ${hasDownvote ? 'thumbs-down' : ''}" data-item-id="${itemId}">👎</button>
                                             <button class="btn btn-secondary skip ${isRead ? 'skip-read' : ''}" data-item-id="${itemId}">Seen</button>
                                         </div>
+                                        <div>
                                         <a href="${link}" class="btn btn-${isRead ? 'secondary' : 'primary'} read-button" target="_blank">${isRead ? 'View Again' : 'Open'}</a>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="card-footer">
