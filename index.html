@@ -246,13 +246,13 @@
             <p><i>Note: when figuring out what you "like" we look only at the card's title, description, and the RSS Feed's name. We don't look at the content of the article, and we also compress all feed titles into single words. That's why you might see things like nyttopstories (NYT > Top Stories) in the word lists below.</i></p>
             <h4>Cooldown Clock</h4>
                     <p>
-                    There's no need to download every feed every time you hit refresh. So this site waits for a defined period before downloading content. If you refresh the page before the end of this cooldown period, it will recalculate ratings based on recent votes, but it won't download your feeds. Currently the period is set to <b><i><span id="cooldown-value">0.25</span></i> hours</b>. <i>Refresh page to see results. <span class="highlighted"><b>If you set a cooldown period that is shorter than the current value, you will have to wait for the old period to pass before the new one takes effect. So, once you set it and refresh, there's no quickly going back.</b></span></i>
+                    There's no need to download every feed every time you hit refresh. So this site waits a defined period before downloading content. If you refresh the page before the end of this cooldown period, it will recalculate ratings based on recent votes and filter what it displays based on the other options here, but it won't try to download your feeds. Currently the period is set to <b><i><span id="cooldown-value">0.25</span></i> hours</b>. <i>You can change this below, but you must refresh the page to see results. <span class="highlighted"><b>If you set a cooldown period that is shorter than the current value, you will have to wait for the old period to pass before the new one takes effect. So, once you set it and refresh, there's no quickly going back.</b></span></i>
                     </p>
                     <p>
                         <input type="range" id="cooldown-slider" min="0.25" max="4" value="0.25" step="0.25" style="width:100%;">
                     </p>
             <h4>A Note on Performance</h4>
-                <p>The options you choose below will effect this site's performance. Generally speaking, the more inclusive your choices, the larger your timeline will be and the slower it will load, reorder and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.</p>
+                <p>The options you choose below will effect this site's performance. Generally speaking, the more inclusive your choices, the larger your timeline will be and the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.</p>
             <h4>Ratings Cutoff</h4>
                 <p>
                     After the recommendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and positive numbers are above average. 
@@ -266,7 +266,7 @@
             <h4>Positive vs. Negative</h4>
                 <p></p>
                     <p>
-                    When calculating ratings, how much influence should <i>down votes</i> have compared to <i>up votes</i>? If you choose 0, they don't count at all. If you choose 2, that makes them twice as important as <i>up votes</i>. Current value: <b><i><span id="negativity-value">1.25</span></i></b>. <i>Refresh page to see results</i>.
+                    When calculating ratings, how much influence should <i>down votes</i> have compared to <i>up votes</i>? If you choose 0, they don't count at all. If you choose 2, they'll count twice as much as <i>up votes</i>. Current value: <b><i><span id="negativity-value">1.25</span></i></b>. <i>Refresh page to see results</i>.
                     </p>
                     <p>
                         <input type="range" id="negativity-slider" min="0" max="2" value="1.25" step="0.01" style="width:100%;">
@@ -288,7 +288,7 @@
                     <p>
                         <input type="range" id="lookback-slider" min="1" max="30" value="7" style="width:100%;">
                     </p>
-                    <p>You can limit how much you see in your timeline by adjusting the slider above. If you clear you reading history, it will effect your recommendations since they're based on interactions with old articles. That is, we'll only be able to use data from old articles if they get downloaded again.</p>
+                    <p>You can limit how much you see in your timeline by adjusting the slider above. If you clear you reading history, however, it will remove older articles, not just hide them. This will effect your recommendations since they are based on interactions with old articles.</p>
                     <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
                     <button id="factory-reset" class="btn btn-danger btn-block factory-reset" onClick="reset_all();"><b>RESET ALL</b></button>
                 </div>
