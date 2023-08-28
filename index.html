@@ -227,7 +227,7 @@
                 <button id="add-feed" class="btn btn-primary">+</button>
             </div>
             <div style="float:left;"><h1 class="my-1">RSS Algo</h1></div>
-            <div style="float:left;width:100%;padding-top: 8px;">An open source client-side algorithmically-driven RSS reader, living with your data on your device. Follow <a href="https://mastodon.social/deck/tags/suffolkrssalgo" target="_blank">#SuffolkRSSalgo</a> on Mastodon for project updates. FYI, we're currently in beta. <a href="https://github.com/colarusso/rss_algo#rss-algo" target="_blank">Learn More</a>.</div>
+            <div style="float:left;width:100%;padding-top: 8px;">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader. Use 👍 &amp; 👎 + "Seen" or "Open" to feed the algo. Votes don't leave your device, and you can tune the algo's behavior in <a href="#settings">settings</a>! FWIW, we're in beta. <a href="https://github.com/colarusso/rss_algo#rss-algo" target="_blank">Learn More</a>. Follow <a href="https://mastodon.social/deck/tags/suffolkrssalgo" target="_blank">#SuffolkRSSalgo</a> on Mastodon for project updates. </div>
             <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;color:black;margin-top: 10px;"><i>&nbsp;Loading...&nbsp;</i></span>
         <div class="my-3" style="float:left;width:100%;">
             <span style="float:right"><a href="#settings">Settings &amp; Data</a></span>
@@ -245,16 +245,17 @@
             <p>You can manage your feeds by clicking "My Feeds" at the <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">top</a> of this page. See additional controls below. To determine what articles you like, we make use of insights from <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">TF-IDF</a>, comparing all the text from the cards you vote up or down with everything you've "seen." I hope to write a more complete explanation sometime. When I do, I'll put a link here. Until then, you can always look at <a href="https://github.com/colarusso/rss_algo" target="_blank">the code</a>.</p>
             <p><i>Note: when figuring out what you "like" we look only at the card's title, description, and the RSS Feed's name. We don't look at the content of the article, and we also compress all feed titles into single words. That's why you might see things like nyttopstories (NYT > Top Stories) in the word lists below.</i></p>
             <h4>Cooldown Clock</h4>
-                <p></p>
                     <p>
-                    There's no need to download evey feed everytime you hit refresh. So this site waits for a defined period before downloading content. If you refresh the page before the end of this cooldown period, it will recalulate ratings based on recent votes, but it won't download your feeds. Currently the period is set to <b><i><span id="cooldown-value">0.25</span></i> hours</b>. <i>Refresh page to see results. <span class="highlighted"><b>If you set a cooldown period that is shorter than the current value, you will have to wait for the old period to pass before the new one takes effect. So, once you set it and refresh, there's no quickly going back.</b></span></i>
+                    There's no need to download every feed every time you hit refresh. So this site waits for a defined period before downloading content. If you refresh the page before the end of this cooldown period, it will recalculate ratings based on recent votes, but it won't download your feeds. Currently the period is set to <b><i><span id="cooldown-value">0.25</span></i> hours</b>. <i>Refresh page to see results. <span class="highlighted"><b>If you set a cooldown period that is shorter than the current value, you will have to wait for the old period to pass before the new one takes effect. So, once you set it and refresh, there's no quickly going back.</b></span></i>
                     </p>
                     <p>
                         <input type="range" id="cooldown-slider" min="0.25" max="4" value="0.25" step="0.25" style="width:100%;">
                     </p>
+            <h4>A Note on Performance</h4>
+                <p>The options you choose below will effect this site's performance. Generally speaking, the more inclusive your choices, the larger your timeline will be and the slower it will load, reorder and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.</p>
             <h4>Ratings Cutoff</h4>
                 <p>
-                    After the recomendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and postive numbers are above average. 
+                    After the recommendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and positive numbers are above average. 
                 </p>
                     <p>
                     Z-Score for cutoff: <b><i><span id="cutoff-value">-2.5</span></i></b>. <i>Refresh page to see results</i>.
@@ -272,8 +273,8 @@
                     </p>
             <div class="row">
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
-                    <h4>Postive</h4>
-                    <p>Here are your <b><i>most-postive</i></b> words and their approximate TF-IDF, treating all up-voted cards as a single document: <span id="upwords">not enough data</span></p>
+                    <h4>Positive</h4>
+                    <p>Here are your <b><i>most-positive</i></b> words and their approximate TF-IDF, treating all up-voted cards as a single document: <span id="upwords">not enough data</span></p>
                     <button id="clear-upvotes" class="btn btn-danger btn-block">Clear Upvotes</button>
                 </div>
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
@@ -285,9 +286,9 @@
                     <h4>History</h4>
                     Display content from the last <b><i><span id="lookback-value">7</span> days</i></b>. <i>Refresh page to see results</i>.
                     <p>
-                        <input type="range" id="lookback-slider" min="1" max="30" value="14" style="width:100%;">
+                        <input type="range" id="lookback-slider" min="1" max="30" value="7" style="width:100%;">
                     </p>
-                    <p>You can limit how much you see in your timeline by adjusting the slider above. If you clear you reading history, it will effect your recomendations since they're based on interactions with old articles. That is, we'll only be able to use data from old artiles if they get downloaded again.</p>
+                    <p>You can limit how much you see in your timeline by adjusting the slider above. If you clear you reading history, it will effect your recommendations since they're based on interactions with old articles. That is, we'll only be able to use data from old articles if they get downloaded again.</p>
                     <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
                     <button id="factory-reset" class="btn btn-danger btn-block factory-reset" onClick="reset_all();"><b>RESET ALL</b></button>
                 </div>
@@ -464,6 +465,11 @@
                 "https://www.wired.com/feed/category/science/latest/rss",
                 "https://www.wired.com/feed/category/ideas/latest/rss",
                 "https://www.wired.com/feed/tag/ai/latest/rss",
+                "https://slate.com/feeds/news-and-politics.rss",
+                "https://slate.com/feeds/culture.rss",
+                "https://slate.com/feeds/technology.rss",
+                "https://slate.com/feeds/business.rss",
+                "https://slate.com/feeds/human-interest.rss",
                 "https://www.lawnext.com/feed",
                 "https://xkcd.com/rss.xml",
                 "https://pluralistic.net/feed/"
@@ -585,7 +591,7 @@
             const cooldownValueElement = document.getElementById("cooldown-value");
             
             // Retrieve cooldown value from localStorage (if available)
-            const savedcooldown = localStorage.getItem("cooldown") || 0.25;
+            const savedcooldown = localStorage.getItem("cooldown") || 0.5;
             if (savedcooldown) {
                 cooldownSlider.value = savedcooldown;
                 cooldownValueElement.textContent = savedcooldown;
@@ -602,7 +608,7 @@
             const lookbackValueElement = document.getElementById("lookback-value");
             
             // Retrieve lookback value from localStorage (if available)
-            const savedLookback = localStorage.getItem("lookback") || 14;
+            const savedLookback = localStorage.getItem("lookback") || 3;
             if (savedLookback) {
                 lookbackSlider.value = savedLookback;
                 lookbackValueElement.textContent = savedLookback;
@@ -720,7 +726,7 @@
 
                                     //console.log(rssFeeds.length)
 
-                                    if ((pubDate >= lookback) && (j<(max_arts/rssFeeds.length))) {
+                                    if ((pubDate >= lookback) && (j<(max_arts/rssFeeds.length)) && (pubDate <= new Date())) {
                                         
                                         try {
                                             title = item.querySelector("title").textContent;
@@ -1161,6 +1167,9 @@
                 for (word in upTFIDF) {
                     if (dfreq["df_arr"][word]) {
                         idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
+                        if (isNaN(idf)) {
+                            idf = 1;
+                        }
                         if (tf[word] && idf) {
                             //if (downTFIDF[word]*savednegativity<=tf[word]) {
                             //    array1.push((tf[word]-downTFIDF[word]*savednegativity)*idf)
@@ -1182,6 +1191,9 @@
                 for (word in downTFIDF) {
                     if (dfreq["df_arr"][word]) {
                         idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
+                        if (isNaN(idf)) {
+                            idf = 1;
+                        }
                         if (tf[word] && idf) {
                             //if (upTFIDF[word]*(2-savednegativity)<=tf[word]) {
                             //    array1.push((tf[word]-upTFIDF[word]*(2-savednegativity))*idf)
@@ -1298,6 +1310,9 @@
                     //    wordObj[word] = 0
                     //} else {
                         idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
+                        if (isNaN(idf)) {
+                            idf = 1;
+                        }
                         wordObj[word] = wordObj[word]*idf;
                     //}
                 }
@@ -1506,8 +1521,8 @@
 
             addFeedButton.addEventListener("click", function() {
                 if (rssFeeds.length>=50) {
-                    alert("For performance reasons, we only support 50 feeds at this time. To add a feed you will first need to make space by removing one or more of your current feeds.")
-                } else {
+                    alert("FYI, to acomidate large feed follows, we truncate feeds to avoid them overloading your browser's storage. How much we have to cut is porpotional to how many feeds you follow. So following a lot of feeds may cause you to miss posts if they are too far down the feed when fetched. If this issue comes up, consider following fewer feeds or checking in more often.")
+                }
                     const newFeedUrl = prompt("Enter a new RSS feed URL:");
                     if (newFeedUrl) {
                         let lastLoad = 0;
@@ -1515,7 +1530,7 @@
                         rssFeeds.push(newFeedUrl);
                         updateFeedList(true);
                     }
-                }
+                
             });
 
             manageFeedsButton.addEventListener("click", function() {
@@ -1553,7 +1568,7 @@
                     if (event.target.classList.contains("remove-feed")) {
                         const feedIndex = event.target.getAttribute("data-feed-index");
                         rssFeeds.splice(feedIndex, 1);
-                        updateFeedList(true);
+                        updateFeedList();
                         feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
                             <tr><td width="1%">
                             <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
