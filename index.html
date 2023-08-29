@@ -331,6 +331,16 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
 
+        const toggleModeButton = document.getElementById("toggle-mode");
+        const body = document.body;
+
+        // Retrieve dark mode state from localStorage (if available)
+        const darkModeState = localStorage.getItem("darkMode");
+        if (darkModeState === "enabled") {
+            body.classList.add("dark-mode");
+            toggleModeButton.innerHTML = "💡"; // Light bulb emoji
+        }
+
         history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
         function readArticles_in_window(){
@@ -440,16 +450,6 @@
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-
-            const toggleModeButton = document.getElementById("toggle-mode");
-            const body = document.body;
-
-            // Retrieve dark mode state from localStorage (if available)
-            const darkModeState = localStorage.getItem("darkMode");
-            if (darkModeState === "enabled") {
-                body.classList.add("dark-mode");
-                toggleModeButton.innerHTML = "💡"; // Light bulb emoji
-            }
 
             // Toggle between light and dark mode
             toggleModeButton.addEventListener("click", function () {
