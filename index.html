@@ -403,7 +403,6 @@
                         _xLen = ((localStorage["articles"].length + "articles".length) * 2);
                         size = (_xLen / 1024)/stored_art; // size per article in stored articles 
                         tfidf_size = ((localStorage["upTFIDF"].length + "upTFIDF".length) * 2)/1024/Object.keys(JSON.parse(localStorage.upvotes)).length;
-                        console.log("tfidf",tfidf_size)
                         size_per_art = (0.2+(0.30+tfidf_size)*1.7+size*1.5); // (size_votes + (size_read + size_TFIDF)*kept + sizer_per_stored_article*padding)
                         max_arts = Math.round((5000*0.95-100-0.1*JSON.parse(localStorage.feeds).length)/size_per_art)  // 90% default size - 100 for all settings - 0.1 per feed                        
                     } catch (error) {}
