@@ -308,7 +308,7 @@
                     <h4>History</h4>
                     Display content from the last <b><i><span id="lookback-value">7</span> days</i></b>. <i>Refresh page to see results</i>.
                     <p>
-                        <input type="range" id="lookback-slider" min="1" max="30" value="7" style="width:100%;">
+                        <input type="range" id="lookback-slider" min="1" max="15" value="7" style="width:100%;">
                     </p>
                     <p>You can limit how much you see in your timeline by adjusting the slider above. If you clear you reading history, however, it will remove older articles, not just hide them. This will effect your recommendations since they are based on interactions with old articles.</p>
                     <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
@@ -402,8 +402,10 @@
                     try {
                         _xLen = ((localStorage["articles"].length + "articles".length) * 2);
                         size = (_xLen / 1024)/stored_art; // size per article in stored articles 
-                        size_per_art = (0.2+(0.35+0.3)*2+size*1.5)*1.05; // size of (size_votes + (read + TFIDF)*kept + sizer per stored article)*1.05
-                        max_arts = Math.round((5000*0.9-100-0.1*JSON.parse(localStorage.feeds).length)/size_per_art)  // 90% default size - 100 for all settings - 0.1 per feed                        
+                        tfidf_size = ((localStorage["upTFIDF"].length + "upTFIDF".length) * 2)/1024/Object.keys(JSON.parse(localStorage.upvotes)).length;
+                        console.log("tfidf",tfidf_size)
+                        size_per_art = (0.2+(0.30+tfidf_size)*1.7+size*1.5); // (size_votes + (size_read + size_TFIDF)*kept + sizer_per_stored_article*padding)
+                        max_arts = Math.round((5000*0.95-100-0.1*JSON.parse(localStorage.feeds).length)/size_per_art)  // 90% default size - 100 for all settings - 0.1 per feed                        
                     } catch (error) {}
                     console.log("Article Cap: "+max_arts);
                 }
@@ -1462,13 +1464,13 @@
 
                 // Convert the object into an array of key-value pairs
                 const dataArray = Object.entries(filteredEntries);
-                if (dataArray.length>max_arts) {
+                if (dataArray.length>=max_arts*1.7) {
                     // Sort the array based on the date values
                     dataArray.sort((a, b) => new Date(a[1]) - new Date(b[1]));
                     // Convert the sorted array back into an object
                     console.log("To free up space, we're forgetting about some of your older articles. If they're still in the live RSS feed, you may see them again.")
                     //console.log(dataArray)
-                    keep_last = Math.round(max_arts*2);
+                    keep_last = Math.floor(max_arts*1.7);
                     lastn_filteredEntries = Object.fromEntries(dataArray.slice(-keep_last));
                     //console.log(dataArray)
                     lastn_filteredEntries = filteredEntries
