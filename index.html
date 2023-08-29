@@ -430,7 +430,7 @@
         }
 
         function reset_all() {
-            let text = "This will erase all of your data and rest the list of feeds to default values. Choose OK to continue.";
+            let text = "This will erase all of your data and set the list of feeds to defaults. Choose OK to continue.";
             if (confirm(text) == true) {
                 history.replaceState('', document.title, window.location.pathname);
                 localStorage.clear();
@@ -1137,18 +1137,16 @@
                         const RemoveFeedButton = article.querySelector(".remove_feed");
 
                         RemoveFeedButton.addEventListener("click", function() {
-                            if (rssFeeds.includes(feedUrl)) {
+                            if (feedUrl == "undefined") {
+                                // Can delete after Start of Dec 2024
+                                alert("This card was saved with an old version of this site and we don't have the information needed to remove the feed. Use the My Feeds button at the top of the page.")
+                            } else if (rssFeeds.includes(feedUrl)) {
                                 let text = "Choose OK to remove: "+feedTitle+"\n\n"+feedUrl+"\n\nChoose Cancel to keep things as they are. Note: If you remove this feed, old posts will remain visable in your timeline, but we will not fetch new ones.";
                                 if (confirm(text) == true) {
-                                    if (feedUrl == "undefined") {
-                                        // Can delete after Start of Dec 2024
-                                        alert("This card was saved with an old version of this site and we don't have the information needed to remove the feed. Use the My Feeds button at the top of the page.")
-                                    } else {
-                                        //console.log(rssFeeds)
-                                        rssFeeds.splice(feedUrl, 1);
-                                        updateFeedList();
-                                        //console.log(rssFeeds)
-                                    }
+                                    //console.log(rssFeeds)
+                                    rssFeeds.splice(feedUrl, 1);
+                                    updateFeedList();
+                                    //console.log(rssFeeds)
                                 }
                             } else {
                                 alert("It looks like this feed has already been removed. Remember, old posts from removed feeds remain visable in your timeline, but new ones are not fetched.")
