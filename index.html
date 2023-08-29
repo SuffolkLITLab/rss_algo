@@ -1143,8 +1143,10 @@
                             } else if (rssFeeds.includes(feedUrl)) {
                                 let text = "Choose OK to remove: "+feedTitle+"\n\n"+feedUrl+"\n\nChoose Cancel to keep things as they are. Note: If you remove this feed, old posts will remain visable in your timeline, but we will not fetch new ones.";
                                 if (confirm(text) == true) {
-                                    //console.log(rssFeeds)
-                                    rssFeeds.splice(feedUrl, 1);
+                                    console.log(rssFeeds)
+                                    console.log("Removing",feedUrl)
+                                    const feedIndex = rssFeeds.indexOf(feedUrl);
+                                    rssFeeds.splice(feedIndex, 1);
                                     updateFeedList();
                                     //console.log(rssFeeds)
                                 }
