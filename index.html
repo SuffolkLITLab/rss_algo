@@ -297,12 +297,12 @@
                         <input type="range" id="negativity-slider" min="0" max="2" value="1.25" step="0.01" style="width:100%;">
                     </p>
             <div class="row">
-                <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
+                <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4" style="overflow:hidden;">
                     <h4>Positive</h4>
                     <p>Here are your <b><i>most-positive</i></b> words and their approximate TF-IDF, treating all up-voted cards as a single document: <span id="upwords">not enough data</span></p>
                     <button id="clear-upvotes" class="btn btn-danger btn-block">Clear Upvotes</button>
                 </div>
-                <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
+                <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4" style="overflow:hidden;">
                     <h4>Negative</h4>
                     <p>Here are your <b><i>most-negative</i></b> words and their approximate TF-IDF, treating all down-voted cards as a single document: <span id="downwords">not enough data</span></p>
                     <button id="clear-downvotes" class="btn btn-danger btn-block">Clear Downvotes</button>
@@ -987,7 +987,7 @@
                     const twoWeeksAgo = new Date();
                     twoWeeksAgo.setDate(twoWeeksAgo.getDate() - savedLookback);
 
-                    if (i==2 && Math.random()<=0.1) {
+                    if ((i==2) && (Math.random()<=0.1) && ((n_feeds>=rssFeeds.length) || (n_feeds==0))) {
                         const sponsor = document.createElement("div");
                         sponsor.setAttribute("data-article-index", "sponsor"); 
                         sponsor.setAttribute("data-item-id", "sponsor");
@@ -1009,6 +1009,7 @@
                             </div>
                         `;                        
                         newsFeedContainer.appendChild(sponsor);
+                        i+=1;
                     }
 
 
@@ -1159,8 +1160,8 @@
                                 alert("It looks like this feed has already been removed. Remember, old posts from removed feeds remain visable in your timeline, but new ones are not fetched.")
                             }
                         });        
+                        i+=1;
                     }                    
-                    i+=1;
                 });
 
                 // After all articles are displayed, update their styles
