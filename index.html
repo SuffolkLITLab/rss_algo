@@ -1067,7 +1067,7 @@
                                 upvotes[itemId] = true;
                                 localStorage.setItem("upvotes", JSON.stringify(upvotes));
                             }
-                            localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*2.1))));
+                            localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*0.9))));
                             
                             updateArticleStyles();
                         });
@@ -1085,7 +1085,7 @@
                                 downvotes[itemId] = true;
                                 localStorage.setItem("downvotes", JSON.stringify(downvotes));
                             }
-                            localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-max_arts*2.1))));
+                            localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-max_arts*0.9))));
                             
                             updateArticleStyles();
                         });
@@ -1466,7 +1466,7 @@
                     dataArray.sort((a, b) => new Date(a[1]) - new Date(b[1]));
                     // Convert the sorted array back into an object
                     console.log("To free up space, we're forgetting about some of your older articles. If they're still in the live RSS feed, you may see them again.")
-                    keep_last = Math.round(max_arts*2.1);
+                    keep_last = Math.round(max_arts*1.75);
                     lastn_filteredEntries = Object.fromEntries(dataArray.slice(-keep_last));
                 } else {
                     lastn_filteredEntries = filteredEntries
