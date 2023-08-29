@@ -154,9 +154,22 @@
             margin-bottom: 12px;
         }
         .card-footer {
-            display: flex;
             line-height: 18px;
+            width:100%;
+            display: flex;
         }
+        .remove_all {
+            margin: 0 5px 10px 0;
+        }
+        .remove_feed {
+            margin: 0 0 3px auto;
+            padding:0;
+            font-size: 18px;
+            line-height: 18px;
+            height: 18px;
+        }
+        
+        
         .highlighted {
             background: yellow;
         }
@@ -450,8 +463,7 @@
                 }
             });
 
-
-            let rssFeeds = JSON.parse(localStorage.getItem("feeds")) || [
+            const default_feeds = [
                 "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
                 "https://rss.nytimes.com/services/xml/rss/nyt/US.xml",
                 "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
@@ -474,6 +486,10 @@
                 "https://www.economist.com/briefing/rss.xml",
                 "https://www.economist.com/science-and-technology/rss.xml",
                 "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
+                "https://feeds.bloomberg.com/markets/news.rss",
+                "https://feeds.bloomberg.com/politics/news.rss",
+                "https://feeds.bloomberg.com/technology/news.rss",
+                "https://slate.com/feeds/news-and-politics.rss",
                 "https://feeds.arstechnica.com/arstechnica/features",
                 "https://feeds.arstechnica.com/arstechnica/technology-lab",
                 "https://feeds.arstechnica.com/arstechnica/tech-policy",
@@ -481,14 +497,15 @@
                 "https://www.wired.com/feed/category/science/latest/rss",
                 "https://www.wired.com/feed/category/ideas/latest/rss",
                 "https://www.wired.com/feed/tag/ai/latest/rss",
-                "https://slate.com/feeds/news-and-politics.rss",
                 "https://slate.com/feeds/technology.rss",
                 "https://slate.com/feeds/business.rss",
                 "https://www.lawnext.com/feed",
                 "https://xkcd.com/rss.xml",
                 "https://pluralistic.net/feed/"
                 // Add more default RSS feed URLs here
-            ];
+            ]
+
+            let rssFeeds = JSON.parse(localStorage.getItem("feeds")) || default_feeds;
 
             function arr2obj(arr) {
                 return arr.reduce(
@@ -729,7 +746,7 @@
                                 //console.log(xml)
 
                                 const feedTitle = xml.querySelector("channel title").textContent;
-
+                                
                                 const items = xml.querySelectorAll("item");
 
                                 j=0;
@@ -845,6 +862,7 @@
                                             itemId,
                                             isRead,
                                             feedTitle,
+                                            feedUrl,
                                             hasUpvote: upvotes[itemId] || false,
                                             hasDownvote: downvotes[itemId] || false,
                                             priorityRating
@@ -959,7 +977,7 @@
                 i=0
                 articles.forEach((articleData, index) => {
 
-                    const { title, link, description, pubDate, image, mediaThumbnail, itemId, isRead, feedTitle, hasUpvote, hasDownvote, priorityRating } = articleData;
+                    const { title, link, description, pubDate, image, mediaThumbnail, itemId, isRead, feedTitle, feedUrl, hasUpvote, hasDownvote, priorityRating } = articleData;
 
                     const twoWeeksAgo = new Date();
                     twoWeeksAgo.setDate(twoWeeksAgo.getDate() - savedLookback);
@@ -971,7 +989,7 @@
                         sponsor.className = `col-xl-4 col-lg-5 col-md-6 col-sm-12 article-container`;
                         sponsor.innerHTML = `
                             <div class="card">
-                                <div class="masto_share"><a href="javascript:void('')" onclick="MastodonShare('Support Suffolk Law\\'s LIT Lab;url=https://suffolklitlab.org/docs/affiliates.pdf');">Mastodon</a></div>
+                                <div class="masto_share" style="right:10px;"><a href="javascript:void('')" onclick="MastodonShare('Support Suffolk Law\\'s LIT Lab;url=https://suffolklitlab.org/docs/affiliates.pdf');">Mastodon</a></div>
                                 <div style="postion:relative;z-index:0;top:0"><img src="images/sargent.jpg" class="card-img-top thumbnail-image" alt="Thumbnail Image"></div>
                                 <div class="card-body">
                                         <h5 class="card-title">Support the People Who Built <i>RSS Algo</i>!</h5>
@@ -1023,7 +1041,8 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <img src="https://${domain_for_img}/favicon.ico" height="18px" align="left/> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small>
+                                    <img src="https://${domain_for_img}/favicon.ico" height="18px" align="left/> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small> 
+                                    <span class="btn remove_feed" data-feed-index="${feedUrl}" data-feed-name="${feedTitle}">🚫</span>
                                 </div>
                             </div>
                         `;
@@ -1114,11 +1133,29 @@
                                 updateItemCount();
                             }
                         });
-                        
-                    }
-                    
-                    i+=1;
 
+                        const RemoveFeedButton = article.querySelector(".remove_feed");
+
+                        RemoveFeedButton.addEventListener("click", function() {
+                            if (rssFeeds.includes(feedUrl)) {
+                                let text = "Choose OK to remove: "+feedTitle+"\n\n"+feedUrl+"\n\nChoose Cancel to keep things as they are. Note: If you remove this feed, old posts will remain visable in your timeline, but we will not fetch new ones.";
+                                if (confirm(text) == true) {
+                                    if (feedUrl == "undefined") {
+                                        // Can delete after Start of Dec 2024
+                                        alert("This card was saved with an old version of this site and we don't have the information needed to remove the feed. Use the My Feeds button at the top of the page.")
+                                    } else {
+                                        //console.log(rssFeeds)
+                                        rssFeeds.splice(feedUrl, 1);
+                                        updateFeedList();
+                                        //console.log(rssFeeds)
+                                    }
+                                }
+                            } else {
+                                alert("It looks like this feed has already been removed. Remember, old posts from removed feeds remain visable in your timeline, but new ones are not fetched.")
+                            }
+                        });        
+                    }                    
+                    i+=1;
                 });
 
                 // After all articles are displayed, update their styles
@@ -1567,7 +1604,11 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <p>Note: If you remove a feed, old articles will remain on your timeline and in your history.</p>
+                                    <p>Note: If you remove a feed, old articles will remain on your timeline and in your history by default.</p>
+                                    <p>
+                                        <button type="button" id="remove_all_add_defaults" class="btn btn-danger remove_all">Remove All &amp; Load Defaults</button>
+                                        <button type="button" id="remove_all_feeds" class="btn btn-danger remove_all">Remove All</button>
+                                    <p>
                                     <table cellpadding="10px" width="100%">${feedList}</table>
                                 </div>
                             </div>
@@ -1577,9 +1618,35 @@
 
                 document.body.insertAdjacentHTML("beforeend", feedListModal);
 
+
                 const feedListModalElement = document.getElementById("feedListModal");
                 feedListModalElement.addEventListener("hidden.bs.modal", function() {
                     feedListModalElement.remove();
+                });
+
+                const removeALLaddDefaults = document.getElementById("remove_all_add_defaults");
+                const removeALLfeeds = document.getElementById("remove_all_feeds");
+                
+                removeALLaddDefaults.addEventListener("click", function() {
+                    rssFeeds = default_feeds
+                    feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
+                        <tr><td width="1%">
+                        <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
+                        </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
+                    `).join("");
+                    let lastLoad = 0;
+                    localStorage.setItem("lastLoad", 0);    
+                    updateFeedList(true);
+                });
+
+                removeALLfeeds.addEventListener("click", function() {
+                    rssFeeds = []
+                    feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
+                        <tr><td width="1%">
+                        <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
+                        </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
+                    `).join("");
+                    updateFeedList();
                 });
 
                 feedListModalElement.querySelector(".modal-body").addEventListener("click", function(event) {
