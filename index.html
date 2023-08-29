@@ -1518,7 +1518,9 @@
 
                 //console.log("TF-IDF: "+readArticleData.length+" 'read' documents","\nUp: "+upvotedArticleData.length+" documents, "+Object.keys(upTFIDF).length+" words","\nDown: "+downvotedArticleData.length+" documents, "+Object.keys(downTFIDF).length+" words\n");
 
-                localStorage.setItem("articles", JSON.stringify(articles.slice(-max_arts)));
+                //localStorage.setItem("articles", JSON.stringify(articles.slice(-max_arts)));
+                columns.log(articles)
+                localStorage.setItem("articles", JSON.stringify(articles));
                 var order_arr = []
                 //console.log("Updating Order")
                 for (article in articles){
