@@ -1137,7 +1137,7 @@
                         const RemoveFeedButton = article.querySelector(".remove_feed");
 
                         RemoveFeedButton.addEventListener("click", function() {
-                            if (feedUrl == "undefined") {
+                            if (feedUrl == "undefined" || typeof feedUrl == "undefined") {
                                 // Can delete after Start of Dec 2024
                                 alert("This card was saved with an old version of this site and we don't have the information needed to remove the feed. Use the My Feeds button at the top of the page.")
                             } else if (rssFeeds.includes(feedUrl)) {
