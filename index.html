@@ -1575,8 +1575,8 @@
             const manageFeedsButton = document.getElementById("manage-feeds");
 
             addFeedButton.addEventListener("click", function() {
-                if (rssFeeds.length>=50) {
-                    alert("FYI, to acomidate large feed follows, we truncate feeds to avoid them overloading your browser's storage. How much we have to cut is porpotional to how many feeds you follow. So following a lot of feeds may cause you to miss posts if they are too far down the feed when fetched. If this issue comes up, consider following fewer feeds or checking in more often.")
+                if (rssFeeds.length>=40) {
+                    alert("Generally speaking, the more feeds you follow the more posts in your timeline and the slower the site will preform. You can shrink the size of your timeline but setting a shorter History window. Also, to accommodate large feed follows, we truncate feeds to avoid overloading your browser's storage. How much we have to cut is proportional to how many feeds you follow. So following a lot of feeds may cause you to miss posts if they are too far down the feed. If this issue comes up, consider following fewer feeds or checking in more often.")
                 }
                     const newFeedUrl = prompt("Enter a new RSS feed URL:");
                     if (newFeedUrl) {
