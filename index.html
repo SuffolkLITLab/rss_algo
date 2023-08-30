@@ -556,11 +556,11 @@
             var ratings_mean = 0;
             var ratings_std = 0;
 
-            function updateFeedList(loadFeeds = false) {
+            function updateFeedList(loadFeeds = false, singlefeed="") {
                 localStorage.setItem("feeds", JSON.stringify(rssFeeds));
                 let upTFIDF =  JSON.parse(localStorage.getItem("upTFIDF")) || {};
                 let downTFIDF =  JSON.parse(localStorage.getItem("downTFIDF")) || {};
-                loadNews(loadFeeds);
+                loadNews(loadFeeds,singlefeed);
                 
             }
 
@@ -719,7 +719,7 @@
                 return span.textContent || span.innerText;
             };
 
-            function loadNews(loadFeeds = true) {
+            function loadNews(loadFeeds = true, singlefeed="") {
 
                 const lastLoad = localStorage.getItem("lastLoad") || 0;
                 const lastcooldown = localStorage.getItem("lastcooldown") || 0.25;
@@ -746,7 +746,13 @@
                         
                     newsFeedContainer.innerHTML = "";
 
-                    rssFeeds.forEach(feedUrl => {
+                    if (singlefeed.length>0) {
+                        use_feeds = [singlefeed];
+                    } else {
+                        use_feeds = rssFeeds;
+                    }
+
+                    use_feeds.forEach(feedUrl => {
                         fetchFeed(feedUrl)
                             .then(data => {
 
@@ -1595,13 +1601,14 @@
                 if (rssFeeds.length>=40) {
                     alert("Generally speaking, the more feeds you follow the more posts in your timeline and the slower the site will preform. You can shrink the size of your timeline but setting a shorter History window. Also, to accommodate large feed follows, we truncate feeds to avoid overloading your browser's storage. How much we have to cut is proportional to how many feeds you follow. So following a lot of feeds may cause you to miss posts if they are too far down the feed. If this issue comes up, consider following fewer feeds or checking in more often.")
                 }
-                    const newFeedUrl = prompt("Enter a new RSS feed URL:");
-                    if (newFeedUrl) {
-                        let lastLoad = 0;
-                        localStorage.setItem("lastLoad", 0);
-                        rssFeeds.push(newFeedUrl);
-                        updateFeedList(true);
-                    }
+
+                const newFeedUrl = prompt("Enter a new RSS feed URL:");
+                if (newFeedUrl) {
+                    let lastLoad = 0;
+                    localStorage.setItem("lastLoad", 0);
+                    rssFeeds.push(newFeedUrl);
+                    updateFeedList(true,newFeedUrl);
+                }
                 
             });
 
@@ -1621,7 +1628,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <p>Note: If you remove a feed, old articles will remain on your timeline and in your history by default.</p>
+                                    <p>Note: If you remove a feed, old articles will remain on your timeline and in your history by default. Also, if you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>.</p>
                                     <p>
                                         <button type="button" id="remove_all_add_defaults" class="btn btn-danger remove_all">Remove All &amp; Load Defaults</button>
                                         <button type="button" id="remove_all_feeds" class="btn btn-danger remove_all">Remove All</button>
