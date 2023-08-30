@@ -8,7 +8,7 @@ Follow [#SuffolkRSSalgo](https://mastodon.social/deck/tags/suffolkrssalgo) on Ma
 
 It's harder to find RSS feeds now than it was 20 years ago. So, here are a few tips and tricks. 
 
-If you're looking for local news in the US, you can probably find a [Patch.com](https://patch.com/) feed. They aren't listed anywhere, but are of the form `https://patch.com/feeds/aol/massachusetts/boston`. This is a common theme, websites with RSS feeds but no clear way of discovering them. My goto method for finding a site's feed has three main steps: 
+If you're looking for local news in the US, you can probably find a [Patch.com](https://patch.com/) feed. They aren't listed anywhere, but are of the form `https://patch.com/feeds/aol/massachusetts/boston`. So you can try swapping out your state and locality names. This is a common theme, websites with RSS feeds but no clear way of discovering them. My goto method for finding a site's feed has three main steps: 
 
 1. See if you can find the letters RSS anywhere on the site. These often link right to the feed (e.g., [Pluralistic](https://pluralistic.net/) has an [RSS link](https://pluralistic.net/feed/) right in the menu. You'll probably want to `right click > copy link` to get the url as clicking on the link often triggers a download. If that doesn't work...
 2. Google `[website name] RSS feeds` and see if anything comes up. If you're lucky, you'll get results like these:
