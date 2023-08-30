@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>RSS Algo</title>
-	<meta property="og:site_name" content="RSS Algo"/>
+    <title>My RSS Algo</title>
+	<meta property="og:site_name" content="My RSS Algo"/>
 	<meta property="og:type" content="website"/>
 	<meta property="og:title" content="RSS Algo"/>
 	<meta property="og:description" content="An open source client-side algorithmically-driven RSS reader, living with your data on your device."/>
@@ -200,7 +200,7 @@
                 display:block;
             }
         }
-        @media only screen and (max-width: 350px) {
+        @media only screen and (max-width: 450px) {
             .menu {
                 width:100%;
                 text-align:right;
@@ -261,8 +261,8 @@
                 <button id="manage-feeds" class="btn btn-secondary">My Feeds</button>
                 <button id="add-feed" class="btn btn-primary">+</button>
             </div>
-            <div style="float:left;"><h1 class="my-1">RSS Algo</h1></div>
-            <div style="float:left;width:100%;padding-top: 8px;">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader. Use 👍 &amp; 👎 + "Seen" or "Open" to feed the algo. Votes don't leave your device, and you can customize the algo's behavior in <a href="#settings">settings</a>! Curate your list of feeds with the buttons above. Follow <a href="https://mastodon.social/deck/tags/suffolkrssalgo" target="_blank">#SuffolkRSSalgo</a> on Mastodon for project updates, or check out <a href="https://github.com/colarusso/rss_algo" target="_blank">our GitHub page</a>.</div>
+            <div style="float:left;"><h1 class="my-1">My RSS Algo</h1></div>
+            <div style="float:left;width:100%;padding-top: 8px;">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader. Use 👍 &amp; 👎 + "Seen" or "Open" to feed the algo. Votes don't leave your device. Customize the algo's behavior in <a href="#settings">settings</a>. Curate your feeds using the buttons above. Follow <a href="https://mastodon.social/deck/tags/suffolkrssalgo" target="_blank">#SuffolkRSSalgo</a> on Mastodon for project updates, or check out <a href="https://github.com/colarusso/rss_algo" target="_blank">our GitHub page</a>.</div>
             <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;color:black;margin-top: 10px;"><i>&nbsp;Loading...&nbsp;</i></span>
         <div class="my-3" style="float:left;width:100%;">
             <span style="float:right"><a href="#settings">Settings &amp; Data</a></span>
@@ -1602,7 +1602,7 @@
                     alert("Generally speaking, the more feeds you follow the more posts in your timeline and the slower the site will preform. You can shrink the size of your timeline but setting a shorter History window. Also, to accommodate large feed follows, we truncate feeds to avoid overloading your browser's storage. How much we have to cut is proportional to how many feeds you follow. So following a lot of feeds may cause you to miss posts if they are too far down the feed. If this issue comes up, consider following fewer feeds or checking in more often.")
                 }
 
-                const newFeedUrl = prompt("Enter a new RSS feed URL:");
+                const newFeedUrl = prompt("Enter the URL for a new RSS feed:");
                 if (newFeedUrl) {
                     let lastLoad = 0;
                     localStorage.setItem("lastLoad", 0);
