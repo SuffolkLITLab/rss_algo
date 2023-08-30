@@ -16,6 +16,9 @@
     
     <style>
         /* Your custom styles can go here */
+        .menu {
+            float:right;
+        }
         .read-article .card {
             opacity: 0.5; /* Slightly transparent for read items */
         }
@@ -188,6 +191,7 @@
             display:none;
             height:35px;
         }
+
         @media only screen and (max-width: 520px) {
             #footer_logo_long {
                 display:none;
@@ -196,7 +200,13 @@
                 display:block;
             }
         }
-
+        @media only screen and (max-width: 350px) {
+            .menu {
+                width:100%;
+                text-align:right;
+                margin-bottom: 15px;
+            }
+        }
         
         /* Dark mode styles */
         .dark-mode {
@@ -246,7 +256,7 @@
 <body>
     <div class="container">
         <div style="float:left;width:100%;margin-top: 20px;">
-            <div style="float:right;">
+            <div class="menu">
                 <button id="toggle-mode" class="btn btn-secondary" aria-label="Toggle Dark Mode">🌗</button>
                 <button id="manage-feeds" class="btn btn-secondary">My Feeds</button>
                 <button id="add-feed" class="btn btn-primary">+</button>
@@ -987,7 +997,7 @@
                     const twoWeeksAgo = new Date();
                     twoWeeksAgo.setDate(twoWeeksAgo.getDate() - savedLookback);
 
-                    if ((i==2) && (Math.random()<=0.1) && ((n_feeds>=rssFeeds.length) || (n_feeds==0))) {
+                    if (((i==2 && !isRead) || (i==0 && isRead)) && (Math.random()<=0.1) && ((n_feeds>=rssFeeds.length) || (n_feeds==0))) {
                         const sponsor = document.createElement("div");
                         sponsor.setAttribute("data-article-index", "sponsor"); 
                         sponsor.setAttribute("data-item-id", "sponsor");
