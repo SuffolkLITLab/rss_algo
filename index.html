@@ -297,8 +297,8 @@
                         _xLen = ((localStorage["articles"].length + "articles".length) * 2);
                         size = (_xLen / 1024)/stored_art; // size per article in stored articles 
                         tfidf_size = ((localStorage["upTFIDF"].length + "upTFIDF".length) * 2)/1024/Object.keys(JSON.parse(localStorage.upvotes)).length;
-                        size_per_art = (0.2+(0.30+tfidf_size)*1.7+size*1.5); // (size_votes + (size_read + size_TFIDF)*kept + sizer_per_stored_article*padding)
-                        max_arts = Math.round((5000*0.95-100-0.1*JSON.parse(localStorage.feeds).length)/size_per_art)  // 90% default size - 100 for all settings - 0.1 per feed                        
+                        size_per_art = (0.2+(0.30+tfidf_size)*1.7+size*1.5); // (size_votes_item + (size_read_item + size_TFIDF)*kept + sizer_per_stored_article*padding)
+                        max_arts = Math.round((5000*0.95-100-0.1*JSON.parse(localStorage.feeds).length)/size_per_art)  // 95% default size - 100 for all settings - 0.1 per feed                        
                     } catch (error) {}
                     console.log("Article Cap: "+max_arts);
                 }
@@ -320,11 +320,12 @@
         <div style="float:left;width:100%;margin-top: 20px;">
             <div class="menu">
                 <button id="toggle-mode" class="btn btn-secondary" aria-label="Toggle Dark Mode">🌗</button>
+                <!--<button id="math" class="btn btn-secondary">❤️ + Math</button>-->
                 <button id="manage-feeds" class="btn btn-secondary">My Feeds</button>
                 <button id="add-feed" class="btn btn-primary">+</button>
             </div>
             <div style="float:left;"><h1 class="my-1">My RSS Algo</h1></div>
-            <div style="float:left;width:100%;padding-top: 8px;">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader. Use 👍 &amp; 👎 + "Seen" or "Open" to feed the algo. Votes don't leave your device. Customize the algo's behavior in <a href="#settings">settings</a>. Curate your feeds using the buttons above. For project updates follow <a href="https://mastodon.social/deck/tags/suffolkrssalgo" target="_blank">#SuffolkRSSalgo</a> on Mastodon, or check out <a href="https://github.com/colarusso/rss_algo" target="_blank">our GitHub page</a>.</div>
+            <div style="float:left;width:100%;padding-top: 8px;">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader made at the <a href="https://suffolklitlab.org/" target="_blank">Suffolk LIT Lab</a>. Use 👍 &amp; 👎 + "Seen" or "Open" to feed the algo. Votes don't leave your device. Customize the algo's behavior in <a href="#settings">settings</a>. Curate your feeds using the buttons above. For project updates follow <a href="https://mastodon.social/deck/tags/suffolkrssalgo" target="_blank">#SuffolkRSSalgo</a> on Mastodon, or check out <a href="https://github.com/colarusso/rss_algo" target="_blank">our GitHub page</a>. </div>
             <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;color:black;margin-top: 10px;"><i>&nbsp;Loading...&nbsp;</i></span>
         <div class="my-3" style="float:left;width:100%;">
             <span style="float:right"><a href="#settings">Settings &amp; Data</a></span>
@@ -349,7 +350,7 @@
                         <input type="range" id="cooldown-slider" min="0.25" max="4" value="0.25" step="0.25" style="width:100%;">
                     </p>
             <h4>A Note on Performance</h4>
-                <p>The options you choose below will effect this site's performance. Generally speaking, the more inclusive your choices, the larger your timeline will be and the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.</p>
+                <p>The options you choose below will effect this site's performance. Generally speaking, the more inclusive your choices the larger your timeline will be and the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.</p>
             <h4>Ratings Cutoff</h4>
                 <p>
                     After the recommendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and positive numbers are above average. 
