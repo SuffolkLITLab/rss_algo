@@ -759,10 +759,6 @@
                 });
 
                 articles = uniqueArticles.reverse();
-
-                keep_last = Math.round(max_arts*1.5);
-                console.log(articles)
-                localStorage.setItem("articles", JSON.stringify(articles.slice(-keep_last)));
             }
 
             function extractContent(s) {
@@ -1608,6 +1604,12 @@
 
                 //console.log("TF-IDF: "+readArticleData.length+" 'read' documents","\nUp: "+upvotedArticleData.length+" documents, "+Object.keys(upTFIDF).length+" words","\nDown: "+downvotedArticleData.length+" documents, "+Object.keys(downTFIDF).length+" words\n");
 
+                articles.sort((a, b) => {
+                    return b.pubDate - a.pubDate;
+                });
+                //console.log(articles)
+                keep_last = Math.round(max_arts*1.5);
+                localStorage.setItem("articles", JSON.stringify(articles.slice(-keep_last)));
                 var order_arr = []
                 //console.log("Updating Order")
                 for (article in articles){
