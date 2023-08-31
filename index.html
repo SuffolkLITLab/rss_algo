@@ -749,7 +749,12 @@
 
             function dedup_articles() {
                 var uniqueArticles = [];
-                var uniqueArticleIds = new Set();
+                var uniqueArticleIds = new Set();                
+
+                articles.sort((a, b) => new Date(a.pubDate) - new Date(b.pubDate));
+                console.log(articles)
+                keep_last = Math.round(max_arts*1.5);
+                localStorage.setItem("articles", JSON.stringify(articles.slice(-keep_last)));
 
                 articles.reverse().forEach(articleData => {
                     if (!uniqueArticleIds.has(articleData.itemId)) {
@@ -759,6 +764,7 @@
                 });
 
                 articles = uniqueArticles.reverse();
+
             }
 
             function extractContent(s) {
@@ -1608,14 +1614,7 @@
                 //console.log("Updating Order")
                 for (article in articles){
                     order_arr.push([articles[article].isRead,articles[article].priorityRating,new Date(articles[article].pubDate).toLocaleString(),articles[article].title,articles[article].itemId])
-                }
-
-                articles.sort((a, b) => new Date(a.pubDate) - new Date(b.pubDate));
-
-                console.log(articles)
-                keep_last = Math.round(max_arts*1.5);
-                localStorage.setItem("articles", JSON.stringify(articles.slice(-keep_last)));
-                
+                }                
             }
 
             const clearUpvotesButton = document.getElementById("clear-upvotes");
