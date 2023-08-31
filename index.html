@@ -759,8 +759,9 @@
                 });
 
                 articles = uniqueArticles.reverse();
+
                 keep_last = Math.round(max_arts*1.5);
-                //console.log(articles)
+                console.log(articles)
                 localStorage.setItem("articles", JSON.stringify(articles.slice(-keep_last)));
             }
 
