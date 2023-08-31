@@ -306,7 +306,7 @@
                 stored_art = 0
             }
             if (localStorage.feeds) {                
-                console.log("Feeds ("+Object.keys(JSON.parse(localStorage.feeds)).length+"):",JSON.parse(localStorage.feeds));
+                console.log("Feeds ("+Object.keys(JSON.parse(localStorage.feeds)).length+")");//,JSON.parse(localStorage.feeds));
                 //for (feed in JSON.parse(localStorage.feeds)){
                 //    console.log("- "+JSON.parse(localStorage.feeds)[feed]);
                 //}
@@ -1556,7 +1556,7 @@
                     // Sort the array based on the date values
                     dataArray.sort((a, b) => new Date(a[1]) - new Date(b[1]));
                     // Convert the sorted array back into an object
-                    console.log("To free up space, we're forgetting about some of your older articles. If they're still in the live RSS feed, you may see them again.")
+                    //console.log("To free up space, we're forgetting about some of your older articles. If they're still in the live RSS feed, you may see them again.")
                     //console.log(dataArray)
                     keep_last = Math.floor(max_arts*1.7);
                     lastn_filteredEntries = Object.fromEntries(dataArray.slice(-keep_last));
