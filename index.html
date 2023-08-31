@@ -749,12 +749,7 @@
 
             function dedup_articles() {
                 var uniqueArticles = [];
-                var uniqueArticleIds = new Set();                
-
-                articles.sort((a, b) => new Date(a.pubDate) - new Date(b.pubDate));
-                console.log(articles)
-                keep_last = Math.round(max_arts*1.5);
-                localStorage.setItem("articles", JSON.stringify(articles.slice(-keep_last)));
+                var uniqueArticleIds = new Set();
 
                 articles.reverse().forEach(articleData => {
                     if (!uniqueArticleIds.has(articleData.itemId)) {
@@ -764,7 +759,6 @@
                 });
 
                 articles = uniqueArticles.reverse();
-
             }
 
             function extractContent(s) {
@@ -999,12 +993,18 @@
                     console.log("Ratings: mean", ratings_mean,"std",ratings_std);                    
                 }
 
+                articles.sort((a, b) => new Date(a.pubDate) - new Date(b.pubDate));
+                console.log("#",articles)
+                keep_last = Math.round(max_arts*1.5);
+                articles = articles.slice(-keep_last)
+
                 articles.sort((a, b) => {
                     if (a.isRead && !b.isRead) return 1;
                     if (!a.isRead && b.isRead) return -1;
                     if (a.priorityRating !== b.priorityRating) return b.priorityRating - a.priorityRating;
-                    return b.pubDate - a.pubDate;
+                    return new Date(b.pubDate) - new Date(a.pubDate);
                 });
+                
             }
 
             function updateOpenButton(card) {
@@ -1614,7 +1614,10 @@
                 //console.log("Updating Order")
                 for (article in articles){
                     order_arr.push([articles[article].isRead,articles[article].priorityRating,new Date(articles[article].pubDate).toLocaleString(),articles[article].title,articles[article].itemId])
-                }                
+                }
+                
+                localStorage.setItem("articles", JSON.stringify(articles));                
+
             }
 
             const clearUpvotesButton = document.getElementById("clear-upvotes");
