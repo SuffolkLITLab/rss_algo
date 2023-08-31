@@ -312,6 +312,8 @@
                 //}
             }
         }
+
+        report();
     </script>
 
     </head>
@@ -328,7 +330,7 @@
             <div style="float:left;width:100%;padding-top: 8px;">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader made at the <a href="https://suffolklitlab.org/" target="_blank">Suffolk LIT Lab</a>. Use 👍 &amp; 👎 + "Seen" or "Open" to feed the algo. Votes don't leave your device. Customize the algo's behavior in <a href="#settings">settings</a>. Curate your feeds using the buttons above. For project updates follow <a href="https://mastodon.social/deck/tags/suffolkrssalgo" target="_blank">#SuffolkRSSalgo</a> on Mastodon, or check out <a href="https://github.com/colarusso/rss_algo" target="_blank">our GitHub page</a>. </div>
             <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;color:black;margin-top: 10px;"><i>&nbsp;Loading...&nbsp;</i></span>
         <div class="my-3" style="float:left;width:100%;">
-            <span style="float:right"><a href="#settings">Settings &amp; Data</a></span>
+            <span style="float:right"><a id="a_settings" href="javascript:void('')" onClick="toggle_settings()">Settings &amp; Data</a></span>
             <span id="unread-count" class="text-danger">New: ?</span>
             <span id="read-count" class="text-success">Seen: ?</span>
         </div>
@@ -336,8 +338,9 @@
         <div id="news-feed" class="row">
             <!-- News articles will be dynamically added here -->
         </div>
+        </div>            
 
-        <div class="container mt-4">
+        <div id="my_settings" class="container" style="display:none;">
             <a name="settings"></a>
             <h2>Settings &amp; Data</h2>
             <p>You can manage your feeds by clicking "My Feeds" at the <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">top</a> of this page. See additional controls below. To determine what articles you like, we make use of insights from <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">TF-IDF</a>, comparing all the text from the cards you vote up or down with everything you've "seen." I hope to write a more complete explanation sometime. When I do, I'll put a link here. Until then, you can always look at <a href="https://github.com/colarusso/rss_algo" target="_blank">the code</a>.</p>
@@ -353,7 +356,7 @@
                 <p>The options you choose below will effect this site's performance. Generally speaking, the more inclusive your choices the larger your timeline will be and the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.</p>
             <h4>Images</h4>
                     <p>
-                        <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Ignore preview images (i.e., load w/o thumbnails). <i>Improves loading speed.</i></label>
+                        <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Ignore preview images (i.e., load w/o thumbnails).</label>
                     </p>
             <h4>Ratings Cutoff</h4>
                 <p>
@@ -398,8 +401,8 @@
                 <p>Since users of <a href="https://joinmastodon.org/" target="_blank">Mastodon</a> use different servers/instnaces, we need to collect that information to enable sharing (i.e., so we can queue your post on the right server). If you'd like to use this feature, enter your server here:</p>
                 <p><input id="masto_instance" value="" oninput="localStorage.instance=this.value"></p>
         </div>
-
-        </div>            
+    </div>
+    <div class="container">
         <div class="footer">
             <a href="https://suffolklitlab.org/" alt="LIT Lab" target="_blank">
                 <img id="footer_logo_long" src="images/lit_suffolk.png" border="0" height="35px" alt="LIT and Suffolk University Law School Logos" align="left"/>
@@ -410,11 +413,24 @@
             </span>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
     <script>
 
         history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
+
+        function toggle_settings() {
+            if (document.getElementById('my_settings').style.display=="none") {
+                document.getElementById('news-feed').style.display = "none";
+                document.getElementById('my_settings').style.display = "block";
+                document.getElementById('a_settings').innerHTML = "Show Timeline";
+            } else {
+                document.getElementById('my_settings').style.display = "none";
+                document.getElementById('news-feed').style.display = "flex";
+                document.getElementById('a_settings').innerHTML = "Settings &amp; Data";
+            }
+        }
 
         function readArticles_in_window(){
             articls_in_window = 0
@@ -1040,7 +1056,7 @@
                                 <div style="postion:relative;z-index:0;top:0;height:33px;"></div>`
                         } else {
                             img_html = `
-                                <div style="postion:relative;z-index:0;top:0"><img src="images/sargent.jpg" class="card-img-top thumbnail-image" alt="Thumbnail Image"></div>`
+                                <div style="postion:relative;z-index:0;top:0"><img src="images/sargent.jpg" class="lazyload card-img-top thumbnail-image"></div>`
                         }
 
                         const sponsor = document.createElement("div");
@@ -1084,7 +1100,7 @@
                                 <div style="postion:relative;z-index:0;top:0;height:33px;"></div>`
                         } else {
                             img_html = `
-                                <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img src="${mediaThumbnail}" class="card-img-top thumbnail-image" alt="Thumbnail Image">` : '<img src="images/placeholder.png" class="card-img-top thumbnail-image" alt="Thumbnail Image">'}</div>`
+                                <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img data-src="${mediaThumbnail}" class="lazyload card-img-top thumbnail-image">` : '<img data-src="images/placeholder.png" class="lazyload card-img-top thumbnail-image">'}</div>`
                         }
 
                         article.innerHTML = `
@@ -1560,6 +1576,8 @@
             }
 
             function updateItemCount() {
+                lazyload();
+
                 const readCount = Object.keys(readArticles).length.toLocaleString("en-US");;
                 const unreadCount = countUnreadArticles().toLocaleString("en-US");; 
                 const readCountElement = document.getElementById("read-count");
@@ -1738,9 +1756,11 @@
 
                 new bootstrap.Modal(feedListModalElement).show();
             });
+
+            
+
         });
 
-        report();
     </script>
     
 </body>
