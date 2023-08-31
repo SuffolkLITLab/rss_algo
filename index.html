@@ -945,6 +945,7 @@
                                 if (crunch_numbers) {
                                     displayed_cards = newsFeedContainer.childNodes.length
                                     console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
+                                    lazyload();
                                 }
                             })
                             .catch(error => {
@@ -965,6 +966,7 @@
                     updateItemCount();
                     displayed_cards = newsFeedContainer.childNodes.length
                     console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
+                    lazyload();
                     crunch_numbers = false;
                 }
 
@@ -1582,7 +1584,7 @@
             }
 
             function updateItemCount() {
-                lazyload();
+                //lazyload();
 
                 const readCount = Object.keys(readArticles).length.toLocaleString("en-US");;
                 const unreadCount = countUnreadArticles().toLocaleString("en-US");; 
