@@ -1604,17 +1604,18 @@
 
                 //console.log("TF-IDF: "+readArticleData.length+" 'read' documents","\nUp: "+upvotedArticleData.length+" documents, "+Object.keys(upTFIDF).length+" words","\nDown: "+downvotedArticleData.length+" documents, "+Object.keys(downTFIDF).length+" words\n");
 
-                articles.sort((a, b) => {
-                    return b.pubDate - a.pubDate;
-                });
-                //console.log(articles)
-                keep_last = Math.round(max_arts*1.5);
-                localStorage.setItem("articles", JSON.stringify(articles.slice(-keep_last)));
                 var order_arr = []
                 //console.log("Updating Order")
                 for (article in articles){
                     order_arr.push([articles[article].isRead,articles[article].priorityRating,new Date(articles[article].pubDate).toLocaleString(),articles[article].title,articles[article].itemId])
                 }
+
+                articles.sort((a, b) => {
+                    return a.pubDate - b.pubDate;
+                });
+                console.log(articles)
+                keep_last = Math.round(max_arts*1.5);
+                localStorage.setItem("articles", JSON.stringify(articles.slice(-keep_last)));
                 
             }
 
