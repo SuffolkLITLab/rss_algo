@@ -353,7 +353,7 @@
                 <p>The options you choose below will effect this site's performance. Generally speaking, the more inclusive your choices the larger your timeline will be and the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.</p>
             <h4>Images</h4>
                     <p>
-                        <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Ignore preview images (i.e., load w/o third-party thumbnails). <i>Improves loading speed.</i></label>
+                        <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Ignore preview images (i.e., load w/o thumbnails). <i>Improves loading speed.</i></label>
                     </p>
             <h4>Ratings Cutoff</h4>
                 <p>
@@ -394,6 +394,9 @@
                     <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
                     <button id="factory-reset" class="btn btn-danger btn-block factory-reset" onClick="reset_all();"><b>RESET ALL</b></button>
                 </div>
+                <h4>Mastodon</h4>
+                <p>Since users of <a href="https://joinmastodon.org/" target="_blank">Mastodon</a> use different servers/instnaces, we need to collect that information to enable sharing (i.e., so we can queue your post on the right server). If you'd like to use this feature, enter your server here:</p>
+                <p><input id="masto_instance" value="" oninput="localStorage.instance=this.value"></p>
         </div>
 
         </div>            
@@ -431,11 +434,19 @@
         }
             
         /* Generate a share link for the user's Mastodon domain */
+        const instance =  localStorage.getItem("instance") || "";
+        document.getElementById("masto_instance").value = instance;
+
         function MastodonShare(target){
 
-            const instance =  localStorage.getItem("instance") || "mastodon.social";
-            // Get the Mastodon domain
-            domain = prompt("Enter your Mastodon domain", instance);
+            if ( document.getElementById("masto_instance").value=="") {
+                my_instance = "mastodon.social"
+                // Get the Mastodon domain
+                domain = prompt("Enter your Mastodon domain. If you want to change this later, you can do so in 'Settings.'", my_instance);
+            } else {
+                my_instance = document.getElementById("masto_instance").value
+                domain = my_instance
+            }
 
             if (domain == "" || domain == null){
                 return;
@@ -444,6 +455,7 @@
             domain = domain.replace(/https?:\/\//,"")
 
             localStorage.instance = domain;
+            document.getElementById("masto_instance").value = domain;
 
             // Build the URL
             url = "https://" + domain + "/share?text=" + target;
@@ -1022,6 +1034,15 @@
                     twoWeeksAgo.setDate(twoWeeksAgo.getDate() - savedLookback);
 
                     if (((i==2 && !isRead) || (i==0 && isRead)) && (Math.random()<=0.1) && ((n_feeds>=rssFeeds.length) || (n_feeds==0))) {
+
+                        if (savedIgnoreImages){
+                            img_html = `
+                                <div style="postion:relative;z-index:0;top:0;height:33px;"></div>`
+                        } else {
+                            img_html = `
+                                <div style="postion:relative;z-index:0;top:0"><img src="images/sargent.jpg" class="card-img-top thumbnail-image" alt="Thumbnail Image"></div>`
+                        }
+
                         const sponsor = document.createElement("div");
                         sponsor.setAttribute("data-article-index", "sponsor"); 
                         sponsor.setAttribute("data-item-id", "sponsor");
@@ -1029,7 +1050,7 @@
                         sponsor.innerHTML = `
                             <div class="card">
                                 <div class="masto_share" style="right:10px;"><a href="javascript:void('')" onclick="MastodonShare('Support Suffolk Law\\'s LIT Lab;url=https://suffolklitlab.org/docs/affiliates.pdf');">Mastodon</a></div>
-                                <div style="postion:relative;z-index:0;top:0"><img src="images/sargent.jpg" class="card-img-top thumbnail-image" alt="Thumbnail Image"></div>
+                                ${img_html}
                                 <div class="card-body">
                                         <h5 class="card-title">Support the People Who Built <i>My RSS Algo</i>!</h5>
                                         <p class="card-text">Through its Affiliates Program, Suffolk University Law School's Legal Innovation and Technology <a href="https://suffolklitlab.org/" target="_blank">(LIT) Lab</a> provides members with connections to experts and law students working with emerging legal services technologies, while growing the Lab's capacity to serve disadvantaged communities.</p>
@@ -1060,7 +1081,7 @@
 
                         if (savedIgnoreImages){
                             img_html = `
-                                <div style="postion:relative;z-index:0;top:0;height:30px;"></div>`
+                                <div style="postion:relative;z-index:0;top:0;height:33px;"></div>`
                         } else {
                             img_html = `
                                 <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img src="${mediaThumbnail}" class="card-img-top thumbnail-image" alt="Thumbnail Image">` : '<img src="images/placeholder.png" class="card-img-top thumbnail-image" alt="Thumbnail Image">'}</div>`
