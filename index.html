@@ -1089,7 +1089,7 @@
 
                         article.innerHTML = `
                             <div class="card">
-                                <div class="masto_share"><a href="javascript:void('')" onclick="MastodonShare('${title};url=${link}');">Mastodon</a></div>
+                                <div class="masto_share"><a href="javascript:void('')" onclick="MastodonShare(\`${title};url=${link}\`);">Mastodon</a></div>
                                 <div class="pocket_share"><a href="javascript:void('')" onClick="save_to_poeket(\`${link}\`)"><div style="background: url('https://getpocket.com/i/v3/pocket_logo.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>
                                 ${img_html}
                                 
