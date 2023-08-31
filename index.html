@@ -351,6 +351,10 @@
                     </p>
             <h4>A Note on Performance</h4>
                 <p>The options you choose below will effect this site's performance. Generally speaking, the more inclusive your choices the larger your timeline will be and the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.</p>
+            <h4>Images</h4>
+                    <p>
+                        <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Ignore preview images (i.e., load w/o third-party thumbnails). <i>Improves loading speed.</i></label>
+                    </p>
             <h4>Ratings Cutoff</h4>
                 <p>
                     After the recommendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and positive numbers are above average. 
@@ -390,8 +394,6 @@
                     <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
                     <button id="factory-reset" class="btn btn-danger btn-block factory-reset" onClick="reset_all();"><b>RESET ALL</b></button>
                 </div>
-                <h4>Images</h4>
-                <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Ignore preview images (i.e., load w/o images). <i>Improves loading speed.</i></label>
         </div>
 
         </div>            
