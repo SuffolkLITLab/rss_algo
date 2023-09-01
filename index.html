@@ -1083,7 +1083,7 @@
                                         const itemId = link; // Using link as a unique identifier for items
                                         const isRead = readArticles[itemId] || false;
 
-                                        const priorityRating = getRating(feedTitle.replace(/[^a-zA-Z]/g,"")+": "+title+" "+description); 
+                                        const priorityRating = getRating(feedTitle.replace(/[^a-zA-Z]/g,"")+": "+title+" "+extractContent(description)); 
 
                                         articles.push({
                                             title,
@@ -1153,7 +1153,7 @@
                 if (crunch_numbers) {
                     tmp_ratings = []
                     for (article in articles){
-                        rating = getRating(articles[article]['feedTitle'].replace(/[^a-zA-Z]/g,"")+": "+articles[article]['title']+" "+articles[article]['description'])
+                        rating = getRating(articles[article]['feedTitle'].replace(/[^a-zA-Z]/g,"")+": "+articles[article]['title']+" "+extractContent(articles[article]['description']))
                         articles[article]["priorityRating"] = rating; 
                         tmp_ratings.push(rating)
                     }
@@ -1607,7 +1607,7 @@
 
                 articles.forEach(article => {
                     const { feedTitle, title, description } = article;
-                    const extractedText = `${feedTitle.replace(/[^a-zA-Z]/g,"")}\n${title}\n${description}`;
+                    const extractedText = `${feedTitle.replace(/[^a-zA-Z]/g,"")}\n${title}\n${extractContent(description)}`;
                     extractedTexts.push(extractedText);
                 });
 
@@ -1624,7 +1624,7 @@
 
                 n_composite_docs = votedArticles.length;
                 
-                const documents = votedArticles.map(article => article.feedTitle.replace(/[^a-zA-Z]/g,"")+' '+article.title+' '+article.description);
+                const documents = votedArticles.map(article => article.feedTitle.replace(/[^a-zA-Z]/g,"")+' '+article.title+' '+extractContent(article.description));
                 const doc = documents.join(' ').replace(/[^a-zA-Z]\d+[^a-zA-Z]/g,"");
 
                 tf = countWords(doc)
