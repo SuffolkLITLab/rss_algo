@@ -1285,13 +1285,16 @@
                         if (savedIgnoreImages){
                             img_html = `
                                 <div style="postion:relative;z-index:0;top:0;height:33px;"></div>`
-                        } else if (mediaThumbnail.match(/\.mp4$/i)) {
-                            img_html = `
-                                <div style="postion:relative;z-index:0;top:0"><video width="100%" controls>
-                                <source src="${mediaThumbnail}" type="video/mp4">
-                                Your browser does not support the video tag.
-                                </video> </div>`
                         } else {
+                            if (mediaThumbnail) {
+                                if (mediaThumbnail.match(/\.mp4$/i)) {
+                                    img_html = `
+                                    <div style="postion:relative;z-index:0;top:0"><video width="100%" controls>
+                                    <source src="${mediaThumbnail}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                    </video> </div>`
+                                }
+                            }
                             img_html = `
                                 <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img data-src="${mediaThumbnail}" class="lazyload card-img-top thumbnail-image">` : '<img data-src="images/placeholder.png" class="lazyload card-img-top thumbnail-image">'}</div>`
                         }
