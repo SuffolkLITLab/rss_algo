@@ -1064,7 +1064,7 @@
                                 <div style="postion:relative;z-index:0;top:0;height:33px;"></div>`
                         } else {
                             img_html = `
-                                <div style="postion:relative;z-index:0;top:0"><img src="images/sargent.jpg" class="lazyload card-img-top thumbnail-image"></div>`
+                                <div style="postion:relative;z-index:0;top:0;min-height:33px;"><img src="images/sargent.jpg" class="lazyload card-img-top thumbnail-image"></div>`
                         }
 
                         const sponsor = document.createElement("div");
@@ -1562,13 +1562,13 @@
                     //console.log(dataArray)
                     keep_last = Math.floor(max_arts*1.7);
                     lastn_filteredEntries = Object.fromEntries(dataArray.slice(-keep_last));
-                    //console.log(dataArray)
-                    lastn_filteredEntries = filteredEntries
                 } else {
                     lastn_filteredEntries = filteredEntries
                 }
 
+                let readArticles = lastn_filteredEntries
                 localStorage.setItem("read", JSON.stringify(lastn_filteredEntries));
+
                 return lastn_filteredEntries;
             }
 
