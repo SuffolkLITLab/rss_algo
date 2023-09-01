@@ -1688,33 +1688,27 @@
                     }
                 }
 
-                return filteredEntries;
+                //return filteredEntries;
 
-                // Not sure what to do about if the read file maxes out
-                // edge case where there's old feed data
-                if (1==2) {
-                    // Convert the object into an array of key-value pairs
-                    const dataArray = Object.entries(filteredEntries);
+                // Convert the object into an array of key-value pairs
+                const dataArray = Object.entries(filteredEntries);
 
-                    //console.log("filter READ first ",dataArray.slice(0)[0][1])
-                    //console.log("filter READ last ",dataArray.slice(-1)[0][1])
-
-                    if (dataArray.length>=max_arts*3) {
-                        // Sort the array based on the date values
-                        dataArray.sort((a, b) => new Date(a[1]) - new Date(b[1]));
-                        // Convert the sorted array back into an object
-                        console.log("To free up space, we're forgetting about some of your older articles. If they're still in the live RSS feed, you may see them again.")
-                        keep_last = Math.floor(max_arts*3);
-                        lastn_filteredEntries = Object.fromEntries(dataArray.slice(-keep_last));
-                    } else {
-                        lastn_filteredEntries = filteredEntries
-                    }
-
-                    let readArticles = lastn_filteredEntries
-                    localStorage.setItem("read", JSON.stringify(lastn_filteredEntries));
-
-                    return lastn_filteredEntries;
+                if (dataArray.length>=max_arts*3) {
+                    // Sort the array based on the date values
+                    dataArray.sort((a, b) => new Date(a[1]) - new Date(b[1]));
+                    // Convert the sorted array back into an object
+                    console.log("To free up space, we're forgetting about some of your older articles. If they're still in the live RSS feed, you may see them again.")
+                    keep_last = Math.floor(max_arts*3);
+                    lastn_filteredEntries = Object.fromEntries(dataArray.slice(-keep_last));
+                } else {
+                    lastn_filteredEntries = filteredEntries
                 }
+
+                let readArticles = lastn_filteredEntries
+                localStorage.setItem("read", JSON.stringify(lastn_filteredEntries));
+
+                return lastn_filteredEntries;
+                
             }
 
             function countUnreadArticles() {
