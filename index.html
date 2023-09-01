@@ -181,7 +181,7 @@
         }
         .footer {
             border-top: 1px solid #555;
-            margin: 20px 0 75px 0;
+            margin: 30px 0 75px 0;
             padding: 10px 5px;
         }
         #footer_logo_long {
@@ -379,7 +379,7 @@
                     <p>
                         <input type="range" id="negativity-slider" min="0" max="2" value="1.25" step="0.01" style="width:100%;">
                     </p>
-            <div class="row">
+            <div class="row" style="margin-bottom: 10px;">
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4" style="overflow:hidden;">
                     <h4>Positive</h4>
                     <p>Here are your <b><i>most-positive</i></b> words and their approximate TF-IDF, treating all up-voted cards as a single document: <span id="upwords">not enough data</span></p>
@@ -400,10 +400,17 @@
                     <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
                     <button id="factory-reset" class="btn btn-danger btn-block factory-reset" onClick="reset_all();"><b>RESET ALL</b></button>
                 </div>
-                <h4>Mastodon</h4>
+            </div>
+            <h4>Mastodon</h4>
                 <p>Since users of <a href="https://joinmastodon.org/" target="_blank">Mastodon</a> use different servers/instnaces, we need to collect that information to enable sharing (i.e., so we can queue your post on the right server). If you'd like to use this feature, enter your server here:</p>
                 <p><input id="masto_instance" value="" oninput="localStorage.instance=this.value"></p>
-        </div>
+                <h4>Your Data</h4>
+                <p>FWIW, you can download the data stored in your browser to a file. This is helpful for backups and if you want to move your history et al. between devices.</p>
+                <input id="upload" type="file" style="display: none;"/> 
+                <p>
+                    <a href="javascript:saveTextAsFile(JSON.stringify(localStorage,null,2),'My_RSS_algo_data.json');" class="btn btn-primary">Download My Data</a>&nbsp;
+                    <a href="javascript:upload_file()" class="btn btn-danger">Upload Data</a>
+                </p>
     </div>
     <div class="container">
         <div class="footer">
@@ -492,6 +499,110 @@
                 window.location.reload(true);
             }
         }
+
+        function saveTextAsFile(tosave,name) {
+            // h/t http://runnable.com/U5HC9xtufQpsu5aj/use-javascript-to-save-textarea-as-a-txt-file 
+
+            // I'm using file system support as a proxy for support for this feature. 
+            // Check based on one found at: http://blog.teamtreehouse.com/building-an-html5-text-editor-with-the-filesystem-apis
+            // Handle vendor prefixes.
+            window.requestFileSystem = window.requestFileSystem || 
+                                    window.webkitRequestFileSystem;
+
+            // tosave = ID of textarea to save
+            // name = name to save file as, including file extension     
+            // grab the content of the form field and place it into a variable
+                var textToWrite = tosave //document.getElementById(tosave).value;
+            //  create a new Blob (html5 magic) that conatins the data from your form feild
+                var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
+                
+            // Specify the name of the file to be saved
+                var fileNameToSaveAs = name;
+                
+            // Optionally allow the user to choose a file name by providing 
+            // an imput field in the HTML and using the collected data here
+            // var fileNameToSaveAs = txtFileName.text;
+
+            // create a link for our script to 'click'
+                var downloadLink = document.createElement("a");
+            //  supply the name of the file (from the var above).
+            // you could create the name here but using a var
+            // allows more flexability later.
+                downloadLink.download = fileNameToSaveAs;
+            // provide text for the link. This will be hidden so you
+            // can actually use anything you want.
+                downloadLink.innerHTML = "My Hidden Link";
+                
+            // allow our code to work in webkit & Gecko based browsers
+            // without the need for a if / else block.
+                window.URL = window.URL || window.webkitURL;
+                    
+            // Create the link Object.
+                downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+            // when link is clicked call a function to remove it from
+            // the DOM in case user wants to save a second file.
+                downloadLink.onclick = destroyClickedElement;
+            // make sure the link is hidden.
+                downloadLink.style.display = "none";
+            // add the link to the DOM
+                document.body.appendChild(downloadLink);
+                
+            // click the new link
+                downloadLink.click();
+        }
+
+        function destroyClickedElement(event) {
+            // remove the link from the DOM
+            document.body.removeChild(event.target);
+        }
+
+        function load_state(clear=0){
+
+            if  (clear==1) {
+                //localStorage.removeItem('');
+                console.log("Loading home");
+
+            } else {
+                console.log("Loading game state");
+
+            }
+        }
+
+        function upload_file() {
+            console.log("Upload File")
+            document.getElementById("upload").click(); 
+        }
+
+        //===========================================
+        // Data handling
+        //===========================================
+        // h/t http://answers.splunk.com/answers/125819/fill-textarea-from-a-file.html
+
+        var control = document.getElementById("upload");
+        control.addEventListener("change", function(event){
+            if (window.File && window.FileReader && window.FileList && window.Blob) {
+                var reader = new FileReader();
+                    reader.onload = function(event){
+                        your_data = event.target.result;
+                        let text = "Loading this file will overwrite and replace your current data.";
+                        if (confirm(text) == true) {
+                            data_dump = JSON.parse(your_data)
+                            for (const [key, value] of Object.entries(data_dump)) {
+                                //console.log(key,JSON.stringify(value))
+                                localStorage.setItem(key,value);
+                            }
+                        }
+                    };
+                    reader.onerror = function(event){
+                        console.error("File could not be read! Code " + event.target.error.code);
+                    };
+                    //console.log("Filename: " + control.files[0].name);
+                    reader.readAsText(control.files[0]);
+            } else {
+                alert('This feature is not supported by your browser.');
+            }
+        }, false);        
+
 
         document.addEventListener("DOMContentLoaded", function() {
 
@@ -999,7 +1110,11 @@
                 }
 
                 articles.sort((a, b) => new Date(a.pubDate) - new Date(b.pubDate));
-                //console.log("#",articles)
+                //console.log("reorder ARTICLES first ",articles.slice(0)[0]["pubDate"])
+                //console.log("reorder ARTICLES last ",articles.slice(-1)[0]["pubDate"])
+
+                //localStorage.setItem("backstop",articles.slice(-1)[0]["pubDate"])
+
                 keep_last = Math.round(max_arts*1.5);
                 articles = articles.slice(-keep_last)
 
@@ -1557,6 +1672,10 @@
 
                 // Convert the object into an array of key-value pairs
                 const dataArray = Object.entries(filteredEntries);
+
+                //console.log("filter READ first ",dataArray.slice(0)[0][1])
+                //console.log("filter READ last ",dataArray.slice(-1)[0][1])
+
                 if (dataArray.length>=max_arts*3) {
                     // Sort the array based on the date values
                     dataArray.sort((a, b) => new Date(a[1]) - new Date(b[1]));
