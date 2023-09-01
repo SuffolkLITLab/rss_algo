@@ -299,9 +299,9 @@
                         vote_size = ((localStorage["upvotes"].length + "upvotes".length) * 2)/1024/Object.keys(JSON.parse(localStorage.upvotes)).length;
                         read_size = ((localStorage["read"].length + "read".length) * 2)/1024/Object.keys(JSON.parse(localStorage.read)).length;
                         tfidf_size = ((localStorage["upTFIDF"].length + "upTFIDF".length) * 2)/1024/Object.keys(JSON.parse(localStorage.upvotes)).length;
-                        size_per_art = (vote_size+read_size*3+tfidf_size*1.7+size*1.5); // (size_votes_item + size_read_item*kept + size_TFIDF*kept + sizer_per_stored_article*padding)
+                        size_per_art = (vote_size+read_size*2+tfidf_size*1.7+size*1.5); // (size_votes_item + size_read_item*kept + size_TFIDF*kept + sizer_per_stored_article*padding)
                         feed_size = ((localStorage["feeds"].length + "feeds".length) * 2)/1024/Object.keys(JSON.parse(localStorage.feeds)).length;
-                        max_arts = Math.round((5000-100-feed_size)/size_per_art)  // 95% default size - 100 for all settings - 0.1 per feed                        
+                        max_arts = Math.round((5000-100-feed_size)/size_per_art)  // - 100 for all settings 
                     } catch (error) {}
                     console.log("Article Cap: "+max_arts);
                 }
@@ -587,8 +587,10 @@
                         let text = "Loading this file will overwrite and replace your current data.";
                         if (confirm(text) == true) {
                             data_dump = JSON.parse(your_data)
+                            localStorage.clear();
                             for (const [key, value] of Object.entries(data_dump)) {
                                 //console.log(key,JSON.stringify(value))
+                                //localStorage.clear();
                                 localStorage.setItem(key,value);
                                 localStorage.setItem("lastLoad",0);
                                 window.location.reload(true);
@@ -759,9 +761,9 @@
 
                     if (readArticles[itemId]) {
                         articleContainer.classList.add("read-article");
-                    } else {
-                        articleContainer.classList.remove("read-article");
-                    }
+                    } //else {
+                    //    articleContainer.classList.remove("read-article");
+                    //}
 
                     const upvoteButton = articleContainer.querySelector(".upvote");
                     const downvoteButton = articleContainer.querySelector(".downvote");
@@ -875,14 +877,16 @@
                 var uniqueArticles = [];
                 var uniqueArticleIds = new Set();
 
-                articles.reverse().forEach(articleData => {
+                //articles.reverse().forEach(articleData => {
+                articles.forEach(articleData => {
                     if (!uniqueArticleIds.has(articleData.itemId)) {
                         uniqueArticleIds.add(articleData.itemId);
                         uniqueArticles.push(articleData);
                     } 
                 });
 
-                articles = uniqueArticles.reverse();
+                //articles = uniqueArticles.reverse();
+                articles = uniqueArticles;
             }
 
             function extractContent(s) {
@@ -1124,15 +1128,6 @@
 
                 keep_last = Math.round(max_arts*1.5);
                 articles = articles.slice(-keep_last)
-
-                //console.log("reorder ARTICLES first ",articles.slice(0)[0]["pubDate"])
-                //console.log("reorder ARTICLES last ",articles.slice(-1)[0]["pubDate"])
-                try {
-                    localStorage.setItem("backstop",articles.slice(0)[0]["pubDate"])                    
-                } catch (error) {
-                    localStorage.setItem("backstop",new Date(0))
-                }
-                backstop = new Date(localStorage.backstop)
                 
                 articles.sort((a, b) => {
                     if (a.isRead && !b.isRead) return 1;
@@ -1671,13 +1666,14 @@
 
             function filterOldEntries(entries) {
 
-                //console.log(entries)
-                
+                ///
+                // Filter's read articles
+                ///
+               
                 const currentDate = new Date();
                 const twoWeeksAgo = new Date();
                 
                 backstop = new Date(localStorage.backstop);
-                //twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 31);
 
                 const filteredEntries = {};
 
@@ -1688,27 +1684,32 @@
                     }
                 }
 
-                //return filteredEntries;
+                return filteredEntries;
 
-                // Convert the object into an array of key-value pairs
-                const dataArray = Object.entries(filteredEntries);
+                // What if read articles much more than read
+                // very edge case
+                if (1==2) {
+                    // Convert the object into an array of key-value pairs
+                    const dataArray = Object.entries(filteredEntries);
 
-                if (dataArray.length>=max_arts*3) {
-                    // Sort the array based on the date values
-                    dataArray.sort((a, b) => new Date(a[1]) - new Date(b[1]));
-                    // Convert the sorted array back into an object
-                    console.log("To free up space, we're forgetting about some of your older articles. If they're still in the live RSS feed, you may see them again.")
-                    keep_last = Math.floor(max_arts*3);
-                    lastn_filteredEntries = Object.fromEntries(dataArray.slice(-keep_last));
-                } else {
-                    lastn_filteredEntries = filteredEntries
+                    multi = 2;
+
+                    if (dataArray.length>=max_arts*multi) {
+                        // Sort the array based on the date values
+                        dataArray.sort((a, b) => new Date(a[1]) - new Date(b[1]));
+                        // Convert the sorted array back into an object
+                        console.log("To free up space, we're forgetting about some of your older articles. If they're still in the live RSS feed, you may see them again.")
+                        keep_last = Math.floor(max_arts*multi);
+                        lastn_filteredEntries = Object.fromEntries(dataArray.slice(-keep_last));
+                    } else {
+                        lastn_filteredEntries = filteredEntries
+                    }
+
+                    let readArticles = lastn_filteredEntries
+                    localStorage.setItem("read", JSON.stringify(lastn_filteredEntries));
+
+                    return lastn_filteredEntries;
                 }
-
-                let readArticles = lastn_filteredEntries
-                localStorage.setItem("read", JSON.stringify(lastn_filteredEntries));
-
-                return lastn_filteredEntries;
-                
             }
 
             function countUnreadArticles() {
@@ -1749,13 +1750,12 @@
                 document.getElementById('upwords').innerHTML = topWords(upTFIDF,downTFIDF);
                 document.getElementById('downwords').innerHTML = topWords(downTFIDF,upTFIDF);
 
-                //console.log("TF-IDF: "+readArticleData.length+" 'read' documents","\nUp: "+upvotedArticleData.length+" documents, "+Object.keys(upTFIDF).length+" words","\nDown: "+downvotedArticleData.length+" documents, "+Object.keys(downTFIDF).length+" words\n");
-
-                var order_arr = []
+                //var order_arr = []
                 //console.log("Updating Order")
-                for (article in articles){
-                    order_arr.push([articles[article].isRead,articles[article].priorityRating,new Date(articles[article].pubDate).toLocaleString(),articles[article].title,articles[article].itemId])
-                }
+                //for (article in articles){
+                //    order_arr.push([articles[article].isRead,articles[article].priorityRating,new Date(articles[article].pubDate).toLocaleString(),articles[article].title,articles[article].itemId])
+                //}
+                //console.log(order_arr)
                 
                 localStorage.setItem("articles", JSON.stringify(articles));                
 
