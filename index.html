@@ -5,7 +5,7 @@
     <title>My RSS Algo</title>
 	<meta property="og:site_name" content="My RSS Algo"/>
 	<meta property="og:type" content="website"/>
-	<meta property="og:title" content="RSS Algo"/>
+	<meta property="og:title" content="My RSS Algo"/>
 	<meta property="og:description" content="An open source client-side algorithmically-driven RSS reader, living with your data on your device."/>
     <meta property="og:image" content="https://suffolklitlab.org/images/thefuture.png"/>
 
@@ -16,6 +16,24 @@
     
     <style>
         /* Your custom styles can go here */
+
+        .invisible {
+            display: inline-block;
+            font-size: 0;
+            height: 0;
+            line-height: 0;
+            position: absolute;
+            width: 0;
+        }
+
+        .ellipsis {
+            width: 200px;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+                
         .menu {
             float:right;
         }
@@ -667,7 +685,8 @@
                 "https://www.lawnext.com/feed",
                 "https://patch.com/feeds/aol/massachusetts/boston",
                 "https://xkcd.com/rss.xml",
-                "https://pluralistic.net/feed/"
+                "https://pluralistic.net/feed/",
+                "https://botsin.space/@APoD.rss"
                 // Add more default RSS feed URLs here
             ]
 
@@ -949,6 +968,19 @@
                                 
                                 const items = xml.querySelectorAll("item");
 
+                                try {
+                                    generator = xml.querySelector("channel generator").textContent;
+                                } catch (error) {
+                                    generator = ""
+                                }
+                                if (generator.match(/mastodon/i)){
+                                    mastodon = true
+                                    masto_profile = xml.querySelector("channel image url").textContent;
+                                } else {
+                                    mastodon = false
+                                    masto_profile = null
+                                }
+
                                 j=0;
                                 items.forEach(item => {
                                     const pubDate = new Date(item.querySelector("pubDate").textContent);
@@ -976,10 +1008,11 @@
                                             }
                                         }
 
-                                        description = extractContent(description)
-
-                                        if (description.length>400) {
-                                            description = description.slice(0,400)+" [...]";
+                                        if (!mastodon) {
+                                            description = extractContent(description)
+                                            if (description.length>400) {
+                                                description = description.slice(0,400)+" [...]";
+                                            }
                                         }
 
                                         const pubDate = new Date(item.querySelector("pubDate").textContent);
@@ -1024,6 +1057,11 @@
                                                 }
                                                 } catch (error) {}
                                         }                 
+
+                                        console.log("#",mediaThumbnail,mastodon,Object.is(mediaThumbnail, null) && mastodon)
+                                        if (Object.is(mediaThumbnail, null) && mastodon) {
+                                            mediaThumbnail = masto_profile
+                                        }
                                         
                                         if (Object.is(mediaThumbnail, null)) {
                                             if(link.includes("washingtonpost.com")){
@@ -1059,6 +1097,8 @@
                                             isRead,
                                             feedTitle,
                                             feedUrl,
+                                            mastodon,
+                                            masto_profile,
                                             hasUpvote: upvotes[itemId] || false,
                                             hasDownvote: downvotes[itemId] || false,
                                             priorityRating
@@ -1181,7 +1221,7 @@
                 i=0
                 articles.forEach((articleData, index) => {
 
-                    const { title, link, description, pubDate, image, mediaThumbnail, itemId, isRead, feedTitle, feedUrl, hasUpvote, hasDownvote, priorityRating } = articleData;
+                    const { title, link, description, pubDate, image, mediaThumbnail, itemId, isRead, feedTitle, feedUrl, mastodon, masto_profile, hasUpvote, hasDownvote, priorityRating } = articleData;
 
                     const twoWeeksAgo = new Date();
                     twoWeeksAgo.setDate(twoWeeksAgo.getDate() - savedLookback);
@@ -1230,11 +1270,27 @@
 
                         local_pubDate = new Date(pubDate).toLocaleString();
 
-                        domain_for_img = domain_from_url(link);
+                        if (mastodon) {
+                            favicon = masto_profile
+                            card_body_text = ` <h5 class="card-title">A Post From <a href="https://joinmastodon.org/" target="_blank" style="color:black">Mastodon</a></h5><div style="height:100%;overflow-y:auto;">${description}</div>`
+                            share_html = `<div class="pocket_share"><a href="javascript:void('')" onClick="save_to_poeket(\`${link}\`)"><div style="background: url('https://getpocket.com/i/v3/pocket_logo.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
+                        } else {
+                            domain_for_img = domain_from_url(link);
+                            favicon = "https://"+domain_for_img+"/favicon.ico"
+                            card_body_text = `<h5 class="card-title">${title}</h5><p class="card-text">${description}</p>`
+                            share_html = `<div class="masto_share"><a href="javascript:void('')" onclick="MastodonShare(\`${title};url=${link}\`);">Mastodon</a></div>
+                                <div class="pocket_share"><a href="javascript:void('')" onClick="save_to_poeket(\`${link}\`)"><div style="background: url('https://getpocket.com/i/v3/pocket_logo.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
+                        }
 
                         if (savedIgnoreImages){
                             img_html = `
                                 <div style="postion:relative;z-index:0;top:0;height:33px;"></div>`
+                        } else if (mediaThumbnail.match(/\.mp4$/i)) {
+                            img_html = `
+                                <div style="postion:relative;z-index:0;top:0"><video width="100%" controls>
+                                <source src="${mediaThumbnail}" type="video/mp4">
+                                Your browser does not support the video tag.
+                                </video> </div>`
                         } else {
                             img_html = `
                                 <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img data-src="${mediaThumbnail}" class="lazyload card-img-top thumbnail-image">` : '<img data-src="images/placeholder.png" class="lazyload card-img-top thumbnail-image">'}</div>`
@@ -1242,14 +1298,12 @@
 
                         article.innerHTML = `
                             <div class="card">
-                                <div class="masto_share"><a href="javascript:void('')" onclick="MastodonShare(\`${title};url=${link}\`);">Mastodon</a></div>
-                                <div class="pocket_share"><a href="javascript:void('')" onClick="save_to_poeket(\`${link}\`)"><div style="background: url('https://getpocket.com/i/v3/pocket_logo.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>
+                                ${share_html}
                                 ${img_html}
                                 
                                 <div class="card-body">
                                         <!--<div class="priority-rating">${priorityRating}</div>-->
-                                        <h5 class="card-title">${title}</h5>
-                                        <p class="card-text">${description}</p>
+                                        ${card_body_text}
                                         <p class="card-text"><small class="text-muted">${local_pubDate}</small></p>
                                     <div class="d-flex justify-content-between">
                                         <div>
@@ -1263,7 +1317,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <img src="https://${domain_for_img}/favicon.ico" height="18px" align="left/> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small> 
+                                    <img src="${favicon}" height="18px" align="left/> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small> 
                                     <span class="btn remove_feed" data-feed-index="${feedUrl}" data-feed-name="${feedTitle}">🚫</span>
                                 </div>
                             </div>
