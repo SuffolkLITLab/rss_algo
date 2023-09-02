@@ -217,11 +217,9 @@ document.addEventListener("DOMContentLoaded", function() {
         localStorage.setItem("hiddenMode", newHiddenImages);
     });
 
-    if ((localStorage.getItem("hiddenMode") == "false") || (localStorage.getItem("hiddenMode") === "false")) {
+    if (!HiddenModeState) {
         body.classList.add("hidden-mode");
     }
-
-
 
     let rssFeeds = JSON.parse(localStorage.getItem("feeds")) || default_feeds;
 
@@ -518,16 +516,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
                         j=0;
                         items.forEach(item => {
+                            
                             const pubDate = new Date(item.querySelector("pubDate").textContent);
 
-                            try {
-                                description = item.querySelector("description").textContent;                                    
-                            } catch (error) {
-                                console.log("Empty Description",link)
-                                description = "";
-                            }
-
-                            if ((pubDate >= backstop) && (pubDate >= lookback) && (j<(max_arts/(rssFeeds.length*0.49))) && (pubDate <= new Date()) && description!="") {
+                            if ((pubDate >= backstop) && (pubDate >= lookback) && (j<(max_arts/(rssFeeds.length*0.49))) && (pubDate <= new Date())) {
                                 
                                 const link = item.querySelector("link").textContent;
 
@@ -538,112 +530,122 @@ document.addEventListener("DOMContentLoaded", function() {
                                     title = ""
                                 }
 
-                                const re = /(https?:\/\/[^\s]+\.(?:png|jpg|jpeg|gif))/i;
-                                possible_img = description.match(re)
-                                if (possible_img) {
-                                    if (!possible_img[0].match("tracking")) {
-                                        possible_img = possible_img[0]
-                                    } else if (possible_img[0].match("tracking") && possible_img[1] && !possible_img[1].match("tracking")) {
-                                        possible_img = possible_img[1]
-                                    } else {
-                                        possible_img = null
-                                    }
-                                }
-
-                                if (!mastodon) {
-                                    description = extractContent(description)
-                                    if (description.length>400) {
-                                        description = description.slice(0,400)+" [...]";
-                                    }
-                                }
-
-                                const pubDate = new Date(item.querySelector("pubDate").textContent);
-                                
-                                //const image = item.querySelector("image"); 
-
-                                //const mediaContent = item.querySelector("media\\:content, content");
-                                //const mediaThumbnail = mediaContent ? mediaContent.getAttribute("url") : null;
-
                                 try {
-                                    mediaThumbnail = item.querySelector("media\\:content, content").getAttribute("url");
-                                } catch(error) {
-                                    mediaThumbnail = null
+                                    description = item.querySelector("description").textContent;                                    
+                                } catch (error) {
+                                    console.log("Empty Description",feedUrl,link)
+                                    description = "";
                                 }
 
-                                if (Object.is(mediaThumbnail, null)) {
-                                    mediaContent = item.querySelector("media\\:thumbnail, thumbnail");
-                                    if (mediaContent) {
-                                        mediaThumbnail = mediaContent.getAttribute("url");
-                                    } else {
+                                if (description!=""){
+        
+                                    const re = /(https?:\/\/[^\s]+\.(?:png|jpg|jpeg|gif))/i;
+                                    possible_img = description.match(re)
+                                    if (possible_img) {
+                                        if (!possible_img[0].match("tracking")) {
+                                            possible_img = possible_img[0]
+                                        } else if (possible_img[0].match("tracking") && possible_img[1] && !possible_img[1].match("tracking")) {
+                                            possible_img = possible_img[1]
+                                        } else {
+                                            possible_img = null
+                                        }
+                                    }
+
+                                    if (!mastodon) {
+                                        description = extractContent(description)
+                                        if (description.length>400) {
+                                            description = description.slice(0,400)+" [...]";
+                                        }
+                                    }
+
+                                    const pubDate = new Date(item.querySelector("pubDate").textContent);
+                                    
+                                    //const image = item.querySelector("image"); 
+
+                                    //const mediaContent = item.querySelector("media\\:content, content");
+                                    //const mediaThumbnail = mediaContent ? mediaContent.getAttribute("url") : null;
+
+                                    try {
+                                        mediaThumbnail = item.querySelector("media\\:content, content").getAttribute("url");
+                                    } catch(error) {
                                         mediaThumbnail = null
                                     }
-                                }
 
-                                if (Object.is(mediaThumbnail, null)) {
-                                    mediaThumbnail = possible_img
-                                }
-
-                                if (Object.is(mediaThumbnail, null)) {
-                                    try {
-                                        blob_of_text = item.querySelector("content\\:encoded, encoded").textContent
-                                        possible_img = blob_of_text.match(re)
-                                        if (possible_img) {
-                                            if (!possible_img[0].match("tracking")) {
-                                                possible_img = possible_img[0]
-                                            } else if (possible_img[0].match("tracking") && possible_img[1] && !possible_img[1].match("tracking")) {
-                                                possible_img = possible_img[1]
-                                            } else {
-                                                possible_img = null
-                                            }                                                    
-                                            mediaThumbnail = possible_img
+                                    if (Object.is(mediaThumbnail, null)) {
+                                        mediaContent = item.querySelector("media\\:thumbnail, thumbnail");
+                                        if (mediaContent) {
+                                            mediaThumbnail = mediaContent.getAttribute("url");
+                                        } else {
+                                            mediaThumbnail = null
                                         }
-                                        } catch (error) {}
-                                }                 
-
-                                if (Object.is(mediaThumbnail, null) && mastodon) {
-                                    mediaThumbnail = masto_profile
-                                }
-                                
-                                if (Object.is(mediaThumbnail, null)) {
-                                    if(link.includes("washingtonpost.com")){
-                                        // source: https://www.washingtonpost.com/reprints-permissions/
-                                        mediaThumbnail = "https://www.washingtonpost.com/wp-apps/imrs.php?src=https://www.washingtonpost.com/wp-stat/store/newspaper.jpg&w=700&h=525&t=20191113b"
-                                    } else if (link.includes("economist.com")) {
-                                        // source: https://commons.wikimedia.org/wiki/File:The_Economist_Logo.svg
-                                        mediaThumbnail = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/The_Economist_Logo.svg/640px-The_Economist_Logo.svg.png"
-                                    } else if (link.includes("nytimes.com")) {
-                                        // source: https://commons.wikimedia.org/wiki/File:Nytimes_hq.jpg
-                                        mediaThumbnail = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Nytimes_hq.jpg/640px-Nytimes_hq.jpg"
-                                    } else if (link.includes("wsj.com")) {
-                                        mediaThumbnail = "https://s.wsj.net/img/meta/wsj-social-share.png"
-                                    } else if (link.includes("npr.org")) {
-                                        // source: https://www.npr.org/about-npr/182675632/photos-and-logos
-                                        mediaThumbnail = "https://media.npr.org/assets/img/2019/06/17/nprlogo_rgb_whiteborder_custom-7c06f2837fb5d2e65e44de702968d1fdce0ce748-s1300-c85.webp";
                                     }
+
+                                    if (Object.is(mediaThumbnail, null)) {
+                                        mediaThumbnail = possible_img
+                                    }
+
+                                    if (Object.is(mediaThumbnail, null)) {
+                                        try {
+                                            blob_of_text = item.querySelector("content\\:encoded, encoded").textContent
+                                            possible_img = blob_of_text.match(re)
+                                            if (possible_img) {
+                                                if (!possible_img[0].match("tracking")) {
+                                                    possible_img = possible_img[0]
+                                                } else if (possible_img[0].match("tracking") && possible_img[1] && !possible_img[1].match("tracking")) {
+                                                    possible_img = possible_img[1]
+                                                } else {
+                                                    possible_img = null
+                                                }                                                    
+                                                mediaThumbnail = possible_img
+                                            }
+                                            } catch (error) {}
+                                    }                 
+
+                                    if (Object.is(mediaThumbnail, null) && mastodon) {
+                                        mediaThumbnail = masto_profile
+                                    }
+                                    
+                                    if (Object.is(mediaThumbnail, null)) {
+                                        if(link.includes("washingtonpost.com")){
+                                            // source: https://www.washingtonpost.com/reprints-permissions/
+                                            mediaThumbnail = "https://www.washingtonpost.com/wp-apps/imrs.php?src=https://www.washingtonpost.com/wp-stat/store/newspaper.jpg&w=700&h=525&t=20191113b"
+                                        } else if (link.includes("economist.com")) {
+                                            // source: https://commons.wikimedia.org/wiki/File:The_Economist_Logo.svg
+                                            mediaThumbnail = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/The_Economist_Logo.svg/640px-The_Economist_Logo.svg.png"
+                                        } else if (link.includes("nytimes.com")) {
+                                            // source: https://commons.wikimedia.org/wiki/File:Nytimes_hq.jpg
+                                            mediaThumbnail = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Nytimes_hq.jpg/640px-Nytimes_hq.jpg"
+                                        } else if (link.includes("wsj.com")) {
+                                            mediaThumbnail = "https://s.wsj.net/img/meta/wsj-social-share.png"
+                                        } else if (link.includes("npr.org")) {
+                                            // source: https://www.npr.org/about-npr/182675632/photos-and-logos
+                                            mediaThumbnail = "https://media.npr.org/assets/img/2019/06/17/nprlogo_rgb_whiteborder_custom-7c06f2837fb5d2e65e44de702968d1fdce0ce748-s1300-c85.webp";
+                                        }
+                                    }
+                                
+                                    const itemId = link; // Using link as a unique identifier for items
+                                    const isRead = readArticles[itemId] || false;
+
+                                    const priorityRating = getRating(feedTitle.replace(/[^a-zA-Z]/g,"")+": "+title+" "+description); 
+
+                                    articles.push({
+                                        title,
+                                        link,
+                                        description,
+                                        pubDate,
+                                        //image: image ? image.textContent : null,
+                                        mediaThumbnail,
+                                        itemId,
+                                        isRead,
+                                        feedTitle,
+                                        feedUrl,
+                                        mastodon,
+                                        masto_profile,
+                                        hasUpvote: upvotes[itemId] || false,
+                                        hasDownvote: downvotes[itemId] || false,
+                                        priorityRating
+                                    });
                                 }
-                            
-                                const itemId = link; // Using link as a unique identifier for items
-                                const isRead = readArticles[itemId] || false;
-
-                                const priorityRating = getRating(feedTitle.replace(/[^a-zA-Z]/g,"")+": "+title+" "+description); 
-
-                                articles.push({
-                                    title,
-                                    link,
-                                    description,
-                                    pubDate,
-                                    //image: image ? image.textContent : null,
-                                    mediaThumbnail,
-                                    itemId,
-                                    isRead,
-                                    feedTitle,
-                                    feedUrl,
-                                    mastodon,
-                                    masto_profile,
-                                    hasUpvote: upvotes[itemId] || false,
-                                    hasDownvote: downvotes[itemId] || false,
-                                    priorityRating
-                                });
                             }
                             j+=1
                         });
