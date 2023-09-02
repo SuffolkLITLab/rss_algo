@@ -1,0 +1,257 @@
+/* Your custom styles can go here */
+
+.invisible {
+    display: inline-block;
+    font-size: 0;
+    height: 0;
+    line-height: 0;
+    position: absolute;
+    width: 0;
+}
+
+.ellipsis {
+    width: 200px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+        
+.menu {
+    float:right;
+}
+.read-article .card {
+    opacity: 0.5; /* Slightly transparent for read items */
+}
+.read-article .skip {
+    display:none;
+}
+.read-article .card-title,
+.read-article .card-text,
+.read-article .feed-tag {
+    color: black; /* Standard black text for read items */
+}
+.article-container {
+    margin-bottom: 15px;
+}
+.card-title {
+    float:left;
+    width:100%;
+}
+
+.feed-tag {
+    font-size: 12px;
+    color: #fff0f0;
+}
+.upvote {
+    background: rgb(212, 255, 212)
+}
+.downvote {
+    background: rgb(255, 216, 216);
+}
+.thumbs-up {
+    background: green
+}
+.thumbs-down {
+    background: red;
+}
+.priority-rating {
+    font-size: 18px;
+    margin-right: 5px;
+    float:left;
+    width:100%;
+}
+#read-count,
+#unread-count {
+    font-weight: bold;
+    margin-right: 10px;
+}
+.thumbnail-image {
+    object-position: center 33%;
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.row-equal-height {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Make the card grow to the full height of its container */
+}
+.pocket_share{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index:100;
+}
+.pocket_share a {
+    text-decoration: none;
+}
+.masto_share{
+    position: absolute;
+    top: 5px;
+    right: 50px;
+    z-index:100;
+}
+.masto_share a {
+    padding: 0.2rem 0.6rem 0.3rem;
+    background: #6c757d;
+    color: white !important;
+    border-radius: 0.3rem;
+    text-decoration: none;
+    font-weight: normal;
+    font-size: 13px;
+    opacity: 0.66;
+}
+.masto_post a {
+    color:black 
+}
+#unread-count {
+    padding: 0.2rem 0.6rem 0.3rem;
+    background: #db1818;
+    color: white !important;
+    border-radius: 0.3rem;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 13px;
+    margin-right: 3px;
+}
+#read-count {
+    padding: 0.2rem 0.6rem 0.3rem;
+    background: #109f08;
+    color: white !important;
+    border-radius: 0.3rem;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 13px;
+}
+.card-body {
+    flex: 1; /* Allow the card body to grow and fill the remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Space between the title and other elements */
+}
+
+.card-title {
+    font-size: 1.25rem; /* Larger font size for the title */
+    margin-bottom: 0.5rem; /* Add some spacing below the title */
+}
+
+.card-text {
+    flex-grow: 1; /* Allow the description to expand to fill space */
+    margin-bottom: 1rem; /* Add spacing at the bottom of the description */
+}
+
+.feed-tag {
+    color: black;
+    margin-top: auto; /* Push the feed tag to the bottom of the card */
+}
+
+.btn-group {
+    margin-top: auto; /* Push the button group to the bottom of the card */
+}
+.my-1 {
+    font-size: 35px;
+    line-height: 30px;
+    margin-bottom: 20px;
+}
+.btn-block{
+    width:100%;
+    margin-bottom: 12px;
+}
+.card-footer {
+    line-height: 18px;
+    width:100%;
+    display: flex;
+}
+.remove_all {
+    margin: 0 5px 10px 0;
+}
+.remove_feed {
+    margin: 0 0 3px auto;
+    padding:0;
+    font-size: 18px;
+    line-height: 18px;
+    height: 18px;
+}
+
+
+.highlighted {
+    background: yellow;
+}
+.footer {
+    border-top: 1px solid #555;
+    margin: 30px 0 75px 0;
+    padding: 10px 5px;
+}
+#footer_logo_long {
+    height:35px;
+}
+#footer_logo_sqr {
+    display:none;
+    height:35px;
+}
+
+@media only screen and (max-width: 520px) {
+    #footer_logo_long {
+        display:none;
+    }
+    #footer_logo_sqr {
+        display:block;
+    }
+}
+@media only screen and (max-width: 450px) {
+    .menu {
+        width:100%;
+        text-align:right;
+        margin-bottom: 15px;
+    }
+}
+
+/* Dark mode styles */
+.dark-mode {
+    background-color: #333;
+    color: #fff;
+}
+.dark-mode a {
+    color: #88e3ff;
+}
+.dark-mode .modal-content {
+    background-color: #333;
+    color: #fff;
+}
+.dark-mode .btn-close {
+    background-image: url('data:image/svg+xml,%3csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="%23FFF"%3e%3cpath d="M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z"/%3e%3c/svg%3e');
+}        
+.dark-mode .btn-primary {
+    color: #ffffff;
+}
+.dark-mode .card {
+    background-color: #333;
+    border-color: #4e4e4e;
+    color: #fff;
+}               
+.dark-mode .text-muted {
+    color: #6a6a6a !important;
+}     
+.dark-mode .card-footer {
+    background-color: #4e4e4e;
+}  
+.dark-mode .feed-tag {
+    color: #fff;
+}  
+.dark-mode .read-article .card {
+    opacity: 0.6;
+}
+.dark-mode .highlighted {
+    background: rgb(200, 95, 29);
+}
+.dark-mode .read-article .card-title,
+.dark-mode .read-article .card-text,
+.dark-mode .read-article .feed-tag {
+    color: #ccc;
+}
