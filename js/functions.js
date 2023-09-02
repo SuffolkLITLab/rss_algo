@@ -179,6 +179,8 @@ control.addEventListener("change", function(event){
 }, false);        
 
 
+//var xml_doc;
+
 document.addEventListener("DOMContentLoaded", function() {
 
     const body = document.body;
@@ -495,33 +497,51 @@ document.addEventListener("DOMContentLoaded", function() {
                         const parser = new DOMParser();
                         const xml = parser.parseFromString(data, "application/xml");
 
+                        //xml_doc = xml 
                         //console.log(xml)
 
-                        const feedTitle = xml.querySelector("channel title").textContent;
-                        
-                        const items = xml.querySelectorAll("item");
-
-                        try {
-                            generator = xml.querySelector("channel generator").textContent;
-                        } catch (error) {
-                            generator = ""
-                        }
-                        if (generator.match(/mastodon/i)){
-                            mastodon = true
-                            masto_profile = xml.querySelector("channel image url").textContent;
-                        } else {
+                        var feedTitle
+                        console.log("root",xml.documentElement.nodeName,xml.documentElement.nodeName=="feed")
+                        if (xml.documentElement.nodeName=="feed") {
+                            feedTitle = xml.querySelector("title").textContent;    
+                            items = xml.querySelectorAll("entry");
                             mastodon = false
                             masto_profile = null
+                        } else {
+                            feedTitle = xml.querySelector("channel title").textContent; 
+                            items = xml.querySelectorAll("item");                          
+                            try {
+                                generator = xml.querySelector("channel generator").textContent;
+                            } catch (error) {
+                                generator = ""
+                            }
+                            if (generator.match(/mastodon/i)){
+                                mastodon = true
+                                masto_profile = xml.querySelector("channel image url").textContent;
+                            } else {
+                                mastodon = false
+                                masto_profile = null
+                            }
                         }
 
                         j=0;
                         items.forEach(item => {
-                            
-                            const pubDate = new Date(item.querySelector("pubDate").textContent);
+
+                            //console.log(item)
+
+                            if (xml.documentElement.nodeName=="feed") {
+                                pubDate = new Date(item.querySelector("published").textContent);                                
+                            } else {
+                                pubDate = new Date(item.querySelector("pubDate").textContent);
+                            }
 
                             if ((pubDate >= backstop) && (pubDate >= lookback) && (j<(max_arts/(rssFeeds.length*0.49))) && (pubDate <= new Date())) {
                                 
-                                const link = item.querySelector("link").textContent;
+                                if (xml.documentElement.nodeName=="feed") {
+                                    link = item.querySelector("link").attributes["href"].nodeValue;
+                                } else {
+                                    link = item.querySelector("link").textContent;
+                                }
 
                                 try {
                                     title = item.querySelector("title").textContent;
@@ -531,7 +551,11 @@ document.addEventListener("DOMContentLoaded", function() {
                                 }
 
                                 try {
-                                    description = item.querySelector("description").textContent;                                    
+                                    if (xml.documentElement.nodeName=="feed") {
+                                        description = item.querySelector("content").textContent;
+                                    } else {
+                                        description = item.querySelector("description").textContent;
+                                    }                                    
                                 } catch (error) {
                                     console.log("Empty Description",feedUrl,link)
                                     description = "";
@@ -558,7 +582,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                         }
                                     }
 
-                                    const pubDate = new Date(item.querySelector("pubDate").textContent);
+                                    //const pubDate = new Date(item.querySelector("pubDate").textContent);
                                     
                                     //const image = item.querySelector("image"); 
 
