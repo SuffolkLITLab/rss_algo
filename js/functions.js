@@ -1472,8 +1472,8 @@ document.addEventListener("DOMContentLoaded", function() {
                         <div class="modal-body">
                             <p>Note: If you remove a feed, old articles will remain on your timeline and in your history by default. Also, if you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>.</p>
                             <p>
-                                <button type="button" id="remove_all_add_defaults" class="btn btn-danger remove_all">Replace w/ Defaults</button>
-                                <button type="button" id="remove_all_add_big" class="btn btn-danger remove_all">Replace w/ Mega List</button>
+                                <button type="button" id="remove_all_add_defaults" class="btn btn-danger remove_all">Swap for Defaults</button>
+                                <button type="button" id="remove_all_add_big" class="btn btn-danger remove_all">Swap for Big List</button>
                                 <button type="button" id="remove_all_feeds" class="btn btn-danger remove_all">Remove All</button>
                             <p>
                             <table cellpadding="10px" width="100%">${feedList}</table>
@@ -1503,7 +1503,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
             `).join("");
             let lastLoad = 0;
-            localStorage.setItem("lastLoad", 0);    
+            localStorage.setItem("lastLoad", 0);
+            modal_win.hide();
             updateFeedList(true);
         });
 
@@ -1515,7 +1516,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
             `).join("");
             let lastLoad = 0;
-            localStorage.setItem("lastLoad", 0);    
+            localStorage.setItem("lastLoad", 0);  
+            modal_win.hide();
             updateFeedList(true);
         });
 
@@ -1542,7 +1544,8 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
 
-        new bootstrap.Modal(feedListModalElement).show();
+        modal_win = new bootstrap.Modal(feedListModalElement)
+        modal_win.show();
     });
 
     
