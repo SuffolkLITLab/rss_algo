@@ -124,6 +124,9 @@
             font-size: 13px;
             opacity: 0.66;
         }
+        .masto_post, a {
+            color:black 
+        }
         #unread-count {
             padding: 0.2rem 0.6rem 0.3rem;
             background: #db1818;
@@ -1271,7 +1274,7 @@
 
                         if (mastodon) {
                             favicon = masto_profile
-                            card_body_text = ` <h5 class="card-title">A Post From <a href="https://joinmastodon.org/" target="_blank" style="color:black">Mastodon</a></h5><div style="height:100%;overflow-y:auto;">${description}</div>`
+                            card_body_text = ` <h5 class="card-title">A Post From <a href="https://joinmastodon.org/" target="_blank" class="masto_post">Mastodon</a></h5><div style="height:100%;overflow-y:auto;">${description}</div>`
                             share_html = `<div class="pocket_share"><a href="javascript:void('')" onClick="save_to_poeket(\`${link}\`)"><div style="background: url('https://getpocket.com/i/v3/pocket_logo.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
                         } else {
                             domain_for_img = domain_from_url(link);
