@@ -181,8 +181,9 @@ control.addEventListener("change", function(event){
 
 document.addEventListener("DOMContentLoaded", function() {
 
-    const toggleModeButton = document.getElementById("toggle-mode");
     const body = document.body;
+
+    const toggleModeButton = document.getElementById("toggle-mode");
 
     // Retrieve dark mode state from localStorage (if available)
     const darkModeState = localStorage.getItem("darkMode");
@@ -203,45 +204,24 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    const default_feeds = [
-        "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
-        "https://rss.nytimes.com/services/xml/rss/nyt/US.xml",
-        "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
-        "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml",
-        "https://rss.nytimes.com/services/xml/rss/nyt/Space.xml",
-        "https://rss.nytimes.com/services/xml/rss/nyt/Arts.xml",
-        "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
-        "http://feeds.washingtonpost.com/rss/business/technology?itid=lk_inline_manual_31",
-        "https://feeds.npr.org/1001/rss.xml",
-        "https://feeds.npr.org/1014/rss.xml",
-        "https://feeds.npr.org/1007/rss.xml",
-        "https://www.economist.com/leaders/rss.xml",
-        "https://www.economist.com/briefing/rss.xml",
-        "https://www.economist.com/science-and-technology/rss.xml",
-        "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
-        "http://www.newyorker.com/feed/news",
-        "http://www.newyorker.com/feed/culture",
-        "http://www.newyorker.com/feed/humor",
-        "http://www.newyorker.com/feed/tag/books/rss",
-        "http://www.newyorker.com/feed/tech",
-        "http://www.newyorker.com/feed/news/sporting-scene",
-        "https://feeds.arstechnica.com/arstechnica/features",
-        "https://feeds.arstechnica.com/arstechnica/technology-lab",
-        "https://feeds.arstechnica.com/arstechnica/tech-policy",
-        "https://feeds.arstechnica.com/arstechnica/science",
-        "https://www.wired.com/feed/category/science/latest/rss",
-        "https://www.wired.com/feed/category/ideas/latest/rss",
-        "https://www.wired.com/feed/tag/ai/latest/rss",
-        "https://slate.com/feeds/news-and-politics.rss",
-        "https://slate.com/feeds/technology.rss",
-        "https://slate.com/feeds/business.rss",
-        "https://www.lawnext.com/feed",
-        "https://patch.com/feeds/aol/massachusetts/boston",
-        "https://xkcd.com/rss.xml",
-        "https://pluralistic.net/feed/",
-        "https://botsin.space/@APoD.rss"
-        // Add more default RSS feed URLs here
-    ]
+
+    const hiddenCardsCheckbox = document.getElementById("hiddenMode");
+
+    // Retrieve ignore images value from localStorage (if available)
+    const HiddenModeState = localStorage.getItem("hiddenMode") === "true";
+    hiddenCardsCheckbox.checked = HiddenModeState;
+
+    // Update ignore images value and save to localStorage when checkbox value changes
+    hiddenCardsCheckbox.addEventListener("change", function () {
+        const newHiddenImages = hiddenCardsCheckbox.checked;
+        localStorage.setItem("hiddenMode", newHiddenImages);
+    });
+
+    if ((localStorage.getItem("hiddenMode") == "false") || (localStorage.getItem("hiddenMode") === "false")) {
+        body.classList.add("hidden-mode");
+    }
+
+
 
     let rssFeeds = JSON.parse(localStorage.getItem("feeds")) || default_feeds;
 
@@ -540,7 +520,14 @@ document.addEventListener("DOMContentLoaded", function() {
                         items.forEach(item => {
                             const pubDate = new Date(item.querySelector("pubDate").textContent);
 
-                            if ((pubDate >= backstop) && (pubDate >= lookback) && (j<(max_arts/(rssFeeds.length*0.49))) && (pubDate <= new Date())) {
+                            try {
+                                description = item.querySelector("description").textContent;                                    
+                            } catch (error) {
+                                console.log("Empty Description",link)
+                                description = "";
+                            }
+
+                            if ((pubDate >= backstop) && (pubDate >= lookback) && (j<(max_arts/(rssFeeds.length*0.49))) && (pubDate <= new Date()) && description!="") {
                                 
                                 const link = item.querySelector("link").textContent;
 
@@ -549,13 +536,6 @@ document.addEventListener("DOMContentLoaded", function() {
                                 } catch (error) {
                                     //console.log("Empty Title",link)
                                     title = ""
-                                }
-
-                                try {
-                                    description = item.querySelector("description").textContent;                                    
-                                } catch (error) {
-                                    //console.log("Empty Description",link)
-                                    description = "";
                                 }
 
                                 const re = /(https?:\/\/[^\s]+\.(?:png|jpg|jpeg|gif))/i;

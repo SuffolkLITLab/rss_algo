@@ -16,6 +16,49 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style/main.css">
     <script src="js/report.js"></script>    
+    <script>
+
+        const default_feeds = [
+            "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
+            "https://rss.nytimes.com/services/xml/rss/nyt/US.xml",
+            "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
+            "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml",
+            "https://rss.nytimes.com/services/xml/rss/nyt/Space.xml",
+            "https://rss.nytimes.com/services/xml/rss/nyt/Arts.xml",
+            "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
+            "http://feeds.washingtonpost.com/rss/business/technology?itid=lk_inline_manual_31",
+            "https://feeds.npr.org/1001/rss.xml",
+            "https://feeds.npr.org/1014/rss.xml",
+            "https://feeds.npr.org/1007/rss.xml",
+            "https://www.economist.com/leaders/rss.xml",
+            "https://www.economist.com/briefing/rss.xml",
+            "https://www.economist.com/science-and-technology/rss.xml",
+            "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
+            "http://www.newyorker.com/feed/news",
+            "http://www.newyorker.com/feed/culture",
+            "http://www.newyorker.com/feed/humor",
+            "http://www.newyorker.com/feed/tag/books/rss",
+            "http://www.newyorker.com/feed/tech",
+            "http://www.newyorker.com/feed/news/sporting-scene",
+            "https://feeds.arstechnica.com/arstechnica/features",
+            "https://feeds.arstechnica.com/arstechnica/technology-lab",
+            "https://feeds.arstechnica.com/arstechnica/tech-policy",
+            "https://feeds.arstechnica.com/arstechnica/science",
+            "https://www.wired.com/feed/category/science/latest/rss",
+            "https://www.wired.com/feed/category/ideas/latest/rss",
+            "https://www.wired.com/feed/tag/ai/latest/rss",
+            "https://slate.com/feeds/news-and-politics.rss",
+            "https://slate.com/feeds/technology.rss",
+            "https://slate.com/feeds/business.rss",
+            "https://www.lawnext.com/feed",
+            "https://patch.com/feeds/aol/massachusetts/boston",
+            "https://xkcd.com/rss.xml",
+            "https://pluralistic.net/feed/",
+            "https://botsin.space/@APoD.rss"
+            // Add more default RSS feed URLs here
+        ]
+
+    </script>
 
 </head>
 
@@ -62,11 +105,16 @@
                     <p>The options you choose below will effect this site's performance. Generally speaking, the more inclusive your choices the larger your timeline will be and the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.</p>
                 </div>
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
-                <h4>Images</h4>
+                    <h4>Show Read Cards</h4>
+                        <p>
+                            <label for="hiddenMode"><input type="checkbox" id="hiddenMode" value="1"> Show read cards at the end of the list but grayed out. <i>Refresh page to see results</i>.</label>
+                        </p>
+                    <h4>Images</h4>
                         <p>
                             <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Ignore preview images (i.e., load w/o thumbnails). <i>Refresh page to see results</i>.</label>
                         </p>
                 </div>
+
             </div>
             <h4>Ratings Cutoff</h4>
                 <p>

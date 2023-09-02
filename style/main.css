@@ -255,3 +255,7 @@
 .dark-mode .read-article .feed-tag {
     color: #ccc;
 }
+
+.hidden-mode .read-article .card {
+    display: none;
+}
