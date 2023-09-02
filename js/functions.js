@@ -501,7 +501,6 @@ document.addEventListener("DOMContentLoaded", function() {
                         //console.log(xml)
 
                         var feedTitle
-                        console.log("root",xml.documentElement.nodeName,xml.documentElement.nodeName=="feed")
                         if (xml.documentElement.nodeName=="feed") {
                             feedTitle = xml.querySelector("title").textContent;    
                             items = xml.querySelectorAll("entry");
@@ -1473,7 +1472,8 @@ document.addEventListener("DOMContentLoaded", function() {
                         <div class="modal-body">
                             <p>Note: If you remove a feed, old articles will remain on your timeline and in your history by default. Also, if you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>.</p>
                             <p>
-                                <button type="button" id="remove_all_add_defaults" class="btn btn-danger remove_all">Remove All &amp; Load Defaults</button>
+                                <button type="button" id="remove_all_add_defaults" class="btn btn-danger remove_all">Replace w/ Defaults</button>
+                                <button type="button" id="remove_all_add_big" class="btn btn-danger remove_all">Replace w/ Mega List</button>
                                 <button type="button" id="remove_all_feeds" class="btn btn-danger remove_all">Remove All</button>
                             <p>
                             <table cellpadding="10px" width="100%">${feedList}</table>
@@ -1492,10 +1492,23 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
         const removeALLaddDefaults = document.getElementById("remove_all_add_defaults");
+        const removeALLaddBig = document.getElementById("remove_all_add_big");
         const removeALLfeeds = document.getElementById("remove_all_feeds");
         
         removeALLaddDefaults.addEventListener("click", function() {
             rssFeeds = default_feeds
+            feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
+                <tr><td width="1%">
+                <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
+                </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
+            `).join("");
+            let lastLoad = 0;
+            localStorage.setItem("lastLoad", 0);    
+            updateFeedList(true);
+        });
+
+        removeALLaddBig.addEventListener("click", function() {
+            rssFeeds = feeds_long_list
             feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
                 <tr><td width="1%">
                 <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
