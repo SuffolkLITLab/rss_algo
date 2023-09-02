@@ -504,7 +504,9 @@ document.addEventListener("DOMContentLoaded", function() {
             const lookback = new Date();
             lookback.setDate(lookback.getDate() - 30);
 
-            backstop = new Date(localStorage.backstop);                                        
+            backstop = new Date(localStorage.backstop);
+            
+            errors = 0
 
             use_feeds.forEach(feedUrl => {
                 fetchFeed(feedUrl)
@@ -540,14 +542,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
                             if ((pubDate >= backstop) && (pubDate >= lookback) && (j<(max_arts/(rssFeeds.length*0.49))) && (pubDate <= new Date())) {
                                 
+                                const link = item.querySelector("link").textContent;
+
                                 try {
                                     title = item.querySelector("title").textContent;
                                 } catch (error) {
+                                    //console.log("Empty Title",link)
                                     title = ""
                                 }
 
-                                const link = item.querySelector("link").textContent;
-                                description = item.querySelector("description").textContent;
+                                try {
+                                    description = item.querySelector("description").textContent;                                    
+                                } catch (error) {
+                                    //console.log("Empty Description",link)
+                                    description = "";
+                                }
 
                                 const re = /(https?:\/\/[^\s]+\.(?:png|jpg|jpeg|gif))/i;
                                 possible_img = description.match(re)
@@ -636,7 +645,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 const itemId = link; // Using link as a unique identifier for items
                                 const isRead = readArticles[itemId] || false;
 
-                                const priorityRating = getRating(feedTitle.replace(/[^a-zA-Z]/g,"")+": "+title+" "+extractContent(description)); 
+                                const priorityRating = getRating(feedTitle.replace(/[^a-zA-Z]/g,"")+": "+title+" "+description); 
 
                                 articles.push({
                                     title,
@@ -673,7 +682,11 @@ document.addEventListener("DOMContentLoaded", function() {
                         // Display a warning popup for error cases
                         const feedTitle = "Unknown Feed";
                         const errorMessage = `Error fetching RSS feed: ${error.message}`;
-                        displayErrorPopup(feedTitle, feedUrl, errorMessage);
+                        if (errors==0) {
+                            displayErrorPopup(feedTitle, feedUrl, errorMessage);
+                        }
+                        errors+=1
+                        console.log("Error #"+errors+": ",feedUrl,errorMessage)
                     });
         
             });
@@ -706,7 +719,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (crunch_numbers) {
             tmp_ratings = []
             for (article in articles){
-                rating = getRating(articles[article]['feedTitle'].replace(/[^a-zA-Z]/g,"")+": "+articles[article]['title']+" "+extractContent(articles[article]['description']))
+                rating = getRating(articles[article]['feedTitle'].replace(/[^a-zA-Z]/g,"")+": "+articles[article]['title']+" "+articles[article]['description'])
                 articles[article]["priorityRating"] = rating; 
                 tmp_ratings.push(rating)
             }
@@ -1160,7 +1173,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         articles.forEach(article => {
             const { feedTitle, title, description } = article;
-            const extractedText = `${feedTitle.replace(/[^a-zA-Z]/g,"")}\n${title}\n${extractContent(description)}`;
+            const extractedText =  extractContent(`${feedTitle.replace(/[^a-zA-Z]/g,"")}\n${title}\n${description}`);
             extractedTexts.push(extractedText);
         });
 
@@ -1177,7 +1190,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         n_composite_docs = votedArticles.length;
         
-        const documents = votedArticles.map(article => article.feedTitle.replace(/[^a-zA-Z]/g,"")+' '+article.title+' '+extractContent(article.description));
+        const documents = votedArticles.map(article => article.feedTitle.replace(/[^a-zA-Z]/g,"")+' '+article.title+' '+article.description);
         const doc = documents.join(' ').replace(/[^a-zA-Z]\d+[^a-zA-Z]/g,"");
 
         tf = countWords(doc)
