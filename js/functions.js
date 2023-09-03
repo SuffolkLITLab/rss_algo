@@ -1476,7 +1476,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p>Note: If you remove a feed, old articles will remain on your timeline and in your history by default. Also, if you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>.</p>
+                            <p>Note: If you remove a feed, old articles will remain on your timeline and in your history by default. Also, if you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>, or just swap in the <i>Big List</i> below and whittle it down over time.</p>
                             <p>
                                 <button type="button" id="remove_all_add_defaults" class="btn btn-danger remove_all">Swap for Defaults</button>
                                 <button type="button" id="remove_all_add_big" class="btn btn-danger remove_all">Swap for Big List</button>
