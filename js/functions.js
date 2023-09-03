@@ -312,7 +312,12 @@ document.addEventListener("DOMContentLoaded", function() {
             const itemId = articleContainer.getAttribute("data-item-id");
 
             if (readArticles[itemId]) {
-                articleContainer.classList.add("read-article");
+                const HiddenModeState = localStorage.getItem("hiddenMode") === "true";
+                if (HiddenModeState) {
+                    articleContainer.classList.add("read-article");
+                } else {
+                    articleContainer.remove()
+                }
             } //else {
             //    articleContainer.classList.remove("read-article");
             //}
@@ -486,7 +491,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
             backstop = new Date(localStorage.backstop);
             
-            errors = 0
+            errors = 0;
+            n_feeds = 0;
 
             use_feeds.forEach(feedUrl => {
                 fetchFeed(feedUrl)
@@ -1528,7 +1534,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
                 </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
             `).join("");
-            updateFeedList();
+            modal_win.hide();
+            //updateFeedList();
         });
 
         feedListModalElement.querySelector(".modal-body").addEventListener("click", function(event) {

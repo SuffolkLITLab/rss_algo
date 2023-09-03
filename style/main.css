@@ -31,9 +31,6 @@
 .read-article .feed-tag {
     color: black; /* Standard black text for read items */
 }
-.article-container {
-    margin-bottom: 15px;
-}
 .card-title {
     float:left;
     width:100%;
