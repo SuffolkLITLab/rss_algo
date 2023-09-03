@@ -571,9 +571,9 @@ document.addEventListener("DOMContentLoaded", function() {
                                     const re = /(https?:\/\/[^\s]+\.(?:png|jpg|jpeg|gif))/i;
                                     possible_img = description.match(re)
                                     if (possible_img) {
-                                        if (!possible_img[0].match("tracking")) {
+                                        if (!possible_img[0].match("tracking") && !possible_img[0].match("count\.gif")) {
                                             possible_img = possible_img[0]
-                                        } else if (possible_img[0].match("tracking") && possible_img[1] && !possible_img[1].match("tracking")) {
+                                        } else if (possible_img[0].match("tracking") && possible_img[1] && !possible_img[1].match("tracking") && !possible_img[0].match("count\.gif")) {
                                             possible_img = possible_img[1]
                                         } else {
                                             possible_img = null
@@ -583,7 +583,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                     if (!mastodon) {
                                         description = extractContent(description)
                                         if (description.length>400) {
-                                            description = description.slice(0,400)+" [...]";
+                                            description = description.slice(0,300)+" [...]";
                                         }
                                     }
 
@@ -802,7 +802,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const twoWeeksAgo = new Date();
             twoWeeksAgo.setDate(twoWeeksAgo.getDate() - savedLookback);
 
-            if (((i==2 && !isRead) || (i==0 && isRead)) && (Math.random()<=0.1) && ((n_feeds>=rssFeeds.length) || (n_feeds==0))) {
+            if ((i==2 && !isRead) && (Math.random()<=0.1) && ((n_feeds>=rssFeeds.length) || (n_feeds==0))) {
 
                 if (savedIgnoreImages){
                     img_html = `
@@ -834,10 +834,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 `;                        
                 newsFeedContainer.appendChild(sponsor);
                 i+=1;
+            } 
+
+            if (savedcutoff<=-3.5) {
+                practical_cutoff = -10;
+            } else {
+                practical_cutoff = savedcutoff;
             }
 
 
-            if ((Date.parse(pubDate) >= Date.parse(twoWeeksAgo)) && priorityRating >= ratings_mean+ratings_std*(savedcutoff)) {
+            if ((Date.parse(pubDate) >= Date.parse(twoWeeksAgo)) && priorityRating >= ratings_mean+ratings_std*(practical_cutoff)) {
 
                 const article = document.createElement("div");
                 article.setAttribute("data-article-index", index); 
@@ -1081,13 +1087,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     idf = 1;
                 }
                 if (tf[word] && idf) {
-                    //if (downTFIDF[word]*savednegativity<=tf[word]) {
-                    //    array1.push((tf[word]-downTFIDF[word]*savednegativity)*idf)
-                    //} else if (downTFIDF[word]*savednegativity>tf[word]) {
-                    //    array1.push(0)
-                    //} else {
-                        array1.push((tf[word])*idf)
-                    //}
+                    array1.push((tf[word])*idf)
                 } else {
                     array1.push(0)
                 }
@@ -1105,13 +1105,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     idf = 1;
                 }
                 if (tf[word] && idf) {
-                    //if (upTFIDF[word]*(2-savednegativity)<=tf[word]) {
-                    //    array1.push((tf[word]-upTFIDF[word]*(2-savednegativity))*idf)
-                    //} else if (upTFIDF[word]*(2-savednegativity)>tf[word]) {
-                    //    array1.push(0)
-                    //} else {
-                        array1.push((tf[word])*idf)
-                    //}
+                    array1.push((tf[word])*idf)
                 } else {
                     array1.push(0)
                 }
@@ -1214,17 +1208,11 @@ document.addEventListener("DOMContentLoaded", function() {
         //console.log(wordObj)
         
         for (word in wordObj){
-            //if (exclude[word]<=wordObj[word]) {
-            //    wordObj[word] = (wordObj[word]-exclude[word])/dfreq["df_arr"][word]
-            //} else if (exclude[word]>wordObj[word]) {
-            //    wordObj[word] = 0
-            //} else {
-                idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
-                if (isNaN(idf)) {
-                    idf = 1;
-                }
-                wordObj[word] = wordObj[word]*idf;
-            //}
+            idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
+            if (isNaN(idf)) {
+                idf = 1;
+            }
+            wordObj[word] = wordObj[word]*idf;
         }
 
         const pickHighest = (wordObj, num = 1) => {
@@ -1357,7 +1345,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function updateItemCount() {
-        //lazyload();
 
         const readCount = Object.keys(readArticles).length.toLocaleString("en-US");;
         const unreadCount = countUnreadArticles().toLocaleString("en-US");; 
@@ -1391,6 +1378,19 @@ document.addEventListener("DOMContentLoaded", function() {
         //console.log(order_arr)
         
         localStorage.setItem("articles", JSON.stringify(articles));                
+
+        if (unreadCount==0) {
+
+            items = [
+                        "Be kind. Have Fun. Try something new.",
+                        "In life and on apps: Always question defaults. Fiddle with some settings, and see what happens."
+                    ]
+
+            const quote = document.createElement("div");
+            quote.className = `end_quote`;
+            quote.innerHTML = items[Math.floor(Math.random()*items.length)];
+            newsFeedContainer.appendChild(quote);    
+        }
 
     }
 
@@ -1431,11 +1431,6 @@ document.addEventListener("DOMContentLoaded", function() {
         let lastLoad = 0;
         localStorage.setItem("lastLoad", 0);
 
-        //resetReadStatus();
-
-        // Reorder the articles to reflect the changes
-        //reorderArticles();
-
         // Update article styles and the feed list
         updateFeedList(true);
     });            
@@ -1443,13 +1438,10 @@ document.addEventListener("DOMContentLoaded", function() {
     loadNews(true);
 
     const addFeedButton = document.getElementById("add-feed");
-    const manageFeedsButton = document.getElementById("manage-feeds");
-
     addFeedButton.addEventListener("click", function() {
-        if (rssFeeds.length>=40) {
+        if (rssFeeds.length>=50) {
             alert("Generally speaking, the more feeds you follow the more posts in your timeline and the slower the site will preform. You can shrink the size of your timeline but setting a shorter History window. Also, to accommodate large feed follows, we truncate feeds to avoid overloading your browser's storage. How much we have to cut is proportional to how many feeds you follow. So following a lot of feeds may cause you to miss posts if they are too far down the feed. If this issue comes up, consider following fewer feeds or checking in more often.")
         }
-
         const newFeedUrl = prompt("Enter the URL for a new RSS feed:");
         if (newFeedUrl) {
             let lastLoad = 0;
@@ -1457,10 +1449,11 @@ document.addEventListener("DOMContentLoaded", function() {
             rssFeeds.push(newFeedUrl);
             updateFeedList(true,newFeedUrl);
         }
-        
     });
 
+    const manageFeedsButton = document.getElementById("manage-feeds");
     manageFeedsButton.addEventListener("click", function() {
+
         const feedList = rssFeeds.map((feed, index) => `
                 <tr><td width="1%">
                 <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
@@ -1476,10 +1469,18 @@ document.addEventListener("DOMContentLoaded", function() {
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p>Note: If you remove a feed, old articles will remain on your timeline and in your history by default. Also, if you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>, or just swap in the <i>Big List</i> below and whittle it down over time.</p>
                             <p>
-                                <button type="button" id="remove_all_add_defaults" class="btn btn-danger remove_all">Swap for Defaults</button>
-                                <button type="button" id="remove_all_add_big" class="btn btn-danger remove_all">Swap for Big List</button>
+                                If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>, or just swap in a pre-made list and whittle it down over time. <i>Note: If you remove a feed, <b>old articles will remain on your timeline and in your history by default</b>. Use <i>Settings &amp; Data</i> to clear your history.</i>
+                            </p>
+                            <select id="feed_list">
+                                <option value="default_feeds">Default Mix</option>
+                                <option value="papers_feeds">Papers: NYT, WaPo, WSJ</option>
+                                <option value="condenast_feeds">Condé Nast: New Yorker, ArsTechnica, Wired</option>
+                                <option value="feeds_long_list">Mega List (100+ feeds)</option>
+                            </select>
+                            </p>
+                            <p>
+                                <button type="button" id="remove_all_add_selection" class="btn btn-danger remove_all">Remove &amp; Replace w/ Above Selection</button>
                                 <button type="button" id="remove_all_feeds" class="btn btn-danger remove_all">Remove All</button>
                             <p>
                             <table cellpadding="10px" width="100%">${feedList}</table>
@@ -1491,18 +1492,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
         document.body.insertAdjacentHTML("beforeend", feedListModal);
 
-
         const feedListModalElement = document.getElementById("feedListModal");
         feedListModalElement.addEventListener("hidden.bs.modal", function() {
             feedListModalElement.remove();
         });
 
-        const removeALLaddDefaults = document.getElementById("remove_all_add_defaults");
-        const removeALLaddBig = document.getElementById("remove_all_add_big");
+        const removeALLaddSelection = document.getElementById("remove_all_add_selection");
         const removeALLfeeds = document.getElementById("remove_all_feeds");
         
-        removeALLaddDefaults.addEventListener("click", function() {
-            rssFeeds = default_feeds
+        removeALLaddSelection.addEventListener("click", function() {
+            feed_name = document.getElementById("feed_list").value;
+            rssFeeds = window[feed_name]
             feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
                 <tr><td width="1%">
                 <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
@@ -1514,19 +1514,6 @@ document.addEventListener("DOMContentLoaded", function() {
             updateFeedList(true);
         });
 
-        removeALLaddBig.addEventListener("click", function() {
-            rssFeeds = feeds_long_list
-            feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
-                <tr><td width="1%">
-                <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
-                </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
-            `).join("");
-            let lastLoad = 0;
-            localStorage.setItem("lastLoad", 0);  
-            modal_win.hide();
-            updateFeedList(true);
-        });
-
         removeALLfeeds.addEventListener("click", function() {
             rssFeeds = []
             feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
@@ -1534,8 +1521,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
                 </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
             `).join("");
+            let lastLoad = 0;
+            localStorage.setItem("lastLoad", 0);
             modal_win.hide();
-            //updateFeedList();
+            updateFeedList();
         });
 
         feedListModalElement.querySelector(".modal-body").addEventListener("click", function(event) {
@@ -1554,7 +1543,5 @@ document.addEventListener("DOMContentLoaded", function() {
         modal_win = new bootstrap.Modal(feedListModalElement)
         modal_win.show();
     });
-
-    
 
 });

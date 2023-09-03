@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
     <meta charset="UTF-8">
     <title>My RSS Algo</title>
 	<meta property="og:site_name" content="My RSS Algo"/>
@@ -9,157 +8,13 @@
 	<meta property="og:title" content="My RSS Algo"/>
 	<meta property="og:description" content="An open source client-side algorithmically-driven RSS reader, living with your data on your device."/>
     <meta property="og:image" content="https://suffolklitlab.org/images/thefuture.png"/>
-
     <link rel="apple-touch-icon" href="https://suffolklitlab.org/images/icon_300.png"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <link rel="stylesheet" type="text/css" href="style/main.css?v=2023-09-02_1245">
     <script src="js/report.js?v=2023-09-02_1245"></script>    
-
-    <script>
-
-        const feeds_long_list = [
-            "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
-            "https://rss.nytimes.com/services/xml/rss/nyt/US.xml",
-            "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml",
-            "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
-            "https://rss.nytimes.com/services/xml/rss/nyt/Sports.xml",
-            "https://rss.nytimes.com/services/xml/rss/nyt/Space.xml",
-            "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml",
-            "https://rss.nytimes.com/services/xml/rss/nyt/Health.xml",
-            "https://rss.nytimes.com/services/xml/rss/nyt/Arts.xml",
-            "https://rss.nytimes.com/services/xml/rss/nyt/FashionandStyle.xml",
-            "https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/ezra-klein/rss.xml",
-            "https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/jamelle-bouie/rss.xml",
-            "https://rss.nytimes.com/services/xml/rss/nyt/sunday-review.xml",
-            "https://feeds.npr.org/1003/rss.xml", //national
-            "https://feeds.npr.org/1004/rss.xml", //world
-            "https://feeds.npr.org/1006/rss.xml", //business
-            "https://feeds.npr.org/1007/rss.xml", //science
-            "https://feeds.npr.org/1014/rss.xml", //politics
-            "https://feeds.npr.org/1015/rss.xml", //race
-            "https://feeds.npr.org/1032/rss.xml", //books
-            "https://feeds.npr.org/1045/rss.xml", //movies
-            "https://feeds.npr.org/1048/rss.xml", //pop culture
-            "https://feeds.npr.org/1128/rss.xml", //health
-            "https://feeds.npr.org/1138/rss.xml", //television
-            "https://feeds.npr.org/1167/rss.xml", //climate
-            "https://feeds.npr.org/1001/rss.xml", //news
-            "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
-            "https://www.washingtonpost.com/arcio/rss/category/opinions/?itid=lk_inline_manual_7",
-            "http://feeds.washingtonpost.com/rss/sports?itid=lk_inline_manual_20",
-            "http://feeds.washingtonpost.com/rss/business/technology?itid=lk_inline_manual_31",
-            "http://feeds.washingtonpost.com/rss/national?itid=lk_inline_manual_32",
-            "http://feeds.washingtonpost.com/rss/world?itid=lk_inline_manual_36",
-            "http://feeds.washingtonpost.com/rss/business?itid=lk_inline_manual_37",
-            "http://feeds.washingtonpost.com/rss/lifestyle?itid=lk_inline_manual_38",
-            "http://feeds.washingtonpost.com/rss/entertainment?itid=lk_inline_manual_39",
-            "https://www.economist.com/the-world-this-week/rss.xml",
-            "https://www.economist.com/letters/rss.xml",
-            "https://www.economist.com/leaders/rss.xml",
-            "https://www.economist.com/briefing/rss.xml",
-            "https://www.economist.com/special-report/rss.xml",
-            "https://www.economist.com/britain/rss.xml",
-            "https://www.economist.com/europe/rss.xml",
-            "https://www.economist.com/united-states/rss.xml",
-            "https://www.economist.com/the-americas/rss.xml",
-            "https://www.economist.com/middle-east-and-africa/rss.xml",
-            "https://www.economist.com/asia/rss.xml",
-            "https://www.economist.com/china/rss.xml",
-            "https://www.economist.com/international/rss.xml",
-            "https://www.economist.com/business/rss.xml",
-            "https://www.economist.com/finance-and-economics/rss.xml",
-            "https://www.economist.com/books-and-arts/rss.xml",
-            "https://www.economist.com/obituary/rss.xml",
-            "https://www.economist.com/graphic-detail/rss.xml",
-            "https://www.economist.com/economic-and-financial-indicators/rss.xml",
-            "https://www.economist.com/science-and-technology/rss.xml",
-            "https://feeds.a.dj.com/rss/RSSOpinion.xml",
-            "https://feeds.a.dj.com/rss/RSSWorldNews.xml",
-            "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
-            "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
-            "https://feeds.a.dj.com/rss/RSSWSJD.xml",
-            "https://feeds.a.dj.com/rss/RSSLifestyle.xml",
-            "http://www.newyorker.com/feed/news",
-            "http://www.newyorker.com/feed/culture",
-            "http://www.newyorker.com/feed/humor",
-            "http://www.newyorker.com/feed/tag/books/rss",
-            "http://www.newyorker.com/feed/tech",
-            "http://www.newyorker.com/feed/news/sporting-scene",
-            "https://www.wgbh.org/news/local.rss",
-            "https://www.wgbh.org/news/politics.rss",
-            "https://www.wgbh.org/news/education-news.rss",
-            "https://www.wgbh.org/news/housing.rss",
-            "https://www.wgbh.org/news/health.rss",
-            "https://www.wgbh.org/news/commentary.rss",
-            "https://patch.com/feeds/aol/massachusetts/boston",
-            "https://patch.com/feeds/aol/massachusetts/somerville",
-            "https://patch.com/feeds/aol/massachusetts/cambridge",
-            "https://patch.com/feeds/aol/massachusetts/arlington",
-            "https://patch.com/feeds/aol/massachusetts/lexington",
-            "https://feeds.arstechnica.com/arstechnica/features",
-            "https://feeds.arstechnica.com/arstechnica/technology-lab",
-            "https://feeds.arstechnica.com/arstechnica/tech-policy",
-            "https://feeds.arstechnica.com/arstechnica/science",
-            "https://feeds.arstechnica.com/arstechnica/features",
-            "https://www.wired.com/feed/category/science/latest/rss",
-            "https://www.wired.com/feed/category/ideas/latest/rss",
-            "https://www.wired.com/feed/tag/ai/latest/rss",
-            "https://www.wired.com/feed/rss",
-            "https://techcrunch.com/feed/",
-            "https://slate.com/feeds/news-and-politics.rss",
-            "https://slate.com/feeds/technology.rss",
-            "https://slate.com/feeds/business.rss",
-            "https://slate.com/feeds/culture.rss",
-            "https://slate.com/feeds/human-interest.rss",
-            "https://www.lawnext.com/feed",
-            "https://www.techdirt.com/techdirt_rss.xml",
-            "https://pluralistic.net/feed/",
-            "https://www.theinformation.com/feed",
-            "https://xkcd.com/rss.xml",
-            "https://botsin.space/@APoD.rss"
-            // Add more default RSS feed URLs here
-        ]
-
-        const feeds_short_list = [
-            "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
-            "https://rss.nytimes.com/services/xml/rss/nyt/US.xml",
-            "https://feeds.npr.org/1001/rss.xml",
-            "https://feeds.npr.org/1007/rss.xml",
-            "https://www.economist.com/science-and-technology/rss.xml",
-            "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
-            "http://www.newyorker.com/feed/news",
-            "http://www.newyorker.com/feed/culture",
-            "http://www.newyorker.com/feed/humor",
-            "http://www.newyorker.com/feed/tag/books/rss",
-            "http://www.newyorker.com/feed/tech",
-            "https://feeds.arstechnica.com/arstechnica/features",
-            "https://feeds.arstechnica.com/arstechnica/technology-lab",
-            "https://feeds.arstechnica.com/arstechnica/tech-policy",
-            "https://feeds.arstechnica.com/arstechnica/science",
-            "https://www.wired.com/feed/category/science/latest/rss",
-            "https://www.wired.com/feed/category/ideas/latest/rss",
-            "https://www.wired.com/feed/tag/ai/latest/rss",
-            "https://slate.com/feeds/news-and-politics.rss",
-            "https://slate.com/feeds/technology.rss",
-            "https://slate.com/feeds/business.rss",
-            "https://www.techdirt.com/techdirt_rss.xml",
-            "https://www.wgbh.org/news/local.rss",
-            "https://www.wgbh.org/news/politics.rss",
-            "https://botsin.space/@APoD.rss"
-            //"https://www.reutersagency.com/feed/?best-regions=north-america&post_type=best",
-            //"https://screenrant.com/feed/tag/star-trek/",
-        ]        
-
-        default_feeds = feeds_short_list
-        //default_feeds = feeds_long_list
-
-    </script>
-
+    <script src="js/feeds.js?v=2023-09-02_1245"></script>  
 </head>
-
 <body>
     <div class="container">
         <div style="float:left;width:100%;margin-top: 20px;">
@@ -171,11 +26,17 @@
             </div>
             <div style="float:left;"><h1 class="my-1">My RSS Algo</h1></div>
             <div style="float:left;width:100%;padding-top: 8px;">
-                An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader made at the <a href="https://suffolklitlab.org/" target="_blank">Suffolk LIT Lab</a>. Use 👍 &amp; 👎 + "Seen" or "Open" to feed the algo. Votes don't leave your device. Customize the algo's behavior in <i>Settings &amp; Data</i>. Curate your feeds using the buttons above. For project updates follow <a href="https://mastodon.social/deck/tags/suffolkrssalgo" target="_blank">#SuffolkRSSalgo</a> on Mastodon, or check out <a href="https://github.com/colarusso/rss_algo" target="_blank">our GitHub page</a>. 
+                <p>
+                    An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader made at the <a href="https://suffolklitlab.org/" target="_blank">Suffolk LIT Lab</a>. Use 👍 &amp; 👎 + "Seen" or "Open" to feed the algo. Votes don't leave your device. Customize the algo's behavior in <i>Settings &amp; Data</i>. Curate your feeds using the buttons above. For project updates, follow <a href="https://mastodon.social/deck/tags/suffolkrssalgo" target="_blank">#SuffolkRSSalgo</a> on Mastodon, or check out <a href="https://github.com/colarusso/rss_algo" target="_blank">our GitHub page</a>.
+                </p>
             </div>
-            <span id="loading" style="float:left;background:yellow;display:none;margin-right: 10px;color:black;margin-top: 10px;"><i>&nbsp;Loading...&nbsp;</i></span>
-            <div class="my-3" style="float:left;width:100%;">
-                <span style="float:right"><a id="a_settings" href="javascript:void('')" onClick="toggle_settings()">Settings &amp; Data</a></span>
+            <div id="loading" style="float:left;background:yellow;display:none;color:black;margin-bottom: 10px;">
+                <i>&nbsp;Loading...&nbsp;</i>
+            </div>
+            <div style="float:left;width:100%;">
+                <span style="float:right">
+                    <a id="a_settings" href="javascript:void('')" onClick="toggle_settings()">Settings &amp; Data</a>
+                </span>
                 <span id="unread-count" class="text-danger">New: ?</span>
                 <span id="read-count" class="text-success">Seen: ?</span>
             </div>
@@ -183,73 +44,82 @@
         <div id="news-feed" class="row gy-3">
             <!-- News articles will be dynamically added here -->
         </div>
-        </div>            
-
-        <div id="my_settings" class="container" style="display:none;">
-            <a name="settings"></a>
+        <div id="my_settings" style="display:none;float:left;padding-top: 15px;">
             <h2>Settings &amp; Data</h2>
-            <p>You can manage your feeds by clicking "My Feeds" at the <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">top</a> of this page. See additional controls below. To determine what articles you like, we make use of insights from <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">TF-IDF</a>, comparing all the text from the cards you vote up or down with everything you've "seen." I hope to write a more complete explanation sometime. When I do, I'll put a link here. Until then, you can always look at <a href="https://github.com/colarusso/rss_algo" target="_blank">the code</a>.</p>
-            <p><i>Note: when figuring out what you "like" we look only at the card's title, description, and the RSS Feed's name. We don't look at the content of the article, and we also compress all feed titles into single words. That's why you might see things like nyttopstories (NYT > Top Stories) in the word lists below.</i></p>
+            <p>
+                You can manage your feeds by clicking "My Feeds" at the <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">top</a> of this page. See additional controls below. To determine what articles you like, we make use of insights from <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">TF-IDF</a>, comparing all the text from the cards you vote up or down with everything you've "seen." I hope to write a more complete explanation sometime. When I do, I'll put a link here. Until then, you can always look at <a href="https://github.com/colarusso/rss_algo" target="_blank">the code</a>.
+            </p>
+            <p>
+                <i>Note: when figuring out what you "like" we look only at the card's title, description, and the RSS Feed's name. We don't look at the content of the article, and we also compress all feed titles into single words. That's why you might see things like nyttopstories (NYT > Top Stories) in the word lists below.</i>
+            </p>
             <h4>Cooldown Clock</h4>
-                    <p>
-                    There's no need to download every feed every time you hit refresh. So this site waits a defined period before downloading content. If you refresh the page before the end of this cooldown period, it will recalculate ratings based on recent votes and filter what it displays based on the other options here, but it won't try to download your feeds. Currently the period is set to <b><i><span id="cooldown-value">0.25</span></i> hours</b>. <i>You can change this below, but you must refresh the page to see results. <span class="highlighted"><b>If you set a cooldown period that is shorter than the current value, you will have to wait for the old period to pass before the new one takes effect. So, once you set it and refresh, there's no quickly going back.</b></span></i>
-                    </p>
-                    <p>
-                        <input type="range" id="cooldown-slider" min="0.25" max="4" value="0.25" step="0.25" style="width:100%;">
-                    </p>
+            <p>
+                There's no need to download every feed every time you hit refresh. So this site waits a defined period before downloading content. If you refresh the page before the end of this cooldown period, it will recalculate ratings based on recent votes and filter what it displays based on the other options here, but it won't try to download your feeds. Currently the period is set to <b><i><span id="cooldown-value">0.25</span></i> hours</b>. <i>You can change this below, but you must refresh the page to see results. <span class="highlighted"><b>If you set a cooldown period that is shorter than the current value, you will have to wait for the old period to pass before the new one takes effect. So, once you set it and refresh, there's no quickly going back.</b></span></i>
+            </p>
+            <p>
+                <input type="range" id="cooldown-slider" min="0.25" max="4" value="0.25" step="0.25" style="width:100%;">
+            </p>
             <div class="row">
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
-                <h4>A Note on Performance</h4>
-                    <p>The options you choose below will effect this site's performance. Generally speaking, the more inclusive your choices the larger your timeline will be and the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.</p>
+                    <h4>A Note on Performance</h4>
+                    <p>
+                        The options you choose below will effect this site's performance. Generally speaking, the more inclusive your choices the larger your timeline will be and the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.
+                    </p>
                 </div>
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
-                    <h4>Show Read Cards</h4>
-                        <p>
-                            <label for="hiddenMode"><input type="checkbox" id="hiddenMode" value="1"> Show read cards at the end of the list but grayed out. <i>Refresh page to see results</i>.</label>
-                        </p>
+                    <h4>Show Cards You've Seen</h4>
+                    <p>
+                        <label for="hiddenMode"><input type="checkbox" id="hiddenMode" value="1"> Show cards marked as "Seen" at the end of the list but grayed out. <i>Refresh page to see results</i>.</label>
+                    </p>
                     <h4>Images</h4>
-                        <p>
-                            <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Ignore preview images (i.e., load w/o thumbnails). <i>Refresh page to see results</i>.</label>
-                        </p>
+                    <p>
+                        <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Ignore preview images (i.e., load w/o thumbnails). <i>Refresh page to see results</i>.</label>
+                    </p>
                 </div>
-
             </div>
             <h4>Ratings Cutoff</h4>
-                <p>
-                    After the recommendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and positive numbers are above average. 
-                </p>
-                    <p>
-                    Z-Score for cutoff: <b><i><span id="cutoff-value">-2.5</span></i></b>. <i>Refresh page to see results</i>.
-                    </p>
-                    <p>
-                        <input type="range" id="cutoff-slider" min="-3.5" max="3.5" value="-2.5" step="0.01" style="width:100%;">
-                    </p>
+            <p>
+                After the recommendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and positive numbers are above average. 
+            </p>
+            <p>
+                Z-Score for cutoff: <b><i><span id="cutoff-value">-2.5</span></i></b>. <i>Refresh page to see results</i>.
+            </p>
+            <p>
+                <input type="range" id="cutoff-slider" min="-3.5" max="3.5" value="-2.5" step="0.01" style="width:100%;">
+            </p>
             <h4>Positive vs. Negative</h4>
-                <p></p>
-                    <p>
-                    When calculating ratings, how much influence should <i>down votes</i> have compared to <i>up votes</i>? If you choose 0, they don't count at all. If you choose 2, they'll count twice as much as <i>up votes</i>. Current value: <b><i><span id="negativity-value">1.25</span></i></b>. <i>Refresh page to see results</i>.
-                    </p>
-                    <p>
-                        <input type="range" id="negativity-slider" min="0" max="2" value="1.25" step="0.01" style="width:100%;">
-                    </p>
+            <p>
+                When calculating ratings, how much influence should <i>down votes</i> have compared to <i>up votes</i>? If you choose 0, they don't count at all. If you choose 2, they'll count twice as much as <i>up votes</i>. Current value: <b><i><span id="negativity-value">1.25</span></i></b>. <i>Refresh page to see results</i>.
+            </p>
+            <p>
+                <input type="range" id="negativity-slider" min="0" max="2" value="1.25" step="0.01" style="width:100%;">
+            </p>
             <div class="row" style="margin-bottom: 10px;">
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4" style="overflow:hidden;">
                     <h4>Positive</h4>
-                    <p>Here are your <b><i>most-positive</i></b> words and their approximate TF-IDF, treating all up-voted cards as a single document: <span id="upwords">not enough data</span></p>
+                    <p>
+                        Here are your <b><i>most-positive</i></b> words and their approximate TF-IDF, treating all up-voted cards as a single document: <span id="upwords">not enough data</span>
+                    </p>
                     <button id="clear-upvotes" class="btn btn-danger btn-block">Clear Upvotes</button>
                 </div>
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4" style="overflow:hidden;">
                     <h4>Negative</h4>
-                    <p>Here are your <b><i>most-negative</i></b> words and their approximate TF-IDF, treating all down-voted cards as a single document: <span id="downwords">not enough data</span></p>
+                    <p>
+                        Here are your <b><i>most-negative</i></b> words and their approximate TF-IDF, treating all down-voted cards as a single document: <span id="downwords">not enough data</span>
+                    </p>
                     <button id="clear-downvotes" class="btn btn-danger btn-block">Clear Downvotes</button>
                 </div>
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
                     <h4>History</h4>
-                    Display content from the last <b><i><span id="lookback-value">7</span> days</i></b>. <i>Refresh page to see results</i>.
+                    <p>
+                        Display content from the last <b><i><span id="lookback-value">7</span> days</i></b>. <i>Refresh page to see results</i>.
+                    </p>
                     <p>
                         <input type="range" id="lookback-slider" min="1" max="15" value="7" style="width:100%;">
                     </p>
-                    <p>You can limit how much you see in your timeline by adjusting the slider above. If you clear you reading history, however, it will remove older articles, not just hide them. This will effect your recommendations since they are based on interactions with old articles.</p>
+                    <p>
+                        You can limit how much you see in your timeline by adjusting the slider above. If you clear you reading history, however, it will remove older articles, not just hide them. This will effect your recommendations since they are based on interactions with old articles.
+                    </p>
                     <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
                     <button id="factory-reset" class="btn btn-danger btn-block factory-reset" onClick="reset_all();"><b>RESET ALL</b></button>
                 </div>
@@ -257,22 +127,24 @@
             <div class="row">
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
                     <h4>Mastodon</h4>
-                        <p>Since users of <a href="https://joinmastodon.org/" target="_blank">Mastodon</a> use different servers/instnaces, we need to collect that information to enable sharing (i.e., so we can queue your post on the right server). If you'd like to use this feature, enter your server here:</p>
-                        <p><input id="masto_instance" value="" oninput="localStorage.instance=this.value"></p>
+                    <p>
+                        Since users of <a href="https://joinmastodon.org/" target="_blank">Mastodon</a> use different servers/instances, we need to collect that information to enable sharing (i.e., so we can queue your post on the right server). If you'd like to use this feature, enter your server here:
+                    </p>
+                    <p><input id="masto_instance" value="" oninput="localStorage.instance=this.value"></p>
                 </div>
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
-                        <h4>Your Data</h4>
-                        <p>FWIW, you can download the data stored in your browser to a file. This is helpful for backups and if you want to move your history et al. between devices.</p>
-                        <input id="upload" type="file" style="display: none;"/> 
-                        <p>
-                            <a href="javascript:saveTextAsFile(JSON.stringify(localStorage,null,2),'My_RSS_algo_data.json');" class="btn btn-primary">Download My Data</a>&nbsp;
-                            <a href="javascript:upload_file()" class="btn btn-danger">Upload Data</a>
-                        </p>
+                    <h4>Your Data</h4>
+                    <p>
+                        FWIW, you can download the data stored in your browser to a file. This is helpful for backups and if you want to move your history et al. between devices.
+                    </p>
+                    <input id="upload" type="file" style="display: none;"/> 
+                    <p>
+                        <a href="javascript:saveTextAsFile(JSON.stringify(localStorage,null,2),'My_RSS_algo_data.json');" class="btn btn-primary">Download My Data</a>&nbsp;
+                        <a href="javascript:upload_file()" class="btn btn-danger">Upload Data</a>
+                    </p>
                 </div>
             </div>
-    </div>
-
-    <div class="container">
+        </div>
         <div class="footer">
             <a href="https://suffolklitlab.org/" alt="LIT Lab" target="_blank">
                 <img id="footer_logo_long" src="images/lit_suffolk.png" border="0" height="35px" alt="LIT and Suffolk University Law School Logos" align="left"/>
@@ -283,7 +155,6 @@
             </span>
         </div>
     </div>
-
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

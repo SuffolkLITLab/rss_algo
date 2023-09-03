@@ -1,4 +1,4 @@
-/* Your custom styles can go here */
+/* Mastodon Content */
 
 .invisible {
     display: inline-block;
@@ -15,6 +15,13 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/* General Content */
+
+select {
+    width:100%;
+    padding:3px;
 }
         
 .menu {
@@ -176,11 +183,22 @@
     height: 18px;
 }
 
+.end_quote {
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+    padding: 10px 10px 0 10px;
+    font-size: 23px;
+    line-height: 25px;
+    text-align: center;
+    width: 100%;
+}
+
 
 .highlighted {
     background: yellow;
 }
 .footer {
+    float:left;
+    width:100%;
     border-top: 1px solid #555;
     margin: 30px 0 75px 0;
     padding: 10px 5px;
@@ -210,6 +228,7 @@
 }
 
 /* Dark mode styles */
+
 .dark-mode {
     background-color: #333;
     color: #fff;
