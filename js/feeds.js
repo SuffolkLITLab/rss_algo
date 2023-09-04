@@ -223,6 +223,7 @@ test_feeds = [
     //"https://www.reutersagency.com/feed/?best-regions=north-america&post_type=best",
     //"https://hnrss.org/best",
     //"http://rss.sciam.com/ScientificAmerican-Global",
+    //"https://api.quantamagazine.org/feed/"
 ]
 
-default_feeds = test_feeds
+//default_feeds = test_feeds
