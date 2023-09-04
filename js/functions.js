@@ -690,6 +690,8 @@ document.addEventListener("DOMContentLoaded", function() {
                             displayed_cards = newsFeedContainer.childNodes.length
                             console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
                             lazyload();
+                            get_quote();
+
                         }
                     })
                     .catch(error => {
@@ -715,6 +717,8 @@ document.addEventListener("DOMContentLoaded", function() {
             displayed_cards = newsFeedContainer.childNodes.length
             console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
             lazyload();
+            get_quote();
+
             crunch_numbers = false;
         }
 
@@ -1350,7 +1354,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function updateItemCount() {
 
         const readCount = Object.keys(readArticles).length.toLocaleString("en-US");;
-        const unreadCount = countUnreadArticles().toLocaleString("en-US");; 
+        const unreadCount = countUnreadArticles().toLocaleString("en-US"); 
         const readCountElement = document.getElementById("read-count");
         const unreadCountElement = document.getElementById("unread-count");
         if (readCount<=1000) {
@@ -1380,24 +1384,24 @@ document.addEventListener("DOMContentLoaded", function() {
         //}
         //console.log(order_arr)
         
-        localStorage.setItem("articles", JSON.stringify(articles));                
+        localStorage.setItem("articles", JSON.stringify(articles));  
+        
+    }
 
-        if (unreadCount==0) {
-
+    function get_quote() {
+        if (countUnreadArticles().toLocaleString("en-US")==0) {
             items = [
                         "Be kind. Have Fun. Try something new.",
                         "In life and on apps, always question defaults. Fiddle with some settings, and see what happens.",
                         "Civilization is a positive-sum game."
                     ]
-
             const quote = document.createElement("div");
             quote.className = `end_quote`;
             quote.innerHTML = items[Math.floor(Math.random()*items.length)];
             newsFeedContainer.appendChild(quote);    
         }
-
     }
-
+    
     const clearUpvotesButton = document.getElementById("clear-upvotes");
     clearUpvotesButton.addEventListener("click", function() {
         // Clear the "read" key from localStorage
