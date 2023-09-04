@@ -1,4 +1,3 @@
-
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
 function toggle_settings() {
@@ -179,7 +178,9 @@ control.addEventListener("change", function(event){
 }, false);        
 
 
-var xml_doc;
+
+
+//var xml_doc;
 
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -429,22 +430,22 @@ document.addEventListener("DOMContentLoaded", function() {
         localStorage.setItem("ignoreImages", newIgnoreImages);
     });
 
-
     function dedup_articles() {
         var uniqueArticles = [];
         var uniqueArticleIds = new Set();
-
-        //articles.reverse().forEach(articleData => {
+        var uniqueArticleTitlesAndDescriptions = new Set();
+      
         articles.forEach(articleData => {
-            if (!uniqueArticleIds.has(articleData.itemId)) {
-                uniqueArticleIds.add(articleData.itemId);
-                uniqueArticles.push(articleData);
-            } 
+          const key = `${articleData.title}-${articleData.description}`;
+          if (!uniqueArticleIds.has(articleData.itemId) && !uniqueArticleTitlesAndDescriptions.has(key)) {
+            uniqueArticleIds.add(articleData.itemId);
+            uniqueArticleTitlesAndDescriptions.add(key);
+            uniqueArticles.push(articleData);
+          }
         });
-
-        //articles = uniqueArticles.reverse();
+      
         articles = uniqueArticles;
-    }
+      }    
 
     function extractContent(s) {
         var span = document.createElement('span');
@@ -466,8 +467,7 @@ document.addEventListener("DOMContentLoaded", function() {
             var time_padding = Date.parse(new Date())-lastcooldown*60*60*1000 //750000
         }
 
-        //console.log(lastLoad, time_padding)
-        if (lastLoad>time_padding) {
+        if ((lastLoad>time_padding) || (rssFeeds.length==0)) {
             loadFeeds = false;
         }
 
@@ -503,7 +503,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         const parser = new DOMParser();
                         const xml = parser.parseFromString(data, "application/xml");
 
-                        xml_doc = xml 
+                        //xml_doc = xml 
                         //console.log(xml)
 
                         var feedTitle
@@ -1482,20 +1482,20 @@ document.addEventListener("DOMContentLoaded", function() {
                         </div>
                         <div class="modal-body">
                             <p>
-                                If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>, or just swap in a pre-made list and whittle it down over time. <i>Note: If you remove a feed, <b>old articles will remain on your timeline and in your history by default</b>. Use <i>Settings &amp; Data</i> to clear your history.</i>
+                                If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>, or just swap in a pre-made list and whittle it down over time. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings &amp; Data</i> to clear your history or one of the "wipe" options to remove old data</b>.</i>
                             </p>
                             <select id="feed_list">
                                 <option value="default_feeds">Generic US News Mix (default)</option>
                                 <option value="papers_feeds">Papers: NYT, WaPo, WSJ</option>
-                                <option value="geeek_feeds">Geekery: Science, Tech, Space, &amp; Star Trek</option>
                                 <option value="condenast_feeds">Condé Nast: New Yorker, ArsTechnica, Wired</option>
-                                <option value="suffolk_law_feeds">Suffolk Law Special</option>
-                                <option value="feeds_long_list">Mega List (100+ feeds)</option>
+                                <option value="geeek_feeds">Geekery: Science, Tech, Space, &amp; Star Trek</option>
+                                <option value="suffolk_law_feeds">Suffolk Special: Papers + Boston + Law</option>
+                                <option value="feeds_long_list">Super Mega List (100+ feeds)</option>
                             </select>
                             </p>
                             <p>
-                                <button type="button" id="remove_all_add_selection" class="btn btn-danger remove_all">Remove &amp; Replace w/ Above Selection</button>
-                                <button type="button" id="remove_all_feeds" class="btn btn-danger remove_all">Remove All</button>
+                                <button type="button" id="remove_all_add_selection" class="btn btn-danger remove_all">Wipe &amp; Replace w/ Above Selection</button>
+                                <button type="button" id="remove_all_feeds" class="btn btn-danger remove_all">Wipe All</button>
                             <p>
                             <table cellpadding="10px" width="100%">${feedList}</table>
                         </div>
@@ -1515,33 +1515,51 @@ document.addEventListener("DOMContentLoaded", function() {
         const removeALLfeeds = document.getElementById("remove_all_feeds");
         
         removeALLaddSelection.addEventListener("click", function() {
-            feed_name = document.getElementById("feed_list").value;
-            rssFeeds = window[feed_name]
-            localStorage.setItem("feeds",rssFeeds)
-            feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
-                <tr><td width="1%">
-                <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
-                </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
-            `).join("");
-            let lastLoad = 0;
-            localStorage.setItem("lastLoad", 0);
-            modal_win.hide();
-            updateFeedList(true);
+            let text = "This will empty your feed list, replacing it with the selection you just made, and it remove all records of read articles, which will effect any algo traing you may have done. Choose OK to continue.";
+            if (confirm(text) == true) {
+                feed_name = document.getElementById("feed_list").value;
+                rssFeeds = window[feed_name]
+                localStorage.setItem("feeds",rssFeeds)
+                feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
+                    <tr><td width="1%">
+                    <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
+                    </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
+                `).join("");
+                // Clear the "read" key from localStorage
+                localStorage.removeItem("read");
+                // Clear the read status of all articles in the readArticles object
+                for (var member in readArticles) delete readArticles[member];
+                articles = [];
+                localStorage.setItem("articles", JSON.stringify(articles));
+                let lastLoad = 0;
+                localStorage.setItem("lastLoad", 0);
+                modal_win.hide();
+                updateFeedList(true);
+            }
         });
 
         removeALLfeeds.addEventListener("click", function() {
-            rssFeeds = []
-            localStorage.setItem("feeds",rssFeeds)
-            feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
-                <tr><td width="1%">
-                <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
-                </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
-            `).join("");
-            let lastLoad = 0;
-            localStorage.setItem("lastLoad", 0);
-            modal_win.hide();
-            updateFeedList();
-            get_quote();
+            let text = "This will empty your feed list and remove all records of read articles, which will effect any algo traing you may have done. Choose OK to continue.";
+            if (confirm(text) == true) {
+                rssFeeds = []
+                localStorage.setItem("feeds",JSON.stringify(rssFeeds))
+                feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
+                    <tr><td width="1%">
+                    <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
+                    </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
+                `).join("");
+                // Clear the "read" key from localStorage
+                localStorage.removeItem("read");
+                // Clear the read status of all articles in the readArticles object
+                for (var member in readArticles) delete readArticles[member];
+                articles = [];
+                localStorage.setItem("articles", JSON.stringify(articles));
+                let lastLoad = 0;
+                localStorage.setItem("lastLoad", 0);
+                modal_win.hide();
+                //updateFeedList();
+                //get_quote();
+            }
         });
 
         feedListModalElement.querySelector(".modal-body").addEventListener("click", function(event) {
