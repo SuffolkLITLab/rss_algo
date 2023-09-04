@@ -7,7 +7,7 @@ var default_feeds = [
     "https://theconversation.com/us/articles.atom",
     "http://www.newyorker.com/feed/everything",
     "https://feeds.arstechnica.com/arstechnica/index",
-    "https://slate.com/feeds/all.rss",
+    "https://pluralistic.net/feed/",
     "https://botsin.space/@APoD.rss"
 ]        
 
@@ -40,6 +40,47 @@ var papers_feeds = [
     "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
     "https://feeds.a.dj.com/rss/RSSWSJD.xml",
     "https://feeds.a.dj.com/rss/RSSLifestyle.xml"
+]
+
+var suffolk_law_feeds = [
+    "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
+    "https://rss.nytimes.com/services/xml/rss/nyt/US.xml",
+    "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml",
+    "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
+    "https://rss.nytimes.com/services/xml/rss/nyt/Sports.xml",
+    "https://rss.nytimes.com/services/xml/rss/nyt/Space.xml",
+    "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml",
+    "https://rss.nytimes.com/services/xml/rss/nyt/Health.xml",
+    "https://rss.nytimes.com/services/xml/rss/nyt/Arts.xml",
+    "https://rss.nytimes.com/services/xml/rss/nyt/FashionandStyle.xml",
+    "https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/ezra-klein/rss.xml",
+    "https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/jamelle-bouie/rss.xml",
+    "https://rss.nytimes.com/services/xml/rss/nyt/sunday-review.xml",
+    "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
+    "https://www.washingtonpost.com/arcio/rss/category/opinions/?itid=lk_inline_manual_7",
+    "http://feeds.washingtonpost.com/rss/sports?itid=lk_inline_manual_20",
+    "http://feeds.washingtonpost.com/rss/business/technology?itid=lk_inline_manual_31",
+    "http://feeds.washingtonpost.com/rss/national?itid=lk_inline_manual_32",
+    "http://feeds.washingtonpost.com/rss/world?itid=lk_inline_manual_36",
+    "http://feeds.washingtonpost.com/rss/business?itid=lk_inline_manual_37",
+    "http://feeds.washingtonpost.com/rss/lifestyle?itid=lk_inline_manual_38",
+    "http://feeds.washingtonpost.com/rss/entertainment?itid=lk_inline_manual_39",
+    "https://feeds.a.dj.com/rss/RSSOpinion.xml",
+    "https://feeds.a.dj.com/rss/RSSWorldNews.xml",
+    "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
+    "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
+    "https://feeds.a.dj.com/rss/RSSWSJD.xml",
+    "https://feeds.a.dj.com/rss/RSSLifestyle.xml",
+    "https://theconversation.com/us/arts/articles.atom",
+    "https://theconversation.com/us/business/articles.atom",
+    "https://theconversation.com/us/education/articles.atom",
+    "https://theconversation.com/us/environment/articles.atom",
+    "https://theconversation.com/us/ethics/articles.atom",
+    "https://theconversation.com/us/health/articles.atom",
+    "https://theconversation.com/us/politics/articles.atom",
+    "https://theconversation.com/us/technology/articles.atom",
+    "https://theconversation.com/us/articles.atom",
+    "https://www.lawnext.com/feed"
 ]
 
 var condenast_feeds = [
@@ -175,9 +216,11 @@ var feeds_long_list = [
     "https://botsin.space/@APoD.rss"
 ]
 
-to_test = [
-    "https://www.reutersagency.com/feed/?best-regions=north-america&post_type=best",
-    "https://screenrant.com/feed/tag/star-trek/",
+test_feeds = [
+    //"https://screenrant.com/feed/tag/star-trek/",
+    //"https://masslawyersweekly.com/feed/",
+    //"https://lawprofblawg.wordpress.com/feed/",
+    "https://www.reutersagency.com/feed/?best-regions=north-america&post_type=best"
 ]
 
-//default_feeds = to_test
+//default_feeds = test_feeds

@@ -179,7 +179,7 @@ control.addEventListener("change", function(event){
 }, false);        
 
 
-//var xml_doc;
+var xml_doc;
 
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -503,7 +503,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         const parser = new DOMParser();
                         const xml = parser.parseFromString(data, "application/xml");
 
-                        //xml_doc = xml 
+                        xml_doc = xml 
                         //console.log(xml)
 
                         var feedTitle
@@ -540,6 +540,8 @@ document.addEventListener("DOMContentLoaded", function() {
                                 pubDate = new Date(item.querySelector("pubDate").textContent);
                             }
 
+                            //console.log("des",pubDate,backstop,lookback,j,max_arts,rssFeeds)
+
                             if ((pubDate >= backstop) && (pubDate >= lookback) && (j<(max_arts/(rssFeeds.length*0.49))) && (pubDate <= new Date())) {
                                 
                                 if (xml.documentElement.nodeName=="feed") {
@@ -565,6 +567,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                     console.log("Empty Description",feedUrl,link)
                                     description = "";
                                 }
+
 
                                 if (description!=""){
         
@@ -1383,7 +1386,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
             items = [
                         "Be kind. Have Fun. Try something new.",
-                        "In life and on apps: Always question defaults. Fiddle with some settings, and see what happens."
+                        "In life and on apps, always question defaults. Fiddle with some settings, and see what happens.",
+                        "Civilization is a positive-sum game."
                     ]
 
             const quote = document.createElement("div");
@@ -1476,6 +1480,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <option value="default_feeds">Default Mix</option>
                                 <option value="papers_feeds">Papers: NYT, WaPo, WSJ</option>
                                 <option value="condenast_feeds">Condé Nast: New Yorker, ArsTechnica, Wired</option>
+                                <option value="suffolk_law_feeds">Suffolk Law Special</option>
                                 <option value="feeds_long_list">Mega List (100+ feeds)</option>
                             </select>
                             </p>
@@ -1503,6 +1508,7 @@ document.addEventListener("DOMContentLoaded", function() {
         removeALLaddSelection.addEventListener("click", function() {
             feed_name = document.getElementById("feed_list").value;
             rssFeeds = window[feed_name]
+            localStorage.setItem("feeds",rssFeeds)
             feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
                 <tr><td width="1%">
                 <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
@@ -1516,6 +1522,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         removeALLfeeds.addEventListener("click", function() {
             rssFeeds = []
+            localStorage.setItem("feeds",rssFeeds)
             feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
                 <tr><td width="1%">
                 <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
@@ -1531,6 +1538,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (event.target.classList.contains("remove-feed")) {
                 const feedIndex = event.target.getAttribute("data-feed-index");
                 rssFeeds.splice(feedIndex, 1);
+                localStorage.setItem("feeds",rssFeeds)
                 updateFeedList();
                 feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
                     <tr><td width="1%">
