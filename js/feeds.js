@@ -42,6 +42,8 @@ var papers_feeds = [
     "https://feeds.a.dj.com/rss/RSSLifestyle.xml"
 ]
 
+// resources availabe to community members
+// See https://www.suffolk.edu/law/faculty-research/research/law-school-research-databases/washington-post
 var suffolk_law_feeds = [
     "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/US.xml",
