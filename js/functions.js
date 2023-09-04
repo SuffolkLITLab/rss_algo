@@ -691,7 +691,6 @@ document.addEventListener("DOMContentLoaded", function() {
                             console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
                             lazyload();
                             get_quote();
-
                         }
                     })
                     .catch(error => {
@@ -718,7 +717,6 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
             lazyload();
             get_quote();
-
             crunch_numbers = false;
         }
 
@@ -977,6 +975,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                     // Update the unread count
                     updateItemCount();
+                    get_quote();
                 });
 
                 readButton.addEventListener("click", function() {
@@ -999,6 +998,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                         // Update the unread count
                         updateItemCount();
+                        get_quote();
                     }
                 });
 
@@ -1389,7 +1389,8 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function get_quote() {
-        if (countUnreadArticles().toLocaleString("en-US")==0) {
+        const HiddenModeState = localStorage.getItem("hiddenMode") === "true";
+        if (countUnreadArticles().toLocaleString("en-US")==0 && !HiddenModeState) {
             items = [
                         "Be kind. Have Fun. Try something new.",
                         "In life and on apps, always question defaults. Fiddle with some settings, and see what happens.",
@@ -1398,6 +1399,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const quote = document.createElement("div");
             quote.className = `end_quote`;
             quote.innerHTML = items[Math.floor(Math.random()*items.length)];
+            newsFeedContainer.textContent = "";
             newsFeedContainer.appendChild(quote);    
         }
     }
@@ -1441,6 +1443,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Update article styles and the feed list
         updateFeedList(true);
+        updateItemCount();
+        get_quote();
     });            
     
     loadNews(true);
@@ -1536,6 +1540,7 @@ document.addEventListener("DOMContentLoaded", function() {
             localStorage.setItem("lastLoad", 0);
             modal_win.hide();
             updateFeedList();
+            get_quote();
         });
 
         feedListModalElement.querySelector(".modal-body").addEventListener("click", function(event) {
