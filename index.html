@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+
     <meta charset="UTF-8">
     <title>My RSS Algo</title>
 	<meta property="og:site_name" content="My RSS Algo"/>
@@ -85,10 +85,10 @@
                 After the recommendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and positive numbers are above average. 
             </p>
             <p>
-                Z-Score for cutoff: <b><i><span id="cutoff-value">-2.5</span></i></b>. <i>Refresh page to see results</i>.
+                Z-Score for cutoff: <b><i><span id="cutoff-value">-2</span></i></b>. <i>Refresh page to see results</i>.
             </p>
             <p>
-                <input type="range" id="cutoff-slider" min="-3.5" max="3.5" value="-2.5" step="0.01" style="width:100%;">
+                <input type="range" id="cutoff-slider" min="-3.5" max="3.5" value="-2" step="0.01" style="width:100%;">
             </p>
             <h4>Positive vs. Negative</h4>
             <p>

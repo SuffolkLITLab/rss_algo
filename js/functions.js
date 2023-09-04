@@ -387,7 +387,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const cutoffValueElement = document.getElementById("cutoff-value");
     
     // Retrieve cutoff value from localStorage (if available)
-    const savedcutoff = localStorage.getItem("cutoff") || -2.5;
+    const savedcutoff = localStorage.getItem("cutoff") || -2;
     if (savedcutoff) {
         cutoffSlider.value = savedcutoff;
         cutoffValueElement.textContent = savedcutoff;
@@ -907,7 +907,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             </div>
                         </div>
                         <div class="card-footer">
-                            <img src="${favicon}" height="18px" align="left/> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small> 
+                            <img class="favicon" src="${favicon}" height="18px" align="left/> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small> 
                             <span class="btn remove_feed" data-feed-index="${feedUrl}" data-feed-name="${feedTitle}">🚫</span>
                         </div>
                     </div>
@@ -1485,8 +1485,9 @@ document.addEventListener("DOMContentLoaded", function() {
                                 If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>, or just swap in a pre-made list and whittle it down over time. <i>Note: If you remove a feed, <b>old articles will remain on your timeline and in your history by default</b>. Use <i>Settings &amp; Data</i> to clear your history.</i>
                             </p>
                             <select id="feed_list">
-                                <option value="default_feeds">Default Mix</option>
+                                <option value="default_feeds">Generic US News Mix (default)</option>
                                 <option value="papers_feeds">Papers: NYT, WaPo, WSJ</option>
+                                <option value="geeek_feeds">Geekery: Science, Tech, Space, &amp; Star Trek</option>
                                 <option value="condenast_feeds">Condé Nast: New Yorker, ArsTechnica, Wired</option>
                                 <option value="suffolk_law_feeds">Suffolk Law Special</option>
                                 <option value="feeds_long_list">Mega List (100+ feeds)</option>
@@ -1559,6 +1560,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
         modal_win = new bootstrap.Modal(feedListModalElement)
         modal_win.show();
+    });
+
+    const images = document.querySelectorAll(".favicon");
+    images.forEach((img) => {
+      img.addEventListener("error", function (event) {
+        event.target.src = "images/favicon.ico";
+        event.target.onerror = null;
+      });
     });
 
 });

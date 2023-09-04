@@ -22,8 +22,7 @@
 select {
     width:100%;
     padding:3px;
-}
-        
+}       
 .menu {
     float:right;
 }
@@ -38,11 +37,18 @@ select {
 .read-article .feed-tag {
     color: black; /* Standard black text for read items */
 }
+.hidden-mode .read-article .card {
+    display: none;
+}
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Make the card grow to the full height of its container */
+}
 .card-title {
     float:left;
     width:100%;
 }
-
 .feed-tag {
     font-size: 12px;
     color: #fff0f0;
@@ -65,8 +71,7 @@ select {
     float:left;
     width:100%;
 }
-#read-count,
-#unread-count {
+#read-count, #unread-count {
     font-weight: bold;
     margin-right: 10px;
 }
@@ -75,16 +80,9 @@ select {
     max-height: 200px;
     object-fit: cover;
 }
-
 .row-equal-height {
     display: flex;
     flex-wrap: wrap;
-}
-
-.card {
-    display: flex;
-    flex-direction: column;
-    height: 100%; /* Make the card grow to the full height of its container */
 }
 .pocket_share{
     position: absolute;
@@ -139,7 +137,6 @@ select {
     flex-direction: column;
     justify-content: space-between; /* Space between the title and other elements */
 }
-
 .card-title {
     font-size: 1.25rem; /* Larger font size for the title */
     margin-bottom: 0.5rem; /* Add some spacing below the title */
@@ -149,12 +146,10 @@ select {
     flex-grow: 1; /* Allow the description to expand to fill space */
     margin-bottom: 1rem; /* Add spacing at the bottom of the description */
 }
-
 .feed-tag {
     color: black;
     margin-top: auto; /* Push the feed tag to the bottom of the card */
 }
-
 .btn-group {
     margin-top: auto; /* Push the button group to the bottom of the card */
 }
@@ -182,7 +177,6 @@ select {
     line-height: 18px;
     height: 18px;
 }
-
 .end_quote {
     font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
     margin: 30px auto 0;
@@ -192,8 +186,6 @@ select {
     text-align: center;
     width: 100%;
 }
-
-
 .highlighted {
     background: yellow;
 }
@@ -211,7 +203,6 @@ select {
     display:none;
     height:35px;
 }
-
 @media only screen and (max-width: 520px) {
     #footer_logo_long {
         display:none;
@@ -271,8 +262,4 @@ select {
 .dark-mode .read-article .card-text,
 .dark-mode .read-article .feed-tag {
     color: #ccc;
-}
-
-.hidden-mode .read-article .card {
-    display: none;
 }

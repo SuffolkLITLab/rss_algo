@@ -40,6 +40,51 @@ var papers_feeds = [
     "https://feeds.a.dj.com/rss/RSSLifestyle.xml"
 ]
 
+var condenast_feeds = [
+    "http://www.newyorker.com/feed/news",
+    "http://www.newyorker.com/feed/culture",
+    "http://www.newyorker.com/feed/humor",
+    "http://www.newyorker.com/feed/tag/books/rss",
+    "http://www.newyorker.com/feed/tech",
+    "http://www.newyorker.com/feed/news/sporting-scene",   
+    "https://feeds.arstechnica.com/arstechnica/technology-lab",
+    "https://feeds.arstechnica.com/arstechnica/tech-policy",
+    "https://feeds.arstechnica.com/arstechnica/science",
+    "https://feeds.arstechnica.com/arstechnica/features",
+    "https://www.wired.com/feed/category/science/latest/rss",
+    "https://www.wired.com/feed/category/ideas/latest/rss",
+    "https://www.wired.com/feed/tag/ai/latest/rss",
+    "https://www.wired.com/feed/rss"
+]
+
+var geeek_feeds = [
+    "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
+    "https://rss.nytimes.com/services/xml/rss/nyt/Space.xml",
+    "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml",
+    "http://feeds.washingtonpost.com/rss/business/technology?itid=lk_inline_manual_31",
+    "https://feeds.npr.org/1007/rss.xml", //science
+    "http://www.newyorker.com/feed/tech",
+    "https://www.economist.com/science-and-technology/rss.xml",
+    "https://feeds.bloomberg.com/technology/news.rss",
+    "https://feeds.arstechnica.com/arstechnica/technology-lab",
+    "https://feeds.arstechnica.com/arstechnica/tech-policy",
+    "https://feeds.arstechnica.com/arstechnica/science",
+    "https://feeds.arstechnica.com/arstechnica/features",
+    "https://www.wired.com/feed/category/science/latest/rss",
+    "https://www.wired.com/feed/category/ideas/latest/rss",
+    "https://www.wired.com/feed/tag/ai/latest/rss",
+    "https://theconversation.com/us/technology/articles.atom",
+    "https://slate.com/feeds/technology.rss",
+    "http://gizmodo.com/vip.xml",
+    "https://techcrunch.com/feed/",
+    "https://pluralistic.net/feed/",
+    "https://spacenews.com/feed/",
+    "https://hnrss.org/best",
+    "https://screenrant.com/feed/tag/star-trek/",
+    "https://api.quantamagazine.org/feed/",
+    "https://botsin.space/@APoD.rss"
+]
+
 // resources availabe to community members
 // See https://www.suffolk.edu/law/faculty-research/research/law-school-research-databases/washington-post
 var suffolk_law_feeds = [
@@ -78,24 +123,8 @@ var suffolk_law_feeds = [
     "https://theconversation.com/us/politics/articles.atom",
     "https://theconversation.com/us/technology/articles.atom",
     "https://theconversation.com/us/articles.atom",
-    "https://www.lawnext.com/feed"
-]
-
-var condenast_feeds = [
-    "http://www.newyorker.com/feed/news",
-    "http://www.newyorker.com/feed/culture",
-    "http://www.newyorker.com/feed/humor",
-    "http://www.newyorker.com/feed/tag/books/rss",
-    "http://www.newyorker.com/feed/tech",
-    "http://www.newyorker.com/feed/news/sporting-scene",   
-    "https://feeds.arstechnica.com/arstechnica/technology-lab",
-    "https://feeds.arstechnica.com/arstechnica/tech-policy",
-    "https://feeds.arstechnica.com/arstechnica/science",
-    "https://feeds.arstechnica.com/arstechnica/features",
-    "https://www.wired.com/feed/category/science/latest/rss",
-    "https://www.wired.com/feed/category/ideas/latest/rss",
-    "https://www.wired.com/feed/tag/ai/latest/rss",
-    "https://www.wired.com/feed/rss"
+    "https://www.lawnext.com/feed",
+    "https://masslawyersweekly.com/feed/"
 ]
 
 var feeds_long_list = [
@@ -208,22 +237,33 @@ var feeds_long_list = [
     "https://www.wired.com/feed/rss",
     "http://gizmodo.com/vip.xml",
     "https://techcrunch.com/feed/",
-    "https://www.lawnext.com/feed",
-    "https://www.techdirt.com/techdirt_rss.xml",
     "https://pluralistic.net/feed/",
+    "https://www.techdirt.com/techdirt_rss.xml",
+    "https://www.lawnext.com/feed",
+    "https://masslawyersweekly.com/feed/",
+    "https://api.quantamagazine.org/feed/",
+    "https://hnrss.org/best",
+    "https://screenrant.com/feed/tag/star-trek/",
     "https://xkcd.com/rss.xml",
     "https://spacenews.com/feed/",
     "https://botsin.space/@APoD.rss"
 ]
 
 test_feeds = [
-    //"https://screenrant.com/feed/tag/star-trek/",
-    //"https://masslawyersweekly.com/feed/",
+    
+    // Proxy doesn't resolve
+    //"http://rss.sciam.com/ScientificAmerican-Global",
+
+    //"works" but no new posts
     //"https://lawprofblawg.wordpress.com/feed/",
     //"https://www.reutersagency.com/feed/?best-regions=north-america&post_type=best",
+
+    // favicon issues
+    //"https://masslawyersweekly.com/feed/",
+    //"https://api.quantamagazine.org/feed/",
     //"https://hnrss.org/best",
-    //"http://rss.sciam.com/ScientificAmerican-Global",
-    //"https://api.quantamagazine.org/feed/"
+    //"https://screenrant.com/feed/tag/star-trek/",
+
 ]
 
 //default_feeds = test_feeds
