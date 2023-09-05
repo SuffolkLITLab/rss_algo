@@ -690,6 +690,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             displayed_cards = newsFeedContainer.childNodes.length
                             console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
                             lazyload();
+                            replace_broken();
                             get_quote();
                         }
                     })
@@ -716,6 +717,7 @@ document.addEventListener("DOMContentLoaded", function() {
             displayed_cards = newsFeedContainer.childNodes.length
             console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
             lazyload();
+            replace_broken();
             get_quote();
             crunch_numbers = false;
         }
@@ -1406,10 +1408,10 @@ document.addEventListener("DOMContentLoaded", function() {
     
     const clearUpvotesButton = document.getElementById("clear-upvotes");
     clearUpvotesButton.addEventListener("click", function() {
-        // Clear the "read" key from localStorage
+        // Clear the "upvotes" key from localStorage
         localStorage.removeItem("upvotes");
 
-        // Clear the read status of all articles in the upvotes object
+        // Clear the upvotes status of all articles in the upvotes object
         for (var member in upvotes) delete upvotes[member];
 
         // Update article styles and the feed list
@@ -1418,10 +1420,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const clearDownvotesButton = document.getElementById("clear-downvotes");
     clearDownvotesButton.addEventListener("click", function() {
-        // Clear the "read" key from localStorage
+        // Clear the "downvotes" key from localStorage
         localStorage.removeItem("downvotes");
 
-        // Clear the read status of all articles in the downvotes object
+        // Clear the downvotes status of all articles in the downvotes object
         for (var member in downvotes) delete downvotes[member];
 
         // Update article styles and the feed list
@@ -1482,7 +1484,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         </div>
                         <div class="modal-body">
                             <p>
-                                If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>, or just swap in a pre-made list and whittle it down over time. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings &amp; Data</i> to clear your history or one of the "wipe" options to remove old data</b>.</i>
+                                Remove individual feeds using the "Remove" buttons below, or wipe and/or replace your existing list. If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>.
+                            </p> 
+                            <p>
+                                Many folks like take a pre-made list and whittle it down and add to it over time. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings &amp; Data</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
                             </p>
                             <select id="feed_list">
                                 <option value="default_feeds">Generic US News Mix (default)</option>
@@ -1515,7 +1520,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const removeALLfeeds = document.getElementById("remove_all_feeds");
         
         removeALLaddSelection.addEventListener("click", function() {
-            let text = "This will empty your feed list, replacing it with the selection you just made, and it remove all records of read articles, which will effect any algo traing you may have done. Choose OK to continue.";
+            let text = "This will empty your current list of feeds, replacing it with the selection you just made. It will remove all current records relating to articles, including votes. Choose OK to continue.";
             if (confirm(text) == true) {
                 feed_name = document.getElementById("feed_list").value;
                 rssFeeds = window[feed_name]
@@ -1525,6 +1530,14 @@ document.addEventListener("DOMContentLoaded", function() {
                     <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
                     </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
                 `).join("");
+                // Clear the "upvotes" key from localStorage
+                localStorage.removeItem("upvotes");
+                // Clear the upvotes status of all articles in the upvotes object
+                for (var member in upvotes) delete upvotes[member];
+                // Clear the "downvotes" key from localStorage
+                localStorage.removeItem("downvotes");
+                // Clear the downvotes status of all articles in the downvotes object
+                for (var member in downvotes) delete downvotes[member];
                 // Clear the "read" key from localStorage
                 localStorage.removeItem("read");
                 // Clear the read status of all articles in the readArticles object
@@ -1539,7 +1552,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
         removeALLfeeds.addEventListener("click", function() {
-            let text = "This will empty your feed list and remove all records of read articles, which will effect any algo traing you may have done. Choose OK to continue.";
+            let text = "This will empty your feed list and remove all article records. This will reset your algo traing. Choose OK to continue.";
             if (confirm(text) == true) {
                 rssFeeds = []
                 localStorage.setItem("feeds",JSON.stringify(rssFeeds))
@@ -1548,6 +1561,14 @@ document.addEventListener("DOMContentLoaded", function() {
                     <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
                     </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
                 `).join("");
+                // Clear the "upvotes" key from localStorage
+                localStorage.removeItem("upvotes");
+                // Clear the upvotes status of all articles in the upvotes object
+                for (var member in upvotes) delete upvotes[member];
+                // Clear the "downvotes" key from localStorage
+                localStorage.removeItem("downvotes");
+                // Clear the downvotes status of all articles in the downvotes object
+                for (var member in downvotes) delete downvotes[member];
                 // Clear the "read" key from localStorage
                 localStorage.removeItem("read");
                 // Clear the read status of all articles in the readArticles object
@@ -1557,7 +1578,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 let lastLoad = 0;
                 localStorage.setItem("lastLoad", 0);
                 modal_win.hide();
-                //updateFeedList();
+                updateFeedList();
                 //get_quote();
             }
         });
@@ -1580,12 +1601,14 @@ document.addEventListener("DOMContentLoaded", function() {
         modal_win.show();
     });
 
-    const images = document.querySelectorAll(".favicon");
-    images.forEach((img) => {
-      img.addEventListener("error", function (event) {
-        event.target.src = "images/favicon.ico";
-        event.target.onerror = null;
-      });
-    });
+    function replace_broken(){
+        const images = document.querySelectorAll(".favicon");
+        images.forEach((img) => {
+          img.addEventListener("error", function (event) {
+            event.target.src = "images/favicon.ico";
+            event.target.onerror = null;
+          });
+        });    
+    }
 
 });
