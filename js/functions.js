@@ -484,6 +484,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 use_feeds = [singlefeed];
             } else {
                 use_feeds = rssFeeds;
+                n_feeds = 0;
             }
 
             const lookback = new Date();
@@ -492,7 +493,6 @@ document.addEventListener("DOMContentLoaded", function() {
             backstop = new Date(localStorage.backstop);
             
             errors = 0;
-            n_feeds = 0;
 
             use_feeds.forEach(feedUrl => {
                 fetchFeed(feedUrl)
