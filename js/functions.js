@@ -542,7 +542,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                             //console.log("des",pubDate,backstop,lookback,j,max_arts,rssFeeds)
 
-                            if ((pubDate >= backstop) && (pubDate >= lookback) && (j<(max_arts/(rssFeeds.length*0.49))) && (pubDate <= new Date())) {
+                            if ((pubDate >= backstop) && (pubDate >= lookback) && (j<(0.49*max_arts/rssFeeds.length)) && (pubDate <= new Date())) {
                                 
                                 if (xml.documentElement.nodeName=="feed") {
                                     link = item.querySelector("link").attributes["href"].nodeValue;
