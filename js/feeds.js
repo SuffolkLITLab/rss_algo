@@ -83,7 +83,7 @@ var geeek_feeds = [
     "https://hnrss.org/best",
     "https://screenrant.com/feed/tag/star-trek/",
     "https://api.quantamagazine.org/feed/",
-    "https://badastronomy.substack.com/p/jwsts-view-of-the-magnificently-dusty",
+    "https://badastronomy.substack.com/feed/",
     "https://botsin.space/@APoD.rss"
 ]
 
@@ -249,7 +249,7 @@ var feeds_long_list = [
     "https://screenrant.com/feed/tag/star-trek/",
     "https://xkcd.com/rss.xml",
     "https://spacenews.com/feed/",
-    "https://badastronomy.substack.com/p/jwsts-view-of-the-magnificently-dusty",
+    "https://badastronomy.substack.com/feed/",
     "https://botsin.space/@APoD.rss"
 ]
 
