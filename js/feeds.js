@@ -77,15 +77,18 @@ var geeek_feeds = [
     "https://slate.com/feeds/technology.rss",
     "http://gizmodo.com/vip.xml",
     "https://techcrunch.com/feed/",
+    "https://www.theinformation.com/feed",
     "https://pluralistic.net/feed/",
     "https://spacenews.com/feed/",
     "https://hnrss.org/best",
     "https://screenrant.com/feed/tag/star-trek/",
     "https://api.quantamagazine.org/feed/",
+    "https://badastronomy.substack.com/p/jwsts-view-of-the-magnificently-dusty",
     "https://botsin.space/@APoD.rss"
 ]
 
-// resources availabe to community members
+// These feeds are a mix of sites without paywalls and sites with paywalls for which 
+// the Suffolk Law community has access. 
 // See https://www.suffolk.edu/law/faculty-research/research/law-school-research-databases/washington-post
 var suffolk_law_feeds = [
     "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
@@ -246,23 +249,18 @@ var feeds_long_list = [
     "https://screenrant.com/feed/tag/star-trek/",
     "https://xkcd.com/rss.xml",
     "https://spacenews.com/feed/",
+    "https://badastronomy.substack.com/p/jwsts-view-of-the-magnificently-dusty",
     "https://botsin.space/@APoD.rss"
 ]
 
 test_feeds = [
     
-    // Proxy doesn't resolve
+    // CORS proxy doesn't resolve feed (entierly broken)
     //"http://rss.sciam.com/ScientificAmerican-Global",
 
-    //"works" but no new posts
+    // Seems to "work" but there are no new posts
     //"https://lawprofblawg.wordpress.com/feed/",
     //"https://www.reutersagency.com/feed/?best-regions=north-america&post_type=best",
-
-    // favicon issues
-    //"https://masslawyersweekly.com/feed/",
-    //"https://api.quantamagazine.org/feed/",
-    //"https://hnrss.org/best",
-    //"https://screenrant.com/feed/tag/star-trek/",
 
 ]
 

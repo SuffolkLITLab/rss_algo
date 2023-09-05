@@ -1454,7 +1454,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const addFeedButton = document.getElementById("add-feed");
     addFeedButton.addEventListener("click", function() {
         if (rssFeeds.length>=50) {
-            alert("Generally speaking, the more feeds you follow the more posts in your timeline and the slower the site will preform. You can shrink the size of your timeline but setting a shorter History window. Also, to accommodate large feed follows, we truncate feeds to avoid overloading your browser's storage. How much we have to cut is proportional to how many feeds you follow. So following a lot of feeds may cause you to miss posts if they are too far down the feed. If this issue comes up, consider following fewer feeds or checking in more often.")
+            alert("Generally speaking, the more feeds you follow the more posts in your timeline and the slower the site will preform. You can shrink the size of your timeline by setting a shorter History window. Also, to accommodate large feed follows, we truncate feeds to avoid overloading your browser's storage. How much we have to cut is proportional to how many feeds you follow. So following a lot of feeds may cause you to miss posts if they are too far down the feed. If this issue comes up, consider following fewer feeds or checking in more often.")
         }
         const newFeedUrl = prompt("Enter the URL for a new RSS feed:");
         if (newFeedUrl) {
@@ -1484,10 +1484,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         </div>
                         <div class="modal-body">
                             <p>
-                                Remove individual feeds using the "Remove" buttons below, or wipe and/or replace your existing list. If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>.
+                                Remove individual feeds using the "Remove" buttons below, or wipe and/or replace your existing list of feeds. If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>.
                             </p> 
                             <p>
-                                Many folks like take a pre-made list and whittle it down and add to it over time. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings &amp; Data</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
+                                Consider starting with a pre-made list. Then over time you can whittle it down and add new feeds as you like. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings &amp; Data</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
                             </p>
                             <select id="feed_list">
                                 <option value="default_feeds">Generic US News Mix (default)</option>
@@ -1520,7 +1520,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const removeALLfeeds = document.getElementById("remove_all_feeds");
         
         removeALLaddSelection.addEventListener("click", function() {
-            let text = "This will empty your current list of feeds, replacing it with the selection you just made. It will remove all current records relating to articles, including votes. Choose OK to continue.";
+            let text = "This will empty your current list of feeds, replacing it with the selection you made. It will remove all current records relating to articles, including votes. Choose OK to continue.";
             if (confirm(text) == true) {
                 feed_name = document.getElementById("feed_list").value;
                 rssFeeds = window[feed_name]
