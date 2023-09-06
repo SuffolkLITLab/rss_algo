@@ -84,6 +84,7 @@ var geeek_feeds = [
     "https://screenrant.com/feed/tag/star-trek/",
     "https://api.quantamagazine.org/feed/",
     "https://badastronomy.substack.com/feed/",
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA",
     "https://botsin.space/@APoD.rss"
 ]
 
@@ -263,6 +264,7 @@ test_feeds = [
     // Seems to "work" but there are no new posts
     //"https://lawprofblawg.wordpress.com/feed/",
     //"https://www.reutersagency.com/feed/?best-regions=north-america&post_type=best",
+    //"https://www.smithsonianmag.com/rss/air-space-magazine/"
 
 ]
 

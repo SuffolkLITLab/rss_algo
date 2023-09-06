@@ -568,6 +568,14 @@ document.addEventListener("DOMContentLoaded", function() {
                                     description = "";
                                 }
 
+                                if (description=="") {
+                                    try{
+                                        description = item.querySelector("media\\:description, description").textContent;
+                                    } catch (error) {
+                                        description = "";
+                                    }
+                                }
+
 
                                 if (description!=""){
         
@@ -598,16 +606,20 @@ document.addEventListener("DOMContentLoaded", function() {
                                     //const mediaThumbnail = mediaContent ? mediaContent.getAttribute("url") : null;
 
                                     try {
-                                        mediaThumbnail = item.querySelector("media\\:content, content").getAttribute("url");
+                                        mediaContent = item.querySelector("media\\:thumbnail, thumbnail");
+                                        if (mediaContent) {
+                                            mediaThumbnail = mediaContent.getAttribute("url");
+                                        } else {
+                                            mediaThumbnail = null
+                                        }
                                     } catch(error) {
                                         mediaThumbnail = null
                                     }
 
                                     if (Object.is(mediaThumbnail, null)) {
-                                        mediaContent = item.querySelector("media\\:thumbnail, thumbnail");
-                                        if (mediaContent) {
-                                            mediaThumbnail = mediaContent.getAttribute("url");
-                                        } else {
+                                        try {
+                                            mediaThumbnail = item.querySelector("media\\:content, content").getAttribute("url");
+                                        } catch(error) {
                                             mediaThumbnail = null
                                         }
                                     }
