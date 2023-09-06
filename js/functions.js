@@ -683,7 +683,9 @@ document.addEventListener("DOMContentLoaded", function() {
                         });
 
                         dedup_articles();
-                        reorderArticles();
+                        if (crunch_numbers) {
+                            reorderArticles();
+                        }
                         displayArticles();
                         updateItemCount();
                         if (crunch_numbers) {
@@ -702,6 +704,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             displayErrorPopup(feedTitle, feedUrl, errorMessage);
                         }
                         errors+=1
+                        n_feeds+=1
                         console.log("Error #"+errors+": ",feedUrl,errorMessage)
                     });
         
