@@ -2,7 +2,7 @@
 
 This code is used to breath life into [https://myRSSalgo.org/](https://myrssalgo.org/), a client-side open source algo-driven RSS reader. 
 
-The RSS algo lives on your device with your data. We make use of a proxy server to help facilitate access to feeds. So we know some of the feeds folks are consuming, but we don't use tracking tools that drop cookies like Google Anaylitics. We do, however, point to the properties provided in your RSS list, and many of these sites may use such. You may want to consider installing an ad blocker. Most importantly, on our end, however, all of your votes and views live in your browser. We just lunched and we're still woking things out, but if you don't mind the sparse documenation and a few bugs from time to time, feel free to play around.
+The RSS algo lives on your device with your data. We make use of a proxy server to help facilitate access to feeds. So we know some of the feeds folks are consuming, but we don't use tracking tools that drop cookies like Google Anaylitics. We do, however, point to the properties provided in your RSS list, and many of these sites may use such. You may want to consider installing an ad blocker. Most importantly, on our end, however, all of your votes and views live in your browser. We just lunched and we're still woking things out, but if you don't mind the sparse documentation and a few bugs from time to time, feel free to play around.
 
 Follow [#SuffolkRSSalgo](https://mastodon.social/deck/tags/suffolkrssalgo) on Mastodon for project updates.
 
@@ -21,10 +21,10 @@ If you're looking for local news in the US, you can probably find a [Patch.com](
     - [RSS Feeds | WIRED](https://www.wired.com/about/rss-feeds/)
     - [Slate’s RSS feeds.](https://slate.com/rss)
   
-3. And if you can't find anything that way, you're best bet is viewing a webpage's source (`right click + view source` in most browsers). This will open a text file where you can look for a link ending in `.rss`. Here, `Control/Command + F` is your friend. 
+3. And if you can't find anything that way, you're best bet is viewing a webpage's source (`right click + view source` in most browsers). This will open a text file where you can look for a link ending in `.rss`. Here, `Control/Command + F` is your friend. For example, this is how you can find YouTube and SubStack feeds which are of the form `https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA` and `https://badastronomy.substack.com/feed/` repectivly. 
 
 FWIW, here's a set of feeds I was able to find: [list of feeds](https://github.com/SuffolkLITLab/rss_algo/blob/main/js/feeds.js) They are the source of the groups found under "My Feeds." 
 
 # Troubleshooting
 
-Make sure that your url is a properly formated url (e.g. `https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml`). More suggestions coming soon.
+Make sure that your url is a properly formated url (e.g. `https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml`). If that doens'y work try opeing your feed in a browser like FireFox where it will show you the XML. I've noticed that a good number of sites have links to RSS feeds that haven't been updated in years despite new content being created (e.g., [https://www.smithsonianmag.com/rss/](https://www.smithsonianmag.com/rss/)). :(
