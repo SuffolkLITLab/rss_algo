@@ -284,7 +284,8 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('loading').style.display = "block";
 
         //If forking this repo, please use your own CORS proxy
-        feedUrl = "https://tools.suffolklitlab.org/rss_proxy/?url="+encodeURIComponent(feedUrl)
+        //feedUrl = "https://tools.suffolklitlab.org/rss_proxy/?url="+encodeURIComponent(feedUrl)
+        feedUrl = 'https://corsproxy.io/?' + encodeURIComponent(feedUrl); 
         
         const response = await fetch(feedUrl);
                         
@@ -475,6 +476,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (loadFeeds) {
 
             localStorage.setItem("lastLoad", Date.parse(new Date()));
+            localStorage.setItem("lastcooldown", savedcooldown);
 
             localStorage.setItem("feeds", JSON.stringify(rssFeeds));
                 
