@@ -1494,7 +1494,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <option value="papers_feeds">Papers: NYT, WaPo, WSJ</option>
                                 <option value="condenast_feeds">Condé Nast: New Yorker, ArsTechnica, Wired</option>
                                 <option value="geeek_feeds">Geekery: Science, Tech, Space, &amp; Star Trek</option>
-                                <option value="suffolk_law_feeds">Suffolk Special: Papers + Boston + Law</option>
+                                <option value="suffolk_law_feeds">Suffolk Mix: Papers + Boston + Law</option>
                                 <option value="feeds_long_list">Super Mega List (100+ feeds)</option>
                             </select>
                             </p>

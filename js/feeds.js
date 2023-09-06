@@ -126,8 +126,10 @@ var suffolk_law_feeds = [
     "https://theconversation.com/us/politics/articles.atom",
     "https://theconversation.com/us/technology/articles.atom",
     "https://theconversation.com/us/articles.atom",
+    "https://masslawyersweekly.com/feed/", 
     "https://www.lawnext.com/feed",
-    "https://masslawyersweekly.com/feed/"
+    "https://www.scotusblog.com/feed/",
+    "https://buttondown.email/LawyerExMachina/rss"
 ]
 
 var feeds_long_list = [
