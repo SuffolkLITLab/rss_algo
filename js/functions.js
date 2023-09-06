@@ -682,13 +682,11 @@ document.addEventListener("DOMContentLoaded", function() {
                             j+=1
                         });
 
-                        dedup_articles();
                         if (crunch_numbers) {
+                            dedup_articles();
                             reorderArticles();
-                        }
-                        displayArticles();
-                        updateItemCount();
-                        if (crunch_numbers) {
+                            displayArticles();
+                            updateItemCount();
                             displayed_cards = newsFeedContainer.childNodes.length
                             console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
                             lazyload();
