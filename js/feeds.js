@@ -84,7 +84,9 @@ var geeek_feeds = [
     "https://screenrant.com/feed/tag/star-trek/",
     "https://api.quantamagazine.org/feed/",
     "https://badastronomy.substack.com/feed/",
-    "https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA",
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", //3blue1brown
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UC415bOPUcGSamy543abLmRA", //Cleo Abram
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA", //Veritasium 
     "https://botsin.space/@APoD.rss"
 ]
 
@@ -118,6 +120,7 @@ var suffolk_law_feeds = [
     "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
     "https://feeds.a.dj.com/rss/RSSWSJD.xml",
     "https://feeds.a.dj.com/rss/RSSLifestyle.xml",
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UC6ZFN9Tx6xh-skXCuRHCDpQ", //PBS News Hour
     "https://theconversation.com/us/arts/articles.atom",
     "https://theconversation.com/us/business/articles.atom",
     "https://theconversation.com/us/education/articles.atom",
@@ -195,6 +198,7 @@ var feeds_long_list = [
     "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
     "https://feeds.a.dj.com/rss/RSSWSJD.xml",
     "https://feeds.a.dj.com/rss/RSSLifestyle.xml",
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UC6ZFN9Tx6xh-skXCuRHCDpQ", //PBS News Hour
     "https://feeds.bloomberg.com/markets/news.rss",
     "https://feeds.bloomberg.com/politics/news.rss",
     "https://feeds.bloomberg.com/technology/news.rss",
@@ -253,6 +257,9 @@ var feeds_long_list = [
     "https://xkcd.com/rss.xml",
     "https://spacenews.com/feed/",
     "https://badastronomy.substack.com/feed/",
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", //3blue1brown
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UC415bOPUcGSamy543abLmRA", //Cleo Abram
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA", //Veritasium 
     "https://botsin.space/@APoD.rss"
 ]
 

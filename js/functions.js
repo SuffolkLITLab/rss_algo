@@ -295,6 +295,7 @@ document.addEventListener("DOMContentLoaded", function() {
         n_feeds += 1;
         if (n_feeds>=rssFeeds.length) {
             document.getElementById('loading').style.display = "none";
+            document.getElementById('loading').innerHTML = "<i>&nbsp;Loading...&nbsp;</i>";
         } else {
             document.getElementById('loading').innerHTML = "<i>&nbsp;Loading feed "+(1+n_feeds)+" of "+rssFeeds.length+".&nbsp;</i>" 
         }
