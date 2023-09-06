@@ -695,6 +695,10 @@ document.addEventListener("DOMContentLoaded", function() {
                             j+=1
                         });
 
+                        if (j==0){
+                            console.log("** No relevant items found in "+feedUrl);
+                        }
+
                         dedup_articles();
                         if (crunch_numbers) {
                             reorderArticles();
@@ -801,7 +805,8 @@ document.addEventListener("DOMContentLoaded", function() {
     function domain_from_url(url) {
         var result
         var match
-        if (match = url.match(/^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n\?\=]+)/im)) {
+        //if (match = url.match(/^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n\?\=]+)/im)) {
+        if (match = url.match(/^https?:\/\/([^\/]+)/)) {
             result = match[1]
             if (match = result.match(/^[^\.]+\.(.+\..+)$/)) {
                 result = match[1]
@@ -873,12 +878,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 local_pubDate = new Date(pubDate).toLocaleString();
 
+                domain_for_img = domain_from_url(link);
+
                 if (mastodon) {
                     favicon = masto_profile
                     card_body_text = ` <h5 class="card-title">A Post From <a href="https://joinmastodon.org/" target="_blank" class="masto_post">Mastodon</a></h5><div style="height:100%;overflow-y:auto;">${description}</div>`
                     share_html = `<div class="pocket_share"><a href="javascript:void('')" onClick="save_to_poeket(\`${link}\`)"><div style="background: url('https://getpocket.com/i/v3/pocket_logo.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
                 } else {
-                    domain_for_img = domain_from_url(link);
                     favicon = "https://"+domain_for_img+"/favicon.ico"
                     card_body_text = `<h5 class="card-title">${title}</h5><p class="card-text">${description}</p>`
                     share_html = `<div class="masto_share"><a href="javascript:void('')" onclick="MastodonShare(\`${title};url=${link}\`);">Mastodon</a></div>
@@ -923,7 +929,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             </div>
                         </div>
                         <div class="card-footer">
-                            <img class="favicon" src="${favicon}" height="18px" align="left/> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small> 
+                            <a href="https://${domain_for_img}" target="_blank"><img class="favicon" src="${favicon}" height="18px"></a> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small> 
                             <span class="btn remove_feed" data-feed-index="${feedUrl}" data-feed-name="${feedTitle}">🚫</span>
                         </div>
                     </div>

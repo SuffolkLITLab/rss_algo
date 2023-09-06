@@ -3,7 +3,7 @@ var default_feeds = [
     "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
     "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
     "https://feeds.npr.org/1001/rss.xml", //news
-    "https://www.wgbh.org/index.rss",
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCx_SjDi4CS5ALkWCS9ffldQ", //GBH News
     "https://theconversation.com/us/articles.atom",
     "http://www.newyorker.com/feed/everything",
     "https://feeds.arstechnica.com/arstechnica/index",
@@ -129,6 +129,14 @@ var suffolk_law_feeds = [
     "https://theconversation.com/us/health/articles.atom",
     "https://theconversation.com/us/politics/articles.atom",
     "https://theconversation.com/us/technology/articles.atom",
+    "https://patch.com/feeds/aol/massachusetts/boston",
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCx_SjDi4CS5ALkWCS9ffldQ", //GBH News
+    "https://www.wgbh.org/news/local.rss",
+    "https://www.wgbh.org/news/politics.rss",
+    "https://www.wgbh.org/news/education-news.rss",
+    "https://www.wgbh.org/news/housing.rss",
+    "https://www.wgbh.org/news/health.rss",
+    "https://www.wgbh.org/news/commentary.rss",
     "https://theconversation.com/us/articles.atom",
     "https://masslawyersweekly.com/feed/", 
     "https://www.lawnext.com/feed",
@@ -223,13 +231,13 @@ var feeds_long_list = [
     "https://theconversation.com/us/politics/articles.atom",
     "https://theconversation.com/us/technology/articles.atom",
     "https://theconversation.com/us/articles.atom",
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCx_SjDi4CS5ALkWCS9ffldQ", //GBH News
     "https://www.wgbh.org/news/local.rss",
     "https://www.wgbh.org/news/politics.rss",
     "https://www.wgbh.org/news/education-news.rss",
     "https://www.wgbh.org/news/housing.rss",
     "https://www.wgbh.org/news/health.rss",
     "https://www.wgbh.org/news/commentary.rss",
-    "https://www.wgbh.org/index.rss",
     "https://www.masslive.com/arc/outboundfeeds/rss/?outputType=xml",
     "https://patch.com/feeds/aol/massachusetts/boston",
     "https://patch.com/feeds/aol/massachusetts/somerville",
