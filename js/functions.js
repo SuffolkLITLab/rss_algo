@@ -286,6 +286,7 @@ document.addEventListener("DOMContentLoaded", function() {
         try {
             feedUrl = "https://tools.suffolklitlab.org/rss_proxy/?url="+encodeURIComponent(feedUrl)
         } catch (error) {
+            console.log("Using corsproxy.io for "+feedUrl)
             feedUrl = 'https://corsproxy.io/?' + encodeURIComponent(feedUrl);
         }
         
