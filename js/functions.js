@@ -682,8 +682,8 @@ document.addEventListener("DOMContentLoaded", function() {
                             j+=1
                         });
 
+                        dedup_articles();
                         if (crunch_numbers) {
-                            dedup_articles();
                             reorderArticles();
                             displayArticles();
                             updateItemCount();
