@@ -283,9 +283,11 @@ document.addEventListener("DOMContentLoaded", function() {
     async function fetchFeed(feedUrl) {
         document.getElementById('loading').style.display = "block";
 
-        //If forking this repo, please use your own CORS proxy
-        //feedUrl = "https://tools.suffolklitlab.org/rss_proxy/?url="+encodeURIComponent(feedUrl)
-        feedUrl = 'https://corsproxy.io/?' + encodeURIComponent(feedUrl); 
+        try {
+            feedUrl = "https://tools.suffolklitlab.org/rss_proxy/?url="+encodeURIComponent(feedUrl)
+        } catch (error) {
+            feedUrl = 'https://corsproxy.io/?' + encodeURIComponent(feedUrl);
+        }
         
         const response = await fetch(feedUrl);
                         
