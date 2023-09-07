@@ -283,19 +283,21 @@ document.addEventListener("DOMContentLoaded", function() {
     async function fetchFeed(feedUrl) {
         document.getElementById('loading').style.display = "block";
 
-        try {
-            feedUrl = "https://tools.suffolklitlab.org/rss_proxy/?url="+encodeURIComponent(feedUrl)
-        } catch (error) {
-            console.log("Using corsproxy.io for "+feedUrl)
-            feedUrl = 'https://corsproxy.io/?' + encodeURIComponent(feedUrl);
-        }
+        feedUrl_prox = "https://suffolklitlab.pythonanywhere.com/rss_proxy/?url="+encodeURIComponent(feedUrl)       
         
-        const response = await fetch(feedUrl);
-                        
+        const response = await fetch(feedUrl_prox);
         if (!response.ok) {
-            throw new Error(`Request failed with status ${response.status}`);
+            //throw new Error(`Request failed with status ${response.status}`);
+            console.log("Trying corsproxy.io for "+feedUrl)
+            feedUrl_prox = 'https://corsproxy.io/?' + encodeURIComponent(feedUrl);
+            let response = await fetch(feedUrl_prox);    
+            if (!response.ok) {
+                console.log("Error fetching "+feedUrl)
+                throw new Error(`Request failed with status ${response.status}`);
+            }
         }
         const data = await response.text();
+
         n_feeds += 1;
         if (n_feeds>=rssFeeds.length) {
             document.getElementById('loading').style.display = "none";
@@ -454,7 +456,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function extractContent(s) {
         var span = document.createElement('span');
-        span.innerHTML = s;
+        span.innerHTML = s.replace(/\n/g, ' ');
         return span.textContent || span.innerText;
     };
 
@@ -1419,9 +1421,11 @@ document.addEventListener("DOMContentLoaded", function() {
         
         localStorage.setItem("articles", JSON.stringify(articles));  
 
-        articles.sort((a, b) => new Date(a[1]) - new Date(b[1]));
-        //console.log("de",articles[0]["pubDate"],articles[articles.length-1]["pubDate"])
-        localStorage.setItem("backstop",articles[articles.length-1]["pubDate"])
+        try {
+            articles.sort((a, b) => new Date(a[1]) - new Date(b[1]));
+            //console.log("de",articles[0]["pubDate"],articles[articles.length-1]["pubDate"])
+            localStorage.setItem("backstop",articles[articles.length-1]["pubDate"])                
+        } catch (error) {}
         
     }
 
@@ -1479,7 +1483,7 @@ document.addEventListener("DOMContentLoaded", function() {
         localStorage.setItem("lastLoad", 0);
 
         // Update article styles and the feed list
-        updateFeedList(true);
+        updateFeedList();
         updateItemCount();
         get_quote();
     });            
