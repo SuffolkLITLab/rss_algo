@@ -45,7 +45,7 @@ function report() {
                 tfidf_size = ((localStorage["upTFIDF"].length + "upTFIDF".length) * 2)/1024/Object.keys(JSON.parse(localStorage.upvotes)).length;
                 size_per_art = (vote_size+read_size*2+tfidf_size*1.7+size*1.5); // (size_votes_item + size_read_item*kept + size_TFIDF*kept + sizer_per_stored_article*padding)
                 feed_size = ((localStorage["feeds"].length + "feeds".length) * 2)/1024/Object.keys(JSON.parse(localStorage.feeds)).length;
-                max_arts = Math.round((5000*0.95-100-feed_size)/size_per_art)  // 95% of limit - 100 for all settings 
+                max_arts = Math.round((5000*1-100-feed_size)/size_per_art)  // 100% of limit - 100 for all settings 
             } catch (error) {}
             console.log("Article Cap: "+max_arts);
         }
