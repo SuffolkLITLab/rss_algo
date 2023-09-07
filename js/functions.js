@@ -778,7 +778,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         articles.sort((a, b) => new Date(a.pubDate) - new Date(b.pubDate));
 
-        keep_last = Math.round(max_arts*2);
+        keep_last = Math.round(max_arts*1.5);
         articles = articles.slice(-keep_last)
         
         articles.sort((a, b) => {
