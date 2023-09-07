@@ -18,6 +18,9 @@
 
 /* General Content */
 
+.modal {
+    z-index: 4000000000;
+}
 select {
     width:100%;
     padding:3px;
