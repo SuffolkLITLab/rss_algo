@@ -3,7 +3,7 @@ var default_feeds = [
     "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
     "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
     "https://feeds.npr.org/1001/rss.xml", //news
-    "https://www.youtube.com/feeds/videos.xml?channel_id=UCx_SjDi4CS5ALkWCS9ffldQ", //GBH News
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UC6ZFN9Tx6xh-skXCuRHCDpQ", //PBS News Hour
     "https://theconversation.com/us/articles.atom",
     "http://www.newyorker.com/feed/everything",
     "https://feeds.arstechnica.com/arstechnica/index",

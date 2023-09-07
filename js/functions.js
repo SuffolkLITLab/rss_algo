@@ -1573,6 +1573,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 localStorage.removeItem("read");
                 // Clear the read status of all articles in the readArticles object
                 for (var member in readArticles) delete readArticles[member];
+                let upTFIDF = {};
+                let downTFIDF = {};
                 articles = [];
                 localStorage.setItem("articles", JSON.stringify(articles));
                 let lastLoad = 0;
@@ -1604,6 +1606,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 localStorage.removeItem("read");
                 // Clear the read status of all articles in the readArticles object
                 for (var member in readArticles) delete readArticles[member];
+                let upTFIDF = {};
+                let downTFIDF = {};
                 articles = [];
                 localStorage.setItem("articles", JSON.stringify(articles));
                 let lastLoad = 0;
