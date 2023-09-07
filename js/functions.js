@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", function() {
     async function fetchFeed(feedUrl) {
         document.getElementById('loading').style.display = "block";
 
-        feedUrl_prox = "https://suffolklitlab.pythonanywhere.com/rss_proxy/?url="+encodeURIComponent(feedUrl)       
+        feedUrl_prox = "https://tools.suffolklitlab.org/rss_proxy/?url="+encodeURIComponent(feedUrl)       
         
         const response = await fetch(feedUrl_prox);
         if (!response.ok) {
@@ -303,7 +303,7 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('loading').style.display = "none";
             document.getElementById('loading').innerHTML = "<i>&nbsp;Loading...&nbsp;</i>";
         } else {
-            document.getElementById('loading').innerHTML = "<i>&nbsp;Loading feed "+(1+n_feeds)+" of "+rssFeeds.length+".&nbsp;</i>" 
+            document.getElementById('loading').innerHTML = "<i>&nbsp;Loading feed "+(1+n_feeds)+" of "+rssFeeds.length+" . . .&nbsp;</i>" 
         }
 
         if (n_feeds>=(rssFeeds.length)) {
@@ -395,7 +395,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const cutoffValueElement = document.getElementById("cutoff-value");
     
     // Retrieve cutoff value from localStorage (if available)
-    const savedcutoff = localStorage.getItem("cutoff") || -2;
+    const savedcutoff = localStorage.getItem("cutoff") || -1.5;
     if (savedcutoff) {
         cutoffSlider.value = savedcutoff;
         cutoffValueElement.textContent = savedcutoff;

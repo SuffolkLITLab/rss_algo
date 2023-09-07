@@ -79,6 +79,8 @@ var geeek_feeds = [
     "https://techcrunch.com/feed/",
     "https://www.theinformation.com/feed",
     "https://pluralistic.net/feed/",
+    "https://xkcd.com/rss.xml",
+    "https://feeds.feedburner.com/mcsweeneys",
     "https://spacenews.com/feed/",
     "https://hnrss.org/best",
     "https://screenrant.com/feed/tag/star-trek/",
@@ -263,6 +265,7 @@ var feeds_long_list = [
     "https://hnrss.org/best",
     "https://screenrant.com/feed/tag/star-trek/",
     "https://xkcd.com/rss.xml",
+    "https://feeds.feedburner.com/mcsweeneys",
     "https://spacenews.com/feed/",
     "https://badastronomy.substack.com/feed/",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", //3blue1brown
