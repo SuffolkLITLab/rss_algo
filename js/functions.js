@@ -483,7 +483,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
             localStorage.setItem("feeds", JSON.stringify(rssFeeds));
                 
-            newsFeedContainer.innerHTML = "";
+            document.getElementById('news-feed').innerHTML = ` <div style="float:left;width:100%;height:80px;"><div id="spinner_here" style="margin:0 auto;width:65px;">&nbsp;</div></div>`;
+            if (localStorage.getItem("darkMode")=="enabled") {
+                tickcolor = '#ddd';		
+            } else {
+                tickcolor = '#000';		
+            }
+            start_spinner('spinner_here',tickcolor);
 
             if (singlefeed.length>0) {
                 n_feeds = rssFeeds.length - 1;
@@ -1637,3 +1643,26 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
 });
+
+
+function start_spinner(target_id,tickcolor='#000') {
+    var opts = {
+      lines: 10, // The number of lines to draw
+      length: 15, // The length of each line
+      width: 5, // The line thickness
+      radius: 12, // The radius of the inner circle
+      corners: 1, // Corner roundness (0..1)
+      rotate: 0, // The rotation offset
+      color: tickcolor, // #rgb or #rrggbb
+      speed: 1, // Rounds per second
+      trail: 60, // Afterglow percentage
+      shadow: false, // Whether to render a shadow
+      hwaccel: false, // Whether to use hardware acceleration
+      className: 'spinner', // The CSS class to assign to the spinner
+      zIndex: 2e9, // The z-index (defaults to 2000000000)
+      top: '10', // Top position relative to parent in px
+      left: '0' // Left position relative to parent in px
+    };
+    var target = document.getElementById(target_id);
+    var spinner = new Spinner(opts).spin(target);
+}
