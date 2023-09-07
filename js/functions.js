@@ -778,7 +778,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         articles.sort((a, b) => new Date(a.pubDate) - new Date(b.pubDate));
 
-        keep_last = Math.round(max_arts*1.5);
+        keep_last = Math.round(max_arts*2);
         articles = articles.slice(-keep_last)
         
         articles.sort((a, b) => {
@@ -1390,10 +1390,10 @@ document.addEventListener("DOMContentLoaded", function() {
         const unreadCount = countUnreadArticles().toLocaleString("en-US"); 
         const readCountElement = document.getElementById("read-count");
         const unreadCountElement = document.getElementById("unread-count");
-        if (readCount<=1000) {
+        if (readCount<=500) {
             readCountElement.textContent = `Seen: ${readCount}`;
         } else {
-            readCountElement.textContent = `Seen: 1,000+`;
+            readCountElement.textContent = `Seen: 500+`;
         }
         unreadCountElement.textContent = `New: ${unreadCount}`;
 
@@ -1420,7 +1420,7 @@ document.addEventListener("DOMContentLoaded", function() {
         localStorage.setItem("articles", JSON.stringify(articles));  
 
         articles.sort((a, b) => new Date(a[1]) - new Date(b[1]));
-        //console.log("de",articles[0]["pubDate"],articles[articles.length-1]["pubDate"])
+        console.log("de",articles[0]["pubDate"],articles[articles.length-1]["pubDate"])
         localStorage.setItem("backstop",articles[articles.length-1]["pubDate"])
         
     }
