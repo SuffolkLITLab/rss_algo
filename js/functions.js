@@ -260,8 +260,8 @@ document.addEventListener("DOMContentLoaded", function() {
     try {
         articles.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
         //console.log(articles)
-        console.log("First and Last dates: \n",articles[articles.length-1]["pubDate"],"\n",articles[0]["pubDate"])
-        console.log("Setting backstop:",articles[articles.length-1]["pubDate"])
+        //console.log("First and Last dates: \n",articles[articles.length-1]["pubDate"],"\n",articles[0]["pubDate"])
+        //console.log("Setting backstop:",articles[articles.length-1]["pubDate"])
         localStorage.setItem("backstop",articles[articles.length-1]["pubDate"])                
     } catch (error) {}
     if (localStorage.backstop) {
@@ -571,9 +571,9 @@ document.addEventListener("DOMContentLoaded", function() {
                                 }
                             }
                             
-                            //console.log("des",pubDate,backstop,lookback,j,max_arts,rssFeeds)
+                            //console.log("Articles",articles.length)
 
-                            if ((pubDate >= backstop) && (pubDate >= lookback) && (j<(0.49*max_arts/rssFeeds.length)) && (pubDate <= new Date())) {
+                            if ((pubDate >= backstop) && (pubDate >= lookback) && (j<(1*max_arts/rssFeeds.length)) && (pubDate <= new Date())) {
                                 
                                 if (xml.documentElement.nodeName=="feed") {
                                     link = item.querySelector("link").attributes["href"].nodeValue;
