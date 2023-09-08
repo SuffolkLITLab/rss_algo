@@ -77,6 +77,7 @@ var geeek_feeds = [
     "https://slate.com/feeds/technology.rss",
     "http://gizmodo.com/vip.xml",
     "https://techcrunch.com/feed/",
+    "https://www.techdirt.com/techdirt_rss.xml",
     "https://www.theinformation.com/feed",
     "https://pluralistic.net/feed/",
     "https://xkcd.com/rss.xml",
