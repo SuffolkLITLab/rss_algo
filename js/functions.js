@@ -335,7 +335,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             } 
                             
-            console.log(HiddenModeState)
             if ((!HiddenModeState) && (articleContainer.classList.contains("read-article"))) {
                 articleContainer.remove()
             }
@@ -902,145 +901,125 @@ document.addEventListener("DOMContentLoaded", function() {
                 practical_cutoff = savedcutoff;
             }
 
+            const HiddenModeState = localStorage.getItem("hiddenMode") === "true";
+            //console.log(!HiddenModeState,!isRead)
+            if ((!HiddenModeState && !isRead) || (HiddenModeState)) {
 
-            if ((Date.parse(pubDate) >= Date.parse(twoWeeksAgo)) && priorityRating >= ratings_mean+ratings_std*(practical_cutoff)) {
+                if ((Date.parse(pubDate) >= Date.parse(twoWeeksAgo)) && priorityRating >= ratings_mean+ratings_std*(practical_cutoff)) {
 
-                const article = document.createElement("div");
-                article.setAttribute("data-article-index", index); 
-                article.setAttribute("data-item-id", itemId);
-                article.className = `col-xl-4 col-lg-5 col-md-6 col-sm-12 article-container ${isRead ? 'read-article' : ''}`;
+                    const article = document.createElement("div");
+                    article.setAttribute("data-article-index", index); 
+                    article.setAttribute("data-item-id", itemId);
+                    article.className = `col-xl-4 col-lg-5 col-md-6 col-sm-12 article-container ${isRead ? 'read-article' : ''}`;
 
-                if (unknown_pubDate){
-                    local_pubDate = "Publication date unknown";
-                } else {
-                    local_pubDate = new Date(pubDate).toLocaleString();
-                }
-
-                domain_for_img = domain_from_url(link);
-
-                if (mastodon) {
-                    favicon = masto_profile
-                    card_body_text = ` <h5 class="card-title">A Post From <a href="https://joinmastodon.org/" target="_blank" class="masto_post">Mastodon</a></h5><div style="height:100%;overflow-y:auto;">${description}</div>`
-                    share_html = `<div class="pocket_share"><a href="javascript:void('')" onClick="save_to_poeket(\`${link}\`)"><div style="background: url('https://getpocket.com/i/v3/pocket_logo.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
-                } else {
-                    favicon = "https://"+domain_for_img+"/favicon.ico"
-                    card_body_text = `<h5 class="card-title">${title}</h5><p class="card-text">${description}</p>`
-                    share_html = `<div class="masto_share"><a href="javascript:void('')" onclick="MastodonShare(\`${title};url=${link}\`);">Mastodon</a></div>
-                        <div class="pocket_share"><a href="javascript:void('')" onClick="save_to_poeket(\`${link}\`)"><div style="background: url('https://getpocket.com/i/v3/pocket_logo.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
-                }
-
-                if (savedIgnoreImages){
-                    img_html = `
-                        <div style="postion:relative;z-index:0;top:0;height:33px;"></div>`
-                } else {
-                    if (mediaThumbnail) {
-                        if (mediaThumbnail.match(/\.mp4$/i)) {
-                            img_html = `
-                            <div style="postion:relative;z-index:0;top:0"><video width="100%" controls>
-                            <source src="${mediaThumbnail}" type="video/mp4">
-                            Your browser does not support the video tag.
-                            </video> </div>`
-                        }
+                    if (unknown_pubDate){
+                        local_pubDate = "Publication date unknown";
+                    } else {
+                        local_pubDate = new Date(pubDate).toLocaleString();
                     }
-                    img_html = `
-                        <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img data-src="${mediaThumbnail}" class="lazyload card-img-top thumbnail-image">` : '<img data-src="images/placeholder.png" class="lazyload card-img-top thumbnail-image">'}</div>`
-                }
 
-                article.innerHTML = `
-                    <div class="card">
-                        ${share_html}
-                        ${img_html}
-                        
-                        <div class="card-body">
-                                <!--<div class="priority-rating">${priorityRating}</div>-->
-                                ${card_body_text}
-                                <p class="card-text"><small class="text-muted">${local_pubDate}</small></p>
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <button class="btn btn-success upvote ${hasUpvote ? 'thumbs-up' : ''}" data-item-id="${itemId}">👍</button>
-                                    <button class="btn btn-danger downvote ${hasDownvote ? 'thumbs-down' : ''}" data-item-id="${itemId}">👎</button>
-                                    <button class="btn btn-secondary skip ${isRead ? 'skip-read' : ''}" data-item-id="${itemId}">Seen</button>
-                                </div>
-                                <div>
-                                <a href="${link}" class="btn btn-${isRead ? 'secondary' : 'primary'} read-button" target="_blank">${isRead ? 'View Again' : 'Open'}</a>
+                    domain_for_img = domain_from_url(link);
+
+                    if (mastodon) {
+                        favicon = masto_profile
+                        card_body_text = ` <h5 class="card-title">A Post From <a href="https://joinmastodon.org/" target="_blank" class="masto_post">Mastodon</a></h5><div style="height:100%;overflow-y:auto;">${description}</div>`
+                        share_html = `<div class="pocket_share"><a href="javascript:void('')" onClick="save_to_poeket(\`${link}\`)"><div style="background: url('https://getpocket.com/i/v3/pocket_logo.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
+                    } else {
+                        favicon = "https://"+domain_for_img+"/favicon.ico"
+                        card_body_text = `<h5 class="card-title">${title}</h5><p class="card-text">${description}</p>`
+                        share_html = `<div class="masto_share"><a href="javascript:void('')" onclick="MastodonShare(\`${title};url=${link}\`);">Mastodon</a></div>
+                            <div class="pocket_share"><a href="javascript:void('')" onClick="save_to_poeket(\`${link}\`)"><div style="background: url('https://getpocket.com/i/v3/pocket_logo.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
+                    }
+
+                    if (savedIgnoreImages){
+                        img_html = `
+                            <div style="postion:relative;z-index:0;top:0;height:33px;"></div>`
+                    } else {
+                        if (mediaThumbnail) {
+                            if (mediaThumbnail.match(/\.mp4$/i)) {
+                                img_html = `
+                                <div style="postion:relative;z-index:0;top:0"><video width="100%" controls>
+                                <source src="${mediaThumbnail}" type="video/mp4">
+                                Your browser does not support the video tag.
+                                </video> </div>`
+                            }
+                        }
+                        img_html = `
+                            <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img data-src="${mediaThumbnail}" class="lazyload card-img-top thumbnail-image">` : '<img data-src="images/placeholder.png" class="lazyload card-img-top thumbnail-image">'}</div>`
+                    }
+
+                    article.innerHTML = `
+                        <div class="card">
+                            ${share_html}
+                            ${img_html}
+                            
+                            <div class="card-body">
+                                    <!--<div class="priority-rating">${priorityRating}</div>-->
+                                    ${card_body_text}
+                                    <p class="card-text"><small class="text-muted">${local_pubDate}</small></p>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <button class="btn btn-success upvote ${hasUpvote ? 'thumbs-up' : ''}" data-item-id="${itemId}">👍</button>
+                                        <button class="btn btn-danger downvote ${hasDownvote ? 'thumbs-down' : ''}" data-item-id="${itemId}">👎</button>
+                                        <button class="btn btn-secondary skip ${isRead ? 'skip-read' : ''}" data-item-id="${itemId}">Seen</button>
+                                    </div>
+                                    <div>
+                                    <a href="${link}" class="btn btn-${isRead ? 'secondary' : 'primary'} read-button" target="_blank">${isRead ? 'View Again' : 'Open'}</a>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="card-footer">
+                                <a href="https://${domain_for_img}" target="_blank"><img class="favicon" src="${favicon}" height="18px"></a> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small> 
+                                <span class="btn remove_feed" data-feed-index="${feedUrl}" data-feed-name="${feedTitle}">🚫</span>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <a href="https://${domain_for_img}" target="_blank"><img class="favicon" src="${favicon}" height="18px"></a> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small> 
-                            <span class="btn remove_feed" data-feed-index="${feedUrl}" data-feed-name="${feedTitle}">🚫</span>
-                        </div>
-                    </div>
-                `;
+                    `;
 
-                newsFeedContainer.appendChild(article);
+                    newsFeedContainer.appendChild(article);
 
-                const upvoteButton = article.querySelector(".upvote");
-                const downvoteButton = article.querySelector(".downvote");
-                const skipButton = article.querySelector(".skip");
-                const readButton = article.querySelector(".read-button");
+                    const upvoteButton = article.querySelector(".upvote");
+                    const downvoteButton = article.querySelector(".downvote");
+                    const skipButton = article.querySelector(".skip");
+                    const readButton = article.querySelector(".read-button");
 
-                upvoteButton.addEventListener("click", function() {
-                    if (downvotes[itemId]) {
-                        delete downvotes[itemId];
-                        localStorage.setItem("downvotes", JSON.stringify(downvotes));
-                    }
-                    
-                    if (upvotes[itemId]) {
-                        delete upvotes[itemId];
-                        localStorage.setItem("upvotes", JSON.stringify(upvotes));
-                    } else {
-                        upvotes[itemId] = true;
-                        localStorage.setItem("upvotes", JSON.stringify(upvotes));
-                    }
-                    localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts))));
-                    
-                    updateArticleStyles();
-                });
+                    upvoteButton.addEventListener("click", function() {
+                        if (downvotes[itemId]) {
+                            delete downvotes[itemId];
+                            localStorage.setItem("downvotes", JSON.stringify(downvotes));
+                        }
+                        
+                        if (upvotes[itemId]) {
+                            delete upvotes[itemId];
+                            localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                        } else {
+                            upvotes[itemId] = true;
+                            localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                        }
+                        localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts))));
+                        
+                        updateArticleStyles();
+                    });
 
-                downvoteButton.addEventListener("click", function() {
-                    if (upvotes[itemId]) {
-                        delete upvotes[itemId];
-                        localStorage.setItem("upvotes", JSON.stringify(upvotes));
-                    }
-                    
-                    if (downvotes[itemId]) {
-                        delete downvotes[itemId];
-                        localStorage.setItem("downvotes", JSON.stringify(downvotes));
-                    } else {
-                        downvotes[itemId] = true;
-                        localStorage.setItem("downvotes", JSON.stringify(downvotes));
-                    }
-                    localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-max_arts))));
-                    
-                    updateArticleStyles();
-                });
+                    downvoteButton.addEventListener("click", function() {
+                        if (upvotes[itemId]) {
+                            delete upvotes[itemId];
+                            localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                        }
+                        
+                        if (downvotes[itemId]) {
+                            delete downvotes[itemId];
+                            localStorage.setItem("downvotes", JSON.stringify(downvotes));
+                        } else {
+                            downvotes[itemId] = true;
+                            localStorage.setItem("downvotes", JSON.stringify(downvotes));
+                        }
+                        localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-max_arts))));
+                        
+                        updateArticleStyles();
+                    });
 
-                skipButton.addEventListener("click", function () {
-                    const articleIndex = parseInt(article.getAttribute("data-article-index"));
-                    readArticles[itemId] = new Date().toISOString();
-                    localStorage.setItem("read", JSON.stringify(readArticles));
-
-                    // Mark the article as read in the articles array
-                    articles[articleIndex].isRead = true;
-
-                    // Get the parent container of the clicked skip button
-                    const articleContainer = skipButton.closest(".article-container");
-
-                    // Update the Open button behavior
-                    updateOpenButton(articleContainer);
-
-                    // Move the article container to the end of the list
-                    moveCardToEnd(articleContainer);
-
-                    // Update the unread count
-                    updateItemCount();
-                    get_quote();
-                });
-
-                readButton.addEventListener("click", function() {
-                    const articleIndex = parseInt(article.getAttribute("data-article-index"));
-                    if (!isRead) {
+                    skipButton.addEventListener("click", function () {
+                        const articleIndex = parseInt(article.getAttribute("data-article-index"));
                         readArticles[itemId] = new Date().toISOString();
                         localStorage.setItem("read", JSON.stringify(readArticles));
 
@@ -1059,31 +1038,55 @@ document.addEventListener("DOMContentLoaded", function() {
                         // Update the unread count
                         updateItemCount();
                         get_quote();
-                    }
-                });
+                    });
 
-                const RemoveFeedButton = article.querySelector(".remove_feed");
+                    readButton.addEventListener("click", function() {
+                        const articleIndex = parseInt(article.getAttribute("data-article-index"));
+                        if (!isRead) {
+                            readArticles[itemId] = new Date().toISOString();
+                            localStorage.setItem("read", JSON.stringify(readArticles));
 
-                RemoveFeedButton.addEventListener("click", function() {
-                    if (feedUrl == "undefined" || typeof feedUrl == "undefined") {
-                        // Can delete after Start of Dec 2024
-                        alert("This card was saved with an old version of this site and we don't have the information needed to remove the feed. Use the My Feeds button at the top of the page.")
-                    } else if (rssFeeds.includes(feedUrl)) {
-                        let text = "Choose OK to remove: "+feedTitle+"\n\n"+feedUrl+"\n\nChoose Cancel to keep things as they are. Note: If you remove this feed, old posts will remain visable in your timeline, but we will not fetch new ones.";
-                        if (confirm(text) == true) {
-                            //console.log(rssFeeds)
-                            //console.log("Removing",feedUrl)
-                            const feedIndex = rssFeeds.indexOf(feedUrl);
-                            rssFeeds.splice(feedIndex, 1);
-                            updateFeedList();
-                            //console.log(rssFeeds)
+                            // Mark the article as read in the articles array
+                            articles[articleIndex].isRead = true;
+
+                            // Get the parent container of the clicked skip button
+                            const articleContainer = skipButton.closest(".article-container");
+
+                            // Update the Open button behavior
+                            updateOpenButton(articleContainer);
+
+                            // Move the article container to the end of the list
+                            moveCardToEnd(articleContainer);
+
+                            // Update the unread count
+                            updateItemCount();
+                            get_quote();
                         }
-                    } else {
-                        alert("It looks like this feed has already been removed. Remember, old posts from removed feeds remain visable in your timeline, but new ones are not fetched.")
-                    }
-                });        
-                i+=1;
-            }                    
+                    });
+
+                    const RemoveFeedButton = article.querySelector(".remove_feed");
+
+                    RemoveFeedButton.addEventListener("click", function() {
+                        if (feedUrl == "undefined" || typeof feedUrl == "undefined") {
+                            // Can delete after Start of Dec 2024
+                            alert("This card was saved with an old version of this site and we don't have the information needed to remove the feed. Use the My Feeds button at the top of the page.")
+                        } else if (rssFeeds.includes(feedUrl)) {
+                            let text = "Choose OK to remove: "+feedTitle+"\n\n"+feedUrl+"\n\nChoose Cancel to keep things as they are. Note: If you remove this feed, old posts will remain visable in your timeline, but we will not fetch new ones.";
+                            if (confirm(text) == true) {
+                                //console.log(rssFeeds)
+                                //console.log("Removing",feedUrl)
+                                const feedIndex = rssFeeds.indexOf(feedUrl);
+                                rssFeeds.splice(feedIndex, 1);
+                                updateFeedList();
+                                //console.log(rssFeeds)
+                            }
+                        } else {
+                            alert("It looks like this feed has already been removed. Remember, old posts from removed feeds remain visable in your timeline, but new ones are not fetched.")
+                        }
+                    });        
+                    i+=1;
+                }   
+            }                 
         });
 
         // After all articles are displayed, update their styles
