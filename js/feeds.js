@@ -143,7 +143,8 @@ var suffolk_law_feeds = [
     "https://masslawyersweekly.com/feed/", 
     "https://www.lawnext.com/feed",
     "https://www.scotusblog.com/feed/",
-    "https://buttondown.email/LawyerExMachina/rss"
+    "https://buttondown.email/LawyerExMachina/rss",
+    "https://api.ssrn.com/content/v1/journals/956475/papers/rss"
 ]
 
 var feeds_long_list = [
@@ -259,8 +260,11 @@ var feeds_long_list = [
     "https://techcrunch.com/feed/",
     "https://pluralistic.net/feed/",
     "https://www.techdirt.com/techdirt_rss.xml",
-    "https://www.lawnext.com/feed",
     "https://masslawyersweekly.com/feed/",
+    "https://www.lawnext.com/feed",
+    "https://www.scotusblog.com/feed/",
+    "https://buttondown.email/LawyerExMachina/rss",
+    "https://api.ssrn.com/content/v1/journals/956475/papers/rss",
     "https://api.quantamagazine.org/feed/",
     "https://hnrss.org/best",
     "https://screenrant.com/feed/tag/star-trek/",
@@ -283,6 +287,7 @@ test_feeds = [
     //"https://lawprofblawg.wordpress.com/feed/",
     //"https://www.reutersagency.com/feed/?best-regions=north-america&post_type=best",
     //"https://www.smithsonianmag.com/rss/air-space-magazine/"
+    "https://api.ssrn.com/content/v1/journals/956475/papers/rss"
 
 ]
 
