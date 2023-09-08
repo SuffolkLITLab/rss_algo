@@ -333,9 +333,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 } else {
                     articleContainer.remove()
                 }
-            } //==else {
-            //    articleContainer.classList.remove("read-article");
-            //}
+            } 
+                            
+            if (articleContainer.classList.contains("read-article")) {
+                articleContainer.remove()
+            }
 
             const upvoteButton = articleContainer.querySelector(".upvote");
             const downvoteButton = articleContainer.querySelector(".downvote");

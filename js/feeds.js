@@ -287,7 +287,6 @@ test_feeds = [
     //"https://lawprofblawg.wordpress.com/feed/",
     //"https://www.reutersagency.com/feed/?best-regions=north-america&post_type=best",
     //"https://www.smithsonianmag.com/rss/air-space-magazine/"
-    "https://api.ssrn.com/content/v1/journals/956475/papers/rss"
 
 ]
 
