@@ -258,7 +258,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     var articles =  JSON.parse(localStorage.getItem("articles")) || [];
     try {
-        articles.sort((a, b) => new Date(a[1]) - new Date(b[1]));
+        articles.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+        //console.log(articles)
         console.log("First and Last dates: \n",articles[articles.length-1]["pubDate"],"\n",articles[0]["pubDate"])
         console.log("Setting backstop:",articles[articles.length-1]["pubDate"])
         localStorage.setItem("backstop",articles[articles.length-1]["pubDate"])                
@@ -1363,9 +1364,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
         for (const link in entries) {
             const entryDate = new Date(entries[link]);
-            //if (entryDate >= backstop) {
+            if (entryDate >= backstop) {
                 filteredEntries[link] = entries[link];
-            //}
+            }
         }
 
         return filteredEntries;
