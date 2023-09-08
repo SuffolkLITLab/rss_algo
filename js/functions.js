@@ -554,7 +554,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                     pubDate = new Date(item.querySelector("pubDate").textContent);                                    
                                 } catch (error) {
                                     const tmp_date = new Date();
-                                    tmp_date.setDate(tmp_date.getDate() - 1);
+                                    tmp_date.setHours(tmp_date.getHours() - 12);
                                     pubDate = tmp_date
                                     unknown_pubDate = true
                                 }
