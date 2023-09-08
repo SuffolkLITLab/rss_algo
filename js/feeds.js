@@ -37,7 +37,19 @@ var papers_feeds = [
     "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
     "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
     "https://feeds.a.dj.com/rss/RSSWSJD.xml",
-    "https://feeds.a.dj.com/rss/RSSLifestyle.xml"
+    "https://feeds.a.dj.com/rss/RSSLifestyle.xml",
+    "https://www.latimes.com/business/rss2.0.xml",
+    "https://www.latimes.com/environment/rss2.0.xml",
+    "https://www.latimes.com/entertainment-arts/rss2.0.xml",
+    "https://www.latimes.com/food/rss2.0.xml",
+    "https://www.latimes.com/lifestyle/rss2.0.xml",
+    "https://www.latimes.com/obituaries/rss2.0.xml",
+    "https://www.latimes.com/opinion/rss2.0.xml",
+    "https://www.latimes.com/politics/rss2.0.xml",
+    "https://www.latimes.com/science/rss2.0.xml",
+    "https://www.latimes.com/sports/rss2.0.xml",
+    "https://www.latimes.com/travel/rss2.0.xml",
+    "https://www.latimes.com/world-nation/rss2.0.xml"
 ]
 
 var condenast_feeds = [
@@ -62,6 +74,7 @@ var geeek_feeds = [
     "https://rss.nytimes.com/services/xml/rss/nyt/Space.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml",
     "http://feeds.washingtonpost.com/rss/business/technology?itid=lk_inline_manual_31",
+    "https://www.latimes.com/science/rss2.0.xml",
     "https://feeds.npr.org/1007/rss.xml", //science
     "http://www.newyorker.com/feed/tech",
     "https://www.economist.com/science-and-technology/rss.xml",
@@ -132,6 +145,7 @@ var suffolk_law_feeds = [
     "https://theconversation.com/us/health/articles.atom",
     "https://theconversation.com/us/politics/articles.atom",
     "https://theconversation.com/us/technology/articles.atom",
+    "https://www.masslive.com/arc/outboundfeeds/rss/?outputType=xml",
     "https://patch.com/feeds/aol/massachusetts/boston",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCx_SjDi4CS5ALkWCS9ffldQ", //GBH News
     "https://www.wgbh.org/news/local.rss",
@@ -145,7 +159,8 @@ var suffolk_law_feeds = [
     "https://www.lawnext.com/feed",
     "https://www.scotusblog.com/feed/",
     "https://buttondown.email/LawyerExMachina/rss",
-    "https://api.ssrn.com/content/v1/journals/956475/papers/rss"
+    "https://api.ssrn.com/content/v1/journals/956475/papers/rss",
+    "https://abovethelaw.com/feed/"
 ]
 
 var feeds_long_list = [
@@ -210,6 +225,18 @@ var feeds_long_list = [
     "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
     "https://feeds.a.dj.com/rss/RSSWSJD.xml",
     "https://feeds.a.dj.com/rss/RSSLifestyle.xml",
+    "https://www.latimes.com/business/rss2.0.xml",
+    "https://www.latimes.com/environment/rss2.0.xml",
+    "https://www.latimes.com/entertainment-arts/rss2.0.xml",
+    "https://www.latimes.com/food/rss2.0.xml",
+    "https://www.latimes.com/lifestyle/rss2.0.xml",
+    "https://www.latimes.com/obituaries/rss2.0.xml",
+    "https://www.latimes.com/opinion/rss2.0.xml",
+    "https://www.latimes.com/politics/rss2.0.xml",
+    "https://www.latimes.com/science/rss2.0.xml",
+    "https://www.latimes.com/sports/rss2.0.xml",
+    "https://www.latimes.com/travel/rss2.0.xml",
+    "https://www.latimes.com/world-nation/rss2.0.xml",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UC6ZFN9Tx6xh-skXCuRHCDpQ", //PBS News Hour
     "https://feeds.bloomberg.com/markets/news.rss",
     "https://feeds.bloomberg.com/politics/news.rss",
@@ -257,6 +284,7 @@ var feeds_long_list = [
     "https://www.wired.com/feed/category/ideas/latest/rss",
     "https://www.wired.com/feed/tag/ai/latest/rss",
     "https://www.wired.com/feed/rss",
+    "https://www.vox.com/rss/index.xml",
     "http://gizmodo.com/vip.xml",
     "https://techcrunch.com/feed/",
     "https://pluralistic.net/feed/",
@@ -266,6 +294,7 @@ var feeds_long_list = [
     "https://www.scotusblog.com/feed/",
     "https://buttondown.email/LawyerExMachina/rss",
     "https://api.ssrn.com/content/v1/journals/956475/papers/rss",
+    "https://abovethelaw.com/feed/",
     "https://api.quantamagazine.org/feed/",
     "https://hnrss.org/best",
     "https://screenrant.com/feed/tag/star-trek/",

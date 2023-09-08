@@ -710,6 +710,11 @@ document.addEventListener("DOMContentLoaded", function() {
                                         } else if (link.includes("masslawyersweekly.com")) {
                                             //https://seekvectorlogo.com/massachusetts-lawyers-weekly-vector-logo-svg/
                                             mediaThumbnail = "https://seekvectorlogo.com/wp-content/uploads/2022/02/massachusetts-lawyers-weekly-vector-logo-2022.png";
+                                        } else if (link.includes("abovethelaw.com")) {
+                                            //https://abovethelaw.com/advertise/
+                                            mediaThumbnail = "https://470182.fs1.hubspotusercontent-na1.net/hubfs/470182/Imported%20images/Logo-1.png";
+                                        } else if (link.includes("latimes.com")) {
+                                            mediaThumbnail = "https://www.vectorlogo.zone/logos/latimes/latimes-ar21.png";
                                         } else if (feedTitle.trim().startsWith("Hacker News")) {
                                                 mediaThumbnail =  "https://uploads-ssl.webflow.com/5e5e26b57a149fc28773c703/5eaf3dc2f728bb4e333a1546_hacker-news-logo.jpeg";
                                         } else if (link.includes("ssrn.com")) {
@@ -1514,6 +1519,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Clear the read status of all articles in the readArticles object
         for (var member in readArticles) delete readArticles[member];
+        localStorage.setItem("backstop",new Date(0))
+        backstop = new Date(0)
 
         articles = [];
         localStorage.setItem("articles", JSON.stringify(articles));
@@ -1568,11 +1575,11 @@ document.addEventListener("DOMContentLoaded", function() {
                             </p>
                             <select id="feed_list">
                                 <option value="default_feeds">Generic US News Mix (default)</option>
-                                <option value="papers_feeds">Papers: NYT, WaPo, WSJ</option>
-                                <option value="condenast_feeds">Condé Nast: New Yorker, ArsTechnica, Wired</option>
+                                <option value="papers_feeds">US Print: NYT, WaPo, WSJ, &amp; LA Times</option>
+                                <option value="condenast_feeds">Condé Nast Lite: New Yorker, ArsTechnica, &amp; Wired</option>
                                 <option value="geeek_feeds">Geekery: Science, Tech, Space, &amp; Star Trek</option>
-                                <option value="suffolk_law_feeds">Suffolk Mix: Papers + Boston + Law</option>
-                                <option value="feeds_long_list">Super Mega List (100+ feeds)</option>
+                                <option value="suffolk_law_feeds">Suffolk Mix: Select Papers + Boston + Law</option>
+                                <option value="feeds_long_list">All of the Above Plus More (over 100 feeds)</option>
                             </select>
                             </p>
                             <p>
@@ -1619,6 +1626,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 localStorage.removeItem("read");
                 // Clear the read status of all articles in the readArticles object
                 for (var member in readArticles) delete readArticles[member];
+                const readCountElement = document.getElementById("read-count");
+                const unreadCountElement = document.getElementById("unread-count");
+                readCountElement.textContent = `Seen: ?`;
+                unreadCountElement.textContent = `New: ?`;
+                localStorage.setItem("backstop",new Date(0))
+                backstop = new Date(0)        
                 let upTFIDF = {};
                 let downTFIDF = {};
                 articles = [];
@@ -1652,6 +1665,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 localStorage.removeItem("read");
                 // Clear the read status of all articles in the readArticles object
                 for (var member in readArticles) delete readArticles[member];
+                const readCountElement = document.getElementById("read-count");
+                const unreadCountElement = document.getElementById("unread-count");
+                readCountElement.textContent = `Seen: ?`;
+                unreadCountElement.textContent = `New: ?`;
+                localStorage.setItem("backstop",new Date(0))
+                backstop = new Date(0)        
                 let upTFIDF = {};
                 let downTFIDF = {};
                 articles = [];
