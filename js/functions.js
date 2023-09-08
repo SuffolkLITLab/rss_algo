@@ -324,9 +324,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 } else {
                     articleContainer.remove()
                 }
-            } else {
-                articleContainer.classList.remove("read-article");
-            }
+            } //==else {
+            //    articleContainer.classList.remove("read-article");
+            //}
 
             const upvoteButton = articleContainer.querySelector(".upvote");
             const downvoteButton = articleContainer.querySelector(".downvote");
