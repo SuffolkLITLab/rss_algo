@@ -322,12 +322,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function updateArticleStyles() {
         const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
+        const HiddenModeState = localStorage.getItem("hiddenMode") === "true";
 
         articleContainers.forEach(articleContainer => {
             const itemId = articleContainer.getAttribute("data-item-id");
 
             if (readArticles[itemId]) {
-                const HiddenModeState = localStorage.getItem("hiddenMode") === "true";
                 if (HiddenModeState) {
                     articleContainer.classList.add("read-article");
                 } else {
@@ -335,7 +335,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             } 
                             
-            if (articleContainer.classList.contains("read-article")) {
+            console.log(HiddenModeState)
+            if ((!HiddenModeState) && (articleContainer.classList.contains("read-article"))) {
                 articleContainer.remove()
             }
 
