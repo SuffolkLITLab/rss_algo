@@ -1398,31 +1398,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         return filteredEntries;
-
-        // What if read articles much more than read
-        // very edge case
-        if (1==2) {
-            // Convert the object into an array of key-value pairs
-            const dataArray = Object.entries(filteredEntries);
-
-            multi = 2;
-
-            if (dataArray.length>=max_arts*multi) {
-                // Sort the array based on the date values
-                dataArray.sort((a, b) => new Date(a[1]) - new Date(b[1]));
-                // Convert the sorted array back into an object
-                console.log("To free up space, we're forgetting about some of your older articles. If they're still in the live RSS feed, you may see them again.")
-                keep_last = Math.floor(max_arts*multi);
-                lastn_filteredEntries = Object.fromEntries(dataArray.slice(-keep_last));
-            } else {
-                lastn_filteredEntries = filteredEntries
-            }
-
-            let readArticles = lastn_filteredEntries
-            localStorage.setItem("read", JSON.stringify(lastn_filteredEntries));
-
-            return lastn_filteredEntries;
-        }
     }
 
     function countUnreadArticles() {
