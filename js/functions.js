@@ -571,9 +571,9 @@ document.addEventListener("DOMContentLoaded", function() {
                                 }
                             }
                             
-                            //console.log("Articles",articles.length)
+                            //console.log("Max items per feed:",(0.75*max_arts/rssFeeds.length))
 
-                            if ((pubDate >= backstop) && (pubDate >= lookback) && (j<(1*max_arts/rssFeeds.length)) && (pubDate <= new Date())) {
+                            if ((pubDate >= backstop) && (pubDate >= lookback) && (j<Math.floor(1.45*max_arts/rssFeeds.length)) && (pubDate <= new Date())) {
                                 
                                 if (xml.documentElement.nodeName=="feed") {
                                     link = item.querySelector("link").attributes["href"].nodeValue;
