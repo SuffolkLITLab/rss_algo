@@ -613,9 +613,9 @@ document.addEventListener("DOMContentLoaded", function() {
                                     const re = /(https?:\/\/[^\s]+\.(?:png|jpg|jpeg|gif))/i;
                                     possible_img = description.match(re)
                                     if (possible_img) {
-                                        if (!possible_img[0].match("tracking") && !possible_img[0].match("count\.gif")) {
+                                        if (!possible_img[0].match("tracking") && !possible_img[0].match("count\.gif") && !possible_img[0].match("embedly\.com")) {
                                             possible_img = possible_img[0]
-                                        } else if (possible_img[0].match("tracking") && possible_img[1] && !possible_img[1].match("tracking") && !possible_img[0].match("count\.gif")) {
+                                        } else if (possible_img[0].match("tracking") && possible_img[1] && !possible_img[1].match("tracking") && !possible_img[0].match("count\.gif") && !possible_img[0].match("embedly\.com")) {
                                             possible_img = possible_img[1]
                                         } else {
                                             possible_img = null
@@ -715,6 +715,10 @@ document.addEventListener("DOMContentLoaded", function() {
                                             mediaThumbnail = "https://470182.fs1.hubspotusercontent-na1.net/hubfs/470182/Imported%20images/Logo-1.png";
                                         } else if (link.includes("latimes.com")) {
                                             mediaThumbnail = "https://www.vectorlogo.zone/logos/latimes/latimes-ar21.png";
+                                        } else if (link.includes("theatlantic.com")) {
+                                            mediaThumbnail =  "https://logovectordl.com/wp-content/uploads/2021/01/the-atlantic-logo-vector.png"
+                                        } else if (link.includes("bbc.co")) {
+                                            mediaThumbnail =  "https://www.newscaststudio.com/wp-content/uploads/2021/10/new-bbc-logo.jpg";
                                         } else if (feedTitle.trim().startsWith("Hacker News")) {
                                                 mediaThumbnail =  "https://uploads-ssl.webflow.com/5e5e26b57a149fc28773c703/5eaf3dc2f728bb4e333a1546_hacker-news-logo.jpeg";
                                         } else if (link.includes("ssrn.com")) {
@@ -1552,6 +1556,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             <select id="feed_list">
                                 <option value="default_feeds">Generic US News Mix (default)</option>
                                 <option value="papers_feeds">US Print: NYT, WaPo, WSJ, &amp; LA Times</option>
+                                <option value="magazine_feeds">Magazines: New Yorker, Economist, Atalantic &amp; Wired</option>
                                 <option value="condenast_feeds">Condé Nast Lite: New Yorker, ArsTechnica, &amp; Wired</option>
                                 <option value="geeek_feeds">Geekery: Science, Tech, Space, &amp; Star Trek</option>
                                 <option value="suffolk_law_feeds">Suffolk Mix: Select Papers + Boston + Law</option>

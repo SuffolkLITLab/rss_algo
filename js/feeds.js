@@ -69,6 +69,40 @@ var condenast_feeds = [
     "https://www.wired.com/feed/rss"
 ]
 
+var magazine_feeds = [
+    "http://www.newyorker.com/feed/news",
+    "http://www.newyorker.com/feed/culture",
+    "http://www.newyorker.com/feed/humor",
+    "http://www.newyorker.com/feed/tag/books/rss",
+    "http://www.newyorker.com/feed/tech",
+    "http://www.newyorker.com/feed/news/sporting-scene",   
+    "https://www.economist.com/the-world-this-week/rss.xml",
+    "https://www.economist.com/letters/rss.xml",
+    "https://www.economist.com/leaders/rss.xml",
+    "https://www.economist.com/briefing/rss.xml",
+    "https://www.economist.com/special-report/rss.xml",
+    "https://www.economist.com/britain/rss.xml",
+    "https://www.economist.com/europe/rss.xml",
+    "https://www.economist.com/united-states/rss.xml",
+    "https://www.economist.com/the-americas/rss.xml",
+    "https://www.economist.com/middle-east-and-africa/rss.xml",
+    "https://www.economist.com/asia/rss.xml",
+    "https://www.economist.com/china/rss.xml",
+    "https://www.economist.com/international/rss.xml",
+    "https://www.economist.com/business/rss.xml",
+    "https://www.economist.com/finance-and-economics/rss.xml",
+    "https://www.economist.com/books-and-arts/rss.xml",
+    "https://www.economist.com/obituary/rss.xml",
+    "https://www.economist.com/graphic-detail/rss.xml",
+    "https://www.economist.com/economic-and-financial-indicators/rss.xml",
+    "https://www.economist.com/science-and-technology/rss.xml",
+    "https://www.theatlantic.com/feed/all/",
+    "https://www.wired.com/feed/category/science/latest/rss",
+    "https://www.wired.com/feed/category/ideas/latest/rss",
+    "https://www.wired.com/feed/tag/ai/latest/rss",
+    "https://www.wired.com/feed/rss"
+]
+
 var geeek_feeds = [
     "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/Space.xml",
@@ -77,6 +111,8 @@ var geeek_feeds = [
     "https://www.latimes.com/science/rss2.0.xml",
     "https://feeds.npr.org/1007/rss.xml", //science
     "http://www.newyorker.com/feed/tech",
+    "http://feeds.bbci.co.uk/news/science_and_environment/rss.xml",
+    "http://feeds.bbci.co.uk/news/technology/rss.xml",
     "https://www.economist.com/science-and-technology/rss.xml",
     "https://feeds.bloomberg.com/technology/news.rss",
     "https://feeds.arstechnica.com/arstechnica/technology-lab",
@@ -190,6 +226,15 @@ var feeds_long_list = [
     "https://feeds.npr.org/1138/rss.xml", //television
     "https://feeds.npr.org/1167/rss.xml", //climate
     "https://feeds.npr.org/1001/rss.xml", //news
+    "http://feeds.bbci.co.uk/news/world/rss.xml",
+    "http://feeds.bbci.co.uk/news/uk/rss.xml",
+    "http://feeds.bbci.co.uk/news/business/rss.xml",
+    "http://feeds.bbci.co.uk/news/politics/rss.xml",
+    "http://feeds.bbci.co.uk/news/health/rss.xml",
+    "http://feeds.bbci.co.uk/news/education/rss.xml",
+    "http://feeds.bbci.co.uk/news/science_and_environment/rss.xml",
+    "http://feeds.bbci.co.uk/news/technology/rss.xml",
+    "http://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml",
     "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
     "https://www.washingtonpost.com/arcio/rss/category/opinions/?itid=lk_inline_manual_7",
     "http://feeds.washingtonpost.com/rss/sports?itid=lk_inline_manual_20",
@@ -248,6 +293,7 @@ var feeds_long_list = [
     "http://www.newyorker.com/feed/tag/books/rss",
     "http://www.newyorker.com/feed/tech",
     "http://www.newyorker.com/feed/news/sporting-scene",
+    "https://www.theatlantic.com/feed/all/",
     "https://slate.com/feeds/news-and-politics.rss",
     "https://slate.com/feeds/technology.rss",
     "https://slate.com/feeds/business.rss",
