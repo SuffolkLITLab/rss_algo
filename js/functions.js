@@ -565,7 +565,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                     pubDate = new Date(item.querySelector("pubDate").textContent);                                    
                                 } catch (error) {
                                     const tmp_date = new Date();
-                                    tmp_date.setHours(tmp_date.getHours() - 12);
+                                    tmp_date.setHours(tmp_date.getHours() - (Math.random() * (23 - 6) + 6));
                                     pubDate = tmp_date
                                     unknown_pubDate = true
                                 }
@@ -719,6 +719,12 @@ document.addEventListener("DOMContentLoaded", function() {
                                             mediaThumbnail =  "https://logovectordl.com/wp-content/uploads/2021/01/the-atlantic-logo-vector.png"
                                         } else if (link.includes("bbc.co")) {
                                             mediaThumbnail =  "https://www.newscaststudio.com/wp-content/uploads/2021/10/new-bbc-logo.jpg";
+                                        } else if (link.includes("lightspeedmagazine.com")) {
+                                            mediaThumbnail =  "https://www.lightspeedmagazine.com/wp-content/uploads/2022/10/LIGHTSPEED_swordAndRocket_cover.png";
+                                        } else if (link.includes("clarkesworldmagazine.com")) {
+                                            mediaThumbnail =  "https://clarkesworldmagazine.com/covers/cw_08_large.jpg";
+                                        } else if (link.includes("escapepod.org")) {
+                                            mediaThumbnail =  "https://escapepod.org/wp-content/uploads/2018/03/Escape-Pod-social.jpg";
                                         } else if (feedTitle.trim().startsWith("Hacker News")) {
                                                 mediaThumbnail =  "https://uploads-ssl.webflow.com/5e5e26b57a149fc28773c703/5eaf3dc2f728bb4e333a1546_hacker-news-logo.jpeg";
                                         } else if (link.includes("ssrn.com")) {
@@ -1548,18 +1554,19 @@ document.addEventListener("DOMContentLoaded", function() {
                         </div>
                         <div class="modal-body">
                             <p>
-                                Remove individual feeds using the "Remove" buttons below, or wipe and/or replace your existing list of feeds. If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>.
+                                Remove individual feeds using the "Remove" buttons below, OR wipe and/or replace your existing list of feeds. If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>.
                             </p> 
                             <p>
-                                Consider starting with a pre-made list. Then over time you can whittle it down and add new feeds as you like. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings &amp; Data</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
+                                Consider starting with a premade list. Then over time you can whittle it down and add new feeds as you like. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings &amp; Data</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
                             </p>
                             <select id="feed_list">
                                 <option value="default_feeds">Generic US News Mix (default)</option>
+                                <option value="suffolk_law_feeds">Suffolk Mix: Select Papers + Boston + Law</option>
                                 <option value="papers_feeds">US Print: NYT, WaPo, WSJ, &amp; LA Times</option>
                                 <option value="condenast_feeds">Condé Nast Lite: New Yorker, ArsTechnica, &amp; Wired</option>
                                 <option value="magazine_feeds">Magazines: New Yorker, Economist, Atalantic, Wired &amp; Quanta</option>
+                                <option value="scifi_shorts_feed">SciFi Short Stories: Clarkesworld, Lightspeed &amp; Escape Pod</option>
                                 <option value="geeek_feeds">Geekery: Science, Tech, Space, &amp; Star Trek</option>
-                                <option value="suffolk_law_feeds">Suffolk Mix: Select Papers + Boston + Law</option>
                                 <option value="feeds_long_list">All of the Above Plus More (over 150 feeds)</option>
                             </select>
                             </p>

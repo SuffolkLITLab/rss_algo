@@ -123,6 +123,12 @@ var magazine_feeds = [
     "https://api.quantamagazine.org/feed/"
 ]
 
+var scifi_shorts_feed = [
+    "https://clarkesworldmagazine.com/feed/",
+    "https://www.lightspeedmagazine.com/rss-2/",
+    "https://escapepod.org/feed/podcast/"
+]
+
 var geeek_feeds = [
     "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/Space.xml",
@@ -146,6 +152,13 @@ var geeek_feeds = [
     "https://www.wired.com/feed/category/backchannel/latest/rss",
     "https://www.wired.com/feed/tag/wired-guide/latest/rss",
     "https://theconversation.com/us/technology/articles.atom",
+    "https://phys.org/rss-feed/earth-news/",
+    "https://phys.org/rss-feed/science-news/",
+    "https://phys.org/rss-feed/nanotech-news/",
+    "https://phys.org/rss-feed/physics-news/",
+    "https://phys.org/rss-feed/space-news/",
+    "https://phys.org/rss-feed/biology-news/",
+    "https://phys.org/rss-feed/chemistry-news/",
     "https://slate.com/feeds/technology.rss",
     "http://gizmodo.com/vip.xml",
     "https://techcrunch.com/feed/",
@@ -162,7 +175,10 @@ var geeek_feeds = [
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", //3blue1brown
     "https://www.youtube.com/feeds/videos.xml?channel_id=UC415bOPUcGSamy543abLmRA", //Cleo Abram
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA", //Veritasium 
-    "https://botsin.space/@APoD.rss"
+    "https://botsin.space/@APoD.rss",
+    "https://clarkesworldmagazine.com/feed/",
+    "https://www.lightspeedmagazine.com/rss-2/",
+    "https://escapepod.org/feed/podcast/"
 ]
 
 // These feeds are a mix of sites without paywalls and sites with paywalls for which 
@@ -355,6 +371,13 @@ var feeds_long_list = [
     "https://theconversation.com/us/politics/articles.atom",
     "https://theconversation.com/us/technology/articles.atom",
     "https://theconversation.com/us/articles.atom",
+    "https://phys.org/rss-feed/earth-news/",
+    "https://phys.org/rss-feed/science-news/",
+    "https://phys.org/rss-feed/nanotech-news/",
+    "https://phys.org/rss-feed/physics-news/",
+    "https://phys.org/rss-feed/space-news/",
+    "https://phys.org/rss-feed/biology-news/",
+    "https://phys.org/rss-feed/chemistry-news/",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCx_SjDi4CS5ALkWCS9ffldQ", //GBH News
     "https://www.wgbh.org/news/local.rss",
     "https://www.wgbh.org/news/politics.rss",
@@ -399,7 +422,10 @@ var feeds_long_list = [
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", //3blue1brown
     "https://www.youtube.com/feeds/videos.xml?channel_id=UC415bOPUcGSamy543abLmRA", //Cleo Abram
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA", //Veritasium 
-    "https://botsin.space/@APoD.rss"
+    "https://botsin.space/@APoD.rss",
+    "https://clarkesworldmagazine.com/feed/",
+    "https://www.lightspeedmagazine.com/rss-2/",
+    "https://escapepod.org/feed/podcast/"
 ]
 
 test_feeds = [
