@@ -1108,6 +1108,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 //console.log("Removing",feedUrl)
                                 const feedIndex = rssFeeds.indexOf(feedUrl);
                                 rssFeeds.splice(feedIndex, 1);
+                                localStorage.setItem("feeds", JSON.stringify(rssFeeds));
                                 //updateFeedList();
                                 //console.log(rssFeeds)
                             }
