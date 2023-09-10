@@ -159,6 +159,7 @@ var geeek_feeds = [
     "https://phys.org/rss-feed/space-news/",
     "https://phys.org/rss-feed/biology-news/",
     "https://phys.org/rss-feed/chemistry-news/",
+    "https://thegradient.pub/rss/",
     "https://slate.com/feeds/technology.rss",
     "http://gizmodo.com/vip.xml",
     "https://techcrunch.com/feed/",
@@ -378,6 +379,7 @@ var feeds_long_list = [
     "https://phys.org/rss-feed/space-news/",
     "https://phys.org/rss-feed/biology-news/",
     "https://phys.org/rss-feed/chemistry-news/",
+    "https://thegradient.pub/rss/",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCx_SjDi4CS5ALkWCS9ffldQ", //GBH News
     "https://www.wgbh.org/news/local.rss",
     "https://www.wgbh.org/news/politics.rss",
