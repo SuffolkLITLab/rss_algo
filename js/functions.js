@@ -1556,11 +1556,11 @@ document.addEventListener("DOMContentLoaded", function() {
                             <select id="feed_list">
                                 <option value="default_feeds">Generic US News Mix (default)</option>
                                 <option value="papers_feeds">US Print: NYT, WaPo, WSJ, &amp; LA Times</option>
-                                <option value="magazine_feeds">Magazines: New Yorker, Economist, Atalantic &amp; Wired</option>
                                 <option value="condenast_feeds">Condé Nast Lite: New Yorker, ArsTechnica, &amp; Wired</option>
+                                <option value="magazine_feeds">Magazines: New Yorker, Economist, Atalantic, Wired &amp; Quanta</option>
                                 <option value="geeek_feeds">Geekery: Science, Tech, Space, &amp; Star Trek</option>
                                 <option value="suffolk_law_feeds">Suffolk Mix: Select Papers + Boston + Law</option>
-                                <option value="feeds_long_list">All of the Above Plus More (over 100 feeds)</option>
+                                <option value="feeds_long_list">All of the Above Plus More (over 150 feeds)</option>
                             </select>
                             </p>
                             <p>
