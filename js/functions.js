@@ -1619,7 +1619,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 readCountElement.textContent = `Seen: ?`;
                 unreadCountElement.textContent = `New: ?`;
                 localStorage.setItem("backstop",new Date(0))
-                backstop = new Date(0)        
+                backstop = new Date(0)    
+                dfreq = {"df_arr":{},"n_docs":0}    
                 let upTFIDF = {};
                 let downTFIDF = {};
                 articles = [];
@@ -1659,6 +1660,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 unreadCountElement.textContent = `New: ?`;
                 localStorage.setItem("backstop",new Date(0))
                 backstop = new Date(0)        
+                dfreq = {"df_arr":{},"n_docs":0}    
                 let upTFIDF = {};
                 let downTFIDF = {};
                 articles = [];
