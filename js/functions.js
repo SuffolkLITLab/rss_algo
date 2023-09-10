@@ -565,7 +565,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                     pubDate = new Date(item.querySelector("pubDate").textContent);                                    
                                 } catch (error) {
                                     const tmp_date = new Date();
-                                    tmp_date.setHours(tmp_date.getHours() - (Math.random() * (23 - 6) + 6));
+                                    tmp_date.setHours(tmp_date.getHours() - (Math.random() * (24*savedLookback - 6) + 6));
                                     pubDate = tmp_date
                                     unknown_pubDate = true
                                 }
@@ -1561,10 +1561,10 @@ document.addEventListener("DOMContentLoaded", function() {
                             </p>
                             <select id="feed_list">
                                 <option value="default_feeds">Generic US News Mix (default)</option>
-                                <option value="suffolk_law_feeds">Suffolk Mix: Select Papers + Boston + Law</option>
                                 <option value="papers_feeds">US Print: NYT, WaPo, WSJ, &amp; LA Times</option>
                                 <option value="condenast_feeds">Condé Nast Lite: New Yorker, ArsTechnica, &amp; Wired</option>
                                 <option value="magazine_feeds">Magazines: New Yorker, Economist, Atalantic, Wired &amp; Quanta</option>
+                                <option value="suffolk_law_feeds">Suffolk Mix: Select Papers + Boston + Law</option>
                                 <option value="scifi_shorts_feed">SciFi Short Stories: Clarkesworld, Lightspeed &amp; Escape Pod</option>
                                 <option value="geeek_feeds">Geekery: Science, Tech, Space, &amp; Star Trek</option>
                                 <option value="feeds_long_list">All of the Above Plus More (over 150 feeds)</option>
