@@ -1525,7 +1525,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const addFeedButton = document.getElementById("add-feed");
     addFeedButton.addEventListener("click", function() {
         if (rssFeeds.length>=50) {
-            alert("Generally speaking, the more feeds you follow the more posts in your timeline and the slower the site will preform. You can shrink the size of your timeline by setting a shorter History window. Also, to accommodate large feed follows, we truncate feeds to avoid overloading your browser's storage. How much we have to cut is proportional to how many feeds you follow. So following a lot of feeds may cause you to miss posts if they are too far down the feed. If this issue comes up, consider following fewer feeds or checking in more often.")
+            alert("Generally speaking, the more feeds you follow the more posts in your timeline and the slower the site will preform. You can shrink the size of your timeline by setting a shorter History window. Also, to accommodate large feed follows, we truncate feeds to avoid overloading your browser's storage.")
         }
         const newFeedUrl = prompt("Enter the URL for a new RSS feed:");
         if (newFeedUrl) {
@@ -1566,8 +1566,8 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <option value="condenast_feeds">Condé Nast Lite: New Yorker, ArsTechnica, &amp; Wired</option>
                                 <option value="magazine_feeds">Magazines: New Yorker, Economist, Atalantic, Wired &amp; Quanta</option>
                                 <option value="suffolk_law_feeds">Suffolk Mix: Select Papers + Boston + Law</option>
-                                <option value="scifi_shorts_feed">SciFi Short Stories: Clarkesworld, Lightspeed &amp; Escape Pod</option>
-                                <option value="geeek_feeds">Geekery: Science, Tech, Space, &amp; Star Trek</option>
+                                <option value="geeek_feeds">Geekery: Science, Tech, Space, Star Trek, &amp; SciFi Shorts</option>
+                                <option value="scifi_shorts_feed">SciFi Shorts: Clarkesworld, Lightspeed &amp; Escape Pod</option>
                                 <option value="feeds_long_list">All of the Above Plus More (over 150 feeds)</option>
                             </select>
                             </p>
