@@ -333,11 +333,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 tf = countWords(text)
 
                 if (Object.keys(tf_source).length<Object.keys(tf).length){
-                    tf_source_tmp = tf_source
-                    tf_tmp = tf
+                    tf_source_tmp = JSON.parse(JSON.stringify(tf_source));
+                    tf_tmp = JSON.parse(JSON.stringify(tf)); 
                     tf_source = tf_tmp
                     tf = tf_source_tmp
-                    console.log("Flipped Comparison!",tf_source,tf)
+                    //console.log("Flipped Comparison!")
                 } 
 
                 //console.log(tf_source,tf)
@@ -366,10 +366,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
                 score = cosinesim(array1, array2);
                 
-                if (score>0.95){
+                if (score>0.9){
                     console.log(score)//,tf_source,tf,array1, array2)
                     console.log("-",title_source,"\n-",articleContainer.querySelector(".card-title").innerHTML)
-                    articleContainer.remove()
+                    //articleContainer.remove()
                 }
             }
 
@@ -385,7 +385,7 @@ document.addEventListener("DOMContentLoaded", function() {
         articleContainers.forEach(articleContainer => {
             const itemId = articleContainer.getAttribute("data-item-id");
 
-            
+
             //source = articleContainer.querySelector(".card-title").innerHTML + " " + articleContainer.querySelector(".card-text").innerHTML
             //title_source = articleContainer.querySelector(".card-title").innerHTML
             //tf_source = countWords(source)
@@ -674,7 +674,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 }
 
 
-                                if (description!=""){
+                                if (description!="" && link){
         
                                     const re = /(https?:\/\/[^\s]+\.(?:png|jpg|jpeg|gif))/i;
                                     possible_img = description.match(re)
