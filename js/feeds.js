@@ -550,7 +550,7 @@ test_feeds = [
     "https://feeds.npr.org/1001/rss.xml", //news
     // BBC
     "http://feeds.bbci.co.uk/news/world/rss.xml",
-    "http://feeds.bbci.co.uk/news/uk/rss.xml",
+    //"http://feeds.bbci.co.uk/news/uk/rss.xml",
     "http://feeds.bbci.co.uk/news/business/rss.xml",
     "http://feeds.bbci.co.uk/news/politics/rss.xml",
     "http://feeds.bbci.co.uk/news/health/rss.xml",

@@ -253,7 +253,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const readArticles = filterOldEntries(JSON.parse(localStorage.getItem("read")) || {});
     localStorage.setItem("read", JSON.stringify(readArticles));
 
-
     const stopwords = ['i','me','my','myself','we','our','ours','ourselves','you','your','yours','yourself','yourselves','he','him','his','himself','she','her','hers','herself','it','its','itself','they','them','their','theirs','themselves','what','which','who','whom','this','that','these','those','am','is','are','was','were','be','been','being','have','has','had','having','do','does','did','doing','a','an','the','and','but','if','or','because','as','until','while','of','at','by','for','with','about','against','between','into','through','during','before','after','above','below','to','from','up','down','in','out','on','off','over','under','again','further','then','once','here','there','when','where','why','how','all','any','both','each','few','more','most','other','some','such','no','nor','not','only','own','same','so','than','too','very','s','t','can','will','just','don','should','now','p','span','https','http']
 
     var articles =  JSON.parse(localStorage.getItem("articles")) || [];
@@ -273,6 +272,7 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log("backstop",localStorage.backstop)
 
     var dfreq = calculateDF(articles.filter(article => readArticles[article.itemId]))
+    var dfreq_all = {}
     var crunch_numbers = false
 
     var ratings_mean = 0;
@@ -282,8 +282,7 @@ document.addEventListener("DOMContentLoaded", function() {
         localStorage.setItem("feeds", JSON.stringify(rssFeeds));
         let upTFIDF =  JSON.parse(localStorage.getItem("upTFIDF")) || {};
         let downTFIDF =  JSON.parse(localStorage.getItem("downTFIDF")) || {};
-        loadNews(loadFeeds,singlefeed);
-        
+        loadNews(loadFeeds,singlefeed);        
     }
 
     var n_feeds = 0;
@@ -320,18 +319,19 @@ document.addEventListener("DOMContentLoaded", function() {
         return data;
     }
 
-    function declutter(title_source,id_source,tf_source,n=0){
+function declutter(title_source,id_source,tf_source,n=0){
 
         //document.getElementById('loading').style.display = "block";
-        //document.getElementById('loading').innerHTML = '<i>&nbsp;Removing "overlapping" articles.&nbsp;</i>'
+        //console.log("starts",document.getElementById('loading').style.display )
+
+        var similar_arts = []
 
         const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
-        var dfreq_all = calculateDF(articles)
 
         k=0;
         articleContainers.forEach(articleContainer => {
 
-            if(i>=n) {
+            if(k>n) {
                 const itemId = articleContainer.getAttribute("data-item-id");
                 if (id_source!=itemId) {
                     text = articleContainer.querySelector(".card-title").innerHTML + " " + articleContainer.querySelector(".card-text").innerHTML
@@ -348,23 +348,18 @@ document.addEventListener("DOMContentLoaded", function() {
                         flipped = 1
                     }
 
-                    //console.log(tf_source,tf)
-
                     var array1 = [];
                     var array2 = [];
                     for (word in tf_source_tmp) {
-                        //if (dfreq_all["df_arr"][word]) {
-                            idf = Math.log(1+dfreq_all["n_docs"]/dfreq_all["df_arr"][word]);
-                            //if (isNaN(idf)) {
-                            //    idf = 1;
-                            //}
-                        //} else {
-                        //    this_here = 1
-                        //    if (tf_tmp[word]) {
-                        //        this_here+=1;
-                        //   }
-                        //    idf = Math.log(1+dfreq_all["n_docs"]/this_here);
-                        //}
+                        try {
+                            idf = Math.log(1+dfreq_all["n_docs"]/dfreq_all["df_arr"][word]);                            
+                        } catch (error) {
+                            this_here = 1
+                            if (tf_tmp[word]) {
+                                 this_here+=1;
+                            }
+                            idf = Math.log(1+dfreq_all["n_docs"]/this_here);                             
+                        }
 
                         if (tf_source_tmp[word] && idf) {
                             array1.push((tf_source_tmp[word])*idf)
@@ -378,18 +373,26 @@ document.addEventListener("DOMContentLoaded", function() {
                         }
                     }
                     score = cosinesim(array1, array2);
+
+                    //console.log(n,score,decluter_cut,tf_source,tf,array1, array2)
+                    //delete array1, array2, tf_source_tmp, tf_tmp
                     
-                    //console.log(n,score)
                     //if ((score>=0.5) || (itemId=="https://www.npr.org/2023/09/13/1199168440/how-strong-is-republicans-impeachment-inquiry-into-president-biden")) {
-                    if (score>=0.65) {
-                        console.log(score)//,flipped,itemId,tf_source_tmp,tf_tmp,array1, array2)
+                    if (score>=decluter_cut) {
+                        //console.log(Object.keys(tf_source_tmp).length,Object.keys(tf_tmp).length)
+                        //console.log(score)//,flipped,itemId,tf_source_tmp,tf_tmp,array1, array2)
                         //console.log(tf_source,tf)
-                        console.log("-",title_source,"\n-",articleContainer.querySelector(".card-title").innerHTML )
+                        //console.log("-",title_source,"\n-",articleContainer.querySelector(".card-title").innerHTML )
                         
                         //var el = articleContainer.querySelector(".similar");
                         //console.log(el)
                         //el.innerHTML += `<li>`+title_source+`</li>`
                         
+                        similar_arts.push([articleContainer.querySelector(".card-title").innerHTML,itemId])
+
+                        readArticles[itemId] = new Date().toISOString();
+                        localStorage.setItem("read", JSON.stringify(readArticles));
+
                         articleContainer.remove()
                     }
                 }
@@ -398,6 +401,8 @@ document.addEventListener("DOMContentLoaded", function() {
             //document.getElementById('loading').style.display = "none";
 
         });
+
+        return similar_arts
 
     }
 
@@ -410,10 +415,13 @@ document.addEventListener("DOMContentLoaded", function() {
         articleContainers.forEach(articleContainer => {
             const itemId = articleContainer.getAttribute("data-item-id");
 
-            //source = articleContainer.querySelector(".card-title").innerHTML + " " + articleContainer.querySelector(".card-text").innerHTML
-            //title_source = articleContainer.querySelector(".card-title").innerHTML
-            //tf_source = countWords(source)
-            //declutter(title_source,itemId,tf_source,j)
+            var similar_arts = []
+            if (decluter_cut<1 && crunch_numbers) {
+                source = articleContainer.querySelector(".card-title").innerHTML + " " + articleContainer.querySelector(".card-text").innerHTML
+                title_source = articleContainer.querySelector(".card-title").innerHTML
+                tf_source = countWords(source)
+                similar_arts = declutter(title_source,itemId,tf_source,j)
+            }
             
             if (readArticles[itemId]) {
                 if (HiddenModeState) {
@@ -425,6 +433,21 @@ document.addEventListener("DOMContentLoaded", function() {
                             
             if ((!HiddenModeState) && (articleContainer.classList.contains("read-article"))) {
                 articleContainer.remove()
+            } else {
+                try {
+                    var el = articleContainer.querySelector(".similar");
+                    html = ""
+                    if (similar_arts.length>0){
+                        html += `Similar Articles: <ul>`
+                    }
+                    for (art in similar_arts){
+                        html += `<li><a href="`+similar_arts[art][1]+`" target="_blank">`+similar_arts[art][0]+`</a></li>`
+                    }
+                    if (similar_arts.length>0){
+                        html += `</ul>`
+                    }
+                    el.innerHTML += html                        
+                } catch (error) {}
             }
 
             const upvoteButton = articleContainer.querySelector(".upvote");
@@ -487,6 +510,30 @@ document.addEventListener("DOMContentLoaded", function() {
         lookbackValueElement.textContent = newLookback;
         localStorage.setItem("lookback", newLookback);
     });
+
+
+
+
+    const simcutSlider = document.getElementById("sim-cutoff");
+    const simcutValueElement = document.getElementById("sim-cutoff-value");
+    
+    // Retrieve lookback value from localStorage (if available)
+    const decluter_cut = localStorage.getItem("decluter_cut") || 1;
+    if (decluter_cut) {
+        simcutSlider.value = decluter_cut;
+        simcutValueElement.textContent = decluter_cut;
+    }
+
+    // Update lookback value and save to localStorage when slider value changes
+    simcutSlider.addEventListener("input", function () {
+        const newsimcut= simcutSlider.value;
+        simcutValueElement.textContent = newsimcut;
+        localStorage.setItem("decluter_cut", newsimcut);
+    });
+
+
+
+    
 
     const cutoffSlider = document.getElementById("cutoff-slider");
     const cutoffValueElement = document.getElementById("cutoff-value");
@@ -575,20 +622,20 @@ document.addEventListener("DOMContentLoaded", function() {
             loadFeeds = false;
         }
 
+        document.getElementById('news-feed').innerHTML = ` <div style="float:left;width:100%;height:80px;"><div id="spinner_here" style="margin:0 auto;width:65px;">&nbsp;</div></div>`;
+        if (localStorage.getItem("darkMode")=="enabled") {
+            tickcolor = '#ddd';		
+        } else {
+            tickcolor = '#000';		
+        }
+        start_spinner('spinner_here',tickcolor);
+
         if (loadFeeds) {
 
             localStorage.setItem("lastLoad", Date.parse(new Date()));
             localStorage.setItem("lastcooldown", savedcooldown);
 
             localStorage.setItem("feeds", JSON.stringify(rssFeeds));
-                
-            document.getElementById('news-feed').innerHTML = ` <div style="float:left;width:100%;height:80px;"><div id="spinner_here" style="margin:0 auto;width:65px;">&nbsp;</div></div>`;
-            if (localStorage.getItem("darkMode")=="enabled") {
-                tickcolor = '#ddd';		
-            } else {
-                tickcolor = '#000';		
-            }
-            start_spinner('spinner_here',tickcolor);
 
             if (singlefeed.length>0) {
                 n_feeds = rssFeeds.length - 1;
@@ -867,28 +914,30 @@ document.addEventListener("DOMContentLoaded", function() {
                         }
                         errors+=1
                         n_feeds+=1
-                        console.log("Error #"+errors+": ",feedUrl,errorMessage)
                     });
         
             });
 
         } else {
 
-            crunch_numbers = true;
-            dedup_articles();
-            reorderArticles();
-            displayArticles();
-            updateItemCount();
-            displayed_cards = newsFeedContainer.childNodes.length
-            console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
-            lazyload();
-            replace_broken();
-            get_quote();
-            crunch_numbers = false;
+            setTimeout(function(){
+                crunch_numbers = true;
+                dedup_articles();
+                reorderArticles();
+                displayArticles();
+                updateItemCount();
+                displayed_cards = newsFeedContainer.childNodes.length
+                console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
+                lazyload();
+                replace_broken();
+                get_quote();
+                document.getElementById('loading').style.display = "none";
+                crunch_numbers = false;
+            }, 1);
         }
 
         crunch_numbers = false;
-        
+
     }        
 
     function resetReadStatus() {
@@ -964,6 +1013,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
     function displayArticles() {  
+
+        if (decluter_cut<1 && crunch_numbers) {
+            dfreq_all = calculateDF(articles)
+        }
 
         newsFeedContainer.innerHTML = "";
 
@@ -1069,7 +1122,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             <div class="card-body">
                                     <!--<div class="priority-rating">${priorityRating}</div>-->
                                     ${card_body_text}
-                                    <ul class="similar"></ul>
+                                    <div class="similar"></div>
                                     <p class="card-text"><small class="text-muted">${local_pubDate}</small></p>
                                 <div class="d-flex justify-content-between">
                                     <div>

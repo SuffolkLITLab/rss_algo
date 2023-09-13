@@ -36,7 +36,7 @@
                     An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader made at the <a href="https://suffolklitlab.org/" target="_blank">Suffolk LIT Lab</a>. Use 👍 &amp; 👎 + <i>Seen</i> or <i>Open</i> to feed the algo. Refresh to update your card order. Votes don't leave your device. Customize algo and timeline in <i>Settings &amp; Data</i>. Curate feeds using <i>My Feeds</i> above—includes premade libraries. Add individual feeds with the <i>plus</i> button. For project updates, follow <a href="https://mastodon.social/deck/tags/suffolkrssalgo" target="_blank">#SuffolkRSSalgo</a> on Mastodon, or visit <a href="https://github.com/colarusso/rss_algo" target="_blank">our GitHub page</a>.
                 </p>
             </div>
-            <div id="loading" style="float:left;background:yellow;display:none;color:black;margin-bottom: 10px;">
+            <div id="loading" style="float:left;background:yellow;color:black;margin-bottom: 10px;">
                 <i>&nbsp;Loading. . .&nbsp;</i>
             </div>
             <div style="float:left;width:100%;">
@@ -71,24 +71,28 @@
                     <p>
                         The options you choose below will effect this site's performance. Generally speaking, the more inclusive your choices the larger your timeline will be and the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.
                     </p>
-                </div>
-                <div class="col-md-6 col-sm-12" style="overflow:hidden;">
+                    <h4>Images</h4>
+                    <p>
+                        <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Ignore preview images (i.e., load w/o thumbnails). <i>Refresh page to see results</i>.</label>
+                    </p>
                     <h4>Show Cards You've Seen</h4>
                     <p>
                         <label for="hiddenMode"><input type="checkbox" id="hiddenMode" value="1"> Show cards marked as "Seen" at the end of the list but grayed out. <i>Refresh page to see results</i>.</label>
                     </p>
-                    <h4>Images</h4>
+                </div>
+                <div class="col-md-6 col-sm-12" style="overflow:hidden;">
+                    <h4>Similar Articles</h4>
                     <p>
-                        <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Ignore preview images (i.e., load w/o thumbnails). <i>Refresh page to see results</i>.</label>
+                        You can hide/group articles that are "too" similar to eachother. Leave the <a href="https://en.wikipedia.org/wiki/Cosine_similarity" target="_blank">cosine similarity</a> cutoff at 1 to keep all articles. Setting the cutoff to something lower will hide all but one of the acticles with similarity greater than the cutoff. This will display a list of "hidden" articles at the bottom of the top-most rated article card for that group. <b><i>Note: this will slow down sorting of your articles, esp. for larger timelines. Also, all items in a group other than the top-most are marked as "read" to hide them from your timeline. This cannot be undone!</i></b> Cosine Similarity for cutoff: <b><i><span id="sim-cutoff-value">1</span></i></b>. <i>Refresh page to see results</i>.
+                    </p>
+                    <p>
+                        <input type="range" id="sim-cutoff" min="0.5" max="1" value="1" step="0.01" style="width:100%;">
                     </p>
                 </div>
             </div>
             <h4>Ratings Cutoff</h4>
             <p>
-                After the recommendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and positive numbers are above average. 
-            </p>
-            <p>
-                Z-Score for cutoff: <b><i><span id="cutoff-value">-2</span></i></b>. <i>Refresh page to see results</i>.
+                After the recommendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and positive numbers are above average. Z-Score for cutoff: <b><i><span id="cutoff-value">-2</span></i></b>. <i>Refresh page to see results</i>.
             </p>
             <p>
                 <input type="range" id="cutoff-slider" min="-3.5" max="3.5" value="-1.5" step="0.1" style="width:100%;">
