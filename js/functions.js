@@ -320,58 +320,82 @@ document.addEventListener("DOMContentLoaded", function() {
         return data;
     }
 
-    function declutter(title_source,id_source,tf_source){
-        const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
+    function declutter(title_source,id_source,tf_source,n=0){
 
+        //document.getElementById('loading').style.display = "block";
+        //document.getElementById('loading').innerHTML = '<i>&nbsp;Removing "overlapping" articles.&nbsp;</i>'
+
+        const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
+        var dfreq_all = calculateDF(articles)
+
+        k=0;
         articleContainers.forEach(articleContainer => {
 
-            const itemId = articleContainer.getAttribute("data-item-id");
+            if(i>=n) {
+                const itemId = articleContainer.getAttribute("data-item-id");
+                if (id_source!=itemId) {
+                    text = articleContainer.querySelector(".card-title").innerHTML + " " + articleContainer.querySelector(".card-text").innerHTML
 
-            if (id_source!=itemId) {
-                text = articleContainer.querySelector(".card-title").innerHTML + " " + articleContainer.querySelector(".card-text").innerHTML
+                    tf = countWords(text)
 
-                tf = countWords(text)
+                    if (Object.keys(tf_source).length>Object.keys(tf).length){
+                        tf_source_tmp = JSON.parse(JSON.stringify(tf_source));
+                        tf_tmp = JSON.parse(JSON.stringify(tf)); 
+                        flipped = 0
+                    } else {
+                        tf_source_tmp = JSON.parse(JSON.stringify(tf)); 
+                        tf_tmp = JSON.parse(JSON.stringify(tf_source));
+                        flipped = 1
+                    }
 
-                if (Object.keys(tf_source).length<Object.keys(tf).length){
-                    tf_source_tmp = JSON.parse(JSON.stringify(tf_source));
-                    tf_tmp = JSON.parse(JSON.stringify(tf)); 
-                    tf_source = tf_tmp
-                    tf = tf_source_tmp
-                    //console.log("Flipped Comparison!")
-                } 
+                    //console.log(tf_source,tf)
 
-                //console.log(tf_source,tf)
+                    var array1 = [];
+                    var array2 = [];
+                    for (word in tf_source_tmp) {
+                        //if (dfreq_all["df_arr"][word]) {
+                            idf = Math.log(1+dfreq_all["n_docs"]/dfreq_all["df_arr"][word]);
+                            //if (isNaN(idf)) {
+                            //    idf = 1;
+                            //}
+                        //} else {
+                        //    this_here = 1
+                        //    if (tf_tmp[word]) {
+                        //        this_here+=1;
+                        //   }
+                        //    idf = Math.log(1+dfreq_all["n_docs"]/this_here);
+                        //}
 
-                var array1 = [];
-                var array2 = [];
-                for (word in tf_source) {
-                    if (dfreq["df_arr"][word]) {
-                        idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
-                        if (isNaN(idf)) {
-                            idf = 1;
+                        if (tf_source_tmp[word] && idf) {
+                            array1.push((tf_source_tmp[word])*idf)
+                        } else {
+                            array1.push(0)
                         }
-                    } else {
-                        idf = 1;
+                        if (tf_tmp[word]) {
+                            array2.push(tf_tmp[word]*idf)
+                        } else {
+                            array2.push(0)
+                        }
                     }
-                    if (tf_source[word] && idf) {
-                        array1.push((tf_source[word])*idf)
-                    } else {
-                        array1.push(0)
+                    score = cosinesim(array1, array2);
+                    
+                    //console.log(n,score)
+                    //if ((score>=0.5) || (itemId=="https://www.npr.org/2023/09/13/1199168440/how-strong-is-republicans-impeachment-inquiry-into-president-biden")) {
+                    if (score>=0.65) {
+                        console.log(score)//,flipped,itemId,tf_source_tmp,tf_tmp,array1, array2)
+                        //console.log(tf_source,tf)
+                        console.log("-",title_source,"\n-",articleContainer.querySelector(".card-title").innerHTML )
+                        
+                        //var el = articleContainer.querySelector(".similar");
+                        //console.log(el)
+                        //el.innerHTML += `<li>`+title_source+`</li>`
+                        
+                        articleContainer.remove()
                     }
-                    if (tf[word]) {
-                        array2.push(tf[word]*idf)
-                    } else {
-                        array2.push(0)
-                    }
-                }
-                score = cosinesim(array1, array2);
-                
-                if (score>0.9){
-                    console.log(score)//,tf_source,tf,array1, array2)
-                    console.log("-",title_source,"\n-",articleContainer.querySelector(".card-title").innerHTML)
-                    //articleContainer.remove()
                 }
             }
+            k+=1;
+            //document.getElementById('loading').style.display = "none";
 
         });
 
@@ -382,17 +406,15 @@ document.addEventListener("DOMContentLoaded", function() {
         const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
         const HiddenModeState = localStorage.getItem("hiddenMode") === "true";
 
+        j = 0;
         articleContainers.forEach(articleContainer => {
             const itemId = articleContainer.getAttribute("data-item-id");
-
 
             //source = articleContainer.querySelector(".card-title").innerHTML + " " + articleContainer.querySelector(".card-text").innerHTML
             //title_source = articleContainer.querySelector(".card-title").innerHTML
             //tf_source = countWords(source)
-            //declutter(title_source,itemId,tf_source)
-
+            //declutter(title_source,itemId,tf_source,j)
             
-
             if (readArticles[itemId]) {
                 if (HiddenModeState) {
                     articleContainer.classList.add("read-article");
@@ -425,8 +447,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     downvoteButton.classList.remove("thumbs-down");
                 } catch (error) {}
             }
+            j+=1;
 
-      
         });
 
     }
@@ -1047,6 +1069,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             <div class="card-body">
                                     <!--<div class="priority-rating">${priorityRating}</div>-->
                                     ${card_body_text}
+                                    <ul class="similar"></ul>
                                     <p class="card-text"><small class="text-muted">${local_pubDate}</small></p>
                                 <div class="d-flex justify-content-between">
                                     <div>
@@ -1245,11 +1268,11 @@ document.addEventListener("DOMContentLoaded", function() {
         for (word in upTFIDF) {
             if (dfreq["df_arr"][word]) {
                 idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
-                if (isNaN(idf)) {
-                    idf = 1;
-                }
+                //if (isNaN(idf)) {
+                //    idf = 1;
+                //}
             } else {
-                idf = 1;
+                idf = Math.log(1+dfreq["n_docs"]/1);
             }
                 if (tf[word] && idf) {
                     array1.push((tf[word])*idf)
@@ -1269,11 +1292,11 @@ document.addEventListener("DOMContentLoaded", function() {
         for (word in downTFIDF) {
             if (dfreq["df_arr"][word]) {
                 idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
-                if (isNaN(idf)) {
-                    idf = 1;
-                }
+                //if (isNaN(idf)) {
+                //    idf = 1;
+                //}
             } else {
-                idf = 1;
+                idf = Math.log(1+dfreq["n_docs"]/1);
             }
                 if (tf[word] && idf) {
                     array1.push((tf[word])*idf)
