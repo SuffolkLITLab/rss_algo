@@ -75,10 +75,6 @@
                     <p>
                         <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Ignore preview images (i.e., load w/o thumbnails). <i>Refresh page to see results</i>.</label>
                     </p>
-                    <h4>Show Cards You've Seen</h4>
-                    <p>
-                        <label for="hiddenMode"><input type="checkbox" id="hiddenMode" value="1"> Show cards marked as "Seen" at the end of the list but grayed out. <i>Refresh page to see results</i>.</label>
-                    </p>
                 </div>
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
                     <h4>Similar Articles</h4>
@@ -95,7 +91,7 @@
                 After the recommendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and positive numbers are above average. Z-Score for cutoff: <b><i><span id="cutoff-value">-2</span></i></b>. <i>Refresh page to see results</i>.
             </p>
             <p>
-                <input type="range" id="cutoff-slider" min="-3.5" max="3.5" value="-1.5" step="0.1" style="width:100%;">
+                <input type="range" id="cutoff-slider" min="-3.5" max="3.5" value="-1.5" step="0.01" style="width:100%;">
             </p>
             <h4>Positive vs. Negative</h4>
             <p>
@@ -136,13 +132,34 @@
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
+                    <h4>Auto Close Pocket Pop-ups</h4>
+                    <p>If you don't have a <a href="https://help.getpocket.com/category/846-category" target="_blank">Pocket plugin</a> installed, you can use the <a href="https://getpocket.com" target="_blank">Pocket</a> button in the upper-right corner of each card to save items to  Pocket. This opens a new window. If you're already signed into Pocket you can have these windows close themselves after saving your item. If you aren't already signed in they will open and close without saving. So, only check the below box if you are signed in.</p>
+                    <p>
+                        <label for="pocket-pop"><input type="checkbox" id="pocket-pop" value="1"> Close the <i>saved to Pocket</i> window right after opening. <i>Refresh page to see results</i>.</label>
+                    </p>
+                    <h4>Auto-Vote</h4>
+                    <p>
+                        <label for="auto-vote"><input type="checkbox" id="auto-vote" value="1"> When: (1) saving to Pocket; (2) sharing to Mastodon; or (3) opening an article, give it a thumbs up. <i>Refresh page to see results</i>.</label>
+                    </p>
+                    <h4>After Opening</h4>
+                    <p>
+                        <label for="after-open"><input type="checkbox" id="after-open" value="1"> Mark cards as "Seen" after opening articles. <i>Refresh page to see results</i>.</label>
+                    </p>
+                    <h4>After Votes</h4>
+                    <p>
+                        <label for="vote-view"><input type="checkbox" id="vote-view" value="1"> Mark cards as "Seen" after up or down votes. <i>Refresh page to see results</i>.</label>
+                    </p>
+                </div>
+                <div class="col-md-6 col-sm-12" style="overflow:hidden;">
+                    <h4>Show Cards You've Seen</h4>
+                    <p>
+                        <label for="hiddenMode"><input type="checkbox" id="hiddenMode" value="1"> Show cards marked as "Seen" at the end of the list but grayed out. <i>Refresh page to see results</i>.</label>
+                    </p>
                     <h4>Mastodon</h4>
                     <p>
                         Since users of <a href="https://joinmastodon.org/" target="_blank">Mastodon</a> use different servers/instances, we need to collect that information to enable sharing (i.e., so we can queue your post on the right server). If you'd like to use this feature, enter your server here:
                     </p>
                     <p><input id="masto_instance" value="" oninput="localStorage.instance=this.value"></p>
-                </div>
-                <div class="col-md-6 col-sm-12" style="overflow:hidden;">
                     <h4>Your Data</h4>
                     <p>
                         FWIW, you can download the data stored in your browser to a file. This is helpful for backups and if you want to move your history et al. between devices.

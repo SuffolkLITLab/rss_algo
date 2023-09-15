@@ -172,6 +172,7 @@ var geeek_feeds = [
     "https://phys.org/rss-feed/biology-news/",
     "https://phys.org/rss-feed/chemistry-news/",
     "https://thegradient.pub/rss/",
+    "https://www.ailawlibrarians.com/feed/",
     "https://slate.com/feeds/technology.rss",
     "http://gizmodo.com/vip.xml",
     "https://techcrunch.com/feed/",
@@ -270,6 +271,7 @@ var suffolk_law_feeds = [
     "https://theconversation.com/us/articles.atom",
     "https://masslawyersweekly.com/feed/", 
     "https://www.lawnext.com/feed",
+    "https://www.ailawlibrarians.com/feed/",
     "https://www.scotusblog.com/feed/",
     "https://buttondown.email/LawyerExMachina/rss",
     "https://api.ssrn.com/content/v1/journals/956475/papers/rss",
@@ -468,6 +470,8 @@ var feeds_long_list = [
     "https://masslawyersweekly.com/feed/",
     // Law Next
     "https://www.lawnext.com/feed",
+    // AI Law Librarians
+    "https://www.ailawlibrarians.com/feed/",
     // SCOTUS Blog
     "https://www.scotusblog.com/feed/",
     // ExMachina Newsletter
@@ -552,7 +556,7 @@ test_feeds = [
     "http://feeds.bbci.co.uk/news/world/rss.xml",
     //"http://feeds.bbci.co.uk/news/uk/rss.xml",
     "http://feeds.bbci.co.uk/news/business/rss.xml",
-    "http://feeds.bbci.co.uk/news/politics/rss.xml",
+    //"http://feeds.bbci.co.uk/news/politics/rss.xml",
     "http://feeds.bbci.co.uk/news/health/rss.xml",
     "http://feeds.bbci.co.uk/news/education/rss.xml",
     "http://feeds.bbci.co.uk/news/science_and_environment/rss.xml",
@@ -699,6 +703,8 @@ test_feeds = [
     "https://masslawyersweekly.com/feed/",
     // Law Next
     "https://www.lawnext.com/feed",
+    // AI Law Librarians
+    "https://www.ailawlibrarians.com/feed/",
     // SCOTUS Blog
     "https://www.scotusblog.com/feed/",
     // ExMachina Newsletter
