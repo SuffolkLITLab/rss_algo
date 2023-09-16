@@ -1884,8 +1884,8 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 <option value="condenast_feeds">Condé Nast Lite: New Yorker, ArsTechnica, &amp; Wired</option>
                                 <option value="magazine_feeds">Mags: New Yorker, Economist, Atalantic, Wired, RollingStone &amp; Quanta</option>
                                 <option value="suffolk_law_feeds">Suffolk Mix: Select Papers + Boston + Law</option>
-                                <option value="journal_feeds">US Law Journals</option>
-                                <option value="scifi_shorts_feed">SciFi Shorts: Clarkesworld, Lightspeed &amp; Escape Pod</option>
+                                <!--<option value="journal_feeds">US Law Journals</option>-->
+                                <option value="geeek_feeds">Geekery: Science, Space, Tech, Star Trek and &amp; SciFi</option>
                                 <option value="scifi_shorts_feed">SciFi Shorts: Clarkesworld, Lightspeed &amp; Escape Pod</option>
                                 <option value="feeds_long_list">All of the Above Plus More (over 180 feeds)</option>
                             </select>
