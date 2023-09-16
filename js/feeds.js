@@ -510,6 +510,21 @@ var feeds_long_list = [
     "https://escapepod.org/feed/podcast/"
 ]
 
+
+journal_feeds = [
+    "https://digitalcommons.law.byu.edu/announcements.html",
+    "https://scholarlycommons.law.case.edu/recent.rss",
+    "https://chicagounbound.uchicago.edu/recent.rss",
+    "https://scholarship.law.cornell.edu/recent.rss",
+    "https://scholarship.law.duke.edu/recent.rss",
+    "https://scholarship.law.marquette.edu/recent.rss",
+    "https://repository.law.umich.edu/recent.rss",
+    "https://scholarlycommons.law.northwestern.edu/recent.rss",
+    "https://scholarship.law.nd.edu/recent.rss",
+    "https://dc.suffolk.edu/suls-faculty/recent.rss",
+    "https://scholarship.law.wm.edu/recent.rss"
+]
+
 test_feeds = [
 
     // New York Times
