@@ -808,7 +808,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     if (!mastodon) {
                                         description = extractContent(description)
                                         if (description.length>400) {
-                                            description = description.slice(0,300)+" [...]";
+                                            description = description.slice(0,350)+" [...]";
                                         }
                                     }
 
@@ -1172,7 +1172,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     <!--<div class="priority-rating">${priorityRating}</div>-->
                                     ${card_body_text}
                                     <div class="similar"></div>
-                                    <p class="card-text"><small class="text-muted">${local_pubDate}</small></p>
+                                    <p class="d-flex"><small class="text-muted">${local_pubDate}</small></p>
                                 <div class="d-flex justify-content-between">
                                     <div>
                                         <button class="btn btn-success upvote ${hasUpvote ? 'thumbs-up' : ''}" data-item-id="${itemId}">👍</button>
