@@ -783,8 +783,12 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     }
                                 }
 
+                                //console.log(author)
                                 if (author!="") {
-                                    description = "By " + author +". "+ description
+                                    author = author.replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g,"").trim();
+                                    if (author!="") {
+                                        description = "By " + author +". "+ description;
+                                    }
                                 }
 
                                 if (description!="" && link){
