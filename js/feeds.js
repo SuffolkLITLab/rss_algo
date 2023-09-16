@@ -409,7 +409,7 @@ var law_schools = [
     "cardozo.yu.edu"
     ]
 
-//  domains found at https://network.bepress.com/institutions/law/
+//  domains found at https://network.bepress.com/institutions/law/ with /recent.rss appended to the end
 var dc_law_feeds = [
     "https://digitalcommons.acu.edu/recent.rss",
     "https://arc.accesslex.org/recent.rss",
