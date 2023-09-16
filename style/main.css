@@ -240,6 +240,9 @@ select {
 .dark-mode .btn-primary {
     color: #ffffff;
 }
+.dark-mode .btn-danger {
+    color: #ffffff;
+}
 .dark-mode .card {
     background-color: #333;
     border-color: #4e4e4e;

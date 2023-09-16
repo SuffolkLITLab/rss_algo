@@ -1,14 +1,18 @@
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
+function show_timeline() {
+    document.getElementById('my_settings').style.display = "none";
+    document.getElementById('news-feed').style.display = "flex";
+    document.getElementById('a_settings').innerHTML = "Settings &amp; Data";
+}
+
 function toggle_settings() {
     if (document.getElementById('my_settings').style.display=="none") {
         document.getElementById('news-feed').style.display = "none";
         document.getElementById('my_settings').style.display = "block";
         document.getElementById('a_settings').innerHTML = "Show Timeline";
     } else {
-        document.getElementById('my_settings').style.display = "none";
-        document.getElementById('news-feed').style.display = "flex";
-        document.getElementById('a_settings').innerHTML = "Settings &amp; Data";
+        show_timeline();
     }
 }
 
@@ -755,7 +759,7 @@ function declutter(title_source,id_source,tf_source,n=0){
 
                                 try {
                                     author = item.querySelector("author").textContent;
-                                    console.log("Author",author)
+                                    //console.log("Author",author)
                                 } catch (error) {
                                     author = ""
                                 }
@@ -1882,12 +1886,13 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 <option value="default_feeds">Generic US News Mix (default)</option>
                                 <option value="papers_feeds">US Print: NYT, WaPo, WSJ, &amp; LA Times</option>
                                 <option value="condenast_feeds">Condé Nast Lite: New Yorker, ArsTechnica, &amp; Wired</option>
-                                <option value="magazine_feeds">Mags: New Yorker, Economist, Atalantic, Wired, RollingStone &amp; Quanta</option>
-                                <option value="suffolk_law_feeds">Suffolk Mix: Select Papers + Boston + Law</option>
-                                <!--<option value="journal_feeds">US Law Journals</option>-->
-                                <option value="geeek_feeds">Geekery: Science, Space, Tech, Star Trek and &amp; SciFi</option>
+                                <option value="magazine_feeds">Mags: New Yorker, Economist, Atalantic, Wired, Rolling Stone &amp; Quanta</option>
+                                <option value="geeek_feeds">Geekery: Science, Space, Tech, Star Trek and &amp; SciFi Shorts</option>
                                 <option value="scifi_shorts_feed">SciFi Shorts: Clarkesworld, Lightspeed &amp; Escape Pod</option>
-                                <option value="feeds_long_list">All of the Above Plus More (over 180 feeds)</option>
+                                <option value="suffolk_law_feeds">Suffolk Mix: Select Papers + Boston + Law &amp; Scholarship</option>
+                                <option value="dc_law_feeds">Digital Commons Orgs w/ Law Content (400+ orgs)</option>
+                                <option value="law_school_feeds">Digital Commons Orgs w/ ABA-Accredited Law Schools (100+ feeds)</option>
+                                <option value="feeds_long_list">All of the Above, Plus Some, Minus Digital Commons Feeds</option>
                             </select>
                             </p>
                             <p>
@@ -1914,6 +1919,7 @@ function declutter(title_source,id_source,tf_source,n=0){
         removeALLaddSelection.addEventListener("click", function() {
             let text = "This will empty your current list of feeds, replacing it with the selection you made. It will remove all current records relating to articles, including votes. Choose OK to continue.";
             if (confirm(text) == true) {
+                show_timeline();
                 feed_name = document.getElementById("feed_list").value;
                 rssFeeds = window[feed_name]
                 localStorage.setItem("feeds",rssFeeds)
@@ -1955,6 +1961,7 @@ function declutter(title_source,id_source,tf_source,n=0){
         removeALLfeeds.addEventListener("click", function() {
             let text = "This will empty your feed list and remove all article records. This will reset your algo traing. Choose OK to continue.";
             if (confirm(text) == true) {
+                show_timeline();
                 rssFeeds = []
                 localStorage.setItem("feeds",JSON.stringify(rssFeeds))
                 feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
