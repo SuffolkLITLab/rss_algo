@@ -251,6 +251,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var ratings_std = 0;
 
     function updateFeedList(loadFeeds = false, singlefeed="") {
+        rssFeeds = removeDuplicates(rssFeeds);
         localStorage.setItem("feeds", JSON.stringify(rssFeeds));
         let upTFIDF =  JSON.parse(localStorage.getItem("upTFIDF")) || {};
         let downTFIDF =  JSON.parse(localStorage.getItem("downTFIDF")) || {};
