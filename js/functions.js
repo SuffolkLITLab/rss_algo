@@ -309,7 +309,13 @@ function declutter(title_source,id_source,tf_source,n=0){
             if(k>n) {
                 const itemId = articleContainer.getAttribute("data-item-id");
                 if (id_source!=itemId) {
-                    text = articleContainer.querySelector(".card-title").innerHTML + " " + articleContainer.querySelector(".card-text").innerHTML
+                    
+                    if (articleContainer.querySelector(".card-text")) {
+                        art_text = articleContainer.querySelector(".card-text").innerHTML
+                    } else {
+                        art_text = ""
+                    }
+                    text = articleContainer.querySelector(".card-title").innerHTML + " " + art_text
 
                     tf = countWords(text)
 
@@ -393,11 +399,36 @@ function declutter(title_source,id_source,tf_source,n=0){
 
             var similar_arts = []
             if (decluter_cut<1 && crunch_numbers) {
-                source = articleContainer.querySelector(".card-title").innerHTML + " " + articleContainer.querySelector(".card-text").innerHTML
+                if (articleContainer.querySelector(".card-text")) {
+                    art_text = articleContainer.querySelector(".card-text").innerHTML
+                } else {
+                    art_text = ""
+                }
+                source = articleContainer.querySelector(".card-title").innerHTML + " " + art_text
                 title_source = articleContainer.querySelector(".card-title").innerHTML
                 tf_source = countWords(source)
                 similar_arts = declutter(title_source,itemId,tf_source,j)
             }
+
+            const upvoteButton = articleContainer.querySelector(".upvote");
+            const downvoteButton = articleContainer.querySelector(".downvote");
+            //const skipButton = articleContainer.querySelector(".skip");
+
+            if (upvotes[itemId]) {
+                upvoteButton.classList.add("thumbs-up");
+            } else {
+                try {
+                    upvoteButton.classList.remove("thumbs-up");
+                } catch (error) {}
+            }
+
+            if (downvotes[itemId]) {
+                downvoteButton.classList.add("thumbs-down");
+            } else {
+                try {
+                    downvoteButton.classList.remove("thumbs-down");
+                } catch (error) {}
+            }            
             
             if (readArticles[itemId]) {
                 if (HiddenModeState) {
@@ -428,26 +459,6 @@ function declutter(title_source,id_source,tf_source,n=0){
                 } catch (error) {}
             }
 
-            const upvoteButton = articleContainer.querySelector(".upvote");
-            const downvoteButton = articleContainer.querySelector(".downvote");
-            const skipButton = articleContainer.querySelector(".skip");
-
-
-            if (upvotes[itemId]) {
-                upvoteButton.classList.add("thumbs-up");
-            } else {
-                try {
-                    upvoteButton.classList.remove("thumbs-up");
-                } catch (error) {}
-            }
-
-            if (downvotes[itemId]) {
-                downvoteButton.classList.add("thumbs-down");
-            } else {
-                try {
-                    downvoteButton.classList.remove("thumbs-down");
-                } catch (error) {}
-            }
             j+=1;
 
         });
