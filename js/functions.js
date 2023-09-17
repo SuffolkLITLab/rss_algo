@@ -1279,6 +1279,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             // Update the unread count
                             updateItemCount();
                             get_quote();  
+                            setTimeout( function() {}, 100);
                         }
                         
                         updateArticleStyles();
@@ -1300,25 +1301,28 @@ function declutter(title_source,id_source,tf_source,n=0){
                         localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts))));
 
                         if (voteViewModeState){
-                            const articleIndex = parseInt(article.getAttribute("data-article-index"));
-                            readArticles[itemId] = new Date().toISOString();
-                            localStorage.setItem("read", JSON.stringify(readArticles));
-    
-                            // Mark the article as read in the articles array
-                            articles[articleIndex].isRead = true;
-    
-                            // Get the parent container of the clicked skip button
-                            const articleContainer = skipButton.closest(".article-container");
-    
-                            // Update the Open button behavior
-                            updateOpenButton(articleContainer);
-    
-                            // Move the article container to the end of the list
-                            moveCardToEnd(articleContainer);
-    
-                            // Update the unread count
-                            updateItemCount();
-                            get_quote();  
+                            setTimeout( function() {
+                                const articleIndex = parseInt(article.getAttribute("data-article-index"));
+                                readArticles[itemId] = new Date().toISOString();
+                                localStorage.setItem("read", JSON.stringify(readArticles));
+        
+                                // Mark the article as read in the articles array
+                                articles[articleIndex].isRead = true;
+        
+                                // Get the parent container of the clicked skip button
+                                const articleContainer = skipButton.closest(".article-container");
+        
+                                // Update the Open button behavior
+                                updateOpenButton(articleContainer);
+        
+                                // Move the article container to the end of the list
+                                moveCardToEnd(articleContainer);
+        
+                                // Update the unread count
+                                updateItemCount();
+                                get_quote();  
+                                
+                            }, 150);
                         }
                         
                         updateArticleStyles();
@@ -1340,25 +1344,27 @@ function declutter(title_source,id_source,tf_source,n=0){
                         localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-max_arts))));
 
                         if (voteViewModeState){
-                            const articleIndex = parseInt(article.getAttribute("data-article-index"));
-                            readArticles[itemId] = new Date().toISOString();
-                            localStorage.setItem("read", JSON.stringify(readArticles));
-    
-                            // Mark the article as read in the articles array
-                            articles[articleIndex].isRead = true;
-    
-                            // Get the parent container of the clicked skip button
-                            const articleContainer = skipButton.closest(".article-container");
-    
-                            // Update the Open button behavior
-                            updateOpenButton(articleContainer);
-    
-                            // Move the article container to the end of the list
-                            moveCardToEnd(articleContainer);
-    
-                            // Update the unread count
-                            updateItemCount();
-                            get_quote();  
+                            setTimeout( function() {
+                                const articleIndex = parseInt(article.getAttribute("data-article-index"));
+                                readArticles[itemId] = new Date().toISOString();
+                                localStorage.setItem("read", JSON.stringify(readArticles));
+        
+                                // Mark the article as read in the articles array
+                                articles[articleIndex].isRead = true;
+        
+                                // Get the parent container of the clicked skip button
+                                const articleContainer = skipButton.closest(".article-container");
+        
+                                // Update the Open button behavior
+                                updateOpenButton(articleContainer);
+        
+                                // Move the article container to the end of the list
+                                moveCardToEnd(articleContainer);
+        
+                                // Update the unread count
+                                updateItemCount();
+                                get_quote(); 
+                            }, 150); 
                         }
 
                         
