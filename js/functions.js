@@ -246,6 +246,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var dfreq = calculateDF(articles.filter(article => readArticles[article.itemId]))
     var dfreq_all = {}
     var crunch_numbers = false
+    var decluter_cards = true
 
     var ratings_mean = 0;
     var ratings_std = 0;
@@ -398,7 +399,8 @@ function declutter(title_source,id_source,tf_source,n=0){
             const itemId = articleContainer.getAttribute("data-item-id");
 
             var similar_arts = []
-            if (decluter_cut<1 && crunch_numbers) {
+            if (decluter_cut<1 && crunch_numbers && decluter_cards) {
+                console.log("decluttering")
                 if (articleContainer.querySelector(".card-text")) {
                     art_text = articleContainer.querySelector(".card-text").innerHTML
                 } else {
@@ -664,9 +666,12 @@ function declutter(title_source,id_source,tf_source,n=0){
             var time_padding = Date.parse(new Date())-lastcooldown*60*60*1000 //750000
         }
 
+        decluter_cards = true
         if ((lastLoad>time_padding) || (rssFeeds.length==0)) {
             loadFeeds = false;
+            decluter_cards = false;
         }
+        
 
         document.getElementById('news-feed').innerHTML = ` <div style="float:left;width:100%;height:80px;"><div id="spinner_here" style="margin:0 auto;width:65px;">&nbsp;</div></div>`;
         if (localStorage.getItem("darkMode")=="enabled") {
@@ -964,6 +969,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             lazyload();
                             replace_broken();
                             get_quote();
+                            decluter_cards = false;
                         }
                     })
                     .catch(error => {
@@ -993,6 +999,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                 lazyload();
                 replace_broken();
                 get_quote();
+                decluter_cards = false;
                 document.getElementById('loading').style.display = "none";
                 crunch_numbers = false;
             }, 1);
