@@ -1300,8 +1300,6 @@ function declutter(title_source,id_source,tf_source,n=0){
                         }
                         localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts))));
 
-                        updateArticleStyles();
-
                         if (voteViewModeState){
                             const articleIndex = parseInt(article.getAttribute("data-article-index"));
                             readArticles[itemId] = new Date().toISOString();
@@ -1324,6 +1322,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             get_quote();  
                         }
                         
+                        updateArticleStyles();
                     });
 
                     downvoteButton.addEventListener("click", function() {
@@ -1341,8 +1340,6 @@ function declutter(title_source,id_source,tf_source,n=0){
                         }
                         localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-max_arts))));
 
-                        updateArticleStyles();
-
                         if (voteViewModeState){
                             const articleIndex = parseInt(article.getAttribute("data-article-index"));
                             readArticles[itemId] = new Date().toISOString();
@@ -1365,6 +1362,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             get_quote();  
                         }
 
+                        updateArticleStyles();
                     });
 
                     skipButton.addEventListener("click", function () {
