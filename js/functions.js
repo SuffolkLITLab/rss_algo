@@ -1222,6 +1222,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             upvotes[itemId] = true;
                             localStorage.setItem("upvotes", JSON.stringify(upvotes));
                             localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts))));
+                            updateArticleStyles();
                         }
 
                         if (voteViewModeState){
@@ -1246,7 +1247,6 @@ function declutter(title_source,id_source,tf_source,n=0){
                             get_quote();  
                         }
                         
-                        updateArticleStyles();
                     });
 
                     pocketButton.addEventListener("click", function() {
@@ -1257,6 +1257,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             upvotes[itemId] = true;
                             localStorage.setItem("upvotes", JSON.stringify(upvotes));
                             localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts))));
+                            updateArticleStyles();
                         }
 
                         if (voteViewModeState){
@@ -1282,7 +1283,6 @@ function declutter(title_source,id_source,tf_source,n=0){
                             setTimeout( function() {}, 100);
                         }
                         
-                        updateArticleStyles();
                     });
 
                     upvoteButton.addEventListener("click", function() {
@@ -1320,9 +1320,10 @@ function declutter(title_source,id_source,tf_source,n=0){
                             // Update the unread count
                             updateItemCount();
                             get_quote();  
+                        } else {
+                            updateArticleStyles();
                         }
                         
-                        updateArticleStyles();
                     });
 
                     downvoteButton.addEventListener("click", function() {
@@ -1339,6 +1340,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             localStorage.setItem("downvotes", JSON.stringify(downvotes));
                         }
                         localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-max_arts))));
+                        //updateArticleStyles();
 
                         if (voteViewModeState){
                             const articleIndex = parseInt(article.getAttribute("data-article-index"));
@@ -1360,9 +1362,9 @@ function declutter(title_source,id_source,tf_source,n=0){
                             // Update the unread count
                             updateItemCount();
                             get_quote();  
+                        } else {
+                            updateArticleStyles();
                         }
-
-                        updateArticleStyles();
                     });
 
                     skipButton.addEventListener("click", function () {
