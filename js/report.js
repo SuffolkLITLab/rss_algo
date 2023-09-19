@@ -43,7 +43,7 @@ function report() {
                 vote_size = ((localStorage["upvotes"].length + "upvotes".length) * 2)/1024/Object.keys(JSON.parse(localStorage.upvotes)).length;
                 read_size = ((localStorage["read"].length + "read".length) * 2)/1024/Object.keys(JSON.parse(localStorage.read)).length;
                 tfidf_size = ((localStorage["upTFIDF"].length + "upTFIDF".length) * 2)/1024/Object.keys(JSON.parse(localStorage.upvotes)).length;
-                size_per_art = (vote_size+read_size*1.5+tfidf_size*1.7+size*1.5); // (size_votes_item + size_read_item*kept + size_TFIDF*kept + sizer_per_stored_article*padding)
+                size_per_art = (vote_size+read_size*2.5+tfidf_size*1.7+size*1.5); // (size_votes_item + size_read_item*kept + size_TFIDF*kept + sizer_per_stored_article*padding)
                 feed_size = ((localStorage["feeds"].length + "feeds".length) * 2)/1024/Object.keys(JSON.parse(localStorage.feeds)).length;
                 max_arts = Math.round((5000*1-10-feed_size)/size_per_art)  // 100% of limit - 10 for all settings 
             } catch (error) {}
