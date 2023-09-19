@@ -1229,7 +1229,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                         if (savedautoVote) {
                             upvotes[itemId] = true;
                             localStorage.setItem("upvotes", JSON.stringify(upvotes));
-                            localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts))));
+                            localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
                             updateArticleStyles();
                         }
 
@@ -1264,7 +1264,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                         if (savedautoVote) {
                             upvotes[itemId] = true;
                             localStorage.setItem("upvotes", JSON.stringify(upvotes));
-                            localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts))));
+                            localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
                             updateArticleStyles();
                         }
 
@@ -1306,7 +1306,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             upvotes[itemId] = true;
                             localStorage.setItem("upvotes", JSON.stringify(upvotes));
                         }
-                        localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts))));
+                        localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
 
                         if (voteViewModeState){
                             const articleIndex = parseInt(article.getAttribute("data-article-index"));
@@ -1347,7 +1347,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             downvotes[itemId] = true;
                             localStorage.setItem("downvotes", JSON.stringify(downvotes));
                         }
-                        localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-max_arts))));
+                        localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-max_arts*1.25))));
                         //updateArticleStyles();
 
                         if (voteViewModeState){
@@ -1402,7 +1402,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                         if (savedautoVote) {
                             upvotes[itemId] = true;
                             localStorage.setItem("upvotes", JSON.stringify(upvotes));
-                            localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts))));
+                            localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
                             updateArticleStyles();
                         }
 
