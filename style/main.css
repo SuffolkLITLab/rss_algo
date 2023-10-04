@@ -144,6 +144,7 @@ select {
     line-height: 16px;
     margin: 2px 5px 0 0;
 }
+
 #results-count {
     float:left;
     display:none;
@@ -157,6 +158,21 @@ select {
     line-height: 16px;
     margin: 2px 5px 0 0;
 }
+
+#search_btn {
+    float:left;
+    padding: 0.2rem 0.6rem 0.3rem;
+    border: 0;
+    background: #6c757d;
+    color: white !important;
+    border-radius: 0.3rem;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 16px;
+    margin: 2px 5px 0 0;
+}
+
 #search_msg {
     display:none;
     float:left;
@@ -169,20 +185,6 @@ select {
 
 .dark-mode #search_msg {
     background:#775c03;
-}
-
-.search {
-    font-weight: bold;
-    padding: 0.1rem 0.6rem 0.22rem;
-    border: 0;
-    background: #6c757d;
-    color: white !important;
-    border-radius: 0.3rem;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 13px;
-    line-height: 19px;
-    margin-right: 3px;
 }
 
 
