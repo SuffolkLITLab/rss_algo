@@ -3,14 +3,14 @@ history.replaceState('', document.title, window.location.pathname);window.scroll
 function show_timeline() {
     document.getElementById('my_settings').style.display = "none";
     document.getElementById('news-feed').style.display = "flex";
-    document.getElementById('a_settings').innerHTML = "Settings &amp; Data";
+    document.getElementById('a_settings').innerHTML = "Settings";
 }
 
 function toggle_settings() {
     if (document.getElementById('my_settings').style.display=="none") {
         document.getElementById('news-feed').style.display = "none";
         document.getElementById('my_settings').style.display = "block";
-        document.getElementById('a_settings').innerHTML = "Show Timeline";
+        document.getElementById('a_settings').innerHTML = "Timeline";
     } else {
         show_timeline();
     }
@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", function() {
      const hiddenCardsCheckbox = document.getElementById("hiddenMode");
 
     // Retrieve ignore images value from localStorage (if available)
-    const HiddenModeState = localStorage.getItem("hiddenMode") === "true";
+    var HiddenModeState = localStorage.getItem("hiddenMode") === "true";
     hiddenCardsCheckbox.checked = HiddenModeState;
 
     // Update ignore images value and save to localStorage when checkbox value changes
@@ -252,6 +252,21 @@ document.addEventListener("DOMContentLoaded", function() {
     var ratings_mean = 0;
     var ratings_std = 0;
 
+    function removeDuplicates(inputList) {
+        // Create a new Set to store unique elements
+        const uniqueSet = new Set();
+      
+        // Iterate through the input list and add elements to the Set
+        for (let item of inputList) {
+          uniqueSet.add(item);
+        }
+      
+        // Convert the Set back to an array to get the unique elements
+        const uniqueList = Array.from(uniqueSet);
+      
+        return uniqueList;
+    }  
+    
     function updateFeedList(loadFeeds = false, singlefeed="") {
         rssFeeds = removeDuplicates(rssFeeds);
         localStorage.setItem("feeds", JSON.stringify(rssFeeds));
@@ -389,10 +404,14 @@ function declutter(title_source,id_source,tf_source,n=0){
 
     }
 
-
     function updateArticleStyles() {
         const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
-        const HiddenModeState = localStorage.getItem("hiddenMode") === "true";
+
+        if (searching) {
+            HiddenModeState = true;
+        } else {
+            HiddenModeState = localStorage.getItem("hiddenMode") === "true";
+        }
         consolidated_from = articleContainers.length
 
         j = 0;
@@ -1018,30 +1037,30 @@ function declutter(title_source,id_source,tf_source,n=0){
 
     function reorderArticles() {
 
-        if (crunch_numbers) {
-            tmp_ratings = []
-            for (article in articles){
-                rating = getRating(articles[article]['feedTitle'].replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(articles[article]['link']).replace(/[^a-zA-Z]+/g,"-")+""+articles[article]['title']+" "+articles[article]['description'])
-                articles[article]["priorityRating"] = rating; 
-                tmp_ratings.push(rating)
+            if (crunch_numbers) {
+                tmp_ratings = []
+                for (article in articles){
+                    rating = getRating(articles[article]['feedTitle'].replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(articles[article]['link']).replace(/[^a-zA-Z]+/g,"-")+""+articles[article]['title']+" "+articles[article]['description'])
+                    articles[article]["priorityRating"] = rating; 
+                    tmp_ratings.push(rating)
+                }
+                stats = StandardDeviation(tmp_ratings)
+                ratings_mean = stats[0];
+                ratings_std = stats[1];
+                console.log("Ratings: mean", ratings_mean,"std",ratings_std);                    
             }
-            stats = StandardDeviation(tmp_ratings)
-            ratings_mean = stats[0];
-            ratings_std = stats[1];
-            console.log("Ratings: mean", ratings_mean,"std",ratings_std);                    
-        }
 
-        articles.sort((a, b) => new Date(a.pubDate) - new Date(b.pubDate));
+            articles.sort((a, b) => new Date(a.pubDate) - new Date(b.pubDate));
 
-        keep_last = Math.round(max_arts*1.5);
-        articles = articles.slice(-keep_last)
-        
-        articles.sort((a, b) => {
-            if (a.isRead && !b.isRead) return 1;
-            if (!a.isRead && b.isRead) return -1;
-            if (a.priorityRating !== b.priorityRating) return b.priorityRating - a.priorityRating;
-            return new Date(b.pubDate) - new Date(a.pubDate);
-        });
+            keep_last = Math.round(max_arts*1.5);
+            articles = articles.slice(-keep_last)
+            
+            articles.sort((a, b) => {
+                if (a.isRead && !b.isRead) return 1;
+                if (!a.isRead && b.isRead) return -1;
+                if (a.priorityRating !== b.priorityRating) return b.priorityRating - a.priorityRating;
+                return new Date(b.pubDate) - new Date(a.pubDate);
+            });
         
     }
 
@@ -1061,9 +1080,10 @@ function declutter(title_source,id_source,tf_source,n=0){
     }
 
     function moveCardToEnd(card) {
-        // Move the card to the end of the list
-        newsFeedContainer.appendChild(card);
-
+        if (!searching) {
+            // Move the card to the end of the list
+            newsFeedContainer.appendChild(card);
+        }
         // Update article styles after the move
         updateArticleStyles();
     }
@@ -1082,7 +1102,17 @@ function declutter(title_source,id_source,tf_source,n=0){
     }
 
 
-    function displayArticles() {  
+    function displayArticles(search=false) {  
+
+        if (search) {
+            local_list = searchResults;
+            local_lookback = 365;
+            local_cutoff = -10;
+        } else {
+            local_list = articles;
+            local_lookback = savedLookback;
+            local_cutoff = savedcutoff;
+        }
 
         if (decluter_cut<1 && crunch_numbers) {
             dfreq_all = calculateDF(articles)
@@ -1091,14 +1121,14 @@ function declutter(title_source,id_source,tf_source,n=0){
         newsFeedContainer.innerHTML = "";
 
         i=0
-        articles.forEach((articleData, index) => {
+        local_list.forEach((articleData, index) => {
 
             const { title, link, description, pubDate, unknown_pubDate, image, mediaThumbnail, itemId, isRead, feedTitle, feedUrl, mastodon, masto_profile, hasUpvote, hasDownvote, priorityRating } = articleData;
 
             const twoWeeksAgo = new Date();
-            twoWeeksAgo.setDate(twoWeeksAgo.getDate() - savedLookback);
+            twoWeeksAgo.setDate(twoWeeksAgo.getDate() - local_lookback);
 
-            if ((i==2 && !isRead) && (Math.random()<=0.1) && ((n_feeds>=rssFeeds.length) || (n_feeds==0))) {
+            if ((!searching) && (i==2 && !isRead) && (Math.random()<=0.1) && ((n_feeds>=rssFeeds.length) || (n_feeds==0))) {
 
                 if (savedIgnoreImages){
                     img_html = `
@@ -1131,13 +1161,17 @@ function declutter(title_source,id_source,tf_source,n=0){
                 i+=1;
             } 
 
-            if (savedcutoff<=-3.5) {
+            if (local_cutoff<=-3.5) {
                 practical_cutoff = -10;
             } else {
-                practical_cutoff = savedcutoff;
+                practical_cutoff = local_cutoff;
             }
 
-            const HiddenModeState = localStorage.getItem("hiddenMode") === "true";
+            if (!searching) {
+                HiddenModeState = localStorage.getItem("hiddenMode") === "true";
+            } else {
+                HiddenModeState = true;
+            }
             if ((!HiddenModeState && !isRead) || (HiddenModeState)) {
 
                 if ((Date.parse(pubDate) >= Date.parse(twoWeeksAgo)) && priorityRating >= ratings_mean+ratings_std*(practical_cutoff)) {
@@ -1815,7 +1849,7 @@ function declutter(title_source,id_source,tf_source,n=0){
     }
 
     function get_quote() {
-        const HiddenModeState = localStorage.getItem("hiddenMode") === "true";
+        HiddenModeState = localStorage.getItem("hiddenMode") === "true";
         if (countUnreadArticles().toLocaleString("en-US")==0 && !HiddenModeState) {
             items = [
                         "Be kind. Have Fun. Try something new.",
@@ -1884,10 +1918,67 @@ function declutter(title_source,id_source,tf_source,n=0){
         }
         const newFeedUrl = prompt("Enter the URL for a new RSS feed:");
         if (newFeedUrl) {
+            clear_search();
             let lastLoad = 0;
             localStorage.setItem("lastLoad", 0);
             rssFeeds.push(newFeedUrl);
             updateFeedList(true,newFeedUrl);
+        }
+    });
+
+    function clear_search() {
+        document.getElementById('unread-count').style.display = "block";
+        document.getElementById('read-count').style.display = "block";
+        document.getElementById('results-count').style.display = "none";
+        document.getElementById('search_msg').style.display = "none";   
+    }
+
+    var searching = false
+    var searchResults = [];
+    const runSearch = document.getElementById("search_btn");
+    runSearch.addEventListener("click", function() {
+        const newSearch = prompt("Search Titles and Descriptions (case insensitive \"exact\" match,):");
+        if (newSearch.trim()!="") {
+            document.getElementById('unread-count').style.display = "none";
+            document.getElementById('read-count').style.display = "none";
+            document.getElementById('results-count').style.display = "block";
+            document.getElementById('search_msg').style.display = "block";   
+            show_timeline();
+
+            searchResults = []
+
+            saved_articles =  JSON.parse(localStorage.getItem("articles")) || [];
+
+            saved_articles.forEach(articleData => {
+                const key = `${articleData.title} - ${articleData.description}`.toLowerCase();
+                if (key.includes(newSearch.toLowerCase())) {
+                  searchResults.push(articleData);
+                }
+              });
+
+            //articles = searchResults;
+
+            //dedup_articles();
+            //reorderArticles(search=true);
+
+            searchResults.sort((a, b) => {
+                return new Date(b.pubDate) - new Date(a.pubDate);
+            });
+
+            searching = true
+            document.querySelector('body').classList.remove("hidden-mode"); 
+
+            displayArticles(search=true);
+
+            displayed_cards = newsFeedContainer.childNodes.length
+
+            document.getElementById("results-count").textContent = `Results: ${displayed_cards}`;
+
+            lazyload();
+            replace_broken();
+            
+        } else {
+            alert("Empty search string (no action taken)");
         }
     });
 
@@ -1913,7 +2004,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 Remove individual feeds using the "Remove" buttons below, OR wipe and/or replace your existing list of feeds. If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>.
                             </p> 
                             <p>
-                                Consider starting with a premade list. Then over time you can whittle it down and add new feeds as you like. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings &amp; Data</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
+                                Consider starting with a premade list. Then over time you can whittle it down and add new feeds as you like. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
                             </p>
                             <select id="feed_list">
                                 <option value="default_feeds">Generic US News Mix (default)</option>
@@ -1952,6 +2043,7 @@ function declutter(title_source,id_source,tf_source,n=0){
         removeALLaddSelection.addEventListener("click", function() {
             let text = "This will empty your current list of feeds, replacing it with the selection you made. It will remove all current records relating to articles, including votes. Choose OK to continue.";
             if (confirm(text) == true) {
+                clear_search();
                 show_timeline();
                 feed_name = document.getElementById("feed_list").value;
                 rssFeeds = window[feed_name]
@@ -1994,6 +2086,7 @@ function declutter(title_source,id_source,tf_source,n=0){
         removeALLfeeds.addEventListener("click", function() {
             let text = "This will empty your feed list and remove all article records. This will reset your algo traing. Choose OK to continue.";
             if (confirm(text) == true) {
+                clear_search();
                 show_timeline();
                 rssFeeds = []
                 localStorage.setItem("feeds",JSON.stringify(rssFeeds))
@@ -2096,7 +2189,7 @@ function declutter(title_source,id_source,tf_source,n=0){
         if (pocketPopModeState) {
             setTimeout( function() {
                 win.close();
-            }, 500);
+            }, 750);
         }
     }
 
@@ -2124,3 +2217,5 @@ function start_spinner(target_id,tickcolor='#000') {
     var target = document.getElementById(target_id);
     var spinner = new Spinner(opts).spin(target);
 }
+
+

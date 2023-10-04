@@ -1,18 +1,3 @@
-function removeDuplicates(inputList) {
-    // Create a new Set to store unique elements
-    const uniqueSet = new Set();
-  
-    // Iterate through the input list and add elements to the Set
-    for (let item of inputList) {
-      uniqueSet.add(item);
-    }
-  
-    // Convert the Set back to an array to get the unique elements
-    const uniqueList = Array.from(uniqueSet);
-  
-    return uniqueList;
-  }  
-
 var default_feeds = [
     "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml",
     "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
@@ -871,7 +856,7 @@ function filterListByStrings(A, B) {
     }
     
     return C;
-    }
+}
     
 var law_school_feeds = filterListByStrings(dc_law_feeds, law_schools);
 
@@ -902,7 +887,8 @@ var suffolk_law_feeds = [
     "https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/nicholas-kristof/rss.xml",
     "https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/paul-krugman/rss.xml",
     "https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/farhad-manjoo/rss.xml",
-    "https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/bret-stephens/rss.xml",    "https://rss.nytimes.com/services/xml/rss/nyt/sunday-review.xml",
+    "https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/bret-stephens/rss.xml",    
+    "https://rss.nytimes.com/services/xml/rss/nyt/sunday-review.xml",
     "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
     "https://www.washingtonpost.com/arcio/rss/category/opinions/?itid=lk_inline_manual_7",
     "http://feeds.washingtonpost.com/rss/sports?itid=lk_inline_manual_20",
@@ -954,7 +940,6 @@ var suffolk_law_feeds = [
     "https://www.ailawlibrarians.com/feed/",
     "https://www.scotusblog.com/feed/",
     "https://buttondown.email/LawyerExMachina/rss",
-    //"https://api.ssrn.com/content/v1/journals/956475/papers/rss",
     "https://abovethelaw.com/feed/"
 ]
 
@@ -1159,7 +1144,7 @@ var feeds_long_list = [
     // ExMachina Newsletter
     "https://buttondown.email/LawyerExMachina/rss",
     // SSRN
-    "https://api.ssrn.com/content/v1/journals/956475/papers/rss",
+    //"https://api.ssrn.com/content/v1/journals/956475/papers/rss",
     // Above the Law
     "https://abovethelaw.com/feed/",
     // Quanta Magazine
