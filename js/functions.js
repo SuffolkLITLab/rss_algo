@@ -1937,7 +1937,7 @@ function declutter(title_source,id_source,tf_source,n=0){
     var searchResults = [];
     const runSearch = document.getElementById("search_btn");
     runSearch.addEventListener("click", function() {
-        const newSearch = prompt("Search Titles and Descriptions (case insensitive \"exact\" match,):");
+        const newSearch = prompt("Search titles and descriptions (case insensitive \"exact\" match on \"all\" articles):");
         if (newSearch.trim()!="") {
             document.getElementById('unread-count').style.display = "none";
             document.getElementById('read-count').style.display = "none";
