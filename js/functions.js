@@ -1970,7 +1970,7 @@ function declutter(title_source,id_source,tf_source,n=0){
 
             displayArticles(search=true);
 
-            displayed_cards = newsFeedContainer.childNodes.length
+            displayed_cards = newsFeedContainer.childNodes.length.toLocaleString("en-US")
 
             document.getElementById("results-count").textContent = `Results: ${displayed_cards}`;
 
