@@ -8,7 +8,7 @@
 	<meta property="og:type" content="website"/>
 	<meta property="og:title" content="My RSS Algo"/>
 	<meta property="og:description" content="An open source client-side algorithmically-driven RSS reader, living with your data on your device."/>
-    <meta property="og:image" content="https://suffolklitlab.org/images/thefuture.png"/>
+    <meta property="og:image" content="https://myrssalgo.org/images/preview.png"/>
     <link rel="apple-touch-icon" href="https://suffolklitlab.org/images/icon_300.png"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -27,13 +27,13 @@
             <div class="menu">
                 <!--<span class="love"><a href="blog" id="math" class="btn btn-secondary">❤️ Letters</a></span>-->
                 <button id="toggle-mode" class="btn btn-secondary" aria-label="Toggle Dark Mode">🌗</button>
-                <button id="manage-feeds" class="btn btn-secondary">My Feeds</button>
+                <button id="manage-feeds" class="btn btn-secondary">Feeds</button>
                 <button id="add-feed" class="btn btn-primary">+</button>
             </div>
             <div style="float:left;"><h1 class="my-1">My RSS Algo</h1></div>
             <div style="float:left;width:100%;padding-top: 8px;">
                 <p>
-                    An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader built at the <a href="https://suffolklitlab.org/" target="_blank">Suffolk LIT Lab</a>. Use 👍 &amp; 👎 + <i>Seen</i> or <i>Open</i> to feed the algo. Refresh this page to update your card order. Searches &amp; votes don't leave your device. Customize your algo and timeline behavior in <i>Settings</i>. Curate your feeds using <i>My Feeds</i>&mdash;comes with premade libraries. Add a feed with the blue <i>plus</i> button. For project updates, follow <a href="https://mastodon.social/deck/tags/suffolkrssalgo" target="_blank">#SuffolkRSSalgo</a> on Mastodon, or visit <a href="https://github.com/colarusso/rss_algo" target="_blank">our GitHub page</a>.
+                    An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader built at the <a href="https://suffolklitlab.org/" target="_blank">Suffolk LIT Lab</a>. Use 👍 &amp; 👎 + <i>Seen</i> or <i>Open</i> to feed the algo. Refresh this page to update your card order. Searches &amp; votes don't leave your device. Customize your algo and timeline behavior in <i>Settings</i>. Curate your feeds using <i>Feeds</i>&mdash;comes with premade libraries. Add a feed with the blue <i>plus</i> button. For project updates, follow <a href="https://mastodon.social/deck/tags/suffolkrssalgo" target="_blank">#SuffolkRSSalgo</a> on Mastodon, or visit <a href="https://github.com/colarusso/rss_algo" target="_blank">our GitHub page</a>.
                 </p>
             </div>
             <div id="loading" style="float:left;background:yellow;color:black;margin-bottom: 10px;">
@@ -50,21 +50,21 @@
             </div>
         </div>
 
-        <div id="search_msg"><i>Search results are presented in reverse chronological order. They include articles marked as "Seen" and ignore rating and history cutoffs. However, this app only remebers about 2,000 articles. So, older content will not show here. Reload page to clear search.</i></div>
+        <div id="search_msg"><i>Search results are presented in reverse chronological order. They include articles marked as "Seen." They also ignore ratings and history cutoffs as well as regex filters. Note: this app only remebers about 2,000 articles. So, older content will not show. Reload page to clear search.</i></div>
         <div id="news-feed" class="row gy-3">
             <!-- News articles will be dynamically added here -->
         </div>
         <div id="my_settings" style="display:none;float:left;padding-top: 15px;">
             <h2>Settings &amp; Data</h2>
             <p>
-                You can manage your feeds by clicking <i>My Feeds</i> at the top of this page. See additional controls below. To determine what articles you like, we make use of insights from <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">TF-IDF</a>, comparing all the text from the cards you vote up or down with everything you've "seen." I hope to write a more complete explanation sometime. When I do, I'll put a link here. Until then, you can always look at <a href="https://github.com/colarusso/rss_algo" target="_blank">the code</a>.
+                You can manage your feeds by clicking <i>Feeds</i> at the top of this page. See additional controls below. To determine what articles you like, we make use of insights from <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">TF-IDF</a>, comparing all the text from the cards you vote up or down with everything you've "seen." I hope to write a more complete explanation sometime. When I do, I'll put a link here. Until then, you can always look at <a href="https://github.com/colarusso/rss_algo" target="_blank">the code</a>.
             </p>
             <p>
                 <i>Note: when figuring out what you "like" we look only at the card's domain, title, description, and the RSS Feed's name. We don't look at the content of the article. We convert all feed titles into hypenated words. That's why you might see things like nyt-top-stories (NYT > Top Stories) in the word lists below. Also, we do something similar for an article's domain (e.g. nytimes-com).</i>
             </p>
             <h4>Cooldown Clock</h4>
             <p>
-                There's no need to download every feed every time you hit refresh. So this site waits a defined period before downloading content. If you refresh the page before the end of this cooldown period, it will recalculate ratings based on recent votes and filter what it displays based on the other options here, but it won't try to download your feeds. Currently the period is set to <b><i><span id="cooldown-value">0.25</span></i> hours</b>. <i>You can change this below, but you must refresh the page to see results. <span class="highlighted"><b>If you set a cooldown period that is shorter than the current value, you will have to wait for the old period to pass before the new one takes effect. So, once you set it and refresh, there's no quickly going back.</b></span></i>
+                There's no need to download every feed every time you hit refresh. So this site waits a defined period before downloading content. If you refresh the page before the end of this cooldown period, it will recalculate ratings based on recent votes and filter what it displays based on the other options here, but it won't try to download your feeds. Welcome to the finite scoll. Currently the cooldown period is set to <b><i><span id="cooldown-value">0.25</span></i> hours</b>. <i>You can change this below, but you must refresh the page to see results. <span class="highlighted"><b>If you set a cooldown period that is shorter than the current value, you will have to wait for the old period to pass before the new one takes effect. So, once you set it and refresh, there's no quickly going back.</b></span></i>
             </p>
             <p>
                 <input type="range" id="cooldown-slider" min="0.25" max="4" value="0.25" step="0.25" style="width:100%;">
@@ -73,17 +73,17 @@
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
                     <h4>A Note on Performance</h4>
                     <p>
-                        The options you choose below will effect this site's performance. Generally speaking, the more inclusive your choices the larger your timeline will be and the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.
+                        The options you choose here will effect this site's performance. Generally speaking, the more inclusive your choices the larger your timeline will be and the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.
                     </p>
                     <h4>Images</h4>
                     <p>
-                        <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Ignore preview images (i.e., load w/o thumbnails). <i>Refresh page to see results</i>.</label>
+                        <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Exclude preview images and <a href="https://en.wikipedia.org/wiki/Favicon" target="_blank">favicons</a> (i.e., load w/o thumbnails and site icons). <i>Refresh page to see results</i>.</label>
                     </p>
                 </div>
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
                     <h4>Similar Articles</h4>
                     <p>
-                        You can hide/group articles that are "too" similar to eachother. Leave the <a href="https://en.wikipedia.org/wiki/Cosine_similarity" target="_blank">cosine similarity</a> cutoff at 1 to keep all articles. Setting the cutoff to something lower will hide all but one of the acticles with similarity greater than the cutoff. This will display a list of "hidden" articles at the bottom of the top-most rated article card for that group. <b><i>Note: this will slow down sorting of your articles, esp. for larger timelines. Also, all items in a group other than the top-most are marked as "read" to hide them from your timeline. This cannot be undone!</i></b> Cosine Similarity for cutoff: <b><i><span id="sim-cutoff-value">1</span></i></b>. <i>Refresh page to see results</i>.
+                        You can hide/group articles that are "too" similar to each other. To measure similarity we use <a href="https://towardsdatascience.com/text-vectorization-term-frequency-inverse-document-frequency-tfidf-5a3f9604da6d" target="_blank">vectorizations</a> of cards based on TF-IDF. Leave the <a href="https://en.wikipedia.org/wiki/Cosine_similarity" target="_blank">cosine similarity</a> cutoff at 1 to keep all articles. Setting the cutoff to something lower will hide all but one of the acticles with similarity greater than the cutoff. This will display a list of "hidden" articles at the bottom of the top-most rated article card for that group. <b><i>Note: this will slow down sorting of your articles, esp. for larger timelines. Also, all items in a group other than the top-most are marked as "read" to hide them from your timeline. This cannot be undone!</i></b> Cosine Similarity for cutoff: <b><i><span id="sim-cutoff-value">1</span></i></b>. <i>Refresh page to see results</i>.
                     </p>
                     <p>
                         <input type="range" id="sim-cutoff" min="0.5" max="1" value="1" step="0.01" style="width:100%;">
@@ -99,7 +99,7 @@
             </p>
             <h4>Positive vs. Negative</h4>
             <p>
-                When calculating ratings, how much influence should <i>down votes</i> have compared to <i>up votes</i>? If you choose 0, they don't count at all. If you choose 1, they count equally. If you choose 2, they'll count twice as much as <i>up votes</i>. Current value: <b><i><span id="negativity-value">1.25</span></i></b>. <i>Refresh page to see results</i>.
+                When calculating ratings, how much influence should <i>down votes</i> have compared to <i>up votes</i>? If you choose 0, they don't count at all. If you choose 1, they count equally. If you choose 2, they'll count twice as much as <i>up votes</i>. Why not just set this to 1? Well, people don't seem to respond equally to positive and negative experience. See <a href="https://en.wikipedia.org/wiki/Negativity_bias" target="_blank">negativity bias</a>. Current value: <b><i><span id="negativity-value">1.25</span></i></b>. <i>Refresh page to see results</i>.
             </p>
             <p>
                 <input type="range" id="negativity-slider" min="0" max="2" value="1.25" step="0.01" style="width:100%;">
@@ -120,24 +120,24 @@
                     <button id="clear-downvotes" class="btn btn-danger btn-block">Clear Downvotes</button>
                 </div>
                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 col-md-4">
-                    <h4>History</h4>
-                    <p>
-                        Display content from the last <b><i><span id="lookback-value">7</span> days</i></b>. <i>Refresh page to see results</i>.
-                    </p>
-                    <p>
-                        <input type="range" id="lookback-slider" min="1" max="15" value="7" style="width:100%;">
-                    </p>
-                    <p>
-                        You can limit how much you see in your timeline by adjusting the slider above. If you clear you reading history, however, it will remove older articles, not just hide them. This will effect your recommendations since they are based on interactions with old articles.
-                    </p>
-                    <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
-                    <button id="factory-reset" class="btn btn-danger btn-block factory-reset" onClick="reset_all();"><b>RESET ALL</b></button>
+                    <h4>Promote &amp; Mute with Regular Expressions</h4>
+                    <p>You can use <a href="https://www.codingthelaw.org/Fall_2020/level/5/" target="_blank">regular expressions</a> to be confident you don't miss, or alternatively, never see, certain articles. Your input  below will be fed into JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank">RegExp()</a> as a constructor, where the first input is a string and the second is an optional operator. These are fed to <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match" target="_blank">.match()</a>. If you include a regex under <i>Bump Up</i>, any matches to said expression will be given the highest rating possible, putting them at the top of your feed. Matches to the regex under <i>Mute</i>, however, will be hidden from your timeline. The match is performed against an article's title and description as well as it's feed title and the link's domain, where these last two have been converted into single "words" using <i>String.replace(/[^a-zA-Z]+/g,"-")</i>.  Note: using the <i>search</i> feature overides these settings as it searches "all" articles. Leave string inputs blank to take no action. <i>Refresh page to see results</i>.</p>
+                    <h5>Bump Up</h5>
+                    <p>Like Barbie and Openhimer news? Try: <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">barbie|oppenheimer</span>, <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">i</span></p>
+                    <p><input id="regex_always" value="" oninput="localStorage.regex_always=this.value" style="width:80%"> 
+                       <input id="regex_always_op" value="" oninput="localStorage.regex_always_op=this.value" style="width:50px" value="i"></p>
+
+                    <h5>Mute</h5>
+                    <p>Dislike Barbie and Openhimer news? Try: <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">barbie|oppenheimer</span>, <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">i</span></p>
+                    <p><input id="regex_never" value="" oninput="localStorage.regex_never=this.value" style="width:80%">
+                       <input id="regex_never_op" value="" oninput="localStorage.regex_never_op=this.value" style="width:50px" value="i"></p>
+
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
                     <h4>Auto-Close Pocket Pop-ups</h4>
-                    <p>If you don't have a <a href="https://help.getpocket.com/category/846-category" target="_blank">Pocket plugin</a> installed, you can use the <a href="https://getpocket.com" target="_blank">Pocket</a> button in the upper-right corner of each card to save items to  Pocket. This opens a new window. If you're already signed into Pocket you can have these windows close themselves after 0.75 seconds. <i><b>Depending on your device, this may or may not be enough time for it to save. YMMV!</b></i> If you aren't already signed in they will open and close without saving. So, only check the below box if you are signed in.</p>
+                    <p>If you don't have a <a href="https://help.getpocket.com/category/846-category" target="_blank">Pocket plugin</a> installed, you can use the <a href="https://getpocket.com" target="_blank">Pocket</a> button in the upper-right corner of each card to save items to  Pocket. This opens a new window. If you're already signed into Pocket you can have these windows close themselves after 0.75 seconds. <i><b>Depending on your device, this may or may not be enough time for it to save. YMMV!</b></i> If you aren't already signed in they will open and close without saving. So, only check the box below if you are signed in.</p>
                     <p>
                         <label for="pocket-pop"><input type="checkbox" id="pocket-pop" value="1"> Close the <i>saved to Pocket</i> window 0.75 sec after opening. <i>Refresh page to see results</i>.</label>
                     </p>
@@ -153,17 +153,30 @@
                     <p>
                         <label for="vote-view"><input type="checkbox" id="vote-view" value="1"> Mark cards as "Seen" after up or down votes. <i>Refresh page to see results</i>.</label>
                     </p>
+                    <h4>Mastodon</h4>
+                    <p>
+                        Since users of <a href="https://joinmastodon.org/" target="_blank">Mastodon</a> use different servers/instances, we need to collect that information to enable sharing (i.e., so we can queue your post on the right server). If you'd like to use this feature, enter your server here:
+                    </p>
+                    <p><input id="masto_instance" value="" oninput="localStorage.instance=this.value"></p>
                 </div>
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
                     <h4>Show Cards You've Seen</h4>
                     <p>
                         <label for="hiddenMode"><input type="checkbox" id="hiddenMode" value="1"> Show cards marked as "Seen" at the end of the list but grayed out. <i>Refresh page to see results</i>.</label>
                     </p>
-                    <h4>Mastodon</h4>
+                    <h4>History</h4>
                     <p>
-                        Since users of <a href="https://joinmastodon.org/" target="_blank">Mastodon</a> use different servers/instances, we need to collect that information to enable sharing (i.e., so we can queue your post on the right server). If you'd like to use this feature, enter your server here:
+                        Display content from the last <b><i><span id="lookback-value">7</span> days</i></b>. <i>Refresh page to see results</i>.
                     </p>
-                    <p><input id="masto_instance" value="" oninput="localStorage.instance=this.value"></p>
+                    <p>
+                        <input type="range" id="lookback-slider" min="1" max="15" value="7" style="width:100%;">
+                    </p>
+                    <p>
+                        You can limit how much you see in your timeline by adjusting the slider above. If you clear you reading history, however, it will remove older articles, not just hide them. This will effect your recommendations since they are based on your interactions with old articles (did you vote them up or down).
+                    </p>
+                    <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
+                    <button id="factory-reset" class="btn btn-danger btn-block factory-reset" onClick="reset_all();"><b>RESET ALL</b></button>
+
                     <h4>Your Data</h4>
                     <p>
                         FWIW, you can download the data stored in your browser to a file. This is helpful for backups and if you want to move your history et al. between devices.
@@ -182,7 +195,7 @@
                 <img id="footer_logo_sqr" src="images/blue_logo.png" border="0" alt="LIT and Suffolk University Law School Logos" align="left"/>
             </a>
             <span style="float:right">
-                <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">back to top</a> | 
+                <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">top</a> | 
                 <a href="https://forms.gle/A681vVjULxaaEyZY9" target="_blank">feedback</a> | 
                 <a href="https://github.com/colarusso/rss_algo" target="_blank">GitHub</a>
             </span>

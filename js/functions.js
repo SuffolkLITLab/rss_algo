@@ -25,8 +25,20 @@ function toggle_settings() {
 //    });
 //    return articls_in_window
 //}
-    
-/* Generate a share link for the user's Mastodon domain */
+
+
+const regex_always =  localStorage.getItem("regex_always") || "";
+document.getElementById("regex_always").value = regex_always;
+
+const regex_always_op =  localStorage.getItem("regex_always_op") || "";
+document.getElementById("regex_always_op").value = regex_always_op;
+
+const regex_never =  localStorage.getItem("regex_never") || "";
+document.getElementById("regex_never").value = regex_never;
+
+const regex_never_op =  localStorage.getItem("regex_never_op") || "";
+document.getElementById("regex_never_op").value = regex_never_op;
+
 const instance =  localStorage.getItem("instance") || "";
 document.getElementById("masto_instance").value = instance;
 
@@ -224,6 +236,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const downTFIDF =  JSON.parse(localStorage.getItem("downTFIDF")) || {};
     const readArticles = filterOldEntries(JSON.parse(localStorage.getItem("read")) || {});    
     localStorage.setItem("read", JSON.stringify(readArticles));
+
+    var suffolk = 0
 
     const stopwords = ['i','me','my','myself','we','our','ours','ourselves','you','your','yours','yourself','yourselves','he','him','his','himself','she','her','hers','herself','it','its','itself','they','them','their','theirs','themselves','what','which','who','whom','this','that','these','those','am','is','are','was','were','be','been','being','have','has','had','having','do','does','did','doing','a','an','the','and','but','if','or','because','as','until','while','of','at','by','for','with','about','against','between','into','through','during','before','after','above','below','to','from','up','down','in','out','on','off','over','under','again','further','then','once','here','there','when','where','why','how','all','any','both','each','few','more','most','other','some','such','no','nor','not','only','own','same','so','than','too','very','s','t','can','will','just','don','should','now','p','span','https','http']
 
@@ -1040,7 +1054,7 @@ function declutter(title_source,id_source,tf_source,n=0){
             if (crunch_numbers) {
                 tmp_ratings = []
                 for (article in articles){
-                    rating = getRating(articles[article]['feedTitle'].replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(articles[article]['link']).replace(/[^a-zA-Z]+/g,"-")+""+articles[article]['title']+" "+articles[article]['description'])
+                    rating = getRating(articles[article]['feedTitle'].replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(articles[article]['link']).replace(/[^a-zA-Z]+/g,"-")+" "+articles[article]['title']+" "+articles[article]['description'])
                     articles[article]["priorityRating"] = rating; 
                     tmp_ratings.push(rating)
                 }
@@ -1119,332 +1133,319 @@ function declutter(title_source,id_source,tf_source,n=0){
         }
 
         newsFeedContainer.innerHTML = "";
+        suffolk = 0
+        const twoWeeksAgo = new Date();
+        twoWeeksAgo.setDate(twoWeeksAgo.getDate() - local_lookback);
 
         i=0
         local_list.forEach((articleData, index) => {
 
             const { title, link, description, pubDate, unknown_pubDate, image, mediaThumbnail, itemId, isRead, feedTitle, feedUrl, mastodon, masto_profile, hasUpvote, hasDownvote, priorityRating } = articleData;
 
-            const twoWeeksAgo = new Date();
-            twoWeeksAgo.setDate(twoWeeksAgo.getDate() - local_lookback);
-
-            if ((!searching) && (i==2 && !isRead) && (Math.random()<=0.1) && ((n_feeds>=rssFeeds.length) || (n_feeds==0))) {
-
-                if (savedIgnoreImages){
-                    img_html = `
-                        <div style="postion:relative;z-index:0;top:0;height:40px;background:#eee;"></div>`
+            if (regex_never!="" && !search) {
+                regex = new RegExp(regex_never, regex_never_op); 
+                test_string = feedTitle.replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(link).replace(/[^a-zA-Z]+/g,"-")+" "+title+" "+description
+                if (test_string.match(regex)) {
+                    //console.log("Muting match for /"+regex_never+"/"+regex_never_op)
+                    match = 1
                 } else {
-                    img_html = `
-                        <div style="postion:relative;z-index:0;top:0;min-height:33px;"><img src="images/sargent.jpg" class="lazyload card-img-top thumbnail-image"></div>`
+                    match = 0
                 }
-
-                const sponsor = document.createElement("div");
-                sponsor.setAttribute("data-article-index", "sponsor"); 
-                sponsor.setAttribute("data-item-id", "sponsor");
-                sponsor.className = `col-xl-4 col-lg-5 col-md-6 col-sm-12 article-container`;
-                sponsor.innerHTML = `
-                    <div class="card">
-                        ${img_html}
-                        <div class="card-body">
-                                <h5 class="card-title">Support the People Who Built <i>My RSS Algo</i>!</h5>
-                                <p class="card-text">Through its Affiliates Program, Suffolk University Law School's Legal Innovation and Technology <a href="https://suffolklitlab.org/" target="_blank">(LIT) Lab</a> provides members with connections to experts and law students working with emerging legal services technologies, while growing the Lab's capacity to serve disadvantaged communities.</p>
-                            <div style="text-align:right;">
-                                <a href="https://suffolklitlab.org/docs/affiliates.pdf" class="btn btn-primary" target="_blank">Become an Affiliate</a>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <small class="feed-tag">FROM THE MAKERS OF THIS SITE</small>
-                        </div>
-                    </div>
-                `;                        
-                newsFeedContainer.appendChild(sponsor);
-                i+=1;
-            } 
-
-            if (local_cutoff<=-3.5) {
-                practical_cutoff = -10;
             } else {
-                practical_cutoff = local_cutoff;
+                match = 0
             }
 
-            if (!searching) {
-                HiddenModeState = localStorage.getItem("hiddenMode") === "true";
-            } else {
-                HiddenModeState = true;
-            }
-            if ((!HiddenModeState && !isRead) || (HiddenModeState)) {
+            if (match==0) {
 
-                if ((Date.parse(pubDate) >= Date.parse(twoWeeksAgo)) && priorityRating >= ratings_mean+ratings_std*(practical_cutoff)) {
+                if ((!searching) && (i==2 && !isRead) && (Math.random()<=0.1) && ((n_feeds>=rssFeeds.length) || (n_feeds==0))) {
 
-                    const article = document.createElement("div");
-                    article.setAttribute("data-article-index", index); 
-                    article.setAttribute("data-item-id", itemId);
-                    article.className = `col-xl-4 col-lg-5 col-md-6 col-sm-12 article-container ${isRead ? 'read-article' : ''}`;
-
-                    if (unknown_pubDate){
-                        local_pubDate = "Publication date unknown";
-                    } else {
-                        local_pubDate = new Date(pubDate).toLocaleString();
-                    }
-
-                    domain_from_link = domain_from_url(link);
-
-                    if (mastodon) {
-                        favicon = masto_profile
-                        card_body_text = ` <h5 class="card-title">A Post From <a href="https://joinmastodon.org/" target="_blank" class="masto_post">Mastodon</a></h5><div style="height:100%;overflow-y:auto;">${description}</div>`
-                        share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div><div class="pocket_share"><a href="javascript:void('')" class="save_to_pocket"><div style="background: url('images/cached_logos/pocket.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
-                    } else {
-                        favicon = "https://"+domain_from_link+"/favicon.ico"
-                        card_body_text = `<h5 class="card-title">${title}</h5><p class="card-text">${description}</p>`
-                        share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div>
-                            <div class="pocket_share"><a href="javascript:void('')" class="save_to_pocket"><div style="background: url('images/cached_logos/pocket.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
-                    }
+                    suffolk = 1
 
                     if (savedIgnoreImages){
                         img_html = `
                             <div style="postion:relative;z-index:0;top:0;height:40px;background:#eee;"></div>`
                     } else {
-                        if (mediaThumbnail) {
-                            if (mediaThumbnail.match(/\.mp4$/i)) {
-                                img_html = `
-                                <div style="postion:relative;z-index:0;top:0"><video width="100%" controls>
-                                <source src="${mediaThumbnail}" type="video/mp4">
-                                Your browser does not support the video tag.
-                                </video> </div>`
-                            }
-                        }
                         img_html = `
-                            <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img data-src="${mediaThumbnail}" class="lazyload card-img-top thumbnail-image">` : '<img data-src="images/placeholder.png" class="lazyload card-img-top thumbnail-image">'}</div>`
+                            <div style="postion:relative;z-index:0;top:0;min-height:33px;"><img src="images/sargent.jpg" class="lazyload card-img-top thumbnail-image"></div>`
                     }
 
-                    article.innerHTML = `
+                    const sponsor = document.createElement("div");
+                    sponsor.setAttribute("data-article-index", "sponsor"); 
+                    sponsor.setAttribute("data-item-id", "sponsor");
+                    sponsor.className = `col-xl-4 col-lg-5 col-md-6 col-sm-12 article-container`;
+                    sponsor.innerHTML = `
                         <div class="card">
-                            ${share_html}
                             ${img_html}
-                            
                             <div class="card-body">
-                                    <!--<div class="priority-rating">${priorityRating}</div>-->
-                                    ${card_body_text}
-                                    <div class="similar"></div>
-                                    <p class="d-flex"><small class="text-muted">${local_pubDate}</small></p>
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <button class="btn btn-success upvote ${hasUpvote ? 'thumbs-up' : ''}" data-item-id="${itemId}">👍</button>
-                                        <button class="btn btn-danger downvote ${hasDownvote ? 'thumbs-down' : ''}" data-item-id="${itemId}">👎</button>
-                                        <button class="btn btn-secondary skip ${isRead ? 'skip-read' : ''}" data-item-id="${itemId}">Seen</button>
-                                    </div>
-                                    <div>
-                                    <a href="${link}" class="btn btn-${isRead ? 'secondary' : 'primary'} read-button" target="_blank">${isRead ? 'View Again' : 'Open'}</a>
-                                    </div>
+                                    <h5 class="card-title">Support the People Who Built <i>My RSS Algo</i>!</h5>
+                                    <p class="card-text">Through its Affiliates Program, Suffolk University Law School's Legal Innovation and Technology <a href="https://suffolklitlab.org/" target="_blank">(LIT) Lab</a> provides members with connections to experts and law students working with emerging legal services technologies, while growing the Lab's capacity to serve disadvantaged communities.</p>
+                                <div style="text-align:right;">
+                                    <a href="https://suffolklitlab.org/docs/affiliates.pdf" class="btn btn-primary" target="_blank">Become an Affiliate</a>
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <a href="https://${domain_from_link}" target="_blank"><img class="favicon" src="${favicon}" height="18px"></a> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small> 
-                                <span class="btn remove_feed" data-feed-index="${feedUrl}" data-feed-name="${feedTitle}">🚫</span>
+                                <small class="feed-tag">FROM THE MAKERS OF THIS SITE</small>
                             </div>
                         </div>
-                    `;
+                    `;                        
+                    newsFeedContainer.appendChild(sponsor);
+                    i+=1;
+                } 
 
-                    newsFeedContainer.appendChild(article);
+                if (local_cutoff<=-3.5) {
+                    practical_cutoff = -10;
+                } else {
+                    practical_cutoff = local_cutoff;
+                }
 
-                    const mastoButton = article.querySelector(".share_to_mastodon");
-                    const pocketButton = article.querySelector(".save_to_pocket");
+                if (!searching) {
+                    HiddenModeState = localStorage.getItem("hiddenMode") === "true";
+                } else {
+                    HiddenModeState = true;
+                }
+                if ((!HiddenModeState && !isRead) || (HiddenModeState)) {
 
-                    const upvoteButton = article.querySelector(".upvote");
-                    const downvoteButton = article.querySelector(".downvote");
-                    const skipButton = article.querySelector(".skip");
-                    const readButton = article.querySelector(".read-button");
+                    if ((Date.parse(pubDate) >= Date.parse(twoWeeksAgo)) && priorityRating >= ratings_mean+ratings_std*(practical_cutoff)) {
+
+                        const article = document.createElement("div");
+                        article.setAttribute("data-article-index", index); 
+                        article.setAttribute("data-item-id", itemId);
+                        article.className = `col-xl-4 col-lg-5 col-md-6 col-sm-12 article-container ${isRead ? 'read-article' : ''}`;
+
+                        if (unknown_pubDate){
+                            local_pubDate = "Publication date unknown";
+                        } else {
+                            local_pubDate = new Date(pubDate).toLocaleString();
+                        }
+
+                        domain_from_link = domain_from_url(link);
+
+                        if (mastodon) {
+                            favicon = masto_profile
+                            card_body_text = ` <h5 class="card-title">A Post From <a href="https://joinmastodon.org/" target="_blank" class="masto_post">Mastodon</a></h5><div style="height:100%;overflow-y:auto;">${description}</div>`
+                            share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div><div class="pocket_share"><a href="javascript:void('')" class="save_to_pocket"><div style="background: url('images/cached_logos/pocket.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
+                        } else {
+                            favicon = "https://"+domain_from_link+"/favicon.ico"
+                            card_body_text = `<h5 class="card-title">${title}</h5><p class="card-text">${description}</p>`
+                            share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div>
+                                <div class="pocket_share"><a href="javascript:void('')" class="save_to_pocket"><div style="background: url('images/cached_logos/pocket.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
+                        }
+
+                        if (savedIgnoreImages){
+                            img_html = `
+                                <div style="postion:relative;z-index:0;top:0;height:40px;background:#eee;"></div>`
+                            favicon = "images/favicon.ico"
+                        } else {
+                            if (mediaThumbnail) {
+                                if (mediaThumbnail.match(/\.mp4$/i)) {
+                                    img_html = `
+                                    <div style="postion:relative;z-index:0;top:0"><video width="100%" controls>
+                                    <source src="${mediaThumbnail}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                    </video> </div>`
+                                }
+                            }
+                            img_html = `
+                                <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img data-src="${mediaThumbnail}" class="lazyload card-img-top thumbnail-image">` : '<img data-src="images/placeholder.png" class="lazyload card-img-top thumbnail-image">'}</div>`
+                        }
+
+                        article.innerHTML = `
+                            <div class="card">
+                                ${share_html}
+                                ${img_html}
+                                
+                                <div class="card-body">
+                                        <!--<div class="priority-rating">${priorityRating}</div>-->
+                                        ${card_body_text}
+                                        <div class="similar"></div>
+                                        <p class="d-flex"><small class="text-muted">${local_pubDate}</small></p>
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <button class="btn btn-success upvote ${hasUpvote ? 'thumbs-up' : ''}" data-item-id="${itemId}">👍</button>
+                                            <button class="btn btn-danger downvote ${hasDownvote ? 'thumbs-down' : ''}" data-item-id="${itemId}">👎</button>
+                                            <button class="btn btn-secondary skip ${isRead ? 'skip-read' : ''}" data-item-id="${itemId}">Seen</button>
+                                        </div>
+                                        <div>
+                                        <a href="${link}" class="btn btn-${isRead ? 'secondary' : 'primary'} read-button" target="_blank">${isRead ? 'View Again' : 'Open'}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <a href="https://${domain_from_link}" target="_blank"><img class="favicon" src="${favicon}" height="18px"></a> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small> 
+                                    <span class="btn remove_feed" data-feed-index="${feedUrl}" data-feed-name="${feedTitle}">🚫</span>
+                                </div>
+                            </div>
+                        `;
+
+                        newsFeedContainer.appendChild(article);
+
+                        const mastoButton = article.querySelector(".share_to_mastodon");
+                        const pocketButton = article.querySelector(".save_to_pocket");
+
+                        const upvoteButton = article.querySelector(".upvote");
+                        const downvoteButton = article.querySelector(".downvote");
+                        const skipButton = article.querySelector(".skip");
+                        const readButton = article.querySelector(".read-button");
 
 
-                    mastoButton.addEventListener("click", function() {
+                        mastoButton.addEventListener("click", function() {
 
-                        MastodonShare(`${title};url=${link}`);
+                            MastodonShare(`${title};url=${link}`);
 
-                        if (savedautoVote) {
-                            upvotes[itemId] = true;
-                            localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                            if (savedautoVote) {
+                                upvotes[itemId] = true;
+                                localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                                localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
+                                updateArticleStyles();
+                            }
+
+                            if (voteViewModeState){
+                                const articleIndex = parseInt(article.getAttribute("data-article-index"));
+                                readArticles[itemId] = new Date().toISOString();
+                                localStorage.setItem("read", JSON.stringify(readArticles));
+        
+                                // Mark the article as read in the articles array
+                                articles[articleIndex].isRead = true;
+        
+                                // Get the parent container of the clicked skip button
+                                const articleContainer = skipButton.closest(".article-container");
+        
+                                // Update the Open button behavior
+                                updateOpenButton(articleContainer);
+        
+                                // Move the article container to the end of the list
+                                moveCardToEnd(articleContainer);
+        
+                                // Update the unread count
+                                updateItemCount();
+                                get_quote();  
+                            }
+                            
+                        });
+
+                        pocketButton.addEventListener("click", function() {
+
+                            save_to_poeket(itemId)
+
+                            if (savedautoVote) {
+                                upvotes[itemId] = true;
+                                localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                                localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
+                                updateArticleStyles();
+                            }
+
+                            if (voteViewModeState){
+                                const articleIndex = parseInt(article.getAttribute("data-article-index"));
+                                readArticles[itemId] = new Date().toISOString();
+                                localStorage.setItem("read", JSON.stringify(readArticles));
+        
+                                // Mark the article as read in the articles array
+                                articles[articleIndex].isRead = true;
+        
+                                // Get the parent container of the clicked skip button
+                                const articleContainer = skipButton.closest(".article-container");
+        
+                                // Update the Open button behavior
+                                updateOpenButton(articleContainer);
+        
+                                // Move the article container to the end of the list
+                                moveCardToEnd(articleContainer);
+        
+                                // Update the unread count
+                                updateItemCount();
+                                get_quote();  
+                                setTimeout( function() {}, 100);
+                            }
+                            
+                        });
+
+                        upvoteButton.addEventListener("click", function() {
+                            if (downvotes[itemId]) {
+                                delete downvotes[itemId];
+                                localStorage.setItem("downvotes", JSON.stringify(downvotes));
+                            }
+                            
+                            if (upvotes[itemId]) {
+                                delete upvotes[itemId];
+                                localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                            } else {
+                                upvotes[itemId] = true;
+                                localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                            }
                             localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
-                            updateArticleStyles();
-                        }
 
-                        if (voteViewModeState){
+                            if (voteViewModeState){
+                                const articleIndex = parseInt(article.getAttribute("data-article-index"));
+                                readArticles[itemId] = new Date().toISOString();
+                                localStorage.setItem("read", JSON.stringify(readArticles));
+        
+                                // Mark the article as read in the articles array
+                                articles[articleIndex].isRead = true;
+        
+                                // Get the parent container of the clicked skip button
+                                const articleContainer = skipButton.closest(".article-container");
+        
+                                // Update the Open button behavior
+                                updateOpenButton(articleContainer);
+        
+                                // Move the article container to the end of the list
+                                moveCardToEnd(articleContainer);
+        
+                                // Update the unread count
+                                updateItemCount();
+                                get_quote();  
+                            } else {
+                                updateArticleStyles();
+                            }
+                            
+                        });
+
+                        downvoteButton.addEventListener("click", function() {
+                            if (upvotes[itemId]) {
+                                delete upvotes[itemId];
+                                localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                            }
+                            
+                            if (downvotes[itemId]) {
+                                delete downvotes[itemId];
+                                localStorage.setItem("downvotes", JSON.stringify(downvotes));
+                            } else {
+                                downvotes[itemId] = true;
+                                localStorage.setItem("downvotes", JSON.stringify(downvotes));
+                            }
+                            localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-max_arts*1.25))));
+                            //updateArticleStyles();
+
+                            if (voteViewModeState){
+                                const articleIndex = parseInt(article.getAttribute("data-article-index"));
+                                readArticles[itemId] = new Date().toISOString();
+                                localStorage.setItem("read", JSON.stringify(readArticles));
+        
+                                // Mark the article as read in the articles array
+                                articles[articleIndex].isRead = true;
+        
+                                // Get the parent container of the clicked skip button
+                                const articleContainer = skipButton.closest(".article-container");
+        
+                                // Update the Open button behavior
+                                updateOpenButton(articleContainer);
+        
+                                // Move the article container to the end of the list
+                                moveCardToEnd(articleContainer);
+        
+                                // Update the unread count
+                                updateItemCount();
+                                get_quote();  
+                            } else {
+                                updateArticleStyles();
+                            }
+                        });
+
+                        skipButton.addEventListener("click", function () {
                             const articleIndex = parseInt(article.getAttribute("data-article-index"));
                             readArticles[itemId] = new Date().toISOString();
                             localStorage.setItem("read", JSON.stringify(readArticles));
-    
-                            // Mark the article as read in the articles array
-                            articles[articleIndex].isRead = true;
-    
-                            // Get the parent container of the clicked skip button
-                            const articleContainer = skipButton.closest(".article-container");
-    
-                            // Update the Open button behavior
-                            updateOpenButton(articleContainer);
-    
-                            // Move the article container to the end of the list
-                            moveCardToEnd(articleContainer);
-    
-                            // Update the unread count
-                            updateItemCount();
-                            get_quote();  
-                        }
-                        
-                    });
-
-                    pocketButton.addEventListener("click", function() {
-
-                        save_to_poeket(itemId)
-
-                        if (savedautoVote) {
-                            upvotes[itemId] = true;
-                            localStorage.setItem("upvotes", JSON.stringify(upvotes));
-                            localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
-                            updateArticleStyles();
-                        }
-
-                        if (voteViewModeState){
-                            const articleIndex = parseInt(article.getAttribute("data-article-index"));
-                            readArticles[itemId] = new Date().toISOString();
-                            localStorage.setItem("read", JSON.stringify(readArticles));
-    
-                            // Mark the article as read in the articles array
-                            articles[articleIndex].isRead = true;
-    
-                            // Get the parent container of the clicked skip button
-                            const articleContainer = skipButton.closest(".article-container");
-    
-                            // Update the Open button behavior
-                            updateOpenButton(articleContainer);
-    
-                            // Move the article container to the end of the list
-                            moveCardToEnd(articleContainer);
-    
-                            // Update the unread count
-                            updateItemCount();
-                            get_quote();  
-                            setTimeout( function() {}, 100);
-                        }
-                        
-                    });
-
-                    upvoteButton.addEventListener("click", function() {
-                        if (downvotes[itemId]) {
-                            delete downvotes[itemId];
-                            localStorage.setItem("downvotes", JSON.stringify(downvotes));
-                        }
-                        
-                        if (upvotes[itemId]) {
-                            delete upvotes[itemId];
-                            localStorage.setItem("upvotes", JSON.stringify(upvotes));
-                        } else {
-                            upvotes[itemId] = true;
-                            localStorage.setItem("upvotes", JSON.stringify(upvotes));
-                        }
-                        localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
-
-                        if (voteViewModeState){
-                            const articleIndex = parseInt(article.getAttribute("data-article-index"));
-                            readArticles[itemId] = new Date().toISOString();
-                            localStorage.setItem("read", JSON.stringify(readArticles));
-    
-                            // Mark the article as read in the articles array
-                            articles[articleIndex].isRead = true;
-    
-                            // Get the parent container of the clicked skip button
-                            const articleContainer = skipButton.closest(".article-container");
-    
-                            // Update the Open button behavior
-                            updateOpenButton(articleContainer);
-    
-                            // Move the article container to the end of the list
-                            moveCardToEnd(articleContainer);
-    
-                            // Update the unread count
-                            updateItemCount();
-                            get_quote();  
-                        } else {
-                            updateArticleStyles();
-                        }
-                        
-                    });
-
-                    downvoteButton.addEventListener("click", function() {
-                        if (upvotes[itemId]) {
-                            delete upvotes[itemId];
-                            localStorage.setItem("upvotes", JSON.stringify(upvotes));
-                        }
-                        
-                        if (downvotes[itemId]) {
-                            delete downvotes[itemId];
-                            localStorage.setItem("downvotes", JSON.stringify(downvotes));
-                        } else {
-                            downvotes[itemId] = true;
-                            localStorage.setItem("downvotes", JSON.stringify(downvotes));
-                        }
-                        localStorage.setItem("downvotes", JSON.stringify(arr2obj(Object.entries(downvotes).slice(-max_arts*1.25))));
-                        //updateArticleStyles();
-
-                        if (voteViewModeState){
-                            const articleIndex = parseInt(article.getAttribute("data-article-index"));
-                            readArticles[itemId] = new Date().toISOString();
-                            localStorage.setItem("read", JSON.stringify(readArticles));
-    
-                            // Mark the article as read in the articles array
-                            articles[articleIndex].isRead = true;
-    
-                            // Get the parent container of the clicked skip button
-                            const articleContainer = skipButton.closest(".article-container");
-    
-                            // Update the Open button behavior
-                            updateOpenButton(articleContainer);
-    
-                            // Move the article container to the end of the list
-                            moveCardToEnd(articleContainer);
-    
-                            // Update the unread count
-                            updateItemCount();
-                            get_quote();  
-                        } else {
-                            updateArticleStyles();
-                        }
-                    });
-
-                    skipButton.addEventListener("click", function () {
-                        const articleIndex = parseInt(article.getAttribute("data-article-index"));
-                        readArticles[itemId] = new Date().toISOString();
-                        localStorage.setItem("read", JSON.stringify(readArticles));
-                        
-                        // Mark the article as read in the articles array
-                        articles[articleIndex].isRead = true;
-
-                        // Get the parent container of the clicked skip button
-                        const articleContainer = skipButton.closest(".article-container");
-
-                        // Update the Open button behavior
-                        updateOpenButton(articleContainer);
-
-                        // Move the article container to the end of the list
-                        moveCardToEnd(articleContainer);
-
-                        // Update the unread count
-                        updateItemCount();
-                        get_quote();
-                    });
-
-                    readButton.addEventListener("click", function() {
-                        
-                        if (savedautoVote) {
-                            upvotes[itemId] = true;
-                            localStorage.setItem("upvotes", JSON.stringify(upvotes));
-                            localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
-                            updateArticleStyles();
-                        }
-
-                        if (!isRead && afterOpenModeState) {
-                            const articleIndex = parseInt(article.getAttribute("data-article-index"));
-                            readArticles[itemId] = new Date().toISOString();
-                            localStorage.setItem("read", JSON.stringify(readArticles));
-
+                            
                             // Mark the article as read in the articles array
                             articles[articleIndex].isRead = true;
 
@@ -1460,33 +1461,65 @@ function declutter(title_source,id_source,tf_source,n=0){
                             // Update the unread count
                             updateItemCount();
                             get_quote();
-                        }
-                    });
+                        });
 
-                    const RemoveFeedButton = article.querySelector(".remove_feed");
-
-                    RemoveFeedButton.addEventListener("click", function() {
-                        if (feedUrl == "undefined" || typeof feedUrl == "undefined") {
-                            // Can delete after Start of Dec 2024
-                            alert("This card was saved with an old version of this site and we don't have the information needed to remove the feed. Use the My Feeds button at the top of the page.")
-                        } else if (rssFeeds.includes(feedUrl)) {
-                            let text = "Choose OK to remove: "+feedTitle+"\n\n"+feedUrl+"\n\nChoose Cancel to keep things as they are. Note: If you remove this feed, old posts will remain visable in your timeline, but we will not fetch new ones.";
-                            if (confirm(text) == true) {
-                                //console.log(rssFeeds)
-                                //console.log("Removing",feedUrl)
-                                const feedIndex = rssFeeds.indexOf(feedUrl);
-                                rssFeeds.splice(feedIndex, 1);
-                                localStorage.setItem("feeds", JSON.stringify(rssFeeds));
-                                //updateFeedList();
-                                //console.log(rssFeeds)
+                        readButton.addEventListener("click", function() {
+                            
+                            if (savedautoVote) {
+                                upvotes[itemId] = true;
+                                localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                                localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
+                                updateArticleStyles();
                             }
-                        } else {
-                            alert("It looks like this feed has already been removed. Remember, old posts from removed feeds remain visable in your timeline, but new ones are not fetched.")
-                        }
-                    });        
-                    i+=1;
+
+                            if (!isRead && afterOpenModeState) {
+                                const articleIndex = parseInt(article.getAttribute("data-article-index"));
+                                readArticles[itemId] = new Date().toISOString();
+                                localStorage.setItem("read", JSON.stringify(readArticles));
+
+                                // Mark the article as read in the articles array
+                                articles[articleIndex].isRead = true;
+
+                                // Get the parent container of the clicked skip button
+                                const articleContainer = skipButton.closest(".article-container");
+
+                                // Update the Open button behavior
+                                updateOpenButton(articleContainer);
+
+                                // Move the article container to the end of the list
+                                moveCardToEnd(articleContainer);
+
+                                // Update the unread count
+                                updateItemCount();
+                                get_quote();
+                            }
+                        });
+
+                        const RemoveFeedButton = article.querySelector(".remove_feed");
+
+                        RemoveFeedButton.addEventListener("click", function() {
+                            if (feedUrl == "undefined" || typeof feedUrl == "undefined") {
+                                // Can delete after Start of Dec 2024
+                                alert("This card was saved with an old version of this site and we don't have the information needed to remove the feed. Use the Feeds button at the top of the page.")
+                            } else if (rssFeeds.includes(feedUrl)) {
+                                let text = "Choose OK to remove: "+feedTitle+"\n\n"+feedUrl+"\n\nChoose Cancel to keep things as they are. Note: If you remove this feed, old posts will remain visable in your timeline, but we will not fetch new ones.";
+                                if (confirm(text) == true) {
+                                    //console.log(rssFeeds)
+                                    //console.log("Removing",feedUrl)
+                                    const feedIndex = rssFeeds.indexOf(feedUrl);
+                                    rssFeeds.splice(feedIndex, 1);
+                                    localStorage.setItem("feeds", JSON.stringify(rssFeeds));
+                                    //updateFeedList();
+                                    //console.log(rssFeeds)
+                                }
+                            } else {
+                                alert("It looks like this feed has already been removed. Remember, old posts from removed feeds remain visable in your timeline, but new ones are not fetched.")
+                            }
+                        });        
+                        i+=1;
+                    }   
                 }   
-            }                 
+            } 
         });
 
         // After all articles are displayed, update their styles
@@ -1544,60 +1577,74 @@ function declutter(title_source,id_source,tf_source,n=0){
 
     function getRating(inputString) {
 
-        //console.log(inputString)
-
-        tf = countWords(inputString)
-
-        var array1 = [];
-        var array2 = [];
-        for (word in upTFIDF) {
-            if (dfreq["df_arr"][word]) {
-                idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
-                //if (isNaN(idf)) {
-                //    idf = 1;
-                //}
+        if (regex_always!="" && !searching) {
+            regex = new RegExp(regex_always, regex_always_op); 
+            if (inputString.match(regex)) {
+                //console.log("Bumping match for /"+regex_always+"/"+regex_always_op)
+                match = 1
             } else {
-                idf = Math.log(1+dfreq["n_docs"]/1);
+                match = 0
             }
-                if (tf[word] && idf) {
-                    array1.push((tf[word])*idf)
-                } else {
-                    array1.push(0)
-                }
-            if (upTFIDF[word]) {
-                array2.push(upTFIDF[word]*idf)
-            } else {
-                array2.push(0)
-            }
+        } else {
+            match = 0
         }
-        up_score = cosinesim(array1, array2);
-        
-        var array1 = [];
-        var array2 = [];
-        for (word in downTFIDF) {
-            if (dfreq["df_arr"][word]) {
-                idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
-                //if (isNaN(idf)) {
-                //    idf = 1;
-                //}
-            } else {
-                idf = Math.log(1+dfreq["n_docs"]/1);
-            }
-                if (tf[word] && idf) {
-                    array1.push((tf[word])*idf)
+
+        if (match==1) {
+            score = 1;
+        } else {
+            tf = countWords(inputString)
+
+            var array1 = [];
+            var array2 = [];
+            for (word in upTFIDF) {
+                if (dfreq["df_arr"][word]) {
+                    idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
+                    //if (isNaN(idf)) {
+                    //    idf = 1;
+                    //}
                 } else {
-                    array1.push(0)
+                    idf = Math.log(1+dfreq["n_docs"]/1);
                 }
-            if (downTFIDF[word]) {
-                array2.push(downTFIDF[word]*idf)
-            } else {
-                array2.push(0)
+                    if (tf[word] && idf) {
+                        array1.push((tf[word])*idf)
+                    } else {
+                        array1.push(0)
+                    }
+                if (upTFIDF[word]) {
+                    array2.push(upTFIDF[word]*idf)
+                } else {
+                    array2.push(0)
+                }
             }
-        }
-        down_score = cosinesim(array1, array2);
-        
-        score = up_score - down_score*savednegativity;
-        //console.log(score)
+            up_score = cosinesim(array1, array2);
+            
+            var array1 = [];
+            var array2 = [];
+            for (word in downTFIDF) {
+                if (dfreq["df_arr"][word]) {
+                    idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
+                    //if (isNaN(idf)) {
+                    //    idf = 1;
+                    //}
+                } else {
+                    idf = Math.log(1+dfreq["n_docs"]/1);
+                }
+                    if (tf[word] && idf) {
+                        array1.push((tf[word])*idf)
+                    } else {
+                        array1.push(0)
+                    }
+                if (downTFIDF[word]) {
+                    array2.push(downTFIDF[word]*idf)
+                } else {
+                    array2.push(0)
+                }
+            }
+            down_score = cosinesim(array1, array2);
+            
+            score = up_score - down_score*savednegativity;
+            //console.log(score)
+        } 
         
         return score;
     }
@@ -1714,7 +1761,7 @@ function declutter(title_source,id_source,tf_source,n=0){
             return requiredObj;
         };
 
-        n = 60;
+        n = 115;
         word_list = pickHighest(wordObj, n)
         if (Object.keys(word_list).length>0) {
             i = 0
@@ -1814,7 +1861,7 @@ function declutter(title_source,id_source,tf_source,n=0){
     function updateItemCount() {
 
         const readCount = Object.keys(readArticles).length.toLocaleString("en-US");;
-        const unreadCount = countUnreadArticles().toLocaleString("en-US"); 
+        const unreadCount = (countUnreadArticles() - suffolk).toLocaleString("en-US"); 
         const readCountElement = document.getElementById("read-count");
         const unreadCountElement = document.getElementById("unread-count");
         if (readCount<=1000) {
@@ -1850,7 +1897,8 @@ function declutter(title_source,id_source,tf_source,n=0){
 
     function get_quote() {
         HiddenModeState = localStorage.getItem("hiddenMode") === "true";
-        if (countUnreadArticles().toLocaleString("en-US")==0 && !HiddenModeState) {
+        unreadcount = countUnreadArticles() - suffolk
+        if (unreadcount.toLocaleString("en-US")==0 && !HiddenModeState) {
             items = [
                         "Be kind. Have Fun. Try something new.",
                         "In life and on apps, always question defaults. Fiddle with some settings, and see what happens.",
@@ -1937,49 +1985,50 @@ function declutter(title_source,id_source,tf_source,n=0){
     var searchResults = [];
     const runSearch = document.getElementById("search_btn");
     runSearch.addEventListener("click", function() {
-        const newSearch = prompt("Search titles and descriptions (case insensitive \"exact\" match on \"all\" articles):");
-        if (newSearch.trim()!="") {
-            document.getElementById('unread-count').style.display = "none";
-            document.getElementById('read-count').style.display = "none";
-            document.getElementById('results-count').style.display = "block";
-            document.getElementById('search_msg').style.display = "block";   
-            show_timeline();
-
-            searchResults = []
-
-            saved_articles =  JSON.parse(localStorage.getItem("articles")) || [];
-
-            saved_articles.forEach(articleData => {
-                const key = `${articleData.title} - ${articleData.description}`.toLowerCase();
-                if (key.includes(newSearch.toLowerCase())) {
-                  searchResults.push(articleData);
-                }
-              });
-
-            //articles = searchResults;
-
-            //dedup_articles();
-            //reorderArticles(search=true);
-
-            searchResults.sort((a, b) => {
-                return new Date(b.pubDate) - new Date(a.pubDate);
-            });
-
-            searching = true
-            document.querySelector('body').classList.remove("hidden-mode"); 
-
-            displayArticles(search=true);
-
-            displayed_cards = newsFeedContainer.childNodes.length.toLocaleString("en-US")
-
-            document.getElementById("results-count").textContent = `Results: ${displayed_cards}`;
-
-            lazyload();
-            replace_broken();
-            
-        } else {
-            alert("Empty search string (no action taken)");
+        const newSearch = prompt("Search titles, descriptions, and links (case-insensitive regex match on \"all\" articles):");
+        if (newSearch === null) {
+            return; //break out of the function early
         }
+
+        document.getElementById('unread-count').style.display = "none";
+        document.getElementById('read-count').style.display = "none";
+        document.getElementById('results-count').style.display = "block";
+        document.getElementById('search_msg').style.display = "block";   
+        show_timeline();
+
+        searchResults = []
+
+        saved_articles =  JSON.parse(localStorage.getItem("articles")) || [];
+
+        regex = new RegExp(newSearch, "i")
+
+        saved_articles.forEach(articleData => {
+            testString = articleData.title + " " + articleData.description + " " + articleData.link
+            if (testString.match(regex)) {
+                searchResults.push(articleData);
+            }
+        });
+
+        //articles = searchResults;
+
+        //dedup_articles();
+        //reorderArticles(search=true);
+
+        searchResults.sort((a, b) => {
+            return new Date(b.pubDate) - new Date(a.pubDate);
+        });
+
+        searching = true
+        document.querySelector('body').classList.remove("hidden-mode"); 
+
+        displayArticles(search=true);
+
+        displayed_cards = newsFeedContainer.childNodes.length.toLocaleString("en-US");
+
+        document.getElementById("results-count").textContent = `Results: ${displayed_cards}`;
+
+        lazyload();
+        replace_broken();
     });
 
     const manageFeedsButton = document.getElementById("manage-feeds");
@@ -1996,7 +2045,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="feedListModalLabel">My Feeds</h5>
+                            <h5 class="modal-title" id="feedListModalLabel">Feeds</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
