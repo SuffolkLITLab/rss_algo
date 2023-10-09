@@ -307,18 +307,20 @@ document.addEventListener("DOMContentLoaded", function() {
     async function fetchFeed(feedUrl) {
         document.getElementById('loading').style.display = "block";
 
-        var proxy_01 = "https://corsproxy.io/?"
+        var proxy_01 = "https://tools.suffolklitlab.org/rss_proxy/?url="
         // set proxy_02 = "" if you only want to use proxy_01
-        var proxy_02 = "https://tools.suffolklitlab.org/rss_proxy/?url="
+        var proxy_02 = "https://corsproxy.io/?"
 
         feedUrl_prox = proxy_01+encodeURIComponent(feedUrl)       
-        const response = await fetchWithTimeout(feedUrl_prox, {timeout: 6000});
+        //const response = await fetchWithTimeout(feedUrl_prox, {timeout: 6000});
+        const response = await fetch(feedUrl_prox);
         if (!response.ok) {
             //throw new Error(`Request failed with status ${response.status}`);
             if (proxy_02!=""){
                 console.log("Trying corsproxy.io for "+feedUrl)
                 feedUrl_prox = proxy_02 + encodeURIComponent(feedUrl);
-                let response = await fetchWithTimeout(feedUrl_prox, {timeout: 8000});    
+                //let response = await fetchWithTimeout(feedUrl_prox, {timeout: 8000});   
+                let response = await fetch(feedUrl_prox);    
             }
             if (!response.ok) {
                 console.log("Error fetching "+feedUrl)
@@ -2078,7 +2080,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 <option value="default_feeds">Generic US News Mix (default)</option>
                                 <option value="papers_feeds">US Print: NYT, WaPo, WSJ, &amp; LA Times</option>
                                 <option value="condenast_feeds">Condé Nast Lite: New Yorker, ArsTechnica, &amp; Wired</option>
-                                <option value="magazine_feeds">Mags: New Yorker, Economist, Atlantic, Wired, Rolling Stone &amp; Quanta</option>
+                                <option value="magazine_feeds">Mags: New Yorker, Economist, Atlantic, Wired, Rolling Stone, Quanta, &amp; Nautilus</option>
                                 <option value="geeek_feeds">Geekery: Science, Space, Tech, Star Trek and &amp; SciFi Shorts</option>
                                 <option value="scifi_shorts_feed">SciFi Shorts: Clarkesworld, Lightspeed &amp; Escape Pod</option>
                                 <option value="suffolk_law_feeds">Suffolk Mix: Select Papers + Boston + Law &amp; Scholarship</option>

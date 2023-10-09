@@ -128,7 +128,8 @@ var magazine_feeds = [
     "https://www.rollingstone.com/tv-movies/feed/",
     "https://www.rollingstone.com/culture/feed/",
     "https://www.rollingstone.com/product-recommendations/feed/",
-    "https://api.quantamagazine.org/feed/"
+    "https://api.quantamagazine.org/feed/",
+    "https://nautil.us/feed/"
 ]
 
 var scifi_shorts_feed = [
@@ -148,12 +149,15 @@ var geeek_feeds = [
     "http://www.newyorker.com/feed/tech",
     "http://feeds.bbci.co.uk/news/science_and_environment/rss.xml",
     "http://feeds.bbci.co.uk/news/technology/rss.xml",
+    "https://www.theguardian.com/us/technology/rss",
+    "https://www.theguardian.com/science/rss",
     "https://www.economist.com/science-and-technology/rss.xml",
     "https://feeds.bloomberg.com/technology/news.rss",
     "https://feeds.arstechnica.com/arstechnica/technology-lab",
     "https://feeds.arstechnica.com/arstechnica/tech-policy",
     "https://feeds.arstechnica.com/arstechnica/science",
     "https://feeds.arstechnica.com/arstechnica/features",
+    "https://www.technologyreview.com/feed/",
     "https://www.wired.com/feed/category/business/latest/rss",
     "https://www.wired.com/feed/tag/ai/latest/rss",
     "https://www.wired.com/feed/category/culture/latest/rss",
@@ -185,6 +189,7 @@ var geeek_feeds = [
     "https://hnrss.org/best",
     "https://screenrant.com/feed/tag/star-trek/",
     "https://api.quantamagazine.org/feed/",
+    "https://nautil.us/feed/",
     "https://badastronomy.substack.com/feed/",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", //3blue1brown
     "https://www.youtube.com/feeds/videos.xml?channel_id=UC415bOPUcGSamy543abLmRA", //Cleo Abram
@@ -996,6 +1001,14 @@ var feeds_long_list = [
     "http://feeds.bbci.co.uk/news/science_and_environment/rss.xml",
     "http://feeds.bbci.co.uk/news/technology/rss.xml",
     "http://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml",
+    // The Guardian
+    "https://www.theguardian.com/us-news/rss",
+    "https://www.theguardian.com/world/rss",
+    "https://www.theguardian.com/us/environment/rss",
+    "https://www.theguardian.com/us/soccer",
+    "https://www.theguardian.com/us/business/rss",
+    "https://www.theguardian.com/us/technology/rss",
+    "https://www.theguardian.com/science/rss",
     // Washington Post
     "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
     "https://www.washingtonpost.com/arcio/rss/category/opinions/?itid=lk_inline_manual_7",
@@ -1107,6 +1120,8 @@ var feeds_long_list = [
     "https://feeds.arstechnica.com/arstechnica/tech-policy",
     "https://feeds.arstechnica.com/arstechnica/science",
     "https://feeds.arstechnica.com/arstechnica/features",
+    // MIT Tech Reviw
+    "https://www.technologyreview.com/feed/",
     // Wired
     "https://www.wired.com/feed/category/business/latest/rss",
     "https://www.wired.com/feed/tag/ai/latest/rss",
@@ -1125,6 +1140,12 @@ var feeds_long_list = [
     "https://www.rollingstone.com/product-recommendations/feed/",
     // Vox
     "https://www.vox.com/rss/index.xml",
+    // The Markup
+    "https://themarkup.org/feeds/rss.xml",
+    // ProPublica
+    "https://www.propublica.org/feeds/propublica/main",
+    // Lifehacker
+    "http://lifehacker.com/vip.xml",
     // Gizmodo
     "http://gizmodo.com/vip.xml",
     // Techcrunch
@@ -1149,6 +1170,8 @@ var feeds_long_list = [
     "https://abovethelaw.com/feed/",
     // Quanta Magazine
     "https://api.quantamagazine.org/feed/",
+    //  Nautilus
+    "https://nautil.us/feed/",
     // Hacker News
     "https://hnrss.org/best",
     // Screen Rant
@@ -1229,6 +1252,14 @@ test_feeds = [
     "http://feeds.bbci.co.uk/news/science_and_environment/rss.xml",
     "http://feeds.bbci.co.uk/news/technology/rss.xml",
     "http://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml",
+    // The Guardian
+    "https://www.theguardian.com/us-news/rss",
+    "https://www.theguardian.com/world/rss",
+    "https://www.theguardian.com/us/environment/rss",
+    //"https://www.theguardian.com/us/soccer",
+    "https://www.theguardian.com/us/business/rss",
+    "https://www.theguardian.com/us/technology/rss",
+    "https://www.theguardian.com/science/rss",
     // Washington Post
     "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
     "https://www.washingtonpost.com/arcio/rss/category/opinions/?itid=lk_inline_manual_7",
@@ -1340,6 +1371,8 @@ test_feeds = [
     "https://feeds.arstechnica.com/arstechnica/tech-policy",
     "https://feeds.arstechnica.com/arstechnica/science",
     "https://feeds.arstechnica.com/arstechnica/features",
+    // MIT Tech Reviw
+    "https://www.technologyreview.com/feed/",
     // Wired
     "https://www.wired.com/feed/category/business/latest/rss",
     "https://www.wired.com/feed/tag/ai/latest/rss",
@@ -1358,6 +1391,12 @@ test_feeds = [
     //"https://www.rollingstone.com/product-recommendations/feed/",
     // Vox
     "https://www.vox.com/rss/index.xml",
+    // The Markup
+    "https://themarkup.org/feeds/rss.xml",
+    // ProPublica
+    "https://www.propublica.org/feeds/propublica/main",
+    // Lifehacker
+    "http://lifehacker.com/vip.xml",
     // Gizmodo
     //"http://gizmodo.com/vip.xml",
     // Techcrunch
@@ -1382,6 +1421,8 @@ test_feeds = [
     "https://abovethelaw.com/feed/",
     // Quanta Magazine
     "https://api.quantamagazine.org/feed/",
+    //  Nautilus
+    "https://nautil.us/feed/",
     // Hacker News
     "https://hnrss.org/best",
     // Screen Rant
