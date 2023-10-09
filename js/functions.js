@@ -293,14 +293,19 @@ document.addEventListener("DOMContentLoaded", function() {
     async function fetchFeed(feedUrl) {
         document.getElementById('loading').style.display = "block";
 
-        feedUrl_prox = "https://tools.suffolklitlab.org/rss_proxy/?url="+encodeURIComponent(feedUrl)       
-        
+        var proxy_01 = "https://corsproxy.io/?"
+        // set proxy_02 = "" if you only want to use proxy_01
+        var proxy_02 = "" //"https://tools.suffolklitlab.org/rss_proxy/?url="
+
+        feedUrl_prox = proxy_01+encodeURIComponent(feedUrl)       
         const response = await fetch(feedUrl_prox);
         if (!response.ok) {
             //throw new Error(`Request failed with status ${response.status}`);
-            console.log("Trying corsproxy.io for "+feedUrl)
-            feedUrl_prox = 'https://corsproxy.io/?' + encodeURIComponent(feedUrl);
-            let response = await fetch(feedUrl_prox);    
+            if (proxy_02!=""){
+                console.log("Trying corsproxy.io for "+feedUrl)
+                feedUrl_prox = proxy_02 + encodeURIComponent(feedUrl);
+                let response = await fetch(feedUrl_prox);    
+            }
             if (!response.ok) {
                 console.log("Error fetching "+feedUrl)
                 throw new Error(`Request failed with status ${response.status}`);
