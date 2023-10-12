@@ -1,18 +1,30 @@
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
 function show_timeline() {
-    document.getElementById('my_settings').style.display = "none";
+    document.getElementById('spin_container').style.display = "block";
     document.getElementById('news-feed').style.display = "flex";
+    document.getElementById('mark-all').style.display = "block";
+    document.getElementById('my_settings').style.display = "none";
     document.getElementById('a_settings').innerHTML = "Settings";
 }
 
+var searching = false
+
+var feed_names = JSON.parse(localStorage.getItem("feed_names")) || {}
+
 function toggle_settings() {
     if (document.getElementById('my_settings').style.display=="none") {
+        document.getElementById('spin_container').style.display = "none";
         document.getElementById('news-feed').style.display = "none";
+        document.getElementById('mark-all').style.display = "none";
         document.getElementById('my_settings').style.display = "block";
         document.getElementById('a_settings').innerHTML = "Timeline";
+        document.getElementById('search_msg').style.display = "none";
     } else {
         show_timeline();
+        if (searching){
+            document.getElementById('search_msg').style.display = "block";
+        }
     }
 }
 
@@ -251,7 +263,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const readArticles = filterOldEntries(JSON.parse(localStorage.getItem("read")) || {});    
     localStorage.setItem("read", JSON.stringify(readArticles));
 
-    var suffolk = 0
+    //var suffolk = 0
 
     const stopwords = ['i','me','my','myself','we','our','ours','ourselves','you','your','yours','yourself','yourselves','he','him','his','himself','she','her','hers','herself','it','its','itself','they','them','their','theirs','themselves','what','which','who','whom','this','that','these','those','am','is','are','was','were','be','been','being','have','has','had','having','do','does','did','doing','a','an','the','and','but','if','or','because','as','until','while','of','at','by','for','with','about','against','between','into','through','during','before','after','above','below','to','from','up','down','in','out','on','off','over','under','again','further','then','once','here','there','when','where','why','how','all','any','both','each','few','more','most','other','some','such','no','nor','not','only','own','same','so','than','too','very','s','t','can','will','just','don','should','now','p','span','https','http']
 
@@ -684,6 +696,25 @@ function declutter(title_source,id_source,tf_source,n=0){
         localStorage.setItem("ignoreImages", newIgnoreImages);
     });
 
+    const weatherCheckbox = document.getElementById("weather-report");
+    // Retrieve ignore images value from localStorage (if available)
+    const savedWeather = localStorage.getItem("weather") === "true";
+    weatherCheckbox.checked = savedWeather;
+    // Update ignore images value and save to localStorage when checkbox value changes
+    weatherCheckbox.addEventListener("change", function () {
+        const newWeather = weatherCheckbox.checked;
+        localStorage.setItem("weather", newWeather);
+    });  
+
+    if (savedWeather){
+        getUserWeather();
+    }
+
+    const savedtemp = localStorage.getItem("temp") || "fahrenheit"
+    document.getElementById("temp").value = savedtemp
+    localStorage.setItem("temp", document.getElementById("temp").value);
+    
+
     function dedup_articles() {
         var uniqueArticles = [];
         var uniqueArticleIds = new Set();
@@ -727,8 +758,7 @@ function declutter(title_source,id_source,tf_source,n=0){
             decluter_cards = false;
         }
         
-
-        document.getElementById('news-feed').innerHTML = ` <div style="float:left;width:100%;height:80px;"><div id="spinner_here" style="margin:0 auto;width:65px;">&nbsp;</div></div>`;
+        document.getElementById('spin_container').innerHTML = `<div style="float:left;width:100%;height:80px;"><div id="spinner_here" style="margin:0 auto;width:65px;">&nbsp;</div></div>`;
         if (localStorage.getItem("darkMode")=="enabled") {
             tickcolor = '#ddd';		
         } else {
@@ -792,6 +822,9 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 masto_profile = null
                             }
                         }
+
+                        feed_names[feedUrl] = feedTitle;
+                        localStorage.setItem("feed_names",JSON.stringify(feed_names));  
 
                         j=0;
                         items.forEach(item => {
@@ -984,7 +1017,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     const itemId = link; // Using link as a unique identifier for items
                                     const isRead = readArticles[itemId] || false;
 
-                                    const priorityRating = getRating(feedTitle.replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(link).replace(/[^a-zA-Z]+/g,"-")+" "+title+" "+description); 
+                                    const priorityRating = getRating(feedTitle.replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(link).replace(/[^a-zA-Z]+/g,"-")+" "+title+" "+description,link,feedTitle); 
 
                                     articles.push({
                                         title,
@@ -1037,7 +1070,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                         errors+=1
                         n_feeds+=1
                     });
-        
+
             });
 
         } else {
@@ -1075,7 +1108,7 @@ function declutter(title_source,id_source,tf_source,n=0){
             if (crunch_numbers) {
                 tmp_ratings = []
                 for (article in articles){
-                    rating = getRating(articles[article]['feedTitle'].replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(articles[article]['link']).replace(/[^a-zA-Z]+/g,"-")+" "+articles[article]['title']+" "+articles[article]['description'])
+                    rating = getRating(articles[article]['feedTitle'].replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(articles[article]['link']).replace(/[^a-zA-Z]+/g,"-")+" "+articles[article]['title']+" "+articles[article]['description'],articles[article]['link'],articles[article]['feedTitle'])
                     articles[article]["priorityRating"] = rating; 
                     tmp_ratings.push(rating)
                 }
@@ -1153,8 +1186,9 @@ function declutter(title_source,id_source,tf_source,n=0){
             dfreq_all = calculateDF(articles)
         }
 
+        document.getElementById('spin_container').innerHTML = ``;
         newsFeedContainer.innerHTML = "";
-        suffolk = 0
+        //suffolk = 0
         const twoWeeksAgo = new Date();
         twoWeeksAgo.setDate(twoWeeksAgo.getDate() - local_lookback);
 
@@ -1165,7 +1199,7 @@ function declutter(title_source,id_source,tf_source,n=0){
 
             if (regex_never!="" && !search) {
                 regex = new RegExp(regex_never, regex_never_op); 
-                test_string = feedTitle.replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(link).replace(/[^a-zA-Z]+/g,"-")+" "+title+" "+description
+                test_string = feedTitle.replace(/[^a-zA-Z]+/g,"-")+" "+title+" "+description+""+link
                 if (test_string.match(regex)) {
                     //console.log("Muting match for /"+regex_never+"/"+regex_never_op)
                     match = 1
@@ -1178,9 +1212,11 @@ function declutter(title_source,id_source,tf_source,n=0){
 
             if (match==0) {
 
-                if ((!searching) && (i==2 && !isRead) && (Math.random()<=0.1) && ((n_feeds>=rssFeeds.length) || (n_feeds==0))) {
+                
+                if ((!searching) && (i==2 && !isRead) && (Math.random()<=0.15) && ((n_feeds>=rssFeeds.length) || (n_feeds==0))) {
 
-                    suffolk = 1
+                    
+                    //suffolk = 1
 
                     if (savedIgnoreImages){
                         img_html = `
@@ -1209,6 +1245,8 @@ function declutter(title_source,id_source,tf_source,n=0){
                             </div>
                         </div>
                     `;                        
+
+                    readArticles["sponsor"] = false
                     newsFeedContainer.appendChild(sponsor);
                     i+=1;
                 } 
@@ -1543,9 +1581,56 @@ function declutter(title_source,id_source,tf_source,n=0){
             } 
         });
 
+        if (!searching){
+            document.getElementById("mark-all").innerHTML = `<button id="mark-above-seen" class="btn btn-danger btn-block" style="margin: 15px 0">Mark Above as Seen</button>`
+            const markAboveSeen = document.getElementById("mark-above-seen");
+
+            markAboveSeen.addEventListener("click", function() {
+
+                document.getElementById('news-feed').style.display = "none";
+                document.getElementById('spin_container').innerHTML = `<div style="float:left;width:100%;height:80px;"><div id="spinner_here" style="margin:0 auto;width:65px;">&nbsp;</div></div>`;
+                if (localStorage.getItem("darkMode")=="enabled") {
+                    tickcolor = '#ddd';		
+                } else {
+                    tickcolor = '#000';		
+                }
+                start_spinner('spinner_here',tickcolor);
+                document.getElementById("mark-all").innerHTML = "";
+
+                setTimeout( function() {
+                    const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
+                    articleContainers.forEach(articleContainer => {
+                        const itemId = articleContainer.getAttribute("data-item-id");
+                        const articleIndex = parseInt(articleContainer.getAttribute("data-article-index"));
+                        //console.log(articleIndex)
+                        readArticles[itemId] = new Date().toISOString();                    
+                        localStorage.setItem("read", JSON.stringify(readArticles));
+    
+                        if (!isNaN(articleIndex) && articles[articleIndex].isRead == false) {
+                            // Mark the article as read in the articles array
+                            articles[articleIndex].isRead = true;
+        
+                            // Update the Open button behavior
+                            updateOpenButton(articleContainer);
+        
+                            // Move the article container to the end of the list
+                            moveCardToEnd(articleContainer);
+        
+                            // Update the unread count
+                            updateItemCount();
+                            get_quote();
+                        }
+                    });
+                }, 10); 
+
+            });
+
+        } else {
+            document.getElementById("mark-all").innerHTML = ``
+        }
+
         // After all articles are displayed, update their styles
         updateArticleStyles();
-
     }
 
     function StandardDeviation(arr) {
@@ -1596,11 +1681,12 @@ function declutter(title_source,id_source,tf_source,n=0){
         return similarity;
     }
 
-    function getRating(inputString) {
+    function getRating(inputString,link="",feed_title="") {
 
         if (regex_always!="" && !searching) {
+            full_input = link + " " + feed_title 
             regex = new RegExp(regex_always, regex_always_op); 
-            if (inputString.match(regex)) {
+            if (full_input.match(regex)) {
                 //console.log("Bumping match for /"+regex_always+"/"+regex_always_op)
                 match = 1
             } else {
@@ -1818,7 +1904,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             <p><strong>Feed:</strong> ${feedTitle}</p>
                             <p><strong>Feed URL:</strong> ${feedUrl}</p>
                             <p><strong>Error Message:</strong> ${errorMessage}</p>
-                            <p>Sometimes there are issues reaching a feed. If this error persists, you can remove this feed using the "My Feeds" button.</p>
+                            <p>Sometimes there are issues reaching a feed. If this error persists, you can remove this feed using the "Feeds" button.</p>
                         </div>
                         <div class="modal-footer">
                             <button id="manage-feeds" class="btn btn-primary" style="width:100%" onClick="window.open('https://github.com/colarusso/rss_algo/tree/main#troubleshooting');">Troubleshoot this error</button>
@@ -1881,8 +1967,9 @@ function declutter(title_source,id_source,tf_source,n=0){
 
     function updateItemCount() {
 
-        const readCount = Object.keys(readArticles).length.toLocaleString("en-US");;
-        const unreadCount = (countUnreadArticles() - suffolk).toLocaleString("en-US"); 
+        const readCount = Object.keys(readArticles).length.toLocaleString("en-US");
+        var unreadCount = (countUnreadArticles() - document.querySelectorAll(".article-container[data-article-index='sponsor']").length).toLocaleString("en-US"); 
+
         const readCountElement = document.getElementById("read-count");
         const unreadCountElement = document.getElementById("unread-count");
         if (readCount<=1000) {
@@ -1890,6 +1977,7 @@ function declutter(title_source,id_source,tf_source,n=0){
         } else {
             readCountElement.textContent = `Seen: 1,000+`;
         }
+
         unreadCountElement.textContent = `New: ${unreadCount}`;
 
         var readArticleData = articles.filter(article => readArticles[article.itemId]);
@@ -1918,8 +2006,8 @@ function declutter(title_source,id_source,tf_source,n=0){
 
     function get_quote() {
         HiddenModeState = localStorage.getItem("hiddenMode") === "true";
-        unreadcount = countUnreadArticles() - suffolk
-        if (unreadcount.toLocaleString("en-US")==0 && !HiddenModeState) {
+        unreadcount = countUnreadArticles() - document.querySelectorAll(".article-container[data-article-index='sponsor']").length
+        if (unreadcount.toLocaleString("en-US")<=0 && !HiddenModeState) {
             items = [
                         "Be kind. Have Fun. Try something new.",
                         "In life and on apps, always question defaults. Fiddle with some settings, and see what happens.",
@@ -1929,8 +2017,14 @@ function declutter(title_source,id_source,tf_source,n=0){
             quote.className = `end_quote`;
             quote.innerHTML = items[Math.floor(Math.random()*items.length)];
             newsFeedContainer.textContent = "";
+            document.getElementById("mark-all").innerHTML = "";
+            document.getElementById('news-feed').style.display = "flex";
+            document.getElementById('spin_container').innerHTML = `` 
             newsFeedContainer.appendChild(quote);    
+        } else if (unreadcount.toLocaleString("en-US")==0) {
+            document.getElementById('spin_container').innerHTML = `` 
         }
+        document.getElementById('news-feed').style.display = "flex";
     }
     
     const clearUpvotesButton = document.getElementById("clear-upvotes");
@@ -2002,11 +2096,12 @@ function declutter(title_source,id_source,tf_source,n=0){
         document.getElementById('search_msg').style.display = "none";   
     }
 
-    var searching = false
+    const matching_regex = document.getElementById("matching_regex");
+
     var searchResults = [];
     const runSearch = document.getElementById("search_btn");
     runSearch.addEventListener("click", function() {
-        const newSearch = prompt("Search titles, descriptions, and links (case-insensitive regex match on \"all\" articles):");
+        const newSearch = prompt("Search titles, descriptions, feed names, and links (case-insensitive regex match on \"all\" articles):");
         if (newSearch === null) {
             return; //break out of the function early
         }
@@ -2017,14 +2112,16 @@ function declutter(title_source,id_source,tf_source,n=0){
         document.getElementById('search_msg').style.display = "block";   
         show_timeline();
 
+
         searchResults = []
 
         saved_articles =  JSON.parse(localStorage.getItem("articles")) || [];
 
         regex = new RegExp(newSearch, "i")
+        matching_regex.innerHTML = `Results matching <b>"${newSearch}"</b>. `;
 
         saved_articles.forEach(articleData => {
-            testString = articleData.title + " " + articleData.description + " " + articleData.link
+            testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle
             if (testString.match(regex)) {
                 searchResults.push(articleData);
             }
@@ -2056,9 +2153,10 @@ function declutter(title_source,id_source,tf_source,n=0){
     manageFeedsButton.addEventListener("click", function() {
 
         const feedList = rssFeeds.map((feed, index) => `
-                <tr><td width="1%">
-                <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
-                </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
+            <tr style="border-top:1px solid #eee"><td colspan=2><b>${feed_names[feed]}</b></td><tr>
+            <tr><td width="1%">
+            <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
+            </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
         `).join("");
 
         const feedListModal = `
@@ -2093,7 +2191,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 <button type="button" id="remove_all_add_selection" class="btn btn-danger remove_all">Wipe &amp; Replace w/ Above Selection</button>
                                 <button type="button" id="remove_all_feeds" class="btn btn-danger remove_all">Wipe All</button>
                             <p>
-                            <table cellpadding="10px" width="100%">${feedList}</table>
+                            <table cellpadding="5px" width="100%">${feedList}</table>
                         </div>
                     </div>
                 </div>
@@ -2115,14 +2213,17 @@ function declutter(title_source,id_source,tf_source,n=0){
             if (confirm(text) == true) {
                 clear_search();
                 show_timeline();
+                document.getElementById('news-feed').style.display = "none";
+                document.getElementById('mark-all').style.display = "none";
                 feed_name = document.getElementById("feed_list").value;
                 rssFeeds = window[feed_name]
                 localStorage.setItem("feeds",rssFeeds)
                 feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
+                    <tr style="border-top:1px solid #eee"><td colspan=2><b>${feed_names[feed]}</b></td><tr>
                     <tr><td width="1%">
                     <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
                     </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
-                `).join("");
+            `).join("");
                 // Clear the "upvotes" key from localStorage
                 localStorage.removeItem("upvotes");
                 // Clear the upvotes status of all articles in the upvotes object
@@ -2150,6 +2251,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                 localStorage.setItem("lastLoad", 0);
                 modal_win.hide();
                 updateFeedList(true);
+                //get_quote();
             }
         });
 
@@ -2158,9 +2260,12 @@ function declutter(title_source,id_source,tf_source,n=0){
             if (confirm(text) == true) {
                 clear_search();
                 show_timeline();
+                document.getElementById('news-feed').style.display = "none";
+                document.getElementById('mark-all').style.display = "none";
                 rssFeeds = []
                 localStorage.setItem("feeds",JSON.stringify(rssFeeds))
                 feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
+                    <tr style="border-top:1px solid #eee"><td colspan=2><b>${feed_names[feed]}</b></td><tr>
                     <tr><td width="1%">
                     <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
                     </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
@@ -2201,8 +2306,11 @@ function declutter(title_source,id_source,tf_source,n=0){
                 const feedIndex = event.target.getAttribute("data-feed-index");
                 rssFeeds.splice(feedIndex, 1);
                 localStorage.setItem("feeds",rssFeeds)
+                document.getElementById('news-feed').style.display = "none";
+                document.getElementById('mark-all').style.display = "none";
                 updateFeedList();
                 feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
+                    <tr style="border-top:1px solid #eee"><td colspan=2><b>${feed_names[feed]}</b></td><tr>
                     <tr><td width="1%">
                     <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
                     </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
@@ -2287,5 +2395,100 @@ function start_spinner(target_id,tickcolor='#000') {
     var target = document.getElementById(target_id);
     var spinner = new Spinner(opts).spin(target);
 }
+
+var userLocation = {}
+function getUserWeather() {
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                userLocation = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                };
+                weatherAPI(userLocation["latitude"],userLocation["longitude"]);
+            },
+            error => {
+                console.error(error);
+                useLocationCheckbox.checked = false;
+            }
+        );
+    } else {
+        console.log("Geolocation is not available in this browser.");
+        useLocationCheckbox.checked = false;
+    }
+}
+
+async function weatherAPI(lat,lon){
+    var data;
+    try {
+        const response = await fetch("https://api.open-meteo.com/v1/forecast?latitude="+lat+"&longitude="+lon+"&current_weather=true&temperature_unit="+document.getElementById("temp").value+"&is_day=true");        
+        data = await response.text();
+    } catch (error) {
+        data = "no data"
+    }
+    data = JSON.parse(data)
+    //console.log(data)
+
+    /* 
+
+    Code 	Description
+    0 	Clear sky
+    1, 2, 3 	Mainly clear, partly cloudy, and overcast
+    45, 48 	Fog and depositing rime fog
+    51, 53, 55 	Drizzle: Light, moderate, and dense intensity
+    56, 57 	Freezing Drizzle: Light and dense intensity
+    61, 63, 65 	Rain: Slight, moderate and heavy intensity
+    66, 67 	Freezing Rain: Light and heavy intensity
+    71, 73, 75 	Snow fall: Slight, moderate, and heavy intensity
+    77 	Snow grains
+    80, 81, 82 	Rain showers: Slight, moderate, and violent
+    85, 86 	Snow showers slight and heavy
+    95 * 	Thunderstorm: Slight or moderate
+    96, 99 * 	Thunderstorm with slight and heavy hail
+
+    */
+
+    //"☁️☀️🌤️🌥️⛅️🌦️🌧️🌨️⛈️🌩️";
+    if (data["current_weather"]["weathercode"]==0) {
+        if (data["current_weather"]["is_day"]==1) {
+            weather_icon = "☀️";
+        } else {
+            weather_icon = "🌙";
+        }
+    } else if ([1,2,3].includes(data["current_weather"]["weathercode"])) {
+        weather_icon = "☁️";
+    } else if ([45,48].includes(data["current_weather"]["weathercode"])) {
+        weather_icon = "☁️";
+    } else if ([51,53,55].includes(data["current_weather"]["weathercode"])) {
+        weather_icon = "🌧️";
+    } else if ([56,57].includes(data["current_weather"]["weathercode"])) {
+        weather_icon = "🌧️";
+    } else if ([61,63,65].includes(data["current_weather"]["weathercode"])) {
+        weather_icon = "🌧️";
+    } else if ([66,67].includes(data["current_weather"]["weathercode"])) {
+        weather_icon = "🌧️";
+    } else if ([71,73,75].includes(data["current_weather"]["weathercode"])) {
+        weather_icon = "❄️";
+    } else if ([77].includes(data["current_weather"]["weathercode"])) {
+        weather_icon = "❄️";
+    } else if ([80,81,82].includes(data["current_weather"]["weathercode"])) {
+        weather_icon = "🌧️";
+    } else if ([85,86].includes(data["current_weather"]["weathercode"])) {
+        weather_icon = "❄️";
+    } else if ([95].includes(data["current_weather"]["weathercode"])) {
+        weather_icon = "⛈️";
+    } else if ([96,99].includes(data["current_weather"]["weathercode"])) {
+        weather_icon = "⛈️";
+    } else {
+        weather_icon = "";
+    }
+
+    document.getElementById('weather').innerHTML = Math.round(data["current_weather"]["temperature"]) + "" + data["current_weather_units"]["temperature"]+" "+weather_icon+"";
+    document.getElementById('weather').style.display = "block";
+
+    //return data
+}
+
+document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
 
 
