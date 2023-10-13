@@ -1,4 +1,4 @@
-var version = "v1.1.3";
+var version = "v1.1.4";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -1324,10 +1324,14 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     <source src="${mediaThumbnail}" type="video/mp4">
                                     Your browser does not support the video tag.
                                     </video> </div>`
+                                } else {
+                                    img_html = `
+                                    <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img data-src="${mediaThumbnail}" class="lazyload card-img-top thumbnail-image">` : '<img data-src="images/placeholder.png" class="lazyload card-img-top thumbnail-image">'}</div>`
                                 }
+                            } else {
+                                img_html = `
+                                    <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img data-src="${mediaThumbnail}" class="lazyload card-img-top thumbnail-image">` : '<img data-src="images/placeholder.png" class="lazyload card-img-top thumbnail-image">'}</div>`
                             }
-                            img_html = `
-                                <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img data-src="${mediaThumbnail}" class="lazyload card-img-top thumbnail-image">` : '<img data-src="images/placeholder.png" class="lazyload card-img-top thumbnail-image">'}</div>`
                         }
 
                         article.innerHTML = `
