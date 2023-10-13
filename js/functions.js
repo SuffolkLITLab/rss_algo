@@ -1,4 +1,4 @@
-var version = "v1.1.1";
+var version = "v1.1.2";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -1589,13 +1589,13 @@ function declutter(title_source,id_source,tf_source,n=0){
 
             markAboveSeen.addEventListener("click", function() {
 
+                document.getElementById("mark-all").innerHTML = "";
                 if (localStorage.getItem("darkMode")=="enabled") {
                     tickcolor = '#ddd';		
                 } else {
                     tickcolor = '#000';		
                 }
                 start_spinner('spinner_here',tickcolor);
-                document.getElementById("mark-all").innerHTML = "";
 
                 setTimeout( function() {
                     const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
@@ -1621,7 +1621,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             get_quote();
                         }
                     });
-                }, 10); 
+                }, 150); 
 
             });
 
@@ -2017,15 +2017,14 @@ function declutter(title_source,id_source,tf_source,n=0){
             quote.className = `end_quote`;
             quote.innerHTML = items[Math.floor(Math.random()*items.length)];
             newsFeedContainer.textContent = "";
-            document.getElementById("mark-all").innerHTML = "";
-            document.getElementById('news-feed').style.display = "flex";
             document.getElementById('spin_container').innerHTML = `` 
             newsFeedContainer.appendChild(quote);    
         } else if (unreadcount.toLocaleString("en-US")==0) {
             document.getElementById('spin_container').innerHTML = `` 
         }
         document.getElementById('news-feed').style.display = "flex";
-    }
+        document.getElementById('mark-all').style.display = "block"
+}
     
     const clearUpvotesButton = document.getElementById("clear-upvotes");
     clearUpvotesButton.addEventListener("click", function() {
@@ -2177,10 +2176,10 @@ function declutter(title_source,id_source,tf_source,n=0){
                             <select id="feed_list">
                                 <option value="default_feeds">Generic US News Mix (default)</option>
                                 <option value="papers_feeds">US Print: NYT, WaPo, WSJ, &amp; LA Times</option>
-                                <option value="condenast_feeds">Condé Nast Lite: New Yorker, ArsTechnica, &amp; Wired</option>
-                                <option value="magazine_feeds">Mags: New Yorker, Economist, Atlantic, Wired, Rolling Stone, Quanta, &amp; Nautilus</option>
+                                <option value="condenast_feeds">Condé Nast Lite: New Yorker, Vanity Fair, ArsTechnica, &amp; Wired</option>
+                                <option value="magazine_feeds">Mags: New Yorker, Economist, Atlantic, Vanity Fair, Wired, Rolling Stone, Quanta, &amp; Nautilus</option>
                                 <option value="geeek_feeds">Geekery: Science, Space, Tech, Star Trek and &amp; SciFi Shorts</option>
-                                <option value="scifi_shorts_feed">SciFi Shorts: Clarkesworld, Lightspeed &amp; Escape Pod</option>
+                                <!--<option value="scifi_shorts_feed">SciFi Shorts: Clarkesworld, Lightspeed &amp; Escape Pod</option>-->
                                 <option value="suffolk_law_feeds">Suffolk Mix: Select Papers + Boston + Law &amp; Scholarship</option>
                                 <option value="dc_law_feeds">Digital Commons Orgs w/ Law Content (400+ orgs)</option>
                                 <option value="law_school_feeds">Digital Commons Orgs w/ ABA-Accredited Law Schools (100+ feeds)</option>

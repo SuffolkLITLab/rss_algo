@@ -73,6 +73,7 @@ var condenast_feeds = [
     "http://www.newyorker.com/feed/tag/books/rss",
     "http://www.newyorker.com/feed/tech",
     "http://www.newyorker.com/feed/news/sporting-scene",   
+    "https://www.vanityfair.com/feed/rss",
     "https://feeds.arstechnica.com/arstechnica/technology-lab",
     "https://feeds.arstechnica.com/arstechnica/tech-policy",
     "https://feeds.arstechnica.com/arstechnica/science",
@@ -93,6 +94,7 @@ var magazine_feeds = [
     "http://www.newyorker.com/feed/tag/books/rss",
     "http://www.newyorker.com/feed/tech",
     "http://www.newyorker.com/feed/news/sporting-scene",   
+    "https://www.vanityfair.com/feed/rss",
     "https://www.economist.com/the-world-this-week/rss.xml",
     "https://www.economist.com/letters/rss.xml",
     "https://www.economist.com/leaders/rss.xml",
@@ -194,7 +196,8 @@ var geeek_feeds = [
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", //3blue1brown
     "https://www.youtube.com/feeds/videos.xml?channel_id=UC415bOPUcGSamy543abLmRA", //Cleo Abram
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA", //Veritasium 
-    "https://botsin.space/@APoD.rss"
+    "https://botsin.space/@APoD.rss",
+    "https://tor.com/feed"
 ]
 
 geeek_feeds = geeek_feeds.concat(scifi_shorts_feed)
@@ -977,6 +980,8 @@ var feeds_long_list = [
     "https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/farhad-manjoo/rss.xml",
     "https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/bret-stephens/rss.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/sunday-review.xml",
+    // Vanity Fair
+    "https://www.vanityfair.com/feed/rss",
     // NPR
     "https://feeds.npr.org/1003/rss.xml", //national
     "https://feeds.npr.org/1004/rss.xml", //world
@@ -1146,6 +1151,10 @@ var feeds_long_list = [
     "https://www.propublica.org/feeds/propublica/main",
     // Lifehacker
     "http://lifehacker.com/vip.xml",
+    // Them Marginalian
+    "https://feeds.feedburner.com/brainpickings/rss",
+    // Smithsonian Mag
+    "https://www.smithsonianmag.com/rss/latest_articles/",
     // Gizmodo
     "http://gizmodo.com/vip.xml",
     // Techcrunch
@@ -1197,7 +1206,9 @@ var feeds_long_list = [
     // Lightspeed
     "https://www.lightspeedmagazine.com/rss-2/",
     // Escape Pod
-    "https://escapepod.org/feed/podcast/"
+    "https://escapepod.org/feed/podcast/",
+    // Tor
+    "https://tor.com/feed"
 ]
 
 test_feeds = [
@@ -1228,6 +1239,8 @@ test_feeds = [
     "https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/farhad-manjoo/rss.xml",
     "https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/bret-stephens/rss.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/sunday-review.xml",
+    // Vanity Fair
+    "https://www.vanityfair.com/feed/rss",
     // NPR
     "https://feeds.npr.org/1003/rss.xml", //national
     "https://feeds.npr.org/1004/rss.xml", //world
@@ -1397,6 +1410,10 @@ test_feeds = [
     "https://www.propublica.org/feeds/propublica/main",
     // Lifehacker
     "http://lifehacker.com/vip.xml",
+    // Them Marginalian
+    "https://feeds.feedburner.com/brainpickings/rss",
+    // Smithsonian Mag
+    "https://www.smithsonianmag.com/rss/latest_articles/",
     // Gizmodo
     //"http://gizmodo.com/vip.xml",
     // Techcrunch
@@ -1448,15 +1465,16 @@ test_feeds = [
     // Lightspeed
     "https://www.lightspeedmagazine.com/rss-2/",
     // Escape Pod
-    "https://escapepod.org/feed/podcast/"
-    
+    "https://escapepod.org/feed/podcast/",
+    // Tor
+    "https://tor.com/feed"
+        
     // CORS proxy doesn't resolve feed (entierly broken)
     //"http://rss.sciam.com/ScientificAmerican-Global",
 
     // Seems to "work" but there are no new posts
     //"https://lawprofblawg.wordpress.com/feed/",
     //"https://www.reutersagency.com/feed/?best-regions=north-america&post_type=best",
-    //"https://www.smithsonianmag.com/rss/air-space-magazine/"
 
 ]
 
