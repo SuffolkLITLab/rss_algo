@@ -2007,12 +2007,19 @@ function declutter(title_source,id_source,tf_source,n=0){
     function get_quote() {
         HiddenModeState = localStorage.getItem("hiddenMode") === "true";
         unreadcount = countUnreadArticles() - document.querySelectorAll(".article-container[data-article-index='sponsor']").length
+        if (unreadcount>0) {
+            document.getElementById('mark-all').style.display = "block"    
+        } else {
+            document.getElementById('mark-all').style.display = "none"    
+        }
+        
         if (unreadcount.toLocaleString("en-US")<=0 && !HiddenModeState) {
             items = [
                         "Be kind. Have Fun. Try something new.",
                         "In life and on apps, always question defaults. Fiddle with some settings, and see what happens.",
                         "Civilization is a positive-sum game."
                     ]
+            document.getElementById('news-feed').style.display = "flex";
             const quote = document.createElement("div");
             quote.className = `end_quote`;
             quote.innerHTML = items[Math.floor(Math.random()*items.length)];
@@ -2023,7 +2030,6 @@ function declutter(title_source,id_source,tf_source,n=0){
             document.getElementById('spin_container').innerHTML = `` 
         }
         document.getElementById('news-feed').style.display = "flex";
-        document.getElementById('mark-all').style.display = "block"
 }
     
     const clearUpvotesButton = document.getElementById("clear-upvotes");
