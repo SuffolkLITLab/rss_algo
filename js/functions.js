@@ -2193,13 +2193,13 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 Consider starting with a premade list. Then over time you can whittle it down and add new feeds as you like. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
                             </p>
                             <select id="feed_list">
-                                <option value="default_feeds">Generic US News Mix (default)</option>
-                                <option value="papers_feeds">US Print: NYT, WaPo, WSJ, &amp; LA Times</option>
-                                <option value="condenast_feeds">Condé Nast Lite: New Yorker, Vanity Fair, ArsTechnica, &amp; Wired</option>
+                                <option value="default_feeds">Default: Generic US News Mix (small)</option>
                                 <option value="magazine_feeds">Mags: New Yorker, Economist, Atlantic, Vanity Fair, Wired, Rolling Stone, Quanta, &amp; Nautilus</option>
+                                <option value="papers_feeds">Papers: NYT, WaPo, WSJ, LA Times &amp; The Guardian</option>
+                                <!--<option value="condenast_feeds">Condé Nast Lite: New Yorker, Vanity Fair, ArsTechnica, &amp; Wired</option>-->
                                 <option value="geeek_feeds">Geekery: Science, Space, Tech, Star Trek and &amp; SciFi Shorts</option>
                                 <!--<option value="scifi_shorts_feed">SciFi Shorts: Clarkesworld, Lightspeed &amp; Escape Pod</option>-->
-                                <option value="suffolk_law_feeds">Suffolk Mix: Select Papers + Boston + Law &amp; Scholarship</option>
+                                <option value="suffolk_law_feeds">Suffolk Law Mix: Select Papers + Boston + Law &amp; Scholarship</option>
                                 <option value="dc_law_feeds">Digital Commons Orgs w/ Law Content (400+ orgs)</option>
                                 <option value="law_school_feeds">Digital Commons Orgs w/ ABA-Accredited Law Schools (100+ feeds)</option>
                                 <option value="feeds_long_list">All of the Above, Plus Some, Minus Digital Commons Feeds</option>

@@ -63,7 +63,16 @@ var papers_feeds = [
     "https://www.latimes.com/science/rss2.0.xml",
     "https://www.latimes.com/sports/rss2.0.xml",
     "https://www.latimes.com/travel/rss2.0.xml",
-    "https://www.latimes.com/world-nation/rss2.0.xml"
+    "https://www.latimes.com/world-nation/rss2.0.xml",
+    // The Guardian
+    "https://www.theguardian.com/us-news/rss",
+    "https://www.theguardian.com/world/rss",
+    "https://www.theguardian.com/us/environment/rss",
+    "https://www.theguardian.com/us/soccer/rss",
+    "https://www.theguardian.com/us/business/rss",
+    "https://www.theguardian.com/us/technology/rss",
+    "https://www.theguardian.com/science/rss",
+    "https://www.theguardian.com/us-news/series/the-fight-for-democracy/rss"
 ]
 
 var condenast_feeds = [
@@ -1010,10 +1019,11 @@ var feeds_long_list = [
     "https://www.theguardian.com/us-news/rss",
     "https://www.theguardian.com/world/rss",
     "https://www.theguardian.com/us/environment/rss",
-    "https://www.theguardian.com/us/soccer",
+    "https://www.theguardian.com/us/soccer/rss",
     "https://www.theguardian.com/us/business/rss",
     "https://www.theguardian.com/us/technology/rss",
     "https://www.theguardian.com/science/rss",
+    "https://www.theguardian.com/us-news/series/the-fight-for-democracy/rss",
     // Washington Post
     "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
     "https://www.washingtonpost.com/arcio/rss/category/opinions/?itid=lk_inline_manual_7",
@@ -1163,6 +1173,8 @@ var feeds_long_list = [
     "https://pluralistic.net/feed/",
     // Techdirt
     "https://www.techdirt.com/techdirt_rss.xml",
+    // The Information
+    "https://www.theinformation.com/feed",
     // MA Lawyers Weekly
     "https://masslawyersweekly.com/feed/",
     // Law Next
@@ -1269,10 +1281,11 @@ test_feeds = [
     "https://www.theguardian.com/us-news/rss",
     "https://www.theguardian.com/world/rss",
     "https://www.theguardian.com/us/environment/rss",
-    //"https://www.theguardian.com/us/soccer",
+    //"https://www.theguardian.com/us/soccer/rss",
     "https://www.theguardian.com/us/business/rss",
     "https://www.theguardian.com/us/technology/rss",
     "https://www.theguardian.com/science/rss",
+    "https://www.theguardian.com/us-news/series/the-fight-for-democracy/rss",
     // Washington Post
     "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
     "https://www.washingtonpost.com/arcio/rss/category/opinions/?itid=lk_inline_manual_7",
@@ -1422,6 +1435,8 @@ test_feeds = [
     "https://pluralistic.net/feed/",
     // Techdirt
     "https://www.techdirt.com/techdirt_rss.xml",
+    // The Information
+    //"https://www.theinformation.com/feed",
     // MA Lawyers Weekly
     "https://masslawyersweekly.com/feed/",
     // Law Next
