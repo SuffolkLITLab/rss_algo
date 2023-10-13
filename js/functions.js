@@ -1,3 +1,5 @@
+var version = "v1.1.1";
+
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
 function show_timeline() {
@@ -2387,7 +2389,7 @@ function start_spinner(target_id,tickcolor='#000') {
       hwaccel: false, // Whether to use hardware acceleration
       className: 'spinner', // The CSS class to assign to the spinner
       zIndex: 2e9, // The z-index (defaults to 2000000000)
-      top: '10', // Top position relative to parent in px
+      top: '25', // Top position relative to parent in px
       left: '0' // Left position relative to parent in px
     };
     var target = document.getElementById(target_id);
