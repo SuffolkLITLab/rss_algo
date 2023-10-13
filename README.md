@@ -27,4 +27,4 @@ FWIW, here's a set of feeds I was able to find: [list of feeds](https://github.c
 
 # Troubleshooting
 
-Make sure that your url is a properly formated url (e.g. `https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml`). If that doens'y work try opeing your feed in a browser like FireFox where it will show you the XML. I've noticed that a good number of sites have links to RSS feeds that haven't been updated in years despite new content being created (e.g., [https://www.smithsonianmag.com/rss/](https://www.smithsonianmag.com/rss/)). :(
+Make sure that your url is a properly formated url (e.g. `https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml`). If that doens'y work try opeing your feed in a browser like FireFox where it will show you the XML. I've noticed that a good number of sites have links to RSS feeds that haven't been updated in years despite new content being created. :(
