@@ -1621,7 +1621,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             get_quote();
                         }
                     });
-                }, 10); 
+                }, 100); 
 
             });
 
