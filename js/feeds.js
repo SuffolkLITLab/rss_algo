@@ -7,7 +7,7 @@ var default_feeds = [
     "https://theconversation.com/us/articles.atom",
     "http://www.newyorker.com/feed/everything",
     "https://feeds.arstechnica.com/arstechnica/index",
-    "https://pluralistic.net/feed/",
+    "https://feeds.feedburner.com/brainpickings/rss",
     "https://botsin.space/@APoD.rss"
 ]        
 
@@ -1468,7 +1468,7 @@ test_feeds = [
     "https://escapepod.org/feed/podcast/",
     // Tor
     "https://tor.com/feed"
-        
+
     // CORS proxy doesn't resolve feed (entierly broken)
     //"http://rss.sciam.com/ScientificAmerican-Global",
 
