@@ -2094,8 +2094,8 @@ function declutter(title_source,id_source,tf_source,n=0){
 
     const addFeedButton = document.getElementById("add-feed");
     addFeedButton.addEventListener("click", function() {
-        if (rssFeeds.length>=50) {
-            alert("Generally speaking, the more feeds you follow the more posts in your timeline and the slower the site will preform. You can shrink the size of your timeline by setting a shorter History window. Also, to accommodate large feed follows, we truncate feeds to avoid overloading your browser's storage.")
+        if (rssFeeds.length>=60) {
+            alert("FYI, to accommodate large feed follows, we may truncate feeds to avoid overloading your browser's storage.")
         }
         const newFeedUrl = prompt("Enter the URL for a new RSS feed:");
         if (newFeedUrl) {
@@ -2202,7 +2202,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 <option value="suffolk_law_feeds">Suffolk Law Mix: Select Papers + Boston + Law &amp; Scholarship</option>
                                 <option value="dc_law_feeds">Digital Commons Orgs w/ Law Content (400+ orgs)</option>
                                 <option value="law_school_feeds">Digital Commons Orgs w/ ABA-Accredited Law Schools (100+ feeds)</option>
-                                <option value="feeds_long_list">All of the Above, Plus Some, Minus Digital Commons Feeds</option>
+                                <option value="feeds_long_list">Fire Hose: All of the Above, Plus Some, Minus Digital Commons Feeds</option>
                             </select>
                             </p>
                             <p>
