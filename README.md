@@ -23,7 +23,7 @@ If you're looking for local news in the US, you can probably find a [Patch.com](
   
 3. And if you can't find anything that way, you're best bet is viewing a webpage's source (`right click + view source` in most browsers). This will open a text file where you can look for a link ending in `.rss`. Here, `Control/Command + F` is your friend. For example, this is how you can find YouTube and SubStack feeds which are of the form `https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA` and `https://badastronomy.substack.com/feed/` repectivly. 
 
-FWIW, here's a set of feeds I was able to find: [list of feeds](https://github.com/SuffolkLITLab/rss_algo/blob/main/js/feeds.js). That file is the source of the groups found under "My Feeds." 
+FWIW, here's a set of feeds I was able to find: [list of feeds](https://github.com/SuffolkLITLab/rss_algo/blob/main/js/feeds.js). That file is the source of the groups found under "Feeds." 
 
 # Troubleshooting
 
