@@ -347,14 +347,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
         feedUrl_prox = proxy_01+encodeURIComponent(feedUrl)       
         //const response = await fetchWithTimeout(feedUrl_prox, {timeout: 6000});
-        const response = await fetch(feedUrl_prox);
+        var response = await fetch(feedUrl_prox);
         if (!response.ok) {
             //throw new Error(`Request failed with status ${response.status}`);
             if (proxy_02!=""){
                 console.log("Trying corsproxy.io for "+feedUrl)
                 feedUrl_prox = proxy_02 + encodeURIComponent(feedUrl);
                 //let response = await fetchWithTimeout(feedUrl_prox, {timeout: 8000});   
-                let response = await fetch(feedUrl_prox);    
+                response = await fetch(feedUrl_prox);    
             }
             if (!response.ok) {
                 console.log("Error fetching "+feedUrl)
