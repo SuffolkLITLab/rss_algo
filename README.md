@@ -2,7 +2,7 @@
 
 This code is used to breath life into [https://myRSSalgo.org/](https://myrssalgo.org/), a client-side open source algo-driven RSS reader. 
 
-The RSS algo lives on your device with your data. We make use of a proxy server to help facilitate access to feeds. So we know some of the feeds folks are consuming, but we don't use tracking tools that drop cookies like Google Anaylitics. We do, however, point to the properties provided in your RSS list, and many of these sites may use such. You may want to consider installing an ad blocker. Most importantly, on our end, however, all of your votes and views live in your browser. We just lunched and we're still woking things out, but if you don't mind the sparse documentation and a few bugs from time to time, feel free to play around.
+The RSS algo lives on your device with your data. We make use of a proxy server to help facilitate access to feeds. So we know some of the feeds folks are consuming, but we don't use tracking tools that drop cookies like Google Analytics. We do, however, point to the properties provided in your RSS list, and many of these sites may use such. You may want to consider installing an ad blocker. Most importantly, on our end, however, all of your votes and views live in your browser. We just lunched and we're still woking things out, but if you don't mind the sparse documentation and a few bugs from time to time, feel free to play around.
 
 Follow [#SuffolkRSSalgo](https://mastodon.social/deck/tags/suffolkrssalgo) on Mastodon for project updates.
 
