@@ -2194,7 +2194,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             </p>
                             <select id="feed_list">
                                 <option value="default_feeds">Default: Generic US News Mix (small)</option>
-                                <option value="magazine_feeds">Mags: New Yorker, Economist, Atlantic, Vanity Fair, Wired, Rolling Stone, Quanta, &amp; Nautilus</option>
+                                <option value="magazine_feeds">Mags: New Yorker, Economist, Atlantic, Vanity Fair, Wired, Rolling Stone, Quanta, Nautilus, &amp; Aeon</option>
                                 <option value="papers_feeds">Papers: NYT, WaPo, WSJ, LA Times &amp; The Guardian</option>
                                 <!--<option value="condenast_feeds">Condé Nast Lite: New Yorker, Vanity Fair, ArsTechnica, &amp; Wired</option>-->
                                 <option value="geeek_feeds">Geekery: Science, Space, Tech, Star Trek and &amp; SciFi Shorts</option>

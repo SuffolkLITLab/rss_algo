@@ -140,7 +140,12 @@ var magazine_feeds = [
     "https://www.rollingstone.com/culture/feed/",
     "https://www.rollingstone.com/product-recommendations/feed/",
     "https://api.quantamagazine.org/feed/",
-    "https://nautil.us/feed/"
+    "https://nautil.us/feed/",
+    "https://aeon.co/philosophy.rss",
+    "https://aeon.co/science.rss",
+    "https://aeon.co/psychology.rss",
+    "https://aeon.co/society.rss",
+    "https://aeon.co/culture.rss"
 ]
 
 var scifi_shorts_feed = [
@@ -201,6 +206,9 @@ var geeek_feeds = [
     "https://screenrant.com/feed/tag/star-trek/",
     "https://api.quantamagazine.org/feed/",
     "https://nautil.us/feed/",
+    "https://aeon.co/philosophy.rss",
+    "https://aeon.co/science.rss",
+    "https://aeon.co/psychology.rss",
     "https://badastronomy.substack.com/feed/",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", //3blue1brown
     "https://www.youtube.com/feeds/videos.xml?channel_id=UC415bOPUcGSamy543abLmRA", //Cleo Abram
@@ -1191,8 +1199,14 @@ var feeds_long_list = [
     "https://abovethelaw.com/feed/",
     // Quanta Magazine
     "https://api.quantamagazine.org/feed/",
-    //  Nautilus
+    // Nautilus
     "https://nautil.us/feed/",
+    // Aeon
+    "https://aeon.co/philosophy.rss",
+    "https://aeon.co/science.rss",
+    "https://aeon.co/psychology.rss",
+    "https://aeon.co/society.rss",
+    "https://aeon.co/culture.rss",
     // Hacker News
     "https://hnrss.org/best",
     // Screen Rant
@@ -1455,6 +1469,12 @@ test_feeds = [
     "https://api.quantamagazine.org/feed/",
     //  Nautilus
     "https://nautil.us/feed/",
+    // Aeon
+    "https://aeon.co/philosophy.rss",
+    "https://aeon.co/science.rss",
+    "https://aeon.co/psychology.rss",
+    "https://aeon.co/society.rss",
+    "https://aeon.co/culture.rss",
     // Hacker News
     "https://hnrss.org/best",
     // Screen Rant
