@@ -195,6 +195,7 @@ var geeek_feeds = [
     "https://www.ailawlibrarians.com/feed/",
     "https://slate.com/feeds/technology.rss",
     "http://gizmodo.com/vip.xml",
+    "https://www.404media.co/rss",
     "https://techcrunch.com/feed/",
     "https://www.techdirt.com/techdirt_rss.xml",
     "https://www.theinformation.com/feed",
@@ -203,7 +204,6 @@ var geeek_feeds = [
     "https://feeds.feedburner.com/mcsweeneys",
     "https://spacenews.com/feed/",
     "https://hnrss.org/best",
-    "https://screenrant.com/feed/tag/star-trek/",
     "https://api.quantamagazine.org/feed/",
     "https://nautil.us/feed/",
     "https://aeon.co/philosophy.rss",
@@ -1175,6 +1175,8 @@ var feeds_long_list = [
     "https://www.smithsonianmag.com/rss/latest_articles/",
     // Gizmodo
     "http://gizmodo.com/vip.xml",
+    // 404 Media
+    "https://www.404media.co/rss",
     // Techcrunch
     "https://techcrunch.com/feed/",
     // Pluralistic
@@ -1209,8 +1211,6 @@ var feeds_long_list = [
     "https://aeon.co/culture.rss",
     // Hacker News
     "https://hnrss.org/best",
-    // Screen Rant
-    "https://screenrant.com/feed/tag/star-trek/",
     // XKCD
     "https://xkcd.com/rss.xml",
     // McSweeney's 
@@ -1443,6 +1443,8 @@ test_feeds = [
     "https://www.smithsonianmag.com/rss/latest_articles/",
     // Gizmodo
     //"http://gizmodo.com/vip.xml",
+    // 404 Media
+    "https://www.404media.co/rss",
     // Techcrunch
     "https://techcrunch.com/feed/",
     // Pluralistic
@@ -1477,8 +1479,6 @@ test_feeds = [
     "https://aeon.co/culture.rss",
     // Hacker News
     "https://hnrss.org/best",
-    // Screen Rant
-    "https://screenrant.com/feed/tag/star-trek/",
     // XKCD
     "https://xkcd.com/rss.xml",
     // McSweeney's 
