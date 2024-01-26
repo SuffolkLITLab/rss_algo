@@ -1,6 +1,6 @@
 var default_feeds = [
     "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml",
-    "http://feeds.washingtonpost.com/rss/politics?itid=lk_inline_manual_2",
+    "https://www.washingtonpost.com/arcio/rss/category/politics/?itid=lk_inline_manual_2",
     "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
     "https://feeds.npr.org/1001/rss.xml", //news
     "https://www.youtube.com/feeds/videos.xml?channel_id=UC6ZFN9Tx6xh-skXCuRHCDpQ", //PBS News Hour
