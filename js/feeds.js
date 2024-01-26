@@ -195,7 +195,7 @@ var geeek_feeds = [
     "https://www.ailawlibrarians.com/feed/",
     "https://slate.com/feeds/technology.rss",
     "http://gizmodo.com/vip.xml",
-    "https://www.404media.co/rss",
+    //"https://www.404media.co/rss",
     "https://techcrunch.com/feed/",
     "https://www.techdirt.com/techdirt_rss.xml",
     "https://www.theinformation.com/feed",
@@ -1176,7 +1176,7 @@ var feeds_long_list = [
     // Gizmodo
     "http://gizmodo.com/vip.xml",
     // 404 Media
-    "https://www.404media.co/rss",
+    //"https://www.404media.co/rss",
     // Techcrunch
     "https://techcrunch.com/feed/",
     // Pluralistic
@@ -1442,7 +1442,7 @@ test_feeds = [
     // Smithsonian Mag
     "https://www.smithsonianmag.com/rss/latest_articles/",
     // Gizmodo
-    //"http://gizmodo.com/vip.xml",
+    "http://gizmodo.com/vip.xml",
     // 404 Media
     "https://www.404media.co/rss",
     // Techcrunch
