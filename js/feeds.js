@@ -209,7 +209,7 @@ var geeek_feeds = [
     "https://aeon.co/philosophy.rss",
     "https://aeon.co/science.rss",
     "https://aeon.co/psychology.rss",
-    "https://badastronomy.substack.com/feed/",
+    "https://rss.beehiiv.com/feeds/t0Uscv6JDz.xml",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", //3blue1brown
     "https://www.youtube.com/feeds/videos.xml?channel_id=UC415bOPUcGSamy543abLmRA", //Cleo Abram
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA", //Veritasium 
@@ -1218,7 +1218,7 @@ var feeds_long_list = [
     // Space News
     "https://spacenews.com/feed/",
     // Bad Astornomy 
-    "https://badastronomy.substack.com/feed/",
+    "https://rss.beehiiv.com/feeds/t0Uscv6JDz.xml",
     // 3blue1brown
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", 
     // Cleo Abram
@@ -1233,7 +1233,7 @@ var feeds_long_list = [
     "https://www.lightspeedmagazine.com/rss-2/",
     // Escape Pod
     "https://escapepod.org/feed/podcast/",
-    // Tor
+    // Tor (Reactor)
     "https://tor.com/feed"
 ]
 
@@ -1442,7 +1442,7 @@ test_feeds = [
     // Smithsonian Mag
     "https://www.smithsonianmag.com/rss/latest_articles/",
     // Gizmodo
-    "http://gizmodo.com/vip.xml",
+    //"http://gizmodo.com/vip.xml",
     // 404 Media
     "https://www.404media.co/rss",
     // Techcrunch
@@ -1486,7 +1486,7 @@ test_feeds = [
     // Space News
     "https://spacenews.com/feed/",
     // Bad Astornomy 
-    "https://badastronomy.substack.com/feed/",
+    "https://rss.beehiiv.com/feeds/t0Uscv6JDz.xml",
     // 3blue1brown
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", 
     // Cleo Abram
@@ -1501,8 +1501,16 @@ test_feeds = [
     "https://www.lightspeedmagazine.com/rss-2/",
     // Escape Pod
     "https://escapepod.org/feed/podcast/",
-    // Tor
-    "https://tor.com/feed"
+    // Tor (Reactor)
+    "https://tor.com/feed",
+    // The Walrus
+    "https://thewalrus.ca/feed/",
+    // Sadly Not Havoc Dinosaur
+    "https://sadlynothavocdinosaur.com/feed.xml",
+    // NonProfit Techy
+    "https://www.nonprofittechy.com/feed/",
+    // Citation Needed
+    "https://www.citationneeded.news/rss/"
 
     // CORS proxy doesn't resolve feed (entierly broken)
     //"http://rss.sciam.com/ScientificAmerican-Global",
