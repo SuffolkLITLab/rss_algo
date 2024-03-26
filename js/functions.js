@@ -1,4 +1,4 @@
-var version = "v1.1.4";
+var version = "v1.2.0";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -31,6 +31,7 @@ function show_timeline() {
 }
 
 var searching = false
+var summarizing = false
 
 var feed_names = JSON.parse(localStorage.getItem("feed_names")) || {}
 
@@ -42,10 +43,15 @@ function toggle_settings() {
         document.getElementById('my_settings').style.display = "block";
         document.getElementById('a_settings').innerHTML = "Timeline";
         document.getElementById('search_msg').style.display = "none";
+        document.getElementById('sum_msg').style.display = "none";
+        sum_msg
     } else {
         show_timeline();
         if (searching){
             document.getElementById('search_msg').style.display = "block";
+        }
+        if (summarizing){
+            document.getElementById('sum_msg').style.display = "block";
         }
     }
 }
@@ -89,6 +95,19 @@ document.getElementById("regex_never_op").value = regex_never_op;
 
 const instance =  localStorage.getItem("instance") || "";
 document.getElementById("masto_instance").value = instance;
+
+const api_base =  localStorage.getItem("api_base") || "https://api.openai.com/v1/chat/completions";
+document.getElementById("api_base").value = api_base;
+
+const api_key =  localStorage.getItem("api_key") || "";
+document.getElementById("api_key").value = api_key;
+
+const prompt_pref =  localStorage.getItem("prompt_pref") || `Read the following list of headlines and introductory sentences then provide a short briefing based on any political news you find.\n-----\n{{news-feed}}\n-----\nNow provide your briefing. Keep it short, no more than 100 words!`;
+document.getElementById("prompt_pref").value = prompt_pref;
+
+if (api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
+    document.getElementById('summarize-news').style.display = "block";
+}
 
 function reset_all() {
     let text = "This will erase all of your data and set the list of feeds to defaults. Choose OK to continue.";
@@ -2100,6 +2119,8 @@ function declutter(title_source,id_source,tf_source,n=0){
         const newFeedUrl = prompt("Enter the URL for a new RSS feed:");
         if (newFeedUrl) {
             clear_search();
+            document.getElementById('news-feed').style.display = "none";
+            document.getElementById('mark-all').style.display = "none";
             let lastLoad = 0;
             localStorage.setItem("lastLoad", 0);
             rssFeeds.push(newFeedUrl);
@@ -2111,7 +2132,8 @@ function declutter(title_source,id_source,tf_source,n=0){
         document.getElementById('unread-count').style.display = "block";
         document.getElementById('read-count').style.display = "block";
         document.getElementById('results-count').style.display = "none";
-        document.getElementById('search_msg').style.display = "none";   
+        document.getElementById('search_msg').style.display = "none";  
+        document.getElementById('sum_msg').style.display = "none"; 
     }
 
     const matching_regex = document.getElementById("matching_regex");
@@ -2128,8 +2150,10 @@ function declutter(title_source,id_source,tf_source,n=0){
         document.getElementById('read-count').style.display = "none";
         document.getElementById('results-count').style.display = "block";
         document.getElementById('search_msg').style.display = "block";   
+        if (summarizing){
+            document.getElementById('sum_msg').style.display = "block";
+        }
         show_timeline();
-
 
         searchResults = []
 
@@ -2167,6 +2191,106 @@ function declutter(title_source,id_source,tf_source,n=0){
         replace_broken();
     });
 
+    async function openai_call(prompt_text) {
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", api_base);
+      
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Bearer "+api_key);
+      
+        xhr.onreadystatechange = function () {
+           if (xhr.readyState === 4) {
+            try {
+              console.log(xhr.responseText);
+              LLM_text = JSON.parse(xhr.responseText)["choices"][0]["message"]["content"];
+              llm_messages.push({"role": "assistant", "content": LLM_text})
+            } catch (error) {
+              llm_messages.pop();
+              try {
+                if (JSON.parse(xhr.responseText)["error"]["code"]=="context_length_exceeded") {
+                  if (llm_messages.length==0) {
+                    console.log("ERROR: The prompt and its expected reply exceeds the token limit for this model.");
+                    LLM_text = "ERROR: The prompt and its expected reply exceeds the token limit for this model."
+                  } else {
+                    console.log("ERROR: Over the course of this chat, you have reached the token limit for this model.");
+                    LLM_text = "ERROR: Over the course of this chat, you have reached the token limit for this model."
+                  }
+                } else {
+                  LLM_text = `There was an ERROR calling the LLM. Make sure you are using a valid endpoint and API Key. The credentials may have expired.`
+                }            
+              } catch (error) {
+                LLM_text = `There was an ERROR calling the LLM. Make sure you are using a valid endpoint and API Key. The credentials may have expired.`
+              }
+            }
+            sum_msg.innerHTML = LLM_text.replaceAll("\n","<br>") + " <div style='width:100%;text-align:center;font-size:14px;margin-top:3px;'> <a href='https://sadlynothavocdinosaur.com/posts/rss-reader' target='_blank'>Magic AI Fairy Dust</a> </div>";
+          }};
+      
+          llm_messages = []  
+      
+          llm_messages.push({"role": "user", "content": prompt_text})
+          var data = {
+                    "model": "gpt-3.5-turbo-1106", 
+                    "messages": llm_messages,
+                    "temperature": 0.0,
+                    "max_tokens": 500
+                  };
+            
+        console.log(data);
+      
+        return xhr.send(JSON.stringify(data));    
+        
+      }
+
+    const sumNewsFeedsButton = document.getElementById("summarize-news");
+    sumNewsFeedsButton.addEventListener("click", function() {
+        
+        if (document.getElementById("news-feed").innerText!=""){
+
+            document.getElementById('sum_msg').style.display = "block";
+            if (searching){
+                document.getElementById('unread-count').style.display = "none";
+                document.getElementById('read-count').style.display = "none";
+                document.getElementById('results-count').style.display = "block";
+                document.getElementById('search_msg').style.display = "block";
+            }
+            show_timeline();
+
+            summarizing = true;
+            sum_msg.innerHTML = `Processing LLM prompt... `;
+            document.getElementById('sum_msg').style.display = "block";
+            //prompt_text = document.getElementById("prompt_pref").value+document.getElementById("news-feed").innerText.substring(0,13000*4);
+
+            // Select all elements with the class 'card-body'
+            var cardBodies = document.querySelectorAll('.card-body');
+
+            // Initialize an array to hold the title and text of each card
+            var cardDetails = "";
+
+            // Iterate over each 'card-body' element
+            cardBodies.forEach(card => {
+                // Find the card title within the current card
+                cardDetails += "- "+card.querySelector('.card-title')?.innerText + "\n";
+
+                // Find the card text within the current card
+                cardDetails += "  "+card.querySelector('.card-text')?.innerText + "\n\n";
+
+            });
+
+            // Log or process the cardDetails array as needed
+            console.log(cardDetails.substring(0,13000*4));
+
+
+            prompt_text = document.getElementById("prompt_pref").value.replace(/{{news-feed}}/g, cardDetails.substring(0,13000*4))
+
+            console.log("prompt_text: "+prompt_text)
+            openai_call(prompt_text);
+        } else {
+            alert("Try again after feeds have finished loading.")
+        }
+
+    });
+
     const manageFeedsButton = document.getElementById("manage-feeds");
     manageFeedsButton.addEventListener("click", function() {
 
@@ -2199,10 +2323,10 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 <!--<option value="condenast_feeds">Condé Nast Lite: New Yorker, Vanity Fair, ArsTechnica, &amp; Wired</option>-->
                                 <option value="geeek_feeds">Geekery: Science, Space, Tech, &amp; SciFi Shorts</option>
                                 <!--<option value="scifi_shorts_feed">SciFi Shorts: Clarkesworld, Lightspeed &amp; Escape Pod</option>-->
-                                <option value="suffolk_law_feeds">Suffolk Law Mix: Select Papers + Boston + Law &amp; Scholarship</option>
-                                <option value="dc_law_feeds">Digital Commons Orgs w/ Law Content (400+ orgs)</option>
-                                <option value="law_school_feeds">Digital Commons Orgs w/ ABA-Accredited Law Schools (100+ feeds)</option>
-                                <option value="feeds_long_list">Fire Hose: All of the Above, Plus Some, Minus Digital Commons Feeds</option>
+                                <option value="suffolk_law_feeds">Suffolk Law Mix: Select Papers + Boston + Law</option>
+                                <!--<option value="dc_law_feeds">Digital Commons Orgs w/ Law Content (400+ orgs)</option>
+                                <option value="law_school_feeds">Digital Commons Orgs w/ ABA-Accredited Law Schools (100+ feeds)</option>-->
+                                <option value="feeds_long_list">Fire Hose: All of the Above, Plus Some</option>
                             </select>
                             </p>
                             <p>

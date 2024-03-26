@@ -79,7 +79,7 @@ var condenast_feeds = [
     "http://www.newyorker.com/feed/news",
     "http://www.newyorker.com/feed/culture",
     "http://www.newyorker.com/feed/humor",
-    "http://www.newyorker.com/feed/tag/books/rss",
+    //"http://www.newyorker.com/feed/tag/books/rss",
     "http://www.newyorker.com/feed/tech",
     "http://www.newyorker.com/feed/news/sporting-scene",   
     "https://www.vanityfair.com/feed/rss",
@@ -100,7 +100,7 @@ var magazine_feeds = [
     "http://www.newyorker.com/feed/news",
     "http://www.newyorker.com/feed/culture",
     "http://www.newyorker.com/feed/humor",
-    "http://www.newyorker.com/feed/tag/books/rss",
+    //"http://www.newyorker.com/feed/tag/books/rss",
     "http://www.newyorker.com/feed/tech",
     "http://www.newyorker.com/feed/news/sporting-scene",   
     "https://www.vanityfair.com/feed/rss",
@@ -198,7 +198,7 @@ var geeek_feeds = [
     //"https://www.404media.co/rss",
     "https://techcrunch.com/feed/",
     "https://www.techdirt.com/techdirt_rss.xml",
-    "https://www.theinformation.com/feed",
+    //"https://www.theinformation.com/feed",
     "https://pluralistic.net/feed/",
     "https://xkcd.com/rss.xml",
     "https://feeds.feedburner.com/mcsweeneys",
@@ -968,7 +968,7 @@ var suffolk_law_feeds = [
     "https://abovethelaw.com/feed/"
 ]
 
-suffolk_law_feeds = suffolk_law_feeds.concat(law_school_feeds)
+//suffolk_law_feeds = suffolk_law_feeds.concat(law_school_feeds)
     
 var feeds_long_list = [
     // New York Times
@@ -1094,7 +1094,7 @@ var feeds_long_list = [
     "http://www.newyorker.com/feed/news",
     "http://www.newyorker.com/feed/culture",
     "http://www.newyorker.com/feed/humor",
-    "http://www.newyorker.com/feed/tag/books/rss",
+    //"http://www.newyorker.com/feed/tag/books/rss",
     "http://www.newyorker.com/feed/tech",
     "http://www.newyorker.com/feed/news/sporting-scene",
     "https://www.theatlantic.com/feed/all/",
@@ -1184,7 +1184,7 @@ var feeds_long_list = [
     // Techdirt
     "https://www.techdirt.com/techdirt_rss.xml",
     // The Information
-    "https://www.theinformation.com/feed",
+    //"https://www.theinformation.com/feed",
     // MA Lawyers Weekly
     "https://masslawyersweekly.com/feed/",
     // Law Next
@@ -1362,7 +1362,7 @@ test_feeds = [
     "http://www.newyorker.com/feed/news",
     "http://www.newyorker.com/feed/culture",
     "http://www.newyorker.com/feed/humor",
-    "http://www.newyorker.com/feed/tag/books/rss",
+    //"http://www.newyorker.com/feed/tag/books/rss",
     "http://www.newyorker.com/feed/tech",
     //"http://www.newyorker.com/feed/news/sporting-scene",
     "https://www.theatlantic.com/feed/all/",
