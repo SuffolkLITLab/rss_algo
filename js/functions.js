@@ -1,4 +1,4 @@
-var version = "v1.2.0";
+var version = "v1.2.1";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -1008,6 +1008,10 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     if (Object.is(mediaThumbnail, null) && mastodon) {
                                         mediaThumbnail = masto_profile
                                     }
+
+                                    if (mediaThumbnail.includes("favicon")){
+                                        mediaThumbnail = null;
+                                    }
                                     
                                     if (Object.is(mediaThumbnail, null)) {
                                         if(link.includes("washingtonpost.com")){
@@ -1052,7 +1056,21 @@ function declutter(title_source,id_source,tf_source,n=0){
                                                 mediaThumbnail =  "images/cached_logos/hackernews.jpeg";
                                         } else if (link.includes("ssrn.com")) {
                                             mediaThumbnail = "images/cached_logos/ssrn.png"
+                                        } else if (link.includes("arstechnica.com")) {
+                                            mediaThumbnail = "images/cached_logos/arstechnica.png"
+                                        } else if (link.includes("technologyreview.com")) {
+                                            mediaThumbnail = "images/cached_logos/mittechreview.png"
+                                        } else if (link.includes("nautil.us")) {
+                                            mediaThumbnail = "images/cached_logos/nautilus.png"
+                                        } else if (link.includes("smithsonianmag.com")) {
+                                            mediaThumbnail = "images/cached_logos/smithsonianmag.png"
+                                        } else if (link.includes("propublica.org")) {
+                                            mediaThumbnail = "images/cached_logos/propublica.png"
                                         }
+                                        
+                                        //} else if (link.includes("")) {
+                                        //    mediaThumbnail = "images/cached_logos/"
+                                        //}
                                     }
                                 
                                     const itemId = link; // Using link as a unique identifier for items
