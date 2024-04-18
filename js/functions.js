@@ -1,4 +1,4 @@
-var version = "v1.2.1";
+var version = "v1.3.1";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -1008,12 +1008,8 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     if (Object.is(mediaThumbnail, null) && mastodon) {
                                         mediaThumbnail = masto_profile
                                     }
-
-                                    if (mediaThumbnail.includes("favicon")){
-                                        mediaThumbnail = null;
-                                    }
                                     
-                                    if (Object.is(mediaThumbnail, null)) {
+                                    if (Object.is(mediaThumbnail, null) || mediaThumbnail.includes("favicon")) {
                                         if(link.includes("washingtonpost.com")){
                                             mediaThumbnail =  "images/cached_logos/wapo.webp";
                                         } else if (link.includes("economist.com")) {
