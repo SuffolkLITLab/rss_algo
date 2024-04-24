@@ -131,6 +131,14 @@
                 </div>
             </div>
 
+            <h4>Cards on Screen</h4>
+            <p>
+                In addition to the above ratings cutoff, you can set a limit on the maximum number of cards visible at one time. If there are more unread cards than can fit on the screen, they will show following the page refresh after you've cleared space for them. Max Cards: <b><i><span id="max-cards-value">1000</span></i></b>. <i>Refresh page to see results</i>.
+            </p>
+            <p>
+                <input type="range" id="max-cards-slider" min="1" max="1000" value="1000" step="1" style="width:100%;">
+            </p>
+
             <div class="row" style="margin-bottom: 10px;">
                 <h4>Promote &amp; Mute with Regular Expressions</h4>
                 <p>You can use <a href="https://www.codingthelaw.org/Fall_2020/level/5/" target="_blank">regular expressions</a> to be confident you don't miss, or alternatively, never see, certain articles. Your input  below will be fed into JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank">RegExp()</a> as a constructor, where the first input is a string and the second is an optional operator. These are fed to <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match" target="_blank">.match()</a>. If you include a regex under <i>Bump Up</i>, any matches to said expression will be given the highest rating possible, putting them at the top of your feed. Matches to the regex under <i>Mute</i>, however, will be hidden from your timeline. The match is performed against an article's: (1) title; (2) description; (3) feed name; and (3) link.  Note: using the <i>search</i> feature overides these settings as it searches "all" articles. Leave string inputs blank to take no action. <i>Refresh page to see results</i>.</p>
