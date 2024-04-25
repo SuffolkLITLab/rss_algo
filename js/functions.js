@@ -1,4 +1,4 @@
-var version = "v1.3.3";
+var version = "v1.4.0";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -1758,7 +1758,7 @@ function declutter(title_source,id_source,tf_source,n=0){
     function getRating(inputString,link="",feed_title="") {
 
         if (regex_always!="" && !searching) {
-            full_input = link + " " + feed_title 
+            full_input = inputString + " " + link + " " + feed_title 
             regex = new RegExp(regex_always, regex_always_op); 
             if (full_input.match(regex)) {
                 //console.log("Bumping match for /"+regex_always+"/"+regex_always_op)
@@ -1769,63 +1769,65 @@ function declutter(title_source,id_source,tf_source,n=0){
         } else {
             match = 0
         }
+        
+        tf = countWords(inputString)
+
+        var array1 = [];
+        var array2 = [];
+        for (word in upTFIDF) {
+            if (dfreq["df_arr"][word]) {
+                idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
+                //if (isNaN(idf)) {
+                //    idf = 1;
+                //}
+            } else {
+                idf = Math.log(1+dfreq["n_docs"]/1);
+            }
+                if (tf[word] && idf) {
+                    array1.push((tf[word])*idf)
+                } else {
+                    array1.push(0)
+                }
+            if (upTFIDF[word]) {
+                array2.push(upTFIDF[word]*idf)
+            } else {
+                array2.push(0)
+            }
+        }
+        up_score = cosinesim(array1, array2);
+        
+        var array1 = [];
+        var array2 = [];
+        for (word in downTFIDF) {
+            if (dfreq["df_arr"][word]) {
+                idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
+                //if (isNaN(idf)) {
+                //    idf = 1;
+                //}
+            } else {
+                idf = Math.log(1+dfreq["n_docs"]/1);
+            }
+                if (tf[word] && idf) {
+                    array1.push((tf[word])*idf)
+                } else {
+                    array1.push(0)
+                }
+            if (downTFIDF[word]) {
+                array2.push(downTFIDF[word]*idf)
+            } else {
+                array2.push(0)
+            }
+        }
+        down_score = cosinesim(array1, array2);
+        
+
+        score = up_score - down_score*savednegativity;
 
         if (match==1) {
-            score = 1;
-        } else {
-            tf = countWords(inputString)
+            score = score + 1;
+        }
 
-            var array1 = [];
-            var array2 = [];
-            for (word in upTFIDF) {
-                if (dfreq["df_arr"][word]) {
-                    idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
-                    //if (isNaN(idf)) {
-                    //    idf = 1;
-                    //}
-                } else {
-                    idf = Math.log(1+dfreq["n_docs"]/1);
-                }
-                    if (tf[word] && idf) {
-                        array1.push((tf[word])*idf)
-                    } else {
-                        array1.push(0)
-                    }
-                if (upTFIDF[word]) {
-                    array2.push(upTFIDF[word]*idf)
-                } else {
-                    array2.push(0)
-                }
-            }
-            up_score = cosinesim(array1, array2);
-            
-            var array1 = [];
-            var array2 = [];
-            for (word in downTFIDF) {
-                if (dfreq["df_arr"][word]) {
-                    idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
-                    //if (isNaN(idf)) {
-                    //    idf = 1;
-                    //}
-                } else {
-                    idf = Math.log(1+dfreq["n_docs"]/1);
-                }
-                    if (tf[word] && idf) {
-                        array1.push((tf[word])*idf)
-                    } else {
-                        array1.push(0)
-                    }
-                if (downTFIDF[word]) {
-                    array2.push(downTFIDF[word]*idf)
-                } else {
-                    array2.push(0)
-                }
-            }
-            down_score = cosinesim(array1, array2);
-            
-            score = up_score - down_score*savednegativity;
-            //console.log(score)
-        } 
+        //console.log(score)
         
         return score;
     }
