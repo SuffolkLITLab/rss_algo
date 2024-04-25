@@ -2324,6 +2324,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                     openai_call(prompt_text);    
                 } else {
                     document.getElementById('sum_msg').style.display = "none";
+                    summarizing = false;
                 }
             } else {
                 openai_call(prompt_text);    
