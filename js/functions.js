@@ -1,4 +1,4 @@
-var version = "v1.4.1";
+var version = "v1.4.2";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -1078,7 +1078,9 @@ function declutter(title_source,id_source,tf_source,n=0){
                                             mediaThumbnail = "images/cached_logos/smithsonianmag.png"
                                         } else if (link.includes("propublica.org")) {
                                             mediaThumbnail = "images/cached_logos/propublica.png"
-                                        }
+                                        } else if (link.includes("schneier.com")) {
+                                            mediaThumbnail = "images/cached_logos/schneier.jpg"
+                                        }                                        
                                         
                                         //} else if (link.includes("")) {
                                         //    mediaThumbnail = "images/cached_logos/"
