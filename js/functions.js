@@ -1,4 +1,4 @@
-var version = "v1.3.2";
+var version = "v1.3.3";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -2310,6 +2310,10 @@ function declutter(title_source,id_source,tf_source,n=0){
 
             // Log or process the cardDetails array as needed
             console.log(cardDetails.substring(0,13000*4));
+
+            if ((document.getElementById("prompt_pref").value.search(/{{news-feed}}/g)>=0) && (cardDetails.substring(0,13000*4).trim().length<=0)) {
+                alert(`There doesn't seem to be anything in your news feed.\n\nYour LLM will likely make something up!!!!!`)
+            }
 
 
             prompt_text = document.getElementById("prompt_pref").value.replace(/{{news-feed}}/g, cardDetails.substring(0,13000*4))
