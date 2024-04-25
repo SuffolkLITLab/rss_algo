@@ -1,4 +1,4 @@
-var version = "v1.4.2";
+var version = "v1.4.3";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -2314,16 +2314,21 @@ function declutter(title_source,id_source,tf_source,n=0){
 
             // Log or process the cardDetails array as needed
             console.log(cardDetails.substring(0,13000*4));
+            
+            prompt_text = document.getElementById("prompt_pref").value.replace(/{{news-feed}}/g, cardDetails.substring(0,13000*4))
+            console.log("prompt_text: "+prompt_text)
 
             if ((document.getElementById("prompt_pref").value.search(/{{news-feed}}/g)>=0) && (cardDetails.substring(0,13000*4).trim().length<=0)) {
-                alert(`There doesn't seem to be anything in your news feed.\n\nYour LLM will likely make something up!!!!!`)
+                let text = `There doesn't seem to be anything in your news feed.\n\nYour LLM will likely make something up!!!!!`;
+                if (confirm(text) == true) {
+                    openai_call(prompt_text);    
+                } else {
+                    document.getElementById('sum_msg').style.display = "none";
+                }
+            } else {
+                openai_call(prompt_text);    
             }
 
-
-            prompt_text = document.getElementById("prompt_pref").value.replace(/{{news-feed}}/g, cardDetails.substring(0,13000*4))
-
-            console.log("prompt_text: "+prompt_text)
-            openai_call(prompt_text);
         } else {
             alert("Try again after feeds have finished loading.")
         }
