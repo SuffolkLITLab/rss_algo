@@ -5,9 +5,9 @@ var default_feeds = [
     "https://feeds.npr.org/1001/rss.xml", //news
     "https://www.youtube.com/feeds/videos.xml?channel_id=UC6ZFN9Tx6xh-skXCuRHCDpQ", //PBS News Hour
     "https://theconversation.com/us/articles.atom",
-    "http://www.newyorker.com/feed/everything",
+    "https://www.newyorker.com/feed/magazine/rss",
     "https://feeds.arstechnica.com/arstechnica/index",
-    "https://feeds.feedburner.com/brainpickings/rss",
+    //"https://feeds.feedburner.com/brainpickings/rss",
     "https://botsin.space/@APoD.rss"
 ]        
 
@@ -1510,7 +1510,14 @@ test_feeds = [
     // NonProfit Techy
     "https://www.nonprofittechy.com/feed/",
     // Citation Needed
-    "https://www.citationneeded.news/rss/"
+    "https://www.citationneeded.news/rss/",
+    // Artifical Lawyer
+    "https://www.artificiallawyer.com/feed/",
+    // Sarah Glassmeyer
+    "https://sarahglassmeyer.com/?feed=rss2",
+    // Schneier on Security
+    "https://www.schneier.com/feed/"
+
 
     // CORS proxy doesn't resolve feed (entierly broken)
     //"http://rss.sciam.com/ScientificAmerican-Global",

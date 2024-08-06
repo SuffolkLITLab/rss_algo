@@ -1143,6 +1143,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                         }
                         errors+=1
                         n_feeds+=1
+                        
                         setTimeout(function(){
                             crunch_numbers = true;
                             dedup_articles();
