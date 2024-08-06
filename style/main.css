@@ -268,7 +268,7 @@ select {
 }
 .end_quote {
     font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-    margin: 30px auto 0;
+    margin: 40px auto 30px;
     padding: 0 40px;
     font-size: 23px;
     line-height: 25px;

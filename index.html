@@ -11,6 +11,7 @@
     <meta property="og:image" content="https://myrssalgo.org/images/preview.png"/>
     <link rel="apple-touch-icon" href="https://suffolklitlab.org/images/icon_300.png"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.2.0">
@@ -133,10 +134,10 @@
 
             <h4>Cards on Screen</h4>
             <p>
-                In addition to the above ratings cutoff, you can set a limit on the maximum number of cards visible at one time. If there are more unread cards than can fit on the screen, they will show following the page refresh after you've cleared space for them. Max Cards: <b><i><span id="max-cards-value">1000</span></i></b>. <i>Refresh page to see results</i>.
+                In addition to the above ratings cutoff, you can set a limit on the maximum number of cards visible at one time. If there are more unread cards than can fit on the screen, they will show following the page refresh after you've cleared space for them. Max Cards: <b><i><span id="max-cards-value">200</span></i></b>. <i>Refresh page to see results</i>.
             </p>
             <p>
-                <input type="range" id="max-cards-slider" min="1" max="1000" value="1000" step="1" style="width:100%;">
+                <input type="range" id="max-cards-slider" min="1" max="1000" value="200" step="1" style="width:100%;">
             </p>
 
             <div class="row" style="margin-bottom: 10px;">
@@ -227,6 +228,11 @@
                 </div>
             </div>
         </div>
+
+        <div id="refresh-all">
+            <button id="mark-above-seen" class="btn btn-primary btn-block" style="margin: 15px 0;" onClick="window.location.reload()">Refresh</button>
+        </div>
+
         <div class="footer">
             <a href="https://suffolklitlab.org/" alt="LIT Lab" target="_blank">
                 <img id="footer_logo_long" src="images/lit_suffolk.png" border="0" height="35px" alt="LIT and Suffolk University Law School Logos" align="left"/>
