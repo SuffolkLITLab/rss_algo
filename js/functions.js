@@ -816,13 +816,12 @@ function declutter(title_source,id_source,tf_source,n=0){
             decluter_cards = false;
         }
         
-        document.getElementById('spin_container').innerHTML = `<div style="float:left;width:100%;height:80px;"><div id="spinner_here" style="margin:0 auto;width:65px;">&nbsp;</div></div>`;
+        document.getElementById('spin_container').innerHTML = `<div style="float:left;width:100%;height:115px;"><div id="spinner_here" style="margin:0 auto;width:65px;">&nbsp;</div></div>`;
         if (localStorage.getItem("darkMode")=="enabled") {
             tickcolor = '#ddd';		
         } else {
             tickcolor = '#000';		
         }
-        document.getElementById('refresh-all').style.display = "none"; 
         start_spinner('spinner_here',tickcolor);
 
         if (loadFeeds) {
@@ -1672,7 +1671,6 @@ function declutter(title_source,id_source,tf_source,n=0){
                 } else {
                     tickcolor = '#000';		
                 }
-                document.getElementById('refresh-all').style.display = "none";
                 start_spinner('spinner_here',tickcolor);
 
                 setTimeout( function() {
@@ -2089,7 +2087,6 @@ function declutter(title_source,id_source,tf_source,n=0){
                         "Civilization is a positive-sum game."
                     ]
             document.getElementById('news-feed').style.display = "flex";
-            document.getElementById('refresh-all').style.display = "block";
             const quote = document.createElement("div");
             quote.className = `end_quote`;
             quote.innerHTML = items[Math.floor(Math.random()*items.length)];
@@ -2100,7 +2097,6 @@ function declutter(title_source,id_source,tf_source,n=0){
             document.getElementById('spin_container').innerHTML = `` 
         }
         document.getElementById('news-feed').style.display = "flex";
-        document.getElementById('refresh-all').style.display = "block";
     }
     
     const clearUpvotesButton = document.getElementById("clear-upvotes");
@@ -2159,7 +2155,6 @@ function declutter(title_source,id_source,tf_source,n=0){
         if (newFeedUrl) {
             clear_search();
             document.getElementById('news-feed').style.display = "none";
-            document.getElementById('refresh-all').style.display = "none";
             document.getElementById('mark-all').style.display = "none";
             let lastLoad = 0;
             localStorage.setItem("lastLoad", 0);
@@ -2406,7 +2401,6 @@ function declutter(title_source,id_source,tf_source,n=0){
                 clear_search();
                 show_timeline();
                 document.getElementById('news-feed').style.display = "none";
-                document.getElementById('refresh-all').style.display = "none";
                 document.getElementById('mark-all').style.display = "none";
                 feed_name = document.getElementById("feed_list").value;
                 rssFeeds = window[feed_name]
@@ -2454,7 +2448,6 @@ function declutter(title_source,id_source,tf_source,n=0){
                 clear_search();
                 show_timeline();
                 document.getElementById('news-feed').style.display = "none";
-                document.getElementById('refresh-all').style.display = "none";
                 document.getElementById('mark-all').style.display = "none";
                 rssFeeds = []
                 localStorage.setItem("feeds",JSON.stringify(rssFeeds))
@@ -2501,7 +2494,6 @@ function declutter(title_source,id_source,tf_source,n=0){
                 rssFeeds.splice(feedIndex, 1);
                 localStorage.setItem("feeds",rssFeeds)
                 document.getElementById('news-feed').style.display = "none";
-                document.getElementById('refresh-all').style.display = "none";
                 document.getElementById('mark-all').style.display = "none";
                 updateFeedList();
                 feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
