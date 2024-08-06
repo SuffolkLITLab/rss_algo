@@ -574,8 +574,6 @@ function declutter(title_source,id_source,tf_source,n=0){
 
         });
 
-        window.scrollTo(0,0);
-
     }
 
 
