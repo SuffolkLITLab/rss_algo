@@ -360,8 +360,9 @@ document.addEventListener("DOMContentLoaded", function() {
     async function fetchFeed(feedUrl) {
         document.getElementById('loading').style.display = "block";
 
-        var proxy_01 = "https://tools.suffolklitlab.org/rss_proxy/?url="
-        // set proxy_02 = "" if you only want to use proxy_01
+        var proxy_01 = "https://corsproxy.io/?" 
+        // var proxy_01 = "https://tools.suffolklitlab.org/rss_proxy/?url="
+        // var proxy_02 = "" if you only want to use proxy_01
         var proxy_02 = "https://corsproxy.io/?"
 
         feedUrl_prox = proxy_01+encodeURIComponent(feedUrl)       
@@ -850,13 +851,12 @@ function declutter(title_source,id_source,tf_source,n=0){
                 fetchFeed(feedUrl)
                     .then(data => {
 
-                        //console.log(data)
+                        console.log(data)
 
                         const parser = new DOMParser();
                         const xml = parser.parseFromString(data, "application/xml");
 
-                        //xml_doc = xml 
-                        //console.log(xml)
+                        //console.log(feedUrl,xml)
 
                         var feedTitle
                         if (xml.documentElement.nodeName=="feed") {
