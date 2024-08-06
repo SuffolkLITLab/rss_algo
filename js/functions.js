@@ -361,7 +361,7 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('loading').style.display = "block";
 
         var proxy_01 = "https://corsproxy.io/?" 
-        // var proxy_01 = "https://tools.suffolklitlab.org/rss_proxy/?url="
+        //var proxy_01 = "https://tools.suffolklitlab.org/rss_proxy/?url="
         // var proxy_02 = "" if you only want to use proxy_01
         var proxy_02 = "https://corsproxy.io/?"
 
@@ -851,10 +851,10 @@ function declutter(title_source,id_source,tf_source,n=0){
                 fetchFeed(feedUrl)
                     .then(data => {
 
-                        console.log(data)
+                        //console.log(feedUrl,data)
 
                         const parser = new DOMParser();
-                        const xml = parser.parseFromString(data, "application/xml");
+                        const xml = parser.parseFromString(data, "application/xml");    
 
                         //console.log(feedUrl,xml)
 
