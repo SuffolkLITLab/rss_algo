@@ -14,15 +14,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.4.4">
-	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.4.4">
-    <script src="js/spin/spin.min.js?v=v1.4.4"></script>
+    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.4.5">
+	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.4.5">
+    <script src="js/spin/spin.min.js?v=v1.4.5"></script>
 
-    <script src="js/report.js?v=v1.4.4"></script>    
-    <script src="js/feeds.js?v=v1.4.4"></script>
+    <script src="js/report.js?v=v1.4.5"></script>    
+    <script src="js/feeds.js?v=v1.4.5"></script>
 
 </head>
-<body>
+<body onLoad="window.scrollTo(0,0);">
     <div class="container">
         <div style="float:left;width:100%;margin-top: 20px;">
             <div class="menu">
@@ -230,13 +230,13 @@
         </div>
 
         <div id="refresh-all">
-            <button id="mark-above-seen" class="btn btn-primary btn-block" style="margin: 15px 0 0;" onClick="window.scrollTo(0,0);setTimeout(function(){window.location.reload();},10)">Refresh</button>
+            <button id="mark-above-seen" class="btn btn-primary btn-block" style="margin: 15px 0 0;" onClick="window.location.reload();">Refresh</button>
         </div>
 
         <div class="footer">
             <a href="https://suffolklitlab.org/" alt="LIT Lab" target="_blank">
-                <img id="footer_logo_long" src="images/lit_suffolk.png" border="0" height="35px" alt="LIT and Suffolk University Law School Logos" align="left"/>
-                <img id="footer_logo_sqr" src="images/blue_logo.png" border="0" alt="LIT and Suffolk University Law School Logos" align="left"/>
+                <img id="footer_logo_long" border="0" height="35px" alt="LIT and Suffolk University Law School Logos" align="left"/>
+                <img id="footer_logo_sqr" border="0" alt="LIT and Suffolk University Law School Logos" align="left"/>
             </a>
             <span style="float:right">
                 <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">top</a> | 
@@ -250,6 +250,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 
-<script src="js/functions.js?v=v1.4.4"></script>    
+<script src="js/functions.js?v=v1.4.5"></script>    
 
 </html>

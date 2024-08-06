@@ -1,4 +1,4 @@
-var version = "v1.4.4";
+var version = "v1.4.5";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -378,7 +378,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             if (!response.ok) {
                 console.log("Error fetching "+feedUrl)
-                throw new Error(`Request failed with status ${response.status}`);
+                //throw new Error(`Request failed with status ${response.status}`);
             }
         }
         const data = await response.text();
@@ -632,12 +632,11 @@ function declutter(title_source,id_source,tf_source,n=0){
     });
 
 
-
     const maxonpageSlider = document.getElementById("max-cards-slider");  
     const maxonpageValueElement = document.getElementById("max-cards-value");
     
     // Retrieve cardcutoff value from localStorage (if available)
-    const max_on_page = localStorage.getItem("cardcutoff") || 20;
+    const max_on_page = localStorage.getItem("cardcutoff") || 15;
     if (max_on_page) {
         maxonpageSlider.value = max_on_page;
         maxonpageValueElement.textContent = max_on_page;
@@ -1142,9 +1141,26 @@ function declutter(title_source,id_source,tf_source,n=0){
                         }
                         errors+=1
                         n_feeds+=1
+                        setTimeout(function(){
+                            crunch_numbers = true;
+                            dedup_articles();
+                            reorderArticles();
+                            displayArticles();
+                            updateItemCount();
+                            displayed_cards = newsFeedContainer.childNodes.length
+                            //console.log(consolidated_from + " cards were consolidated to " + displayed_cards)
+                            console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
+                            lazyload();
+                            replace_broken();
+                            get_quote();
+                            decluter_cards = false;
+                            document.getElementById('loading').style.display = "none";
+                            crunch_numbers = false;
+                        }, 1);
                     });
 
             });
+
 
         } else {
 
@@ -1660,7 +1676,7 @@ function declutter(title_source,id_source,tf_source,n=0){
         });
 
         if (!searching){
-            document.getElementById("mark-all").innerHTML = `<button id="mark-above-seen" class="btn btn-danger btn-block" style="margin: 15px 0 0;" onClick="document.getElementById('news-feed').style.display = 'none';document.getElementById('spin_container').innerHTML = \`<div style='float:left;width:100%;height:80px;'><div id='spinner_here' style='margin:0 auto;width:65px;'>&nbsp;</div></div>\`;">Mark Above as Seen</button>`
+            document.getElementById("mark-all").innerHTML = `<button id="mark-above-seen" class="btn btn-danger btn-block" style="margin: 15px 0 0;" onClick="document.getElementById('news-feed').style.display = 'none';document.getElementById('spin_container').innerHTML = \`<div style='float:left;width:100%;height:115px;'><div id='spinner_here' style='margin:0 auto;width:65px;'>&nbsp;</div></div>\`;">Mark Above as Seen</button>`
             const markAboveSeen = document.getElementById("mark-above-seen");
 
             markAboveSeen.addEventListener("click", function() {

@@ -286,12 +286,22 @@ select {
     padding: 10px 5px;
 }
 #footer_logo_long {
-    height:35px;
+    content:url("../images/lit-lab-logo-large.png");
+    height:80px;
 }
 #footer_logo_sqr {
     display:none;
-    height:35px;
+    content:url("../images/lit-lab-torch.png");
+    height:50px;
 }
+
+.dark-mode #footer_logo_long {
+    content:url("../images/lit-lab-logo-large-inverted.png");
+}
+.dark-mode #footer_logo_sqr {
+    content:url("../images/lit-lab-torch-inverted.png");
+}
+
 @media only screen and (max-width: 520px) {
     #footer_logo_long {
         display:none;
