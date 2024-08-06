@@ -1140,28 +1140,26 @@ function declutter(title_source,id_source,tf_source,n=0){
                         const errorMessage = `Error fetching RSS feed: ${error.message}`;
                         if (errors==0) {
                             displayErrorPopup(feedTitle, feedUrl, errorMessage);
+                            setTimeout(function(){
+                                crunch_numbers = true;
+                                dedup_articles();
+                                reorderArticles();
+                                displayArticles();
+                                updateItemCount();
+                                displayed_cards = newsFeedContainer.childNodes.length
+                                //console.log(consolidated_from + " cards were consolidated to " + displayed_cards)
+                                console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
+                                lazyload();
+                                replace_broken();
+                                get_quote();
+                                decluter_cards = false;
+                                document.getElementById('loading').style.display = "none";
+                                crunch_numbers = false;
+                            }, 1);
                         }
                         errors+=1
                         n_feeds+=1
-                        
-                        setTimeout(function(){
-                            crunch_numbers = true;
-                            dedup_articles();
-                            reorderArticles();
-                            displayArticles();
-                            updateItemCount();
-                            displayed_cards = newsFeedContainer.childNodes.length
-                            //console.log(consolidated_from + " cards were consolidated to " + displayed_cards)
-                            console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
-                            lazyload();
-                            replace_broken();
-                            get_quote();
-                            decluter_cards = false;
-                            document.getElementById('loading').style.display = "none";
-                            crunch_numbers = false;
-                        }, 1);
                     });
-
             });
 
 
