@@ -82,7 +82,7 @@ async function fetchWithTimeout(resource, options = {}) {
   }
 
 if (!localStorage.getItem("backstop")) {
-    localStorage.setItem("regex_always", "nonprofittechy\\.com|lawnext\\.com\\/feed");
+    localStorage.setItem("regex_always", "\\bAI\\b|legal");
     localStorage.setItem("regex_always_op", "i");
 }
 
