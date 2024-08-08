@@ -1,4 +1,4 @@
-var version = "v1.4.5";
+var version = "v1.4.6";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -360,27 +360,44 @@ document.addEventListener("DOMContentLoaded", function() {
     async function fetchFeed(feedUrl) {
         document.getElementById('loading').style.display = "block";
 
-        var proxy_01 = "https://corsproxy.io/?" 
-        //var proxy_01 = "https://tools.suffolklitlab.org/rss_proxy/?url="
-        // var proxy_02 = "" if you only want to use proxy_01
-        var proxy_02 = "https://corsproxy.io/?"
+        var proxy_01 = "https://corsproxy.io/?";
+        var proxy_02 = "https://api.cors.lol/?url=";
+        //var proxy_02 = "https://tools.suffolklitlab.org/rss_proxy/?url=";
+        var feedUrl_prox = proxy_01 + encodeURIComponent(feedUrl);
 
-        feedUrl_prox = proxy_01+encodeURIComponent(feedUrl)       
-        //const response = await fetchWithTimeout(feedUrl_prox, {timeout: 6000});
-        var response = await fetch(feedUrl_prox);
-        if (!response.ok) {
-            //throw new Error(`Request failed with status ${response.status}`);
-            if (proxy_02!=""){
-                console.log("Trying corsproxy.io for "+feedUrl)
-                feedUrl_prox = proxy_02 + encodeURIComponent(feedUrl);
-                //let response = await fetchWithTimeout(feedUrl_prox, {timeout: 8000});   
-                response = await fetch(feedUrl_prox);    
-            }
-            if (!response.ok) {
-                console.log("Error fetching "+feedUrl)
-                //throw new Error(`Request failed with status ${response.status}`);
+        async function fetchRSS(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {  // Check for HTTP errors.
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response;  // Return the successful response object.
+            } catch (error) {
+                console.log("Error fetching "+feedUrl+": " + error.message);
+                return null;  // Return null or appropriate error handling.
             }
         }
+
+        async function tryFetchWithProxies() {
+            let response = await fetchRSS(feedUrl_prox);
+            if (!response) {
+                console.log("Trying Suffolk's proxy for " + feedUrl);
+                feedUrl_prox = proxy_02 + feedUrl;
+                response = await fetchRSS(feedUrl_prox);
+                if (!response) {
+                    console.log("Error fetching with both proxies.");
+                }
+            }
+            return response;
+        }
+
+        //tryFetchWithProxies().then(response => {
+        //    if (response) {
+        //        console.log("Fetched successfully:", response);
+        //    }
+        //});
+
+        var response = await tryFetchWithProxies(feedUrl_prox);   
         const data = await response.text();
 
         n_feeds += 1;
@@ -900,6 +917,8 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     unknown_pubDate = true
                                 }
                             }
+
+                            //console.log(pubDate)
                             
                             //console.log("Max items per feed:",(0.75*max_arts/rssFeeds.length))
                             //if ((pubDate >= backstop) && (pubDate >= lookback) && (j<Math.floor(1.45*max_arts/rssFeeds.length)) && (pubDate <= new Date())) {
@@ -2280,7 +2299,7 @@ function declutter(title_source,id_source,tf_source,n=0){
       
           llm_messages.push({"role": "user", "content": prompt_text})
           var data = {
-                    "model": "gpt-3.5-turbo-1106", 
+                    "model": "gpt-4o-mini",//"gpt-3.5-turbo-1106", 
                     "messages": llm_messages,
                     "temperature": 0.0,
                     "max_tokens": 500
