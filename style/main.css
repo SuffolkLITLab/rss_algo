@@ -175,6 +175,7 @@ select {
 
 #summarize-news{
     display:none;
+    margin-right: 5px;
 }
 
 #sum_msg {
