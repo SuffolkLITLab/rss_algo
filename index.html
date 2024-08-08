@@ -27,6 +27,7 @@
         <div style="float:left;width:100%;margin-top: 20px;">
             <div class="menu">
                 <button id="summarize-news" class="btn btn-secondary" style="float:left;">🤖</button>
+                <button id="refresh" class="btn btn-secondary" style="float:left;" onCLick="window.location.reload();">↺</button>
                 <!--<span class="love"><a href="blog" id="math" class="btn btn-secondary">❤️ Letters</a></span>-->
                 <button id="toggle-mode" class="btn btn-secondary" aria-label="Toggle Dark Mode">🌗</button>
                 <button id="manage-feeds" class="btn btn-secondary">Feeds</button>
@@ -230,7 +231,7 @@
         </div>
 
         <div id="refresh-all">
-            <button id="mark-above-seen" class="btn btn-primary btn-block" style="margin: 15px 0 0;" onClick="document.getElementById('news-feed').style.display = 'none';document.getElementById('mark-all').style.display = 'none';window.location.reload();">Refresh</button>
+            <button id="mark-above-seen" class="btn btn-primary btn-block" style="margin: 15px 0 0;" onClick="document.getElementById('news-feed').style.display = 'none';document.getElementById('mark-all').style.display = 'none';window.location.reload();">↺ Refresh</button>
         </div>
 
         <div class="footer">
