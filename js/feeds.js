@@ -1500,7 +1500,7 @@ test_feeds = [
 
 
     // CORS proxy doesn't resolve feed (entierly broken)
-    //"https://rss.sciam.com/ScientificAmerican-Global",
+    //"http://rss.sciam.com/ScientificAmerican-Global",
 
     // Seems to "work" but there are no new posts
     //"https://lawprofblawg.wordpress.com/feed/",

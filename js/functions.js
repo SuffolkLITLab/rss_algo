@@ -81,6 +81,11 @@ async function fetchWithTimeout(resource, options = {}) {
     return response;
   }
 
+if (!localStorage.getItem("backstop")) {
+    localStorage.setItem("regex_always", "nonprofittechy\\.com|lawnext\\.com\\/feed");
+    localStorage.setItem("regex_always_op", "i");
+}
+
 const regex_always =  localStorage.getItem("regex_always") || "";
 document.getElementById("regex_always").value = regex_always;
 
