@@ -658,7 +658,7 @@ function declutter(title_source,id_source,tf_source,n=0){
     const maxonpageValueElement = document.getElementById("max-cards-value");
     
     // Retrieve cardcutoff value from localStorage (if available)
-    const max_on_page = localStorage.getItem("cardcutoff") || 15;
+    const max_on_page = localStorage.getItem("cardcutoff") || 30;
     if (max_on_page) {
         maxonpageSlider.value = max_on_page;
         maxonpageValueElement.textContent = max_on_page;
