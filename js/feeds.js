@@ -1566,9 +1566,6 @@ if (!localStorage.getItem("backstop")) {
     //localStorage.setItem("regex_never_op", "i");
 }
 
-
-
-
 var article_test;
 var upTFIDF_tmp;
 var dfreq_tmp = {};
