@@ -820,7 +820,7 @@ function declutter(title_source,id_source,tf_source,n=0){
 
         votelib = localStorage.getItem("votelib")
         if ( Object.keys(defaultTFIDF).includes(votelib) ) {
-            vote_discount = default_dfreq[votelib]["n_docs"]/(2*default_dfreq[votelib]["n_docs"]+dfreq["n_docs"]);
+            vote_discount = default_dfreq[votelib]["n_docs"]/(default_dfreq[votelib]["n_docs"]+2*dfreq["n_docs"]);
             upTFIDF_tmp = combineWordCounts(defaultTFIDF[votelib], upTFIDF, vote_discount);
             dfreq_tmp["n_docs"] = default_dfreq[votelib]["n_docs"]*vote_discount+dfreq["n_docs"]*1;
             dfreq_tmp["df_arr"] = combineWordCounts(default_dfreq[votelib]["df_arr"], dfreq["df_arr"], vote_discount);
@@ -948,6 +948,10 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     link = item.querySelector("link").textContent;
                                 }
 
+                                if(!link) {
+                                    link=""
+                                }
+
                                 try {
                                     title = item.querySelector("title").textContent;
                                 } catch (error) {
@@ -989,7 +993,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     }
                                 }
 
-                                if (description!="" && link){
+                                if (description!="" && link!=""){
         
                                     const re = /(https?:\/\/[^\s]+\.(?:png|jpg|jpeg|gif))/i;
                                     possible_img = description.match(re)
@@ -1133,6 +1137,9 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     const isRead = readArticles[itemId] || false;
 
                                     const priorityRating = getRating(feedTitle.replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(link).replace(/[^a-zA-Z]+/g,"-")+" "+title+" "+description,link,feedTitle,feedUrl); 
+
+
+
 
                                     articles.push({
                                         title,
