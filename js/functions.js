@@ -81,11 +81,6 @@ async function fetchWithTimeout(resource, options = {}) {
     return response;
   }
 
-if (!localStorage.getItem("backstop")) {
-    localStorage.setItem("regex_always", "\\bAI\\b|legal");
-    localStorage.setItem("regex_always_op", "i");
-}
-
 const regex_always =  localStorage.getItem("regex_always") || "";
 document.getElementById("regex_always").value = regex_always;
 
@@ -235,6 +230,7 @@ control.addEventListener("change", function(event){
 
 
 var xml_doc;
+var dfreq_last;
 
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -304,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const newsFeedContainer = document.getElementById("news-feed");
     const upvotes =  JSON.parse(localStorage.getItem("upvotes")) || {};
     const downvotes = JSON.parse(localStorage.getItem("downvotes")) || {};
-    const upTFIDF =  JSON.parse(localStorage.getItem("upTFIDF")) || {};
+    upTFIDF =  JSON.parse(localStorage.getItem("upTFIDF")) || {};
     const downTFIDF =  JSON.parse(localStorage.getItem("downTFIDF")) || {};
     const readArticles = filterOldEntries(JSON.parse(localStorage.getItem("read")) || {});    
     localStorage.setItem("read", JSON.stringify(readArticles));
@@ -356,7 +352,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function updateFeedList(loadFeeds = false, singlefeed="") {
         rssFeeds = removeDuplicates(rssFeeds);
         localStorage.setItem("feeds", JSON.stringify(rssFeeds));
-        let upTFIDF =  JSON.parse(localStorage.getItem("upTFIDF")) || {};
+        upTFIDF =  JSON.parse(localStorage.getItem("upTFIDF")) || {};
         let downTFIDF =  JSON.parse(localStorage.getItem("downTFIDF")) || {};
         loadNews(loadFeeds,singlefeed);        
     }
@@ -603,7 +599,7 @@ function declutter(title_source,id_source,tf_source,n=0){
     const cooldownValueElement = document.getElementById("cooldown-value");
     
     // Retrieve cooldown value from localStorage (if available)
-    const savedcooldown = localStorage.getItem("cooldown") || 0.5;
+    const savedcooldown = localStorage.getItem("cooldown");
     if (savedcooldown) {
         cooldownSlider.value = savedcooldown;
         cooldownValueElement.textContent = savedcooldown;
@@ -620,7 +616,7 @@ function declutter(title_source,id_source,tf_source,n=0){
     const lookbackValueElement = document.getElementById("lookback-value");
     
     // Retrieve lookback value from localStorage (if available)
-    const savedLookback = localStorage.getItem("lookback") || 3;
+    const savedLookback = localStorage.getItem("lookback");
     if (savedLookback) {
         lookbackSlider.value = savedLookback;
         lookbackValueElement.textContent = savedLookback;
@@ -658,7 +654,7 @@ function declutter(title_source,id_source,tf_source,n=0){
     const maxonpageValueElement = document.getElementById("max-cards-value");
     
     // Retrieve cardcutoff value from localStorage (if available)
-    const max_on_page = localStorage.getItem("cardcutoff") || 30;
+    const max_on_page = localStorage.getItem("cardcutoff");
     if (max_on_page) {
         maxonpageSlider.value = max_on_page;
         maxonpageValueElement.textContent = max_on_page;
@@ -822,6 +818,19 @@ function declutter(title_source,id_source,tf_source,n=0){
         const lastLoad = localStorage.getItem("lastLoad") || 0;
         const lastcooldown = localStorage.getItem("lastcooldown") || 0.25;
 
+        votelib = localStorage.getItem("votelib")
+        if ( Object.keys(defaultTFIDF).includes(votelib) ) {
+            upTFIDF_tmp = combineWordCounts(defaultTFIDF[votelib], upTFIDF);
+            dfreq_tmp["n_docs"] = default_dfreq[votelib]["n_docs"]*1+dfreq["n_docs"]*1;
+            dfreq_tmp["df_arr"] = combineWordCounts(default_dfreq[votelib]["df_arr"], dfreq["df_arr"]);
+            //console.log(upTFIDF_tmp,dfreq_tmp)
+        } else {
+            upTFIDF_tmp = upTFIDF;
+            dfreq_tmp["n_docs"] = dfreq["n_docs"];
+            dfreq_tmp["df_arr"] = dfreq["df_arr"];
+        }
+        dfreq_last = dfreq; 
+
         //console.log("new cooldown",savedcooldown,"old cooldown",lastcooldown)
         
         if (savedcooldown>=lastcooldown) {
@@ -868,6 +877,7 @@ function declutter(title_source,id_source,tf_source,n=0){
             errors = 0;
 
             use_feeds.forEach(feedUrl => {
+
                 fetchFeed(feedUrl)
                     .then(data => {
 
@@ -905,6 +915,8 @@ function declutter(title_source,id_source,tf_source,n=0){
                         localStorage.setItem("feed_names",JSON.stringify(feed_names));  
 
                         j=0;
+                        //infeed_count = 0;
+
                         items.forEach(item => {
 
                             //console.log(item)
@@ -1133,14 +1145,25 @@ function declutter(title_source,id_source,tf_source,n=0){
                                         hasDownvote: downvotes[itemId] || false,
                                         priorityRating
                                     });
+
+                                    //infeed_count += 1;
+                                    j+=1;
                                 }
                             }
-                            j+=1
+                            //j+=1
                         });
+
+                        //if (infeed_count<=0) {
+                        //    console.log("NO ITEMS FOUND: \n"+feedUrl,infeed_count);
+                        //} else {
+                        //    console.log("ITEMS FOUND: \n"+feedUrl,infeed_count);
+                        //}
 
                         if (j==0){
                             console.log("** No relevant items found in "+feedUrl);
-                        }
+                        }// else {
+                        //    console.log("** "+feedUrl+" | Sample: "+articles[articles.length-1]["link"]);
+                        //}
 
                         dedup_articles();
                         if (crunch_numbers) {
@@ -1796,6 +1819,28 @@ function declutter(title_source,id_source,tf_source,n=0){
         return similarity;
     }
 
+    function combineWordCounts(obj1, obj2) {
+        // Create a new object to store the combined results
+        let combined = {};
+    
+        // Add counts from obj1
+        for (let word in obj1) {
+            combined[word] = obj1[word];
+        }
+    
+        // Add counts from obj2, summing where necessary
+        for (let word in obj2) {
+            if (combined[word]) {
+                combined[word] += obj2[word]; // Sum the counts if the word is in both objects
+            } else {
+                combined[word] = obj2[word]; // Otherwise, just add the count from obj2
+            }
+        }
+    
+        return combined;
+    }
+
+    
     function getRating(inputString,link="",feed_title="") {
 
         if (regex_always!="" && !searching) {
@@ -1815,22 +1860,23 @@ function declutter(title_source,id_source,tf_source,n=0){
 
         var array1 = [];
         var array2 = [];
-        for (word in upTFIDF) {
-            if (dfreq["df_arr"][word]) {
-                idf = Math.log(1+dfreq["n_docs"]/dfreq["df_arr"][word]);
+        for (word in upTFIDF_tmp) {
+            
+            if (dfreq_tmp["df_arr"][word]) {
+                idf = Math.log(1+dfreq_tmp["n_docs"]/dfreq_tmp["df_arr"][word]);
                 //if (isNaN(idf)) {
                 //    idf = 1;
                 //}
             } else {
-                idf = Math.log(1+dfreq["n_docs"]/1);
+                idf = Math.log(1+dfreq_tmp["n_docs"]/1);
             }
                 if (tf[word] && idf) {
                     array1.push((tf[word])*idf)
                 } else {
                     array1.push(0)
                 }
-            if (upTFIDF[word]) {
-                array2.push(upTFIDF[word]*idf)
+            if (upTFIDF_tmp[word]) {
+                array2.push(upTFIDF_tmp[word]*idf)
             } else {
                 array2.push(0)
             }
@@ -1860,7 +1906,6 @@ function declutter(title_source,id_source,tf_source,n=0){
             }
         }
         down_score = cosinesim(array1, array2);
-        
 
         score = up_score - down_score*savednegativity;
 
@@ -2090,7 +2135,7 @@ function declutter(title_source,id_source,tf_source,n=0){
         var upvotedArticleData = articles.filter(article => upvotes[article.itemId]);
         var downvotedArticleData = articles.filter(article => downvotes[article.itemId]);
         dfreq = calculateDF(readArticleData)
-        let upTFIDF = calculateTFIDF(upvotedArticleData,dfreq);
+        upTFIDF = calculateTFIDF(upvotedArticleData,dfreq);
         let downTFIDF = calculateTFIDF(downvotedArticleData,dfreq);
 
         localStorage.setItem("upTFIDF", JSON.stringify(upTFIDF));
@@ -2238,6 +2283,7 @@ function declutter(title_source,id_source,tf_source,n=0){
 
         saved_articles.forEach(articleData => {
             testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle
+            //console.log(testString)
             if (testString.match(regex)) {
                 searchResults.push(articleData);
             }
@@ -2442,6 +2488,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                 document.getElementById('news-feed').style.display = "none";
                 document.getElementById('mark-all').style.display = "none";
                 feed_name = document.getElementById("feed_list").value;
+                localStorage.setItem("votelib",feed_name);
                 rssFeeds = window[feed_name]
                 localStorage.setItem("feeds",rssFeeds)
                 feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
@@ -2469,7 +2516,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                 localStorage.setItem("backstop",new Date(0))
                 backstop = new Date(0)    
                 dfreq = {"df_arr":{},"n_docs":0}    
-                let upTFIDF = {};
+                upTFIDF = {};
                 let downTFIDF = {};
                 articles = [];
                 localStorage.setItem("articles", JSON.stringify(articles));
@@ -2515,7 +2562,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                 localStorage.setItem("backstop",new Date(0))
                 backstop = new Date(0)        
                 dfreq = {"df_arr":{},"n_docs":0}    
-                let upTFIDF = {};
+                upTFIDF = {};
                 let downTFIDF = {};
                 articles = [];
                 localStorage.setItem("articles", JSON.stringify(articles));
@@ -2709,7 +2756,7 @@ async function weatherAPI(lat,lon){
         weather_icon = "";
     }
 
-    document.getElementById('weather').innerHTML = Math.round(data["current_weather"]["temperature"]) + "" + data["current_weather_units"]["temperature"]+" "+weather_icon+"";
+    document.getElementById('weather').innerHTML = "<a href='https://www.wunderground.com/weather/"+lat+","+lon+"' target='_blank' style='text-decoration:none;'>" + Math.round(data["current_weather"]["temperature"]) + "" + data["current_weather_units"]["temperature"]+" "+weather_icon+"</a>";
     document.getElementById('weather').style.display = "block";
 
     //return data
