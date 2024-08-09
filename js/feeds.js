@@ -301,7 +301,8 @@ var feeds_long_list = [
     "https://www.scotusblog.com/feed/",
     // LawyerExMachina
     "https://buttondown.email/LawyerExMachina/rss",
-
+    // Suffolk LIT Lab
+    "https://suffolklitlab.org/feed/",
     // Sadly Not Havoc Dinosaur
     "https://sadlynothavocdinosaur.com/feed.xml",
     // NonProfit Techy
@@ -355,12 +356,12 @@ if (!localStorage.getItem("cardcutoff")) {
 }
 
 if (!localStorage.getItem("backstop")) {
-    localStorage.setItem("regex_always", "oneusefulthing\.org");
+    localStorage.setItem("regex_always", "suffolklitlab\\.org");
     localStorage.setItem("regex_always_op", "i");
 }
 
 if (!localStorage.getItem("backstop")) {
-    localStorage.setItem("regex_never", "Daily Deal:");
+    localStorage.setItem("regex_never", "Deal of the Day:|Daily Deal:|on Sale|\% Off|Slate Quiz|The Crossword:|Wordle");
     localStorage.setItem("regex_never_op", "i");
 }
 

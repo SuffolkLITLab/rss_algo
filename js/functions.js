@@ -1,4 +1,4 @@
-var version = "v1.12.4";
+var version = "v1.13.4";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -1122,6 +1122,8 @@ function declutter(title_source,id_source,tf_source,n=0){
                                             mediaThumbnail = "images/cached_logos/lexblog.png"
                                         } else if (link.includes("artificiallawyer.com")) {
                                             mediaThumbnail = "images/cached_logos/al.png"
+                                        } else if (link.includes("suffolklitlab.org")) {
+                                            mediaThumbnail = "images/cached_logos/lit.png"
                                         }                                          
                                         
                                         //} else if (link.includes("")) {
