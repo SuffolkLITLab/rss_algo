@@ -261,6 +261,8 @@ select {
 
 .feed_search {
     background: var(--bs-card-footer-bg);
+    margin: 0;
+    padding: 0;
     border: 0px;
 }
 
