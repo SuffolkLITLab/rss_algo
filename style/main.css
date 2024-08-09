@@ -215,6 +215,7 @@ select {
     background: #ffcf31;
     margin-top: 15px;
     padding:15px 15px 20px 15px;
+    word-wrap:break-word;
 }
 
 .dark-mode #search_msg {
