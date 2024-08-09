@@ -1,4 +1,4 @@
-var version = "v1.9.4";
+var version = "v1.10.4";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -820,9 +820,10 @@ function declutter(title_source,id_source,tf_source,n=0){
 
         votelib = localStorage.getItem("votelib")
         if ( Object.keys(defaultTFIDF).includes(votelib) ) {
-            upTFIDF_tmp = combineWordCounts(defaultTFIDF[votelib], upTFIDF);
-            dfreq_tmp["n_docs"] = default_dfreq[votelib]["n_docs"]*1+dfreq["n_docs"]*1;
-            dfreq_tmp["df_arr"] = combineWordCounts(default_dfreq[votelib]["df_arr"], dfreq["df_arr"]);
+            vote_discount = default_dfreq[votelib]["n_docs"]/(2*default_dfreq[votelib]["n_docs"]+dfreq["n_docs"]);
+            upTFIDF_tmp = combineWordCounts(defaultTFIDF[votelib], upTFIDF, vote_discount);
+            dfreq_tmp["n_docs"] = default_dfreq[votelib]["n_docs"]*vote_discount+dfreq["n_docs"]*1;
+            dfreq_tmp["df_arr"] = combineWordCounts(default_dfreq[votelib]["df_arr"], dfreq["df_arr"], vote_discount);
             //console.log(upTFIDF_tmp,dfreq_tmp)
         } else {
             upTFIDF_tmp = upTFIDF;
@@ -1364,7 +1365,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             <div style="postion:relative;z-index:0;top:0;height:40px;background:#eee;"></div>`
                     } else {
                         img_html = `
-                            <div style="postion:relative;z-index:0;top:0;min-height:33px;"><img src="images/sargent.jpg" class="lazyload card-img-top thumbnail-image"></div>`
+                            <div style="postion:relative;z-index:0;top:0;min-height:33px;"><img src="images/sargent.jpg" class="lazyload card-img-top thumbnail-image" onError="this.onerror=null;this.src='images/placeholder.png';"></div>`
                     }
 
                     const sponsor = document.createElement("div");
@@ -1446,11 +1447,11 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     </video> </div>`
                                 } else {
                                     img_html = `
-                                    <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img data-src="${mediaThumbnail}" class="lazyload card-img-top thumbnail-image">` : '<img data-src="images/placeholder.png" class="lazyload card-img-top thumbnail-image">'}</div>`
+                                    <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img data-src="${mediaThumbnail}" class="lazyload card-img-top thumbnail-image" onError="this.onerror=null;this.src='images/placeholder.png';">` : '<img data-src="images/placeholder.png" class="lazyload card-img-top thumbnail-image">'}</div>`
                                 }
                             } else {
                                 img_html = `
-                                    <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img data-src="${mediaThumbnail}" class="lazyload card-img-top thumbnail-image">` : '<img data-src="images/placeholder.png" class="lazyload card-img-top thumbnail-image">'}</div>`
+                                    <div style="postion:relative;z-index:0;top:0">${mediaThumbnail ? `<img data-src="${mediaThumbnail}" class="lazyload card-img-top thumbnail-image" onError="this.onerror=null;this.src='images/placeholder.png';">` : '<img data-src="images/placeholder.png" class="lazyload card-img-top thumbnail-image">'}</div>`
                             }
                         }
 
@@ -1495,7 +1496,10 @@ function declutter(title_source,id_source,tf_source,n=0){
                         const feedSearch = article.querySelector(".feed_search");
 
                         feedSearch.addEventListener("click", function() {
-                            regex_search(feedSearch.getAttribute("data-item-id"));
+                            search_string = feedSearch.getAttribute("data-item-id")
+                            search_string = search_string.replaceAll("?","\\?")
+                            //console.log(search_string)
+                            regex_search(search_string);
                             setTimeout( function() {window.scrollTo(0,0)}, 100);
                         });
 
@@ -1831,13 +1835,13 @@ function declutter(title_source,id_source,tf_source,n=0){
         return similarity;
     }
 
-    function combineWordCounts(obj1, obj2) {
+    function combineWordCounts(obj1, obj2, vote_discount) {
         // Create a new object to store the combined results
         let combined = {};
     
         // Add counts from obj1
         for (let word in obj1) {
-            combined[word] = obj1[word];
+            combined[word] = obj1[word]*vote_discount;
         }
     
         // Add counts from obj2, summing where necessary
@@ -2462,17 +2466,22 @@ function declutter(title_source,id_source,tf_source,n=0){
                             <p>
                                 Consider starting with a premade list. Then over time you can whittle it down and add new feeds as you like. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
                             </p>
+                            <p>
+                                If a feed inludes a pranthetical that means it comes with a pre-trained algo so you don't have to start from scrtach.
+                            </p>
                             <select id="feed_list">
-                                <option value="default_feeds">Default: Generic US News Mix (small)</option>
+                                <option value="default_feeds">US Fire Hose</option>
+                                <option value="feeds_us_fire_hose_legal_tech">US Fire Hose (legal tech)</option>
+                                <!--<option value="default_feeds">Default: Generic US News Mix (small)</option>
                                 <option value="magazine_feeds">Mags: New Yorker, Economist, Atlantic, Vanity Fair, Wired, Rolling Stone, Quanta, Nautilus, &amp; Aeon</option>
                                 <option value="papers_feeds">Papers: NYT, WaPo, WSJ, LA Times &amp; The Guardian</option>
-                                <!--<option value="condenast_feeds">Condé Nast Lite: New Yorker, Vanity Fair, ArsTechnica, &amp; Wired</option>-->
+                                <option value="condenast_feeds">Condé Nast Lite: New Yorker, Vanity Fair, ArsTechnica, &amp; Wired</option>
                                 <option value="geeek_feeds">Geekery: Science, Space, Tech, &amp; SciFi Shorts</option>
-                                <!--<option value="scifi_shorts_feed">SciFi Shorts: Clarkesworld, Lightspeed &amp; Escape Pod</option>-->
+                                <option value="scifi_shorts_feed">SciFi Shorts: Clarkesworld, Lightspeed &amp; Escape Pod</option>
                                 <option value="suffolk_law_feeds">Suffolk Law Mix: Select Papers + Boston + Law</option>
-                                <!--<option value="dc_law_feeds">Digital Commons Orgs w/ Law Content (400+ orgs)</option>
-                                <option value="law_school_feeds">Digital Commons Orgs w/ ABA-Accredited Law Schools (100+ feeds)</option>-->
-                                <option value="feeds_long_list">Fire Hose: All of the Above, Plus Some</option>
+                                <option value="dc_law_feeds">Digital Commons Orgs w/ Law Content (400+ orgs)</option>
+                                <option value="law_school_feeds">Digital Commons Orgs w/ ABA-Accredited Law Schools (100+ feeds)</option>
+                                <option value="feeds_long_list">Fire Hose: All of the Above, Plus Some</option>-->
                             </select>
                             </p>
                             <p>

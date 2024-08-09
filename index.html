@@ -16,12 +16,12 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="images/blue-icon-180x180.png">
 
-    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.9.4">
-	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.9.4">
-    <script src="js/spin/spin.min.js?v=v1.9.4"></script>
+    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.10.4">
+	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.10.4">
+    <script src="js/spin/spin.min.js?v=v1.10.4"></script>
 
-    <script src="js/report.js?v=v1.9.4"></script>    
-    <script src="js/feeds.js?v=v1.9.4"></script>
+    <script src="js/report.js?v=v1.10.4"></script>    
+    <script src="js/feeds.js?v=v1.10.4"></script>
 
 </head>
 <body>
@@ -42,7 +42,7 @@
                     <span id="description_more">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader <a href="javascript:void();" onClick="document.getElementById('description_more').style.display = 'none';document.getElementById('description').style.display = 'block';">...</a></span> 
                     <span id="description" style="display: none;">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader built at the <a href="https://suffolklitlab.org/" target="_blank">Suffolk LIT Lab</a>. Use 👍 &amp; 👎 + <i>Seen</i> or <i>Open</i> to feed the algo. Refresh this page to update card order et al. Searches, votes, &amp; settings don't leave your device. Customize your algo and timeline behavior in <i>Settings</i>. Curate sources in <i>Feeds</i>&mdash;starter lists available. Add feeds with the blue <i>plus</i> button. For project updates, follow <a href="https://mastodon.social/deck/tags/suffolkrssalgo" target="_blank">#SuffolkRSSalgo</a> on Mastodon, or visit <a href="https://github.com/colarusso/rss_algo" target="_blank">our GitHub page</a>.
 
-                    <a href="javascript:void();" onClick="document.getElementById('description').style.display = 'none';document.getElementById('description_more').style.display = 'block';">shrink description</a>    
+                    [<a href="javascript:void();" onClick="document.getElementById('description').style.display = 'none';document.getElementById('description_more').style.display = 'block';">shrink description</a>]
                     </span>
                 </p>
             </div>
@@ -237,7 +237,7 @@
         </div>
 
         <div id="refresh-all">
-            <button id="mark-above-seen" class="btn btn-primary btn-block" style="margin: 15px 0 0;" onClick="document.getElementById('loading').style.display = 'block';document.getElementById('sum_msg').style.display = 'none';document.getElementById('search_msg').style.display = 'none';document.getElementById('news-feed').style.display = 'none';document.getElementById('mark-all').style.display = 'none';document.getElementById('refresh-all').style.display = 'none';toggle_settings(clear=true);window.location.reload();">↺ Refresh</button>
+            <button id="mark-above-seen" class="btn btn-primary btn-block" style="margin: 15px 0 0;" onClick="document.getElementById('loading').style.display = 'block';toggle_settings(clear=true);document.getElementById('sum_msg').style.display = 'none';document.getElementById('search_msg').style.display = 'none';document.getElementById('news-feed').style.display = 'none';document.getElementById('mark-all').style.display = 'none';document.getElementById('refresh-all').style.display = 'none';window.location.reload();">↺ Refresh</button>
         </div>
 
         <div class="footer">
@@ -257,6 +257,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 
-<script src="js/functions.js?v=v1.9.4"></script>    
+<script src="js/functions.js?v=v1.10.4"></script>    
 
 </html>
