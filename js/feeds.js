@@ -347,7 +347,7 @@ if (!localStorage.getItem("cooldown")) {
 }
 
 if (!localStorage.getItem("lookback")) {
-    localStorage.setItem("lookback",5);
+    localStorage.setItem("lookback",3);
 }
 
 if (!localStorage.getItem("cardcutoff")) {

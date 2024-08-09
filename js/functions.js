@@ -1,4 +1,4 @@
-var version = "v1.11.4";
+var version = "v1.12.4";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -2474,7 +2474,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 Consider starting with a premade list. Then over time you can whittle it down and add new feeds as you like. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
                             </p>
                             <p>
-                                If a feed inludes a pranthetical that means it comes with a pre-trained algo so you don't have to start from scrtach.
+                                If a feed inludes a parenthetical that means it comes with pre-trained algo focusing on the named theme. Your interactions will of course refine its operation.
                             </p>
                             <select id="feed_list">
                                 <option value="default_feeds">US Fire Hose</option>
