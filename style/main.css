@@ -57,6 +57,7 @@ select {
     float:left;
     width:100%;
 }
+
 .feed-tag {
     font-size: 12px;
     color: #fff0f0;
@@ -257,6 +258,12 @@ select {
     width:100%;
     display: flex;
 }
+
+.feed_search {
+    background: var(--bs-card-footer-bg);
+    border: 0px;
+}
+
 .remove_all {
     margin: 0 5px 10px 0;
 }

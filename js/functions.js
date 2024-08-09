@@ -1,4 +1,4 @@
-var version = "v1.4.7";
+var version = "v1.9.4";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -35,8 +35,8 @@ var summarizing = false
 
 var feed_names = JSON.parse(localStorage.getItem("feed_names")) || {}
 
-function toggle_settings() {
-    if (document.getElementById('my_settings').style.display=="none") {
+function toggle_settings(clear=false) {
+    if ((clear == false) && document.getElementById('my_settings').style.display=="none") {
         document.getElementById('spin_container').style.display = "none";
         document.getElementById('news-feed').style.display = "none";
         document.getElementById('mark-all').style.display = "none";
@@ -1115,7 +1115,13 @@ function declutter(title_source,id_source,tf_source,n=0){
                                             mediaThumbnail = "images/cached_logos/propublica.png"
                                         } else if (link.includes("schneier.com")) {
                                             mediaThumbnail = "images/cached_logos/schneier.jpg"
-                                        }                                        
+                                        } else if (link.includes("scientificamerican.com")) {
+                                            mediaThumbnail = "images/cached_logos/sciam.png"
+                                        } else if (link.includes("lexblog.com")) {
+                                            mediaThumbnail = "images/cached_logos/lexblog.png"
+                                        } else if (link.includes("artificiallawyer.com")) {
+                                            mediaThumbnail = "images/cached_logos/al.png"
+                                        }                                          
                                         
                                         //} else if (link.includes("")) {
                                         //    mediaThumbnail = "images/cached_logos/"
@@ -1125,7 +1131,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     const itemId = link; // Using link as a unique identifier for items
                                     const isRead = readArticles[itemId] || false;
 
-                                    const priorityRating = getRating(feedTitle.replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(link).replace(/[^a-zA-Z]+/g,"-")+" "+title+" "+description,link,feedTitle); 
+                                    const priorityRating = getRating(feedTitle.replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(link).replace(/[^a-zA-Z]+/g,"-")+" "+title+" "+description,link,feedTitle,feedUrl); 
 
                                     articles.push({
                                         title,
@@ -1243,7 +1249,7 @@ function declutter(title_source,id_source,tf_source,n=0){
             if (crunch_numbers) {
                 tmp_ratings = []
                 for (article in articles){
-                    rating = getRating(articles[article]['feedTitle'].replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(articles[article]['link']).replace(/[^a-zA-Z]+/g,"-")+" "+articles[article]['title']+" "+articles[article]['description'],articles[article]['link'],articles[article]['feedTitle'])
+                    rating = getRating(articles[article]['feedTitle'].replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(articles[article]['link']).replace(/[^a-zA-Z]+/g,"-")+" "+articles[article]['title']+" "+articles[article]['description'],articles[article]['link'],articles[article]['feedTitle'],articles[article]['feedUrl'])
                     articles[article]["priorityRating"] = rating; 
                     tmp_ratings.push(rating)
                 }
@@ -1387,7 +1393,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                 } 
 
                 if (local_cutoff<=-3.5) {
-                    practical_cutoff = -10;
+                    practical_cutoff = -100;
                 } else {
                     practical_cutoff = local_cutoff;
                 }
@@ -1470,7 +1476,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <a href="https://${domain_from_link}" target="_blank"><img class="favicon" src="${favicon}" height="18px"></a> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small> 
+                                    <button class="feed_search" data-item-id="${feedUrl}"><img class="favicon" src="${favicon}" height="18px"> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small></button>  
                                     <span class="btn remove_feed" data-feed-index="${feedUrl}" data-feed-name="${feedTitle}">🚫</span>
                                 </div>
                             </div>
@@ -1486,6 +1492,12 @@ function declutter(title_source,id_source,tf_source,n=0){
                         const skipButton = article.querySelector(".skip");
                         const readButton = article.querySelector(".read-button");
 
+                        const feedSearch = article.querySelector(".feed_search");
+
+                        feedSearch.addEventListener("click", function() {
+                            regex_search(feedSearch.getAttribute("data-item-id"));
+                            setTimeout( function() {window.scrollTo(0,0)}, 100);
+                        });
 
                         mastoButton.addEventListener("click", function() {
 
@@ -1841,10 +1853,10 @@ function declutter(title_source,id_source,tf_source,n=0){
     }
 
     
-    function getRating(inputString,link="",feed_title="") {
+    function getRating(inputString,link="",feed_title="",feedUrl="") {
 
         if (regex_always!="" && !searching) {
-            full_input = inputString + " " + link + " " + feed_title 
+            full_input = inputString + " " + link + " " + feed_title + " " + feedUrl
             regex = new RegExp(regex_always, regex_always_op); 
             if (full_input.match(regex)) {
                 //console.log("Bumping match for /"+regex_always+"/"+regex_always_op)
@@ -2257,13 +2269,7 @@ function declutter(title_source,id_source,tf_source,n=0){
 
     const matching_regex = document.getElementById("matching_regex");
 
-    var searchResults = [];
-    const runSearch = document.getElementById("search_btn");
-    runSearch.addEventListener("click", function() {
-        const newSearch = prompt("Search titles, descriptions, feed names, and links (case-insensitive regex match on \"all\" articles):");
-        if (newSearch === null) {
-            return; //break out of the function early
-        }
+    function regex_search(newSearch) {
 
         document.getElementById('unread-count').style.display = "none";
         document.getElementById('read-count').style.display = "none";
@@ -2282,7 +2288,7 @@ function declutter(title_source,id_source,tf_source,n=0){
         matching_regex.innerHTML = `Results matching <b>"${newSearch}"</b>. `;
 
         saved_articles.forEach(articleData => {
-            testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle
+            testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl
             //console.log(testString)
             if (testString.match(regex)) {
                 searchResults.push(articleData);
@@ -2309,6 +2315,16 @@ function declutter(title_source,id_source,tf_source,n=0){
 
         lazyload();
         replace_broken();
+    }
+
+    var searchResults = [];
+    const runSearch = document.getElementById("search_btn");
+    runSearch.addEventListener("click", function() {
+        const newSearch = prompt("Search titles, descriptions, feed names, and links (case-insensitive regex match on \"all\" articles):");
+        if (newSearch === null) {
+            return; //break out of the function early
+        }   
+        regex_search(newSearch);
     });
 
     async function openai_call(prompt_text) {
@@ -2404,7 +2420,7 @@ function declutter(title_source,id_source,tf_source,n=0){
             //console.log("prompt_text: "+prompt_text)
 
             if ((document.getElementById("prompt_pref").value.search(/{{news-feed}}/g)>=0) && (cardDetails.substring(0,13000*4).trim().length<=0)) {
-                let text = `There doesn't seem to be anything in your news feed.\n\nYour LLM will likely make something up!!!!!`;
+                let text = `There doesn't seem to be anything in your news feed. Your LLM will likely make something up!!!!!`;
                 if (confirm(text) == true) {
                     openai_call(prompt_text);    
                 } else {
@@ -2756,7 +2772,7 @@ async function weatherAPI(lat,lon){
         weather_icon = "";
     }
 
-    document.getElementById('weather').innerHTML = "<a href='https://www.wunderground.com/weather/"+lat+","+lon+"' target='_blank' style='text-decoration:none;'>" + Math.round(data["current_weather"]["temperature"]) + "" + data["current_weather_units"]["temperature"]+" "+weather_icon+"</a>";
+    document.getElementById('weather').innerHTML = "<a href='https://www.wunderground.com/hourly/"+lat+","+lon+"' target='_blank' style='text-decoration:none;'>" + Math.round(data["current_weather"]["temperature"]) + "" + data["current_weather_units"]["temperature"]+" "+weather_icon+"</a>";
     document.getElementById('weather').style.display = "block";
 
     //return data
