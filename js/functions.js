@@ -948,10 +948,6 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     link = item.querySelector("link").textContent;
                                 }
 
-                                if(!link) {
-                                    link=""
-                                }
-
                                 try {
                                     title = item.querySelector("title").textContent;
                                 } catch (error) {
@@ -993,7 +989,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     }
                                 }
 
-                                if (description!="" && link!=""){
+                                if (description!="" && link){
         
                                     const re = /(https?:\/\/[^\s]+\.(?:png|jpg|jpeg|gif))/i;
                                     possible_img = description.match(re)

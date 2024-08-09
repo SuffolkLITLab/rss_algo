@@ -64,7 +64,7 @@ var feeds_long_list = [
     // Washington Post
     "https://www.washingtonpost.com/arcio/rss/category/politics/?itid=lk_inline_manual_2",
     "https://www.washingtonpost.com/arcio/rss/category/opinions/?itid=lk_inline_manual_7",
-    "https://feeds.washingtonpost.com/rss/sports?itid=lk_inline_manual_20",
+    //"https://feeds.washingtonpost.com/rss/sports?itid=lk_inline_manual_20",
     "https://feeds.washingtonpost.com/rss/business/technology?itid=lk_inline_manual_31",
     "https://feeds.washingtonpost.com/rss/national?itid=lk_inline_manual_32",
     "https://feeds.washingtonpost.com/rss/world?itid=lk_inline_manual_36",
