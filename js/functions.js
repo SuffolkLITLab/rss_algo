@@ -1301,12 +1301,16 @@ function declutter(title_source,id_source,tf_source,n=0){
     function domain_from_url(url) {
         var result
         var match
-        //if (match = url.match(/^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n\?\=]+)/im)) {
-        if (match = url.match(/^https?:\/\/([^\/]+)/)) {
-            result = match[1]
-            if (match = result.match(/^[^\.]+\.(.+\..+)$/)) {
+        try {
+            //if (match = url.match(/^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n\?\=]+)/im)) {
+            if (match = url.match(/^https?:\/\/([^\/]+)/)) {
                 result = match[1]
-            }
+                if (match = result.match(/^[^\.]+\.(.+\..+)$/)) {
+                    result = match[1]
+                }
+            }            
+        } catch (error) {
+            result = ""
         }
         return result
     }
