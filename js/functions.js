@@ -290,7 +290,7 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             alert("Error reading feed list. Loading default.")
         }
-        window.history.pushState({}, "", url.split("?")[0]);
+        //window.history.pushState({}, "", url.split("?")[0]);
     } else {
         load_default_feed = 1;
     }
