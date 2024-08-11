@@ -276,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // load feed
     const searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.has('text')){
+    if (searchParams.has('feeds')){
         if (feed_lib[searchParams.get('feeds').trim()]) {
             if (confirm(`By clicking "OK" you will overwrite your list of feeds and replace it with `+searchParams.get('feeds').trim()+`. Choose "Cancel" to stop without loading `+searchParams.get('feeds').trim()+`.`) == true) {
                 feed_name = searchParams.get('feeds').trim(); // "feeds_us_fire_hose_legal_tech"
