@@ -1,4 +1,4 @@
-var version = "v1.13.4";
+var version = "v1.14.4";
 
 history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
 
@@ -274,7 +274,32 @@ document.addEventListener("DOMContentLoaded", function() {
         body.classList.add("hidden-mode");
     }
 
-    let rssFeeds = JSON.parse(localStorage.getItem("feeds")) || default_feeds;
+    // load feed
+    const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.has('text')){
+        if (feed_lib[searchParams.get('feeds').trim()]) {
+            if (confirm(`By clicking "OK" you will overwrite your list of feeds and replace it with `+searchParams.get('feeds').trim()+`. Choose "Cancel" to stop without loading `+searchParams.get('feeds').trim()+`.`) == true) {
+                feed_name = searchParams.get('feeds').trim(); // "feeds_us_fire_hose_legal_tech"
+                localStorage.setItem("votelib",feed_name);
+                rssFeeds = feed_lib[feed_name];
+                localStorage.setItem("feeds",rssFeeds);
+                load_default_feed = 0;
+            } else {
+                load_default_feed = 1;
+            }
+        } else {
+            alert("Error reading feed list. Loading default.")
+        }
+        window.history.pushState({}, "", url.split("?")[0]);
+    } else {
+        load_default_feed = 1;
+    }
+
+    if (load_default_feed==1){
+        var feed_name = "default_feeds"
+        rssFeeds = JSON.parse(localStorage.getItem("feeds")) || feed_lib[feed_name];
+    }
+    
 
     function arr2obj(arr) {
         return arr.reduce(
@@ -849,9 +874,9 @@ function declutter(title_source,id_source,tf_source,n=0){
         
         document.getElementById('spin_container').innerHTML = `<div style="float:left;width:100%;height:115px;"><div id="spinner_here" style="margin:0 auto;width:65px;">&nbsp;</div></div>`;
         if (localStorage.getItem("darkMode")=="enabled") {
-            tickcolor = '#ddd';		
+            tickcolor = '#909090' //'#ddd';		
         } else {
-            tickcolor = '#000';		
+            tickcolor = '#909090' //'#000';		
         }
         start_spinner('spinner_here',tickcolor);
 
@@ -1267,9 +1292,12 @@ function declutter(title_source,id_source,tf_source,n=0){
 
             articles.sort((a, b) => new Date(a.pubDate) - new Date(b.pubDate));
 
+            // trim for memory
+            //console.log("before filter:",articles.length,"last",articles[0]["pubDate"])
             keep_last = Math.round(max_arts*1.5);
             articles = articles.slice(-keep_last)
-            
+            //console.log("after filter:",articles.length,"last",articles[0]["pubDate"])
+           
             articles.sort((a, b) => {
                 if (a.isRead && !b.isRead) return 1;
                 if (!a.isRead && b.isRead) return -1;
@@ -2192,6 +2220,7 @@ function declutter(title_source,id_source,tf_source,n=0){
         if (unreadcount.toLocaleString("en-US")<=0 && !HiddenModeState) {
             items = [
                         "Be kind. Have Fun. Try something new.",
+                        "Patience is a superpower.",
                         "In life and on apps, always question defaults. Fiddle with some settings, and see what happens.",
                         "Civilization is a positive-sum game."
                     ]
@@ -2523,7 +2552,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                 document.getElementById('mark-all').style.display = "none";
                 feed_name = document.getElementById("feed_list").value;
                 localStorage.setItem("votelib",feed_name);
-                rssFeeds = window[feed_name]
+                rssFeeds = feed_lib[feed_name]
                 localStorage.setItem("feeds",rssFeeds)
                 feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
                     <tr style="border-top:1px solid #eee"><td colspan=2><b>${feed_names[feed]}</b></td><tr>
