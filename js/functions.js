@@ -232,6 +232,29 @@ control.addEventListener("change", function(event){
 var xml_doc;
 var dfreq_last;
 
+// load feed
+const searchParams = new URLSearchParams(window.location.search);
+console.log(searchParams.get('feeds'))
+if (searchParams.has('feeds')){
+    if (feed_lib[searchParams.get('feeds').trim()]) {
+        if (confirm(`By clicking "OK" you will overwrite your list of feeds and replace it with `+searchParams.get('feeds').trim()+`. Choose "Cancel" to stop without loading `+searchParams.get('feeds').trim()+`.`) == true) {
+            feed_name = searchParams.get('feeds').trim(); // "feeds_us_fire_hose_legal_tech"
+            localStorage.setItem("votelib",feed_name);
+            rssFeeds = feed_lib[feed_name];
+            localStorage.setItem("feeds",rssFeeds);
+            load_default_feed = 0;
+        } else {
+            load_default_feed = 1;
+        }
+    } else {
+        alert("Error reading feed list. Loading default.")
+    }
+    //var url= document.location.href;
+    //window.history.pushState({}, "", url.split("?")[0]);
+} else {
+    load_default_feed = 1;
+}
+
 document.addEventListener("DOMContentLoaded", function() {
 
     const body = document.body;
@@ -272,27 +295,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (!HiddenModeState) {
         body.classList.add("hidden-mode");
-    }
-
-    // load feed
-    const searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.has('feeds')){
-        if (feed_lib[searchParams.get('feeds').trim()]) {
-            if (confirm(`By clicking "OK" you will overwrite your list of feeds and replace it with `+searchParams.get('feeds').trim()+`. Choose "Cancel" to stop without loading `+searchParams.get('feeds').trim()+`.`) == true) {
-                feed_name = searchParams.get('feeds').trim(); // "feeds_us_fire_hose_legal_tech"
-                localStorage.setItem("votelib",feed_name);
-                rssFeeds = feed_lib[feed_name];
-                localStorage.setItem("feeds",rssFeeds);
-                load_default_feed = 0;
-            } else {
-                load_default_feed = 1;
-            }
-        } else {
-            alert("Error reading feed list. Loading default.")
-        }
-        //window.history.pushState({}, "", url.split("?")[0]);
-    } else {
-        load_default_feed = 1;
     }
 
     if (load_default_feed==1){
