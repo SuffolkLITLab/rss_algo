@@ -2556,8 +2556,9 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 <button type="button" id="remove_all_feeds" class="btn btn-danger remove_all">Wipe All</button>
                             <p>
                             <hr>
-                                You current feeds were built on top of <a href="https://myrssalgo.com/?feeds=${feed_name}">myrssalgo.com/?feeds=${feed_name}</a>. Share that link to have folks start where you do.
-                            <hr>
+                            <p>
+                                <b>Current Feeds</b>: You experience was built on top of <a href="https://myrssalgo.org/?feeds=${feed_name}">myrssalgo.org/?feeds=${feed_name}</a>. Share that link to have folks start where you do.
+                            </p>
                             <table cellpadding="5px" width="100%">${feedList}</table>
                         </div>
                     </div>
