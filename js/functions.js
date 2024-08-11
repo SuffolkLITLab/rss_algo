@@ -1,4 +1,4 @@
-var version = "v1.15.4";
+var version = "v1.16.4";
 
 //history.replaceState('', document.title, window.location.pathname);
 //window.scrollTo(0, 0);
@@ -2556,7 +2556,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             <p>
                             <hr>
                             <p>
-                                <b>Current Feeds</b>: You experience was built on top of <a href="https://myrssalgo.org/?feeds=${feed_name}">myrssalgo.org/?feeds=${feed_name}</a>. Share that link to have folks start where you do.
+                                <b>Current Feeds</b>: You experience was built on top of <a href="?feeds=${feed_name}">myrssalgo.org/?feeds=${feed_name}</a>. Share that link to have folks start where you do.
                             </p>
                             <table cellpadding="5px" width="100%">${feedList}</table>
                         </div>

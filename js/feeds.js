@@ -315,7 +315,6 @@ var feeds_long_list = [
     "https://librarian.aedileworks.com/feed/",
     // Public Notice
     "https://www.publicnotice.co/feed",
-
     // Fix the News
     "https://fixthenews.com/rss/",
     // Media Nation (Dan Kennedy)
