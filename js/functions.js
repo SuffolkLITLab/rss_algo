@@ -309,7 +309,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     load_default_feed = 1;
                 }    
             }
-
         } else {
             alert("Error reading feed list. Loading default.")
             load_default_feed = 1;
@@ -2343,12 +2342,12 @@ function declutter(title_source,id_source,tf_source,n=0){
         
         document.getElementById('unread-count').style.display = "none";
         document.getElementById('read-count').style.display = "none";
-        document.getElementById('sum_msg').style.display = "none";
         document.getElementById('results-count').style.display = "block";
         document.getElementById('search_msg').style.display = "block";   
-        if (summarizing){
-            document.getElementById('sum_msg').style.display = "block";
-        }
+        //if (summarizing){
+        //    document.getElementById('sum_msg').style.display = "block";
+        //}
+        document.getElementById('sum_msg').style.display = "none";
         show_timeline();
 
         searchResults = []
@@ -2487,10 +2486,10 @@ function declutter(title_source,id_source,tf_source,n=0){
             // Log or process the cardDetails array as needed
             console.log(cardDetails.substring(0,13000*4));
             
-            prompt_text = document.getElementById("prompt_pref").value.replace(/{{news-feed}}/g, cardDetails.substring(0,13000*4))
+            prompt_text = document.getElementById("prompt_pref").value.replace(/{{news-feed}}/g, cardDetails.substring(0,100000*4)) // cutoff prompt size
             //console.log("prompt_text: "+prompt_text)
 
-            if ((document.getElementById("prompt_pref").value.search(/{{news-feed}}/g)>=0) && (cardDetails.substring(0,13000*4).trim().length<=0)) {
+            if ((document.getElementById("prompt_pref").value.search(/{{news-feed}}/g)>=0) && (cardDetails.substring(0,100000*4).trim().length<=0)) {
                 let text = `There doesn't seem to be anything in your news feed. Your LLM will likely make something up!!!!!`;
                 if (confirm(text) == true) {
                     openai_call(prompt_text);    

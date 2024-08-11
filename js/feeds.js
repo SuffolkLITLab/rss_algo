@@ -355,7 +355,7 @@ if (!localStorage.getItem("lookback")) {
 }
 
 if (!localStorage.getItem("cardcutoff")) {
-    localStorage.setItem("cardcutoff",30);
+    localStorage.setItem("cardcutoff",50);
 }
 
 if (!localStorage.getItem("backstop")) {
