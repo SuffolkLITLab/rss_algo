@@ -1799,7 +1799,7 @@ function declutter(title_source,id_source,tf_source,n=0){
         });
 
         if (!searching){
-            document.getElementById("mark-all").innerHTML = `<button id="mark-above-seen" class="btn btn-danger btn-block" style="margin: 15px 0 0;" onClick="document.getElementById('sum_msg').style.display = "none";document.getElementById('news-feed').style.display = 'none';document.getElementById('spin_container').innerHTML = \`<div style='float:left;width:100%;height:115px;'><div id='spinner_here' style='margin:0 auto;width:65px;'>&nbsp;</div></div>\`;">Mark Above as Seen</button>`
+            document.getElementById("mark-all").innerHTML = `<button id="mark-above-seen" class="btn btn-danger btn-block" style="margin: 15px 0 0;" onClick="document.getElementById('sum_msg').style.display = 'none';document.getElementById('news-feed').style.display = 'none';document.getElementById('spin_container').innerHTML = \`<div style='float:left;width:100%;height:115px;'><div id='spinner_here' style='margin:0 auto;width:65px;'>&nbsp;</div></div>\`;">Mark Above as Seen</button>`
             const markAboveSeen = document.getElementById("mark-above-seen");
 
             markAboveSeen.addEventListener("click", function() {
