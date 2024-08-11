@@ -102,7 +102,7 @@ document.getElementById("api_base").value = api_base;
 const api_key =  localStorage.getItem("api_key") || "";
 document.getElementById("api_key").value = api_key;
 
-const prompt_pref =  localStorage.getItem("prompt_pref") || `Read the following collection of headlines and introductory sentences for a set of news posts. Then provide a short briefing based on their content and only their content.\n-----\n{{news-feed}}\n-----\nNow provide your briefing. Keep it short, no more than 100 words!`;
+const prompt_pref =  localStorage.getItem("prompt_pref") || `Read the following collection of headlines and introductory sentences for a set of news posts. Then provide a short summary/briefing based on their content and only their content.\n-----\n{{news-feed}}\n-----\nNow provide your briefing. Keep it short, no more than 100 words!`;
 document.getElementById("prompt_pref").value = prompt_pref;
 
 if (api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
@@ -1799,7 +1799,7 @@ function declutter(title_source,id_source,tf_source,n=0){
         });
 
         if (!searching){
-            document.getElementById("mark-all").innerHTML = `<button id="mark-above-seen" class="btn btn-danger btn-block" style="margin: 15px 0 0;" onClick="document.getElementById('news-feed').style.display = 'none';document.getElementById('spin_container').innerHTML = \`<div style='float:left;width:100%;height:115px;'><div id='spinner_here' style='margin:0 auto;width:65px;'>&nbsp;</div></div>\`;">Mark Above as Seen</button>`
+            document.getElementById("mark-all").innerHTML = `<button id="mark-above-seen" class="btn btn-danger btn-block" style="margin: 15px 0 0;" onClick="document.getElementById('sum_msg').style.display = "none";document.getElementById('news-feed').style.display = 'none';document.getElementById('spin_container').innerHTML = \`<div style='float:left;width:100%;height:115px;'><div id='spinner_here' style='margin:0 auto;width:65px;'>&nbsp;</div></div>\`;">Mark Above as Seen</button>`
             const markAboveSeen = document.getElementById("mark-above-seen");
 
             markAboveSeen.addEventListener("click", function() {

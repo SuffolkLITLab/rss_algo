@@ -318,7 +318,18 @@ var feeds_long_list = [
 
     // Fix the News
     "https://fixthenews.com/rss/",
-
+    // Media Nation (Dan Kennedy)
+    "https://dankennedy.net/feed/",
+    // Law Dork
+    "https://www.lawdork.com/feed",
+    // Technology and Marketing Blog
+    "https://blog.ericgoldman.org/feed",
+    // EFF Updates
+    "https://www.eff.org/rss/updates.xml",
+    // The Verge
+    "https://www.theverge.com/rss/index.xml",
+    // Lit hub
+    "https://lithub.com/feed/"
 ]
 
 
@@ -364,7 +375,7 @@ if (!localStorage.getItem("backstop")) {
 }
 
 if (!localStorage.getItem("backstop")) {
-    localStorage.setItem("regex_never", "Deal of the Day:|Daily Deal:|on Sale|\% Off|Slate Quiz|The Crossword:|Wordle");
+    localStorage.setItem("regex_never", "Deal of the Day:|Daily Deal:|on Sale|\\% Off|\\$\\d+ Off|Slate Quiz|The Crossword:|Wordle");
     localStorage.setItem("regex_never_op", "i");
 }
 
