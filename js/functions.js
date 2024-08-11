@@ -1,7 +1,7 @@
-var version = "v1.14.4";
+var version = "v1.15.4";
 
-history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);
-
+//history.replaceState('', document.title, window.location.pathname);
+//window.scrollTo(0, 0);
 
 function countUnreadArticles() {
     const cardElements = document.querySelectorAll(".article-container");
@@ -102,7 +102,7 @@ document.getElementById("api_base").value = api_base;
 const api_key =  localStorage.getItem("api_key") || "";
 document.getElementById("api_key").value = api_key;
 
-const prompt_pref =  localStorage.getItem("prompt_pref") || `Read the following list of headlines and introductory sentences then provide a short briefing based on any political news you find.\n-----\n{{news-feed}}\n-----\nNow provide your briefing. Keep it short, no more than 100 words!`;
+const prompt_pref =  localStorage.getItem("prompt_pref") || `Read the following collection of headlines and introductory sentences for a set of news posts. Then provide a short briefing based on their content and only their content.\n-----\n{{news-feed}}\n-----\nNow provide your briefing. Keep it short, no more than 100 words!`;
 document.getElementById("prompt_pref").value = prompt_pref;
 
 if (api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
@@ -232,28 +232,6 @@ control.addEventListener("change", function(event){
 var xml_doc;
 var dfreq_last;
 
-// load feed
-const searchParams = new URLSearchParams(window.location.search);
-console.log(searchParams.get('feeds'))
-if (searchParams.has('feeds')){
-    if (feed_lib[searchParams.get('feeds').trim()]) {
-        if (confirm(`By clicking "OK" you will overwrite your list of feeds and replace it with `+searchParams.get('feeds').trim()+`. Choose "Cancel" to stop without loading `+searchParams.get('feeds').trim()+`.`) == true) {
-            feed_name = searchParams.get('feeds').trim(); // "feeds_us_fire_hose_legal_tech"
-            localStorage.setItem("votelib",feed_name);
-            rssFeeds = feed_lib[feed_name];
-            localStorage.setItem("feeds",rssFeeds);
-            load_default_feed = 0;
-        } else {
-            load_default_feed = 1;
-        }
-    } else {
-        alert("Error reading feed list. Loading default.")
-    }
-    //var url= document.location.href;
-    //window.history.pushState({}, "", url.split("?")[0]);
-} else {
-    load_default_feed = 1;
-}
 
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -295,6 +273,51 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (!HiddenModeState) {
         body.classList.add("hidden-mode");
+    }
+
+    // load feed
+    const searchParams = new URLSearchParams(window.location.search);
+    console.log(searchParams.get('feeds'))
+    if (searchParams.has('feeds')){
+        if (feed_lib[searchParams.get('feeds').trim()]) {
+            if (!localStorage.getItem("backstop")) {
+                feed_name = searchParams.get('feeds').trim(); // "feeds_us_fire_hose_legal_tech"
+                localStorage.setItem("votelib",feed_name);
+                rssFeeds = feed_lib[feed_name];
+                localStorage.setItem("feeds",rssFeeds);
+                localStorage.removeItem("upvotes");
+                localStorage.removeItem("downvotes");
+                localStorage.removeItem("read");
+                localStorage.setItem("backstop",new Date(0));
+                localStorage.setItem("articles", JSON.stringify([]));
+                localStorage.setItem("lastLoad", 0);
+                load_default_feed = 0;
+            } else {
+                if (confirm(`By clicking "OK" you will overwrite your list of feeds and replace it with "`+searchParams.get('feeds').trim()+`." Choose "Cancel" to stop without loading "`+searchParams.get('feeds').trim()+`."`) == true) {
+                    feed_name = searchParams.get('feeds').trim(); // "feeds_us_fire_hose_legal_tech"
+                    localStorage.setItem("votelib",feed_name);
+                    rssFeeds = feed_lib[feed_name];
+                    localStorage.setItem("feeds",rssFeeds);
+                    localStorage.removeItem("upvotes");
+                    localStorage.removeItem("downvotes");
+                    localStorage.removeItem("read");
+                    localStorage.setItem("backstop",new Date(0));
+                    localStorage.setItem("articles", JSON.stringify([]));
+                    localStorage.setItem("lastLoad", 0);
+                    load_default_feed = 0;
+                } else {
+                    load_default_feed = 1;
+                }    
+            }
+
+        } else {
+            alert("Error reading feed list. Loading default.")
+            load_default_feed = 1;
+        }
+        //var url= document.location.href;
+        //window.history.pushState({}, "", url.split("?")[0]);
+    } else {
+        load_default_feed = 1;
     }
 
     if (load_default_feed==1){
@@ -2173,6 +2196,9 @@ function declutter(title_source,id_source,tf_source,n=0){
 
     function updateItemCount() {
 
+        var url= document.location.href;
+        window.history.pushState({}, "", url.split("?")[0]);
+
         const readCount = Object.keys(readArticles).length.toLocaleString("en-US");
         var unreadCount = (countUnreadArticles() - document.querySelectorAll(".article-container[data-article-index='sponsor']").length).toLocaleString("en-US"); 
 
@@ -2314,9 +2340,10 @@ function declutter(title_source,id_source,tf_source,n=0){
     const matching_regex = document.getElementById("matching_regex");
 
     function regex_search(newSearch) {
-
+        
         document.getElementById('unread-count').style.display = "none";
         document.getElementById('read-count').style.display = "none";
+        document.getElementById('sum_msg').style.display = "none";
         document.getElementById('results-count').style.display = "block";
         document.getElementById('search_msg').style.display = "block";   
         if (summarizing){
@@ -2528,6 +2555,9 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 <button type="button" id="remove_all_add_selection" class="btn btn-danger remove_all">Wipe &amp; Replace w/ Above Selection</button>
                                 <button type="button" id="remove_all_feeds" class="btn btn-danger remove_all">Wipe All</button>
                             <p>
+                            <hr>
+                                You current feeds were built on top of <a href="https://myrssalgo.com/?feeds=${feed_name}">myrssalgo.com/?feeds=${feed_name}</a>. Share that link to have folks start where you do.
+                            <hr>
                             <table cellpadding="5px" width="100%">${feedList}</table>
                         </div>
                     </div>
@@ -2548,11 +2578,13 @@ function declutter(title_source,id_source,tf_source,n=0){
         removeALLaddSelection.addEventListener("click", function() {
             let text = "This will empty your current list of feeds, replacing it with the selection you made. It will remove all current records relating to articles, including votes. Choose OK to continue.";
             if (confirm(text) == true) {
+                var url= document.location.href;
                 clear_search();
                 show_timeline();
                 document.getElementById('news-feed').style.display = "none";
                 document.getElementById('mark-all').style.display = "none";
                 feed_name = document.getElementById("feed_list").value;
+                window.history.pushState({}, "", url.split("?")[0]+"?feeds="+feed_name);
                 localStorage.setItem("votelib",feed_name);
                 rssFeeds = feed_lib[feed_name]
                 localStorage.setItem("feeds",rssFeeds)

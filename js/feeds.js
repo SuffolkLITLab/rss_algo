@@ -332,7 +332,6 @@ feed_lib = {
     "feeds_us_fire_hose_legal_tech": feeds_long_list
 }
 
-
 // localStorage.upTFIDF
 defaultTFIDF = {
     "feeds_us_fire_hose_legal_tech": default_votes
