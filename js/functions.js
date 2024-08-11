@@ -293,7 +293,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 localStorage.setItem("lastLoad", 0);
                 load_default_feed = 0;
             } else {
-                if (confirm(`By clicking "OK" you will overwrite your list of feeds and replace it with "`+searchParams.get('feeds').trim()+`." Choose "Cancel" to stop without loading "`+searchParams.get('feeds').trim()+`."`) == true) {
+                if (confirm(`By clicking "OK" you will overwrite your list of feeds and replace it with "`+searchParams.get('feeds').trim()+`." It will also rest all of your votes and clear your history of read articles. Choose "Cancel" to stop without loading this new list or making any changes.`) == true) {
                     feed_name = searchParams.get('feeds').trim(); // "feeds_us_fire_hose_legal_tech"
                     localStorage.setItem("votelib",feed_name);
                     rssFeeds = feed_lib[feed_name];
