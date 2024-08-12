@@ -410,10 +410,12 @@ document.addEventListener("DOMContentLoaded", function() {
     async function fetchFeed(feedUrl) {
         document.getElementById('loading').style.display = "block";
 
+        // https://github.com/distribuyed/proxies?tab=readme-ov-file
         var proxy_01 = "https://corsproxy.io/?";
+        //var proxy_01 = "https://api.allorigins.win/raw?url=";
+        //var proxy_01 = "https://tools.suffolklitlab.org/rss_proxy/?url=";
         var proxy_02 = "https://api.cors.lol/?url=";
-        //var proxy_02 = "https://tools.suffolklitlab.org/rss_proxy/?url=";
-        var feedUrl_prox = proxy_01 + encodeURIComponent(feedUrl);
+        //var feedUrl_prox = proxy_01 + feedUrl //encodeURIComponent(feedUrl);
 
         async function fetchRSS(url) {
             try {
@@ -429,13 +431,18 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         async function tryFetchWithProxies() {
-            let response = await fetchRSS(feedUrl_prox);
+            let response = await fetchRSS(feedUrl);
             if (!response) {
-                console.log("Trying Suffolk's proxy for " + feedUrl);
-                feedUrl_prox = proxy_02 + feedUrl;
+                console.log("Trying first proxy for " + feedUrl);
+                feedUrl_prox = proxy_01 + encodeURIComponent(feedUrl);
                 response = await fetchRSS(feedUrl_prox);
                 if (!response) {
-                    console.log("Error fetching with both proxies.");
+                    console.log("Trying second proxy for " + feedUrl);
+                    feedUrl_prox = proxy_02 + feedUrl; //no encoding for this service
+                    response = await fetchRSS(feedUrl_prox);
+                    if (!response) {
+                        console.log("Error fetching with both proxies.");
+                    }
                 }
             }
             return response;
@@ -447,7 +454,7 @@ document.addEventListener("DOMContentLoaded", function() {
         //    }
         //});
 
-        var response = await tryFetchWithProxies(feedUrl_prox);   
+        var response = await tryFetchWithProxies(feedUrl);   
         const data = await response.text();
 
         n_feeds += 1;
@@ -2083,7 +2090,7 @@ function declutter(title_source,id_source,tf_source,n=0){
         return tf;
     }
 
-    function topWords(wordObj,exclude) {         
+    function topWords(wordObj,n=115) {         
 
         //console.log(wordObj)
         
@@ -2109,7 +2116,7 @@ function declutter(title_source,id_source,tf_source,n=0){
             return requiredObj;
         };
 
-        n = 115;
+        //n = 115;
         word_list = pickHighest(wordObj, n)
         if (Object.keys(word_list).length>0) {
             i = 0
@@ -2535,7 +2542,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 Consider starting with a premade list. Then over time you can whittle it down and add new feeds as you like. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
                             </p>
                             <p>
-                                If a feed inludes a parenthetical that means it comes with pre-trained algo focusing on the named theme. Your interactions will of course refine its operation.
+                                If a feed inludes a parenthetical that means it comes with a pre-trained algo focusing on the named theme. Your interactions will of course refine its operation.
                             </p>
                             <select id="feed_list">
                                 <option value="default_feeds">US Fire Hose</option>
