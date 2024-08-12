@@ -1173,6 +1173,8 @@ function declutter(title_source,id_source,tf_source,n=0){
                                             mediaThumbnail = "images/cached_logos/al.png"
                                         } else if (link.includes("suffolklitlab.org")) {
                                             mediaThumbnail = "images/cached_logos/lit.png"
+                                        } else if (link.includes("eff.org")) {
+                                            mediaThumbnail = "images/cached_logos/eff.png"
                                         }                                          
                                         
                                         //} else if (link.includes("")) {

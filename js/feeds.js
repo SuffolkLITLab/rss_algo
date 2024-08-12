@@ -295,12 +295,6 @@ var feeds_long_list = [
     
     // One Usefulthing
     "https://www.oneusefulthing.org/feed",
-    // AI Law Librarians
-    "https://www.ailawlibrarians.com/feed/",
-    // SCOTUS Blog
-    "https://www.scotusblog.com/feed/",
-    // LawyerExMachina
-    "https://buttondown.email/LawyerExMachina/rss",
     // Suffolk LIT Lab
     "https://suffolklitlab.org/feed/",
     // Sadly Not Havoc Dinosaur
@@ -361,7 +355,7 @@ if (!localStorage.getItem("cooldown")) {
 }
 
 if (!localStorage.getItem("lookback")) {
-    localStorage.setItem("lookback",5);
+    localStorage.setItem("lookback",3);
 }
 
 if (!localStorage.getItem("cardcutoff")) {
