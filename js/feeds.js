@@ -1,6 +1,6 @@
 var feeds_nyt = [
     // New York Times
-    //"https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml",
+    "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/US.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml",
@@ -388,7 +388,7 @@ var feeds_long_list = [
     "https://www.scotusblog.com/feed/",
     
     // MA Lawyers Weekly
-    //"https://masslawyersweekly.com/feed/",
+    "https://masslawyersweekly.com/feed/",
     
     // Law Next
     "https://www.lawnext.com/feed",
@@ -519,7 +519,7 @@ if (!localStorage.getItem("cooldown")) {
 }
 
 if (!localStorage.getItem("lookback")) {
-    localStorage.setItem("lookback",3);
+    localStorage.setItem("lookback",5);
 }
 
 if (!localStorage.getItem("cardcutoff")) {

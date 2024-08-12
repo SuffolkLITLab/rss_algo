@@ -1,4 +1,4 @@
-var version = "v1.16.4";
+var version = "v1.17.4";
 
 //history.replaceState('', document.title, window.location.pathname);
 //window.scrollTo(0, 0);
@@ -411,11 +411,12 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('loading').style.display = "block";
 
         // https://github.com/distribuyed/proxies?tab=readme-ov-file
+        var proxy_00 = "https://workers-playground-dawn-hill-de20.dcolarusso.workers.dev/?url=";
         var proxy_01 = "https://corsproxy.io/?";
         //var proxy_01 = "https://api.allorigins.win/raw?url=";
         //var proxy_01 = "https://tools.suffolklitlab.org/rss_proxy/?url=";
         var proxy_02 = "https://api.cors.lol/?url=";
-        //var feedUrl_prox = proxy_01 + feedUrl //encodeURIComponent(feedUrl);
+        var feedUrl_prox = proxy_00 + encodeURIComponent(feedUrl);
 
         async function fetchRSS(url) {
             try {
@@ -431,18 +432,22 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         async function tryFetchWithProxies() {
-            let response = await fetchRSS(feedUrl);
+            let response = await fetchRSS(feedUrl_prox);
             if (!response) {
                 console.log("Trying first proxy for " + feedUrl);
                 feedUrl_prox = proxy_01 + encodeURIComponent(feedUrl);
-                response = await fetchRSS(feedUrl_prox);
-                if (!response) {
+                response2 = await fetchRSS(feedUrl_prox);
+                if (!response2) {
                     console.log("Trying second proxy for " + feedUrl);
                     feedUrl_prox = proxy_02 + feedUrl; //no encoding for this service
-                    response = await fetchRSS(feedUrl_prox);
-                    if (!response) {
+                    response3 = await fetchRSS(feedUrl_prox);
+                    if (!response3) {
                         console.log("Error fetching with both proxies.");
+                    } else {
+                        response = response3
                     }
+                } else {
+                    response = response2
                 }
             }
             return response;
@@ -454,7 +459,7 @@ document.addEventListener("DOMContentLoaded", function() {
         //    }
         //});
 
-        var response = await tryFetchWithProxies(feedUrl);   
+        var response = await tryFetchWithProxies(feedUrl_prox);   
         const data = await response.text();
 
         n_feeds += 1;
