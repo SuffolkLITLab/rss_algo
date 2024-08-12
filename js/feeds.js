@@ -463,6 +463,9 @@ var feeds_long_list = [
     // Tor (Reactor)
     "https://reactormag.com/feed",   
 
+    // arXiv
+    "https://rss.arxiv.org/rss/cs.AI+cs.LG",
+
 ]
 
 
@@ -497,6 +500,7 @@ default_doc_counts = {"df_arr":{"one-useful-thing":1,"oneusefulthing-org":1,"cha
 
 feed_lib = {
     "default_feeds": feeds_long_list,
+    "feeds_us_fire_hose": feeds_long_list,
     "feeds_us_fire_hose_legal_tech": feeds_long_list
 }
 

@@ -1187,6 +1187,8 @@ function declutter(title_source,id_source,tf_source,n=0){
                                             mediaThumbnail = "images/cached_logos/lit.png"
                                         } else if (link.includes("eff.org")) {
                                             mediaThumbnail = "images/cached_logos/eff.png"
+                                        }  else if (link.includes("arxiv.org")) {
+                                            mediaThumbnail = "images/cached_logos/arxiv.png"
                                         }                                          
                                         
                                         //} else if (link.includes("")) {
@@ -1198,9 +1200,6 @@ function declutter(title_source,id_source,tf_source,n=0){
                                     const isRead = readArticles[itemId] || false;
 
                                     const priorityRating = getRating(feedTitle.replace(/[^a-zA-Z]+/g,"-")+": "+domain_from_url(link).replace(/[^a-zA-Z]+/g,"-")+" "+title+" "+description,link,feedTitle,feedUrl); 
-
-
-
 
                                     articles.push({
                                         title,
