@@ -1585,7 +1585,7 @@ function declutter(title_source,id_source,tf_source,n=0){
 
                         feedSearch.addEventListener("click", function() {
                             search_string = feedSearch.getAttribute("data-item-id")
-                            search_string = search_string.replaceAll("?","\\?")
+                            search_string = search_string.replaceAll("?","\\?").replaceAll("+","\\+").replaceAll(".","\\.")
                             //console.log(search_string)
                             regex_search(search_string);
                             setTimeout( function() {window.scrollTo(0,0)}, 100);
@@ -2108,7 +2108,7 @@ function declutter(title_source,id_source,tf_source,n=0){
         return tf;
     }
 
-    function topWords(wordObj,n=115) {         
+    function topWords(wordObj,exclude,n=115) {         
 
         //console.log(wordObj)
         
@@ -2560,13 +2560,15 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 Consider starting with a premade list. Then over time you can whittle it down and add new feeds as you like. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
                             </p>
                             <p>
-                                If a feed inludes a parenthetical that means it comes with a pre-trained algo focusing on the named theme. Your interactions will of course refine its operation.
+                                If a feed inludes a parenthetical that means it comes with a pre-trained algo focusing on the named theme. Your interactions will of course refine its operation, and FWIW, it includes the same feeds as others with the same name. It's just the intial focus that's different.
                             </p>
                             <select id="feed_list">
                                 <option value="default_feeds">Generic US Mix</option>
-                                <option value="default_feeds_legal_tech">Generic US Mix (legal tech)</option>
+                                <option value="default_feeds_legal_tech">Generic US Mix (legal tech &amp; AI)</option>
+                                <option value="default_feeds_science">Generic US Mix (math, science, &amp; space)</option>
                                 <option value="feeds_us_fire_hose">Whittle Me Down: US Fire Hose</option>
-                                <option value="feeds_us_fire_hose_legal_tech">Whittle Me Down: US Fire Hose (legal tech)</option>
+                                <option value="feeds_us_fire_hose_legal_tech">Whittle Me Down: US Fire Hose (legal tech &amp; AI)</option>
+                                <option value="feeds_us_fire_hose_science">Whittle Me Down: US Fire Hose (math, science, &amp; space)</option>
                                 <!--<option value="default_feeds">Default: Generic US News Mix (small)</option>
                                 <option value="magazine_feeds">Mags: New Yorker, Economist, Atlantic, Vanity Fair, Wired, Rolling Stone, Quanta, Nautilus, &amp; Aeon</option>
                                 <option value="papers_feeds">Papers: NYT, WaPo, WSJ, LA Times &amp; The Guardian</option>
