@@ -2589,7 +2589,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             <p>
                             <hr>
                             <p>
-                                <b>Current Feeds</b>: You experience was built on top of <a href="?feeds=${feed_name}">myrssalgo.org/?feeds=${feed_name}</a>. Share that link to have folks start where you do.
+                                <b>Current Feeds</b>: You experience was built on top of <a href="?feeds=${localStorage.getItem("votelib")}">myrssalgo.org/?feeds=${localStorage.getItem("votelib")}</a>. Share that link to have folks start where you do.
                             </p>
                             <table cellpadding="5px" width="100%">${feedList}</table>
                         </div>
