@@ -1,4 +1,4 @@
-var version = "v1.18.4";
+var version = "v1.19.4";
 
 //history.replaceState('', document.title, window.location.pathname);
 //window.scrollTo(0, 0);
