@@ -1,4 +1,4 @@
-var version = "v1.17.4";
+var version = "v1.18.4";
 
 //history.replaceState('', document.title, window.location.pathname);
 //window.scrollTo(0, 0);
@@ -293,7 +293,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 localStorage.setItem("lastLoad", 0);
                 load_default_feed = 0;
             } else {
-                if (confirm(`By clicking "OK" you will overwrite your list of feeds and replace it with "`+searchParams.get('feeds').trim()+`." It will also rest all of your votes and clear your history of read articles. Choose "Cancel" to stop without loading this new list or making any changes.`) == true) {
+                if (confirm(`By clicking "OK" you will overwrite your list of feeds and replace it with "`+searchParams.get('feeds').trim()+`." It will also rest all of your votes and clear your history of read articles. Regex boosts and mutes will remain in place, as will other settings. Choose "Cancel" to stop without loading this new list or making any changes.`) == true) {
                     feed_name = searchParams.get('feeds').trim(); // "feeds_us_fire_hose_legal_tech"
                     localStorage.setItem("votelib",feed_name);
                     rssFeeds = feed_lib[feed_name];
@@ -997,7 +997,19 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 }
                             }
 
-                            //console.log(pubDate)
+                            if (unknown_pubDate) {
+                                try {
+                                    adate = item.querySelector("description").textContent.match(/arXiv:\d+\.\d+/);
+                                } finally {
+                                    if (adate.length>0) {
+                                        const tmp_date = new Date(adate[0].slice(8,10)+"-"+adate[0].slice(11,13)+"-"+adate[0].slice(6,8)); 
+                                        pubDate = tmp_date;
+                                        unknown_pubDate = false;    
+                                    }
+                                }
+                            }
+
+                            //console.log(new Date(pubDate).toLocaleString())
                             
                             //console.log("Max items per feed:",(0.75*max_arts/rssFeeds.length))
                             //if ((pubDate >= backstop) && (pubDate >= lookback) && (j<Math.floor(1.45*max_arts/rssFeeds.length)) && (pubDate <= new Date())) {

@@ -323,7 +323,7 @@ var feeds_lawfare = [
         "https://www.lawfaremedia.org/feeds/cybersecurity-tech",
         "https://www.lawfaremedia.org/feeds/democracy-elections",
         "https://www.lawfaremedia.org/feeds/executive-branch",
-        "https://www.lawfaremedia.org/feeds/foreign-relations-international-law",
+        //"https://www.lawfaremedia.org/feeds/foreign-relations-international-law", Running into erros
         "https://www.lawfaremedia.org/feeds/intelligence",
         "https://www.lawfaremedia.org/feeds/lawfare-news",
         "https://www.lawfaremedia.org/feeds/states-localities",
@@ -356,11 +356,37 @@ var feeds_lexblog = [
         "https://www.lexblog.com/government/feed/",
         "https://www.lexblog.com/law-school-blogs/feed/",
 ]
-
 var feeds_lexblog_sm = [
     // LexBlog
     "https://www.lexblog.com/feed/",
 ]
+
+
+var feeds_hacker = [
+    // Hacker News
+    "https://hnrss.org/best",
+]
+
+var feeds_arxiv = [
+    // arXiv
+    "https://rss.arxiv.org/rss/cs.LG", // machine learning
+    "https://rss.arxiv.org/rss/cs.AI", // AI
+]
+var feeds_arxiv_sm = [
+    // arXiv
+    "https://rss.arxiv.org/rss/cs.LG+cs.AI", // machine learning + AI
+]
+
+var feeds_arlington = [
+    // Your Arlington
+    "https://www.yourarlington.com/?format=feed&type=rss",
+]
+
+var feeds_malawyers = [
+    // MA Lawyers Weekly
+    "https://masslawyersweekly.com/feed/",
+]
+
 
 var feeds_long_list = [
 
@@ -375,6 +401,9 @@ var feeds_long_list = [
 
     // Vanity Fair
     "https://www.vanityfair.com/feed/rss",  
+
+    // Fast Company
+    "https://www.fastcompany.com/latest/rss?truncated=true",
   
     // Vox
     "https://www.vox.com/rss/index.xml",
@@ -403,7 +432,7 @@ var feeds_long_list = [
     "https://fixthenews.com/rss/",
 
     // Public Notice
-    "https://www.publicnotice.co/feed",
+    //"https://www.publicnotice.co/feed",
     
     // Media Nation (Dan Kennedy)
     "https://dankennedy.net/feed/",
@@ -412,9 +441,6 @@ var feeds_long_list = [
     
     // XKCD
     "https://xkcd.com/rss.xml",
-
-    // Hacker News
-    "https://hnrss.org/best",
 
     // Simon Willison's Newsletter
     "https://simonw.substack.com/feed/",
@@ -486,9 +512,6 @@ var feeds_long_list = [
     // SCOTUS Blog
     "https://www.scotusblog.com/feed/",
     
-    // MA Lawyers Weekly
-    "https://masslawyersweekly.com/feed/",
-    
     // Law Next
     "https://www.lawnext.com/feed",
     
@@ -551,22 +574,16 @@ var feeds_long_list = [
     "https://spacenews.com/feed/",
     
     // Clarksworld
-    "https://clarkesworldmagazine.com/feed/",
+    //"https://clarkesworldmagazine.com/feed/",
     
     // Lightspeed
     //"https://www.lightspeedmagazine.com/rss-2/",
     
     // Escape Pod
-    "https://escapepod.org/feed/podcast/",
+    //"https://escapepod.org/feed/podcast/",
     
     // Tor (Reactor)
     "https://reactormag.com/feed",   
-
-    // arXiv
-    "https://rss.arxiv.org/rss/cs.AI+cs.LG",
-
-    // Your Arlington
-    "https://www.yourarlington.com/?format=feed&type=rss",
 
 ]
 
@@ -591,6 +608,7 @@ var default_feeds = feeds_long_list
 .concat(feeds_aeon_sm)
 .concat(feeds_lawfare_sm)
 .concat(feeds_lexblog_sm)
+.concat(feeds_arxiv_sm)
 ;
 
 var feeds_long_list = feeds_long_list
@@ -614,7 +632,10 @@ var feeds_long_list = feeds_long_list
 .concat(feeds_aeon)
 .concat(feeds_lawfare)
 .concat(feeds_lexblog)
-//.concat(feeds_lexblog_all_in_one)
+.concat(feeds_hacker)
+.concat(feeds_arxiv)
+.concat(feeds_arlington)
+.concat(feeds_malawyers)
 ;
 
 // localStorage.upTFIDF
@@ -655,7 +676,7 @@ if (!localStorage.getItem("lookback")) {
 }
 
 if (!localStorage.getItem("cardcutoff")) {
-    localStorage.setItem("cardcutoff",50);
+    localStorage.setItem("cardcutoff",30);
 }
 
 if (!localStorage.getItem("backstop")) {
