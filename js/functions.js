@@ -1,4 +1,4 @@
-var version = "v1.19.4";
+var version = "v1.18.4";
 
 //history.replaceState('', document.title, window.location.pathname);
 //window.scrollTo(0, 0);
@@ -1482,7 +1482,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                 } 
 
                 if (local_cutoff<=-3.5) {
-                    practical_cutoff = 0;
+                    practical_cutoff = -1*1000;
                 } else {
                     practical_cutoff = local_cutoff;
                 }
