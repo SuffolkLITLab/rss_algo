@@ -1187,8 +1187,10 @@ function declutter(title_source,id_source,tf_source,n=0){
                                             mediaThumbnail = "images/cached_logos/lit.png"
                                         } else if (link.includes("eff.org")) {
                                             mediaThumbnail = "images/cached_logos/eff.png"
-                                        }  else if (link.includes("arxiv.org")) {
+                                        } else if (link.includes("arxiv.org")) {
                                             mediaThumbnail = "images/cached_logos/arxiv.png"
+                                        } else if (link.includes("lawfaremedia.org")) {
+                                            mediaThumbnail = "images/cached_logos/lawfare.png"
                                         }                                          
                                         
                                         //} else if (link.includes("")) {
@@ -2549,8 +2551,10 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 If a feed inludes a parenthetical that means it comes with a pre-trained algo focusing on the named theme. Your interactions will of course refine its operation.
                             </p>
                             <select id="feed_list">
-                                <option value="default_feeds">US Fire Hose</option>
-                                <option value="feeds_us_fire_hose_legal_tech">US Fire Hose (legal tech)</option>
+                                <option value="default_feeds">Generic US Mix</option>
+                                <option value="default_feeds_legal_tech">Generic US Mix (legal tech)</option>
+                                <option value="feeds_us_fire_hose">Whittle Me Down: US Fire Hose</option>
+                                <option value="feeds_us_fire_hose_legal_tech">Whittle Me Down: US Fire Hose (legal tech)</option>
                                 <!--<option value="default_feeds">Default: Generic US News Mix (small)</option>
                                 <option value="magazine_feeds">Mags: New Yorker, Economist, Atlantic, Vanity Fair, Wired, Rolling Stone, Quanta, Nautilus, &amp; Aeon</option>
                                 <option value="papers_feeds">Papers: NYT, WaPo, WSJ, LA Times &amp; The Guardian</option>

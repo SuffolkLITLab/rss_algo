@@ -27,18 +27,27 @@ var feeds_nyt = [
     "https://www.nytimes.com/svc/collections/v1/publish/https://www.nytimes.com/by/bret-stephens/rss.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/sunday-review.xml",
 ]
+var feeds_nyt_sm = [
+    // New York Times
+    "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml",
+]
 
 var feeds_wapo = [
     // Washington Post
+    //"https://www.washingtonpost.com/arcio/rss/",
     "https://www.washingtonpost.com/arcio/rss/category/politics/?itid=lk_inline_manual_2",
     "https://www.washingtonpost.com/arcio/rss/category/opinions/?itid=lk_inline_manual_7",
     //"https://feeds.washingtonpost.com/rss/sports?itid=lk_inline_manual_20",
-    "https://feeds.washingtonpost.com/rss/business/technology?itid=lk_inline_manual_31",
+    "https://feeds.washingtonpost.com/rss/business/technology?itid=lk_inline_manual_31", // National
     "https://feeds.washingtonpost.com/rss/national?itid=lk_inline_manual_32",
     "https://feeds.washingtonpost.com/rss/world?itid=lk_inline_manual_36",
     "https://feeds.washingtonpost.com/rss/business?itid=lk_inline_manual_37",
     "https://feeds.washingtonpost.com/rss/lifestyle?itid=lk_inline_manual_38",
     "https://feeds.washingtonpost.com/rss/entertainment?itid=lk_inline_manual_39",
+]
+var feeds_wapo_sm = [
+    // Washington Post
+    "https://feeds.washingtonpost.com/rss/business/technology?itid=lk_inline_manual_31",
 ]
 
 var feeds_wsj = [
@@ -50,9 +59,14 @@ var feeds_wsj = [
     "https://feeds.a.dj.com/rss/RSSWSJD.xml", // Tech What's New
     "https://feeds.a.dj.com/rss/RSSLifestyle.xml",
 ]
+var feeds_wsj_sm = [
+    // Wall Street Journal
+    "https://feeds.a.dj.com/rss/RSSWorldNews.xml",
+]
 
 var feeds_latimes = [
     // LA Times
+    "https://www.latimes.com/world-nation/rss2.0.xml",
     "https://www.latimes.com/business/rss2.0.xml",
     "https://www.latimes.com/environment/rss2.0.xml",
     "https://www.latimes.com/entertainment-arts/rss2.0.xml",
@@ -64,6 +78,9 @@ var feeds_latimes = [
     "https://www.latimes.com/science/rss2.0.xml",
     "https://www.latimes.com/sports/rss2.0.xml",
     "https://www.latimes.com/travel/rss2.0.xml",
+]
+var feeds_latimes_sm = [
+    // LA Times
     "https://www.latimes.com/world-nation/rss2.0.xml",
 ]
 
@@ -74,9 +91,14 @@ var feeds_bloomberg = [
     "https://feeds.bloomberg.com/technology/news.rss",
     "https://feeds.bloomberg.com/wealth/news.rss",
 ]
+var feeds_bloomberg_sm = [
+    // Bloomberg
+    "https://feeds.bloomberg.com/markets/news.rss",
+]
 
 var feeds_npr = [
     // NPR
+    //"https://feeds.npr.org/1002/rss.xml" // TOP STORIES
     "https://feeds.npr.org/1003/rss.xml", //national
     "https://feeds.npr.org/1004/rss.xml", //world
     "https://feeds.npr.org/1006/rss.xml", //business
@@ -91,9 +113,14 @@ var feeds_npr = [
     "https://feeds.npr.org/1167/rss.xml", //climate
     "https://feeds.npr.org/1001/rss.xml", //news
 ]
+var feeds_npr_sm = [
+    // NPR
+    "https://feeds.npr.org/1002/rss.xml" // TOP STORIES
+]
 
 var feeds_wgbh = [
     //GBH News
+    //"https://www.wgbh.org/news.rss",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCx_SjDi4CS5ALkWCS9ffldQ", 
     "https://www.wgbh.org/news/local.rss",
     "https://www.wgbh.org/news/politics.rss",
@@ -101,6 +128,10 @@ var feeds_wgbh = [
     "https://www.wgbh.org/news/housing.rss",
     "https://www.wgbh.org/news/health.rss",
     "https://www.wgbh.org/news/commentary.rss",
+]
+var feeds_wgbh_sm = [
+    //GBH News
+    "https://www.wgbh.org/news.rss",
 ]
 
 var feeds_economist = [
@@ -126,6 +157,10 @@ var feeds_economist = [
     "https://www.economist.com/economic-and-financial-indicators/rss.xml",
     "https://www.economist.com/science-and-technology/rss.xml",
 ]
+var feeds_economist_sm = [
+    // The Economist
+    "https://www.economist.com/leaders/rss.xml",
+]
 
 var feeds_guardian = [
     // The Guardian
@@ -138,9 +173,14 @@ var feeds_guardian = [
     "https://www.theguardian.com/science/rss",
     "https://www.theguardian.com/us-news/series/the-fight-for-democracy/rss",
 ]
+var feeds_guardian_sm = [
+    // The Guardian
+    "https://www.theguardian.com/us-news/rss",
+]
     
 var feeds_bbc = [
     // BBC
+    //"http://feeds.bbci.co.uk/news/rss.xml",
     "https://feeds.bbci.co.uk/news/world/rss.xml",
     "https://feeds.bbci.co.uk/news/uk/rss.xml",
     "https://feeds.bbci.co.uk/news/business/rss.xml",
@@ -150,6 +190,10 @@ var feeds_bbc = [
     "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml",
     "https://feeds.bbci.co.uk/news/technology/rss.xml",
     "https://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml",
+]
+var feeds_bbc_sm = [
+    // BBC
+    "http://feeds.bbci.co.uk/news/rss.xml",
 ]
 
 var feeds_patch = [
@@ -163,15 +207,21 @@ var feeds_patch = [
 
 var feeds_slate = [
     // Slate
+    //"https://slate.com/feeds/all.rss",
     "https://slate.com/feeds/news-and-politics.rss",
     "https://slate.com/feeds/technology.rss",
     "https://slate.com/feeds/business.rss",
     "https://slate.com/feeds/culture.rss",
     "https://slate.com/feeds/human-interest.rss",
 ]
+var feeds_slate_sm = [
+    // Slate
+    "https://slate.com/feeds/all.rss",
+]
 
 var feeds_rollingstone = [    
     // Rollingstone
+    //"https://www.rollingstone.com/feed/rss/",
     "https://www.rollingstone.com/music/feed/",
     "https://www.rollingstone.com/politics/feed/",
     "https://www.rollingstone.com/tv-movies/feed/",
@@ -179,17 +229,27 @@ var feeds_rollingstone = [
     //"https://www.rollingstone.com/product-recommendations/feed/",
 
 ]
+var feeds_rollingstone_sm = [    
+    // Rollingstone
+    "https://www.rollingstone.com/feed/rss/",
+]
 
 var feeds_arstechnica = [
     // Arstechnica
+    //"http://feeds.arstechnica.com/arstechnica/index",
     "https://feeds.arstechnica.com/arstechnica/technology-lab",
     "https://feeds.arstechnica.com/arstechnica/tech-policy",
     "https://feeds.arstechnica.com/arstechnica/science",
     "https://feeds.arstechnica.com/arstechnica/features",  
 ]
+var feeds_arstechnica_sm = [
+    // Arstechnica
+    "http://feeds.arstechnica.com/arstechnica/index",
+]
 
 var feeds_theconversation = [
     // The Conversation
+    //"https://theconversation.com/us/articles.atom",
     "https://theconversation.com/us/arts/articles.atom",
     "https://theconversation.com/us/business/articles.atom",
     "https://theconversation.com/us/education/articles.atom",
@@ -200,9 +260,14 @@ var feeds_theconversation = [
     "https://theconversation.com/us/technology/articles.atom",
     "https://theconversation.com/us/articles.atom",
 ]
+var feeds_theconversation_sm = [
+    // The Conversation
+    "https://theconversation.com/us/articles.atom",
+]
 
 var feeds_phys = [
     // Phys.org
+    //"https://phys.org/rss-feed/breaking/",
     "https://phys.org/rss-feed/earth-news/",
     "https://phys.org/rss-feed/science-news/",
     "https://phys.org/rss-feed/nanotech-news/",
@@ -211,9 +276,14 @@ var feeds_phys = [
     "https://phys.org/rss-feed/biology-news/",
     "https://phys.org/rss-feed/chemistry-news/",               
 ]
+var feeds_phys_sm = [
+    // Phys.org
+    "https://phys.org/rss-feed/breaking/",
+]
 
 var feeds_wired = [
     // Wired
+    //"https://www.wired.com/feed/rss",
     "https://www.wired.com/feed/category/business/latest/rss",
     "https://www.wired.com/feed/tag/ai/latest/rss",
     "https://www.wired.com/feed/category/culture/latest/rss",
@@ -224,14 +294,45 @@ var feeds_wired = [
     "https://www.wired.com/feed/category/backchannel/latest/rss",
     //"https://www.wired.com/feed/tag/wired-guide/latest/rss",
 ]
+var feeds_wired_sm = [
+    // Wired
+    "https://www.wired.com/feed/rss",
+]
 
 var feeds_aeon = [
     // Aeon
+    //"https://aeon.co/feed.rss",
     "https://aeon.co/philosophy.rss",
     "https://aeon.co/science.rss",
     "https://aeon.co/psychology.rss",
     "https://aeon.co/society.rss",
     "https://aeon.co/culture.rss",
+]
+var feeds_aeon_sm = [
+    // Aeon
+    "https://aeon.co/feed.rss",
+]
+
+var feeds_lawfare = [
+    // Law Fare
+    //"https://www.lawfaremedia.org/feeds/articles",
+        "https://www.lawfaremedia.org/feeds/armed-conflict",
+        "https://www.lawfaremedia.org/feeds/congress",
+        "https://www.lawfaremedia.org/feeds/courts-litigation",
+        "https://www.lawfaremedia.org/feeds/criminal-justice-rule-of-law",
+        "https://www.lawfaremedia.org/feeds/cybersecurity-tech",
+        "https://www.lawfaremedia.org/feeds/democracy-elections",
+        "https://www.lawfaremedia.org/feeds/executive-branch",
+        "https://www.lawfaremedia.org/feeds/foreign-relations-international-law",
+        "https://www.lawfaremedia.org/feeds/intelligence",
+        "https://www.lawfaremedia.org/feeds/lawfare-news",
+        "https://www.lawfaremedia.org/feeds/states-localities",
+        "https://www.lawfaremedia.org/feeds/surveillance-privacy",
+        "https://www.lawfaremedia.org/feeds/surveillance-privacy",
+]
+var feeds_lawfare_sm = [
+    // Law Fare
+    "https://www.lawfaremedia.org/feeds/articles",
 ]
 
 
@@ -256,7 +357,7 @@ var feeds_lexblog = [
         "https://www.lexblog.com/law-school-blogs/feed/",
 ]
 
-var feeds_lexblog_all_in_one = [
+var feeds_lexblog_sm = [
     // LexBlog
     "https://www.lexblog.com/feed/",
 ]
@@ -372,7 +473,6 @@ var feeds_long_list = [
     "https://lithub.com/feed/",
 
 
-
     // 3blue1brown
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", 
 
@@ -382,7 +482,6 @@ var feeds_long_list = [
     // Veritasium 
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA", 
     
-
 
     // SCOTUS Blog
     "https://www.scotusblog.com/feed/",
@@ -466,8 +565,33 @@ var feeds_long_list = [
     // arXiv
     "https://rss.arxiv.org/rss/cs.AI+cs.LG",
 
+    // Your Arlington
+    "https://www.yourarlington.com/?format=feed&type=rss",
+
 ]
 
+var default_feeds = feeds_long_list
+.concat(feeds_nyt_sm)
+.concat(feeds_wapo_sm)
+.concat(feeds_wsj_sm)
+.concat(feeds_latimes_sm)
+.concat(feeds_bloomberg_sm)
+.concat(feeds_npr_sm)
+.concat(feeds_wgbh_sm)
+.concat(feeds_economist_sm)
+.concat(feeds_guardian_sm)
+.concat(feeds_bbc_sm)
+//.concat(feeds_patch_sm)
+.concat(feeds_slate_sm)
+.concat(feeds_rollingstone_sm)
+.concat(feeds_arstechnica_sm)
+.concat(feeds_theconversation_sm)
+.concat(feeds_phys_sm)
+.concat(feeds_wired_sm)
+.concat(feeds_aeon_sm)
+.concat(feeds_lawfare_sm)
+.concat(feeds_lexblog_sm)
+;
 
 var feeds_long_list = feeds_long_list
 .concat(feeds_nyt)
@@ -488,6 +612,7 @@ var feeds_long_list = feeds_long_list
 .concat(feeds_phys)
 .concat(feeds_wired)
 .concat(feeds_aeon)
+.concat(feeds_lawfare)
 .concat(feeds_lexblog)
 //.concat(feeds_lexblog_all_in_one)
 ;
@@ -499,19 +624,22 @@ default_votes = {"lawsites":1,"lawnext-com":1,"two":3,"back-to-back":1,"conferen
 default_doc_counts = {"df_arr":{"one-useful-thing":1,"oneusefulthing-org":1,"change":1,"blindness":1,"months":1,"later":1,"technology-archives-lexblog":1,"lexblog-com":1,"mind":1,"gap":1,"disconnect":1,"surveys":1,"anecdotal":1,"evidence":2,"gen":1,"ai":2,"use":1,"lawyers":2,"three":2,"kinds":1,"lies":1,"damned":1,"statistics":1,"mark":1,"twain":1,"told":1,"one":1,"time":1,"firms":1,"want":1,"innovate":1,"say":1,"meaning":1,"course":1,"get":1,"bandwagon":1,"appear":1,"follow":1,"trends":1,"policy-ars-technica":2,"arstechnica-com":2,"google":1,"loses":1,"doj":1,"big":1,"monopoly":1,"trial":1,"search":1,"business":1,"exclusive":1,"deals":1,"maintained":1,"monopolies":1,"two":2,"markets":1,"judge":1,"ruled":1,"court":1,"blocks":1,"net":1,"neutrality":1,"says":1,"isps":1,"likely":1,"win":1,"case":1,"fcc":1,"judges":1,"said":1,"succeed":1,"merits":1,"lawsites":1,"lawnext-com":1,"back-to-back":1,"conferences":1,"re":1,"moving":1,"ball":1,"forward":1,"using":1,"law":2,"within":2,"five":1,"days":1,"recently":1,"chicago":1,"attended":1,"somewhat":1,"different":1,"found":1,"developing":1,"implementing":1,"practical":1,"applications":1,"generative":1,"may":1,"wonder":1,"even":1,"needed":1,"last":1,"year":1,"artificial-lawyer":1,"artificiallawyer-com":1,"stanford":1,"codex":1,"flatiron":1,"launch":1,"genai":1,"m":1,"training":1,"simulator":1,"main":1,"value":1,"supporting":1,"legal":1,"view":1,"held":1,"technology":1,"group":1},"n_docs":6}
 
 feed_lib = {
-    "default_feeds": feeds_long_list,
+    "default_feeds": default_feeds,
+    "default_feeds_legal_tech": default_feeds,
     "feeds_us_fire_hose": feeds_long_list,
     "feeds_us_fire_hose_legal_tech": feeds_long_list
 }
 
 // localStorage.upTFIDF
 defaultTFIDF = {
-    "feeds_us_fire_hose_legal_tech": default_votes
+    "default_feeds_legal_tech": default_votes,
+    "feeds_us_fire_hose_legal_tech": default_votes,
 }
 
 //JSON.stringify(dfreq_last)
 default_dfreq = {
-    "feeds_us_fire_hose_legal_tech": default_doc_counts
+    "default_feeds_legal_tech": default_doc_counts,
+    "feeds_us_fire_hose_legal_tech": default_doc_counts,
 }
 
 if (!localStorage.getItem("votelib")) {
