@@ -721,4 +721,3 @@ if (!localStorage.getItem("backstop")) {
 var article_test;
 var upTFIDF_tmp;
 var dfreq_tmp = {};
-
