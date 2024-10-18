@@ -605,7 +605,7 @@ var default_feeds = feeds_long_list
 .concat(feeds_phys_sm)
 .concat(feeds_wired_sm)
 .concat(feeds_aeon_sm)
-.concat(feeds_lawfare_sm)
+//.concat(feeds_lawfare_sm)
 .concat(feeds_lexblog_sm)
 .concat(feeds_arxiv_sm)
 ;
@@ -629,7 +629,7 @@ var feeds_long_list = feeds_long_list
 .concat(feeds_phys)
 .concat(feeds_wired)
 .concat(feeds_aeon)
-.concat(feeds_lawfare)
+//.concat(feeds_lawfare)
 .concat(feeds_lexblog)
 .concat(feeds_hacker)
 .concat(feeds_arxiv)
