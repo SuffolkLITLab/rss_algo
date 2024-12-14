@@ -437,18 +437,18 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.log("Trying first proxy for " + feedUrl);
                 feedUrl_prox = proxy_01 + encodeURIComponent(feedUrl);
                 response2 = await fetchRSS(feedUrl_prox);
-                if (!response2) {
-                    console.log("Trying second proxy for " + feedUrl);
-                    feedUrl_prox = proxy_02 + feedUrl; //no encoding for this service
-                    response3 = await fetchRSS(feedUrl_prox);
-                    if (!response3) {
-                        console.log("Error fetching with both proxies.");
-                    } else {
-                        response = response3
-                    }
-                } else {
+                //if (!response2) {
+                //    console.log("Trying second proxy for " + feedUrl);
+                //    feedUrl_prox = proxy_02 + feedUrl; //no encoding for this service
+                //    response3 = await fetchRSS(feedUrl_prox);
+                //    if (!response3) {
+                //        console.log("Error fetching with both proxies.");
+                //    } else {
+                //        response = response3
+                //    }
+                //} else {
                     response = response2
-                }
+                //}
             }
             return response;
         }
@@ -1272,7 +1272,10 @@ function declutter(title_source,id_source,tf_source,n=0){
                         const feedTitle = "Unknown Feed";
                         const errorMessage = `Error fetching RSS feed: ${error.message}`;
                         if (errors==0) {
-                            displayErrorPopup(feedTitle, feedUrl, errorMessage);
+                            
+                            console.log("THERE WAS AN ERROR")
+                            //displayErrorPopup(feedTitle, feedUrl, errorMessage);
+                            
                             setTimeout(function(){
                                 crunch_numbers = true;
                                 dedup_articles();
