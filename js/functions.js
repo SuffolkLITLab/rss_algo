@@ -1,4 +1,4 @@
-var version = "v1.20.4";
+var version = "v1.21.0";
 
 //history.replaceState('', document.title, window.location.pathname);
 //window.scrollTo(0, 0);
@@ -1468,9 +1468,12 @@ function declutter(title_source,id_source,tf_source,n=0){
                             ${img_html}
                             <div class="card-body">
                                     <h5 class="card-title">Support the People Who Built <i>My RSS Algo</i>!</h5>
-                                    <p class="card-text">Through its Affiliates Program, Suffolk University Law School's Legal Innovation and Technology <a href="https://suffolklitlab.org/" target="_blank">(LIT) Lab</a> provides members with connections to experts and law students working with emerging legal services technologies, while growing the Lab's capacity to serve disadvantaged communities.</p>
+                                    <p class="card-text">
+                                        The Legal Innovation &amp; Technology Lab (LIT Lab) is a collaboration between Suffolk Law's Clinical Program and Institute on Legal Innovation and Technology. Your support empowers students to create cutting-edge legal tech solutions that make a real impact in communities, while gaining hands-on experience through one of the nation's top clinical programs.
+                                        Your gift fuels innovation, access to justice, and the future of legal services.
+                                    </p>
                                 <div style="text-align:right;">
-                                    <a href="https://suffolklitlab.org/docs/affiliates.pdf" class="btn btn-primary" target="_blank">Become an Affiliate</a>
+                                    <a href="https://www.givecampus.com/campaigns/70271/donations/new" class="btn btn-primary" target="_blank">Donate</a>
                                 </div>
                             </div>
                             <div class="card-footer">
@@ -1523,6 +1526,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div>
                                 <div class="pocket_share"><a href="javascript:void('')" class="save_to_pocket"><div style="background: url('images/cached_logos/pocket.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
                         }
+                        share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div>`
 
                         if (savedIgnoreImages){
                             img_html = `
@@ -1577,7 +1581,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                         newsFeedContainer.appendChild(article);
 
                         const mastoButton = article.querySelector(".share_to_mastodon");
-                        const pocketButton = article.querySelector(".save_to_pocket");
+                        //const pocketButton = article.querySelector(".save_to_pocket");
 
                         const upvoteButton = article.querySelector(".upvote");
                         const downvoteButton = article.querySelector(".downvote");
@@ -1629,41 +1633,41 @@ function declutter(title_source,id_source,tf_source,n=0){
                             
                         });
 
-                        pocketButton.addEventListener("click", function() {
+                        //pocketButton.addEventListener("click", function() {
 
-                            save_to_poeket(itemId)
+                        //    save_to_poeket(itemId)
 
-                            if (savedautoVote) {
-                                upvotes[itemId] = true;
-                                localStorage.setItem("upvotes", JSON.stringify(upvotes));
-                                localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
-                                updateArticleStyles();
-                            }
+                        //    if (savedautoVote) {
+                        //        upvotes[itemId] = true;
+                        //        localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                        //        localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
+                        //        updateArticleStyles();
+                        //    }
 
-                            if (voteViewModeState){
-                                const articleIndex = parseInt(article.getAttribute("data-article-index"));
-                                readArticles[itemId] = new Date().toISOString();
-                                localStorage.setItem("read", JSON.stringify(readArticles));
+                        //    if (voteViewModeState){
+                        //        const articleIndex = parseInt(article.getAttribute("data-article-index"));
+                        //        readArticles[itemId] = new Date().toISOString();
+                        //        localStorage.setItem("read", JSON.stringify(readArticles));
         
                                 // Mark the article as read in the articles array
-                                articles[articleIndex].isRead = true;
+                        //        articles[articleIndex].isRead = true;
         
                                 // Get the parent container of the clicked skip button
-                                const articleContainer = skipButton.closest(".article-container");
+                        //        const articleContainer = skipButton.closest(".article-container");
         
                                 // Update the Open button behavior
-                                updateOpenButton(articleContainer);
+                        //        updateOpenButton(articleContainer);
         
                                 // Move the article container to the end of the list
-                                moveCardToEnd(articleContainer);
+                        //        moveCardToEnd(articleContainer);
         
                                 // Update the unread count
-                                updateItemCount();
-                                get_quote();  
-                                setTimeout( function() {}, 100);
-                            }
+                        //        updateItemCount();
+                        //        get_quote();  
+                        //        setTimeout( function() {}, 100);
+                        //    }
                             
-                        });
+                        //});
 
                         upvoteButton.addEventListener("click", function() {
                             if (downvotes[itemId]) {

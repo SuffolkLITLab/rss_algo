@@ -105,7 +105,7 @@ select {
 .masto_share{
     position: absolute;
     top: 5px;
-    right: 50px;
+    right: 8px;
     z-index:100;
 }
 .masto_share a {

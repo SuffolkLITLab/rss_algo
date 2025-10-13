@@ -607,7 +607,7 @@ var default_feeds = feeds_long_list
 .concat(feeds_aeon_sm)
 //.concat(feeds_lawfare_sm)
 .concat(feeds_lexblog_sm)
-.concat(feeds_arxiv_sm)
+//.concat(feeds_arxiv_sm)
 ;
 
 var feeds_long_list = feeds_long_list
