@@ -1,4 +1,4 @@
-var version = "v1.22.0";
+var version = "v1.22.1";
 
 //history.replaceState('', document.title, window.location.pathname);
 //window.scrollTo(0, 0);
@@ -35,16 +35,20 @@ var summarizing = false
 
 var feed_names = JSON.parse(localStorage.getItem("feed_names")) || {}
 
+function hide_timeline(){
+    document.getElementById('spin_container').style.display = "none";
+    document.getElementById('news-feed').style.display = "none";
+    document.getElementById('mark-all').style.display = "none";
+    document.getElementById('my_settings').style.display = "block";
+    document.getElementById('a_settings').innerHTML = "Timeline";
+    document.getElementById('search_msg').style.display = "none";
+    document.getElementById('sum_msg').style.display = "none";
+    sum_msg
+}
+
 function toggle_settings(clear=false) {
     if ((clear == false) && document.getElementById('my_settings').style.display=="none") {
-        document.getElementById('spin_container').style.display = "none";
-        document.getElementById('news-feed').style.display = "none";
-        document.getElementById('mark-all').style.display = "none";
-        document.getElementById('my_settings').style.display = "block";
-        document.getElementById('a_settings').innerHTML = "Timeline";
-        document.getElementById('search_msg').style.display = "none";
-        document.getElementById('sum_msg').style.display = "none";
-        sum_msg
+         hide_timeline();
     } else {
         show_timeline();
         if (searching){
@@ -2295,32 +2299,39 @@ function declutter(title_source,id_source,tf_source,n=0){
     }
 
     function get_quote() {
-        HiddenModeState = localStorage.getItem("hiddenMode") === "true";
-        unreadcount = countUnreadArticles() - document.querySelectorAll(".article-container[data-article-index='sponsor']").length
-        if (unreadcount>0) {
-            document.getElementById('mark-all').style.display = "block"    
-        } else {
-            document.getElementById('mark-all').style.display = "none"    
-        }
         
-        if (unreadcount.toLocaleString("en-US")<=0 && !HiddenModeState) {
-            items = [
-                        "Be kind. Have Fun. Try something new.",
-                        "Patience is a superpower.",
-                        "In life and on apps, always question defaults. Fiddle with some settings, and see what happens.",
-                        "Civilization is a positive-sum game."
-                    ]
-            document.getElementById('news-feed').style.display = "flex";
-            const quote = document.createElement("div");
-            quote.className = `end_quote`;
-            quote.innerHTML = items[Math.floor(Math.random()*items.length)];
-            newsFeedContainer.textContent = "";
-            document.getElementById('spin_container').innerHTML = `` 
-            newsFeedContainer.appendChild(quote);    
-        } else if (unreadcount.toLocaleString("en-US")==0) {
-            document.getElementById('spin_container').innerHTML = `` 
-        }
-        document.getElementById('news-feed').style.display = "flex";
+            HiddenModeState = localStorage.getItem("hiddenMode") === "true";
+            unreadcount = countUnreadArticles() - document.querySelectorAll(".article-container[data-article-index='sponsor']").length
+            if (unreadcount>0) {
+                if (document.getElementById('my_settings').style.display=="none") {       
+                    document.getElementById('mark-all').style.display = "block"    
+                }
+            } else {
+                document.getElementById('mark-all').style.display = "none"    
+            }
+            
+            if (unreadcount.toLocaleString("en-US")<=0 && !HiddenModeState) {
+                items = [
+                            "Be kind. Have Fun. Try something new.",
+                            "Patience is a superpower.",
+                            "In life and on apps, always question defaults. Fiddle with some settings, and see what happens.",
+                            "Civilization is a positive-sum game."
+                        ]
+                if (document.getElementById('my_settings').style.display=="none") {       
+                    document.getElementById('news-feed').style.display = "flex";
+                }
+                const quote = document.createElement("div");
+                quote.className = `end_quote`;
+                quote.innerHTML = items[Math.floor(Math.random()*items.length)];
+                newsFeedContainer.textContent = "";
+                document.getElementById('spin_container').innerHTML = `` 
+                newsFeedContainer.appendChild(quote);    
+            } else if (unreadcount.toLocaleString("en-US")==0) {
+                document.getElementById('spin_container').innerHTML = `` 
+            }
+            if (document.getElementById('my_settings').style.display=="none") {
+                document.getElementById('news-feed').style.display = "flex";
+            }
     }
     
     const clearUpvotesButton = document.getElementById("clear-upvotes");
@@ -2365,7 +2376,8 @@ function declutter(title_source,id_source,tf_source,n=0){
         // Update article styles and the feed list
         updateFeedList();
         updateItemCount();
-        get_quote();
+        //get_quote();
+       
     });            
     
     loadNews(true);
