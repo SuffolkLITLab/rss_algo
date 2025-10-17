@@ -1,4 +1,4 @@
-var version = "v1.21.0";
+var version = "v1.22.0";
 
 //history.replaceState('', document.title, window.location.pathname);
 //window.scrollTo(0, 0);
@@ -119,6 +119,14 @@ function reset_all() {
     }
 }
 
+function getTodayString(){
+    const d=new Date();
+    const mm=String(d.getMonth()+1).padStart(2,'0');
+    const dd=String(d.getDate()).padStart(2,'0');
+    const yyyy=d.getFullYear();
+    return `${yyyy}-${mm}-${dd}`;
+}
+
 function saveTextAsFile(tosave,name) {
     // h/t http://runnable.com/U5HC9xtufQpsu5aj/use-javascript-to-save-textarea-as-a-txt-file 
 
@@ -207,15 +215,27 @@ control.addEventListener("change", function(event){
                 your_data = event.target.result;
                 let text = "Loading this file will overwrite and replace your current data.";
                 if (confirm(text) == true) {
-                    data_dump = JSON.parse(your_data)
-                    localStorage.clear();
-                    for (const [key, value] of Object.entries(data_dump)) {
-                        //console.log(key,JSON.stringify(value))
-                        //localStorage.clear();
-                        localStorage.setItem(key,value);
-                        localStorage.setItem("lastLoad",0);
-                        window.location.reload(true);
-                    }
+                    var data_dump = {}
+                    try {
+                        // Code that might throw an error
+                        data_dump = JSON.parse(your_data)
+                    } catch (error) {
+                        // Code to execute if an error occurs in the try block
+                        // The 'error' variable contains information about the error
+                        data_dump = RssOpmlIO.opmlToJson(your_data)
+                    }               
+                    if (data_dump["feeds"]!="[]"){
+                        localStorage.clear();
+                        for (const [key, value] of Object.entries(data_dump)) {
+                            //console.log(key,JSON.stringify(value))
+                            //localStorage.clear();
+                            localStorage.setItem(key,value);
+                            localStorage.setItem("lastLoad",0);
+                            window.location.reload(true);
+                        }
+                    } else {
+                        alert("Error Parsing File: No feeds found. Check file format.")
+                    } 
                 }
             };
             reader.onerror = function(event){
@@ -239,11 +259,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const toggleModeButton = document.getElementById("toggle-mode");
 
+    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+
     // Retrieve dark mode state from localStorage (if available)
     const darkModeState = localStorage.getItem("darkMode");
     if (darkModeState === "enabled") {
         body.classList.add("dark-mode");
         toggleModeButton.innerHTML = "💡"; // Light bulb emoji
+        metaThemeColor.setAttribute('content', '#333');
     }
 
     // Toggle between light and dark mode
@@ -252,9 +275,11 @@ document.addEventListener("DOMContentLoaded", function() {
         if (body.classList.contains("dark-mode")) {
             localStorage.setItem("darkMode", "enabled");
             toggleModeButton.innerHTML = "💡"; // Light bulb emoji
+            metaThemeColor.setAttribute('content', '#333');
         } else {
             localStorage.removeItem("darkMode");
             toggleModeButton.innerHTML = "🌗"; // Moon emoji
+            metaThemeColor.setAttribute('content', '#fff');
         }
     });
 
@@ -764,15 +789,15 @@ function declutter(title_source,id_source,tf_source,n=0){
     });
 
 
-    const pocketPopCheckbox = document.getElementById("pocket-pop");
+    //const pocketPopCheckbox = document.getElementById("pocket-pop");
     // Retrieve ignore images value from localStorage (if available)
-    const pocketPopModeState = localStorage.getItem("pocketPopMode") === "true";
-    pocketPopCheckbox.checked = pocketPopModeState;
+    //const pocketPopModeState = localStorage.getItem("pocketPopMode") === "true";
+    //pocketPopCheckbox.checked = pocketPopModeState;
     // Update ignore images value and save to localStorage when checkbox value changes
-    pocketPopCheckbox.addEventListener("change", function () {
-        const newPocketPopImages = pocketPopCheckbox.checked;
-        localStorage.setItem("pocketPopMode", newPocketPopImages);
-    });
+    //pocketPopCheckbox.addEventListener("change", function () {
+    //    const newPocketPopImages = pocketPopCheckbox.checked;
+    //    localStorage.setItem("pocketPopMode", newPocketPopImages);
+    //});
 
     const voteViewCheckbox = document.getElementById("vote-view");
     // Retrieve ignore images value from localStorage (if available)
@@ -2567,7 +2592,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 Consider starting with a premade list. Then over time you can whittle it down and add new feeds as you like. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
                             </p>
                             <p>
-                                If a feed inludes a parenthetical that means it comes with a pre-trained algo focusing on the named theme. Your interactions will of course refine its operation, and FWIW, it includes the same feeds as others with the same name. It's just the intial focus that's different.
+                                If an option below inludes a parenthetical, that means it comes with a pre-trained algo focusing on the named theme. Your interactions will of course refine its operation, and FWIW, it includes the same feeds as others with the same name. It's just the intial focus that's different.
                             </p>
                             <select id="feed_list">
                                 <option value="default_feeds">Generic US Mix</option>
@@ -2830,74 +2855,288 @@ function getUserWeather() {
 
 async function weatherAPI(lat,lon){
     var data;
-    try {
-        const response = await fetch("https://api.open-meteo.com/v1/forecast?latitude="+lat+"&longitude="+lon+"&current_weather=true&temperature_unit="+document.getElementById("temp").value+"&is_day=true");        
-        data = await response.text();
-    } catch (error) {
-        data = "no data"
-    }
-    data = JSON.parse(data)
-    //console.log(data)
-
-    /* 
-
-    Code 	Description
-    0 	Clear sky
-    1, 2, 3 	Mainly clear, partly cloudy, and overcast
-    45, 48 	Fog and depositing rime fog
-    51, 53, 55 	Drizzle: Light, moderate, and dense intensity
-    56, 57 	Freezing Drizzle: Light and dense intensity
-    61, 63, 65 	Rain: Slight, moderate and heavy intensity
-    66, 67 	Freezing Rain: Light and heavy intensity
-    71, 73, 75 	Snow fall: Slight, moderate, and heavy intensity
-    77 	Snow grains
-    80, 81, 82 	Rain showers: Slight, moderate, and violent
-    85, 86 	Snow showers slight and heavy
-    95 * 	Thunderstorm: Slight or moderate
-    96, 99 * 	Thunderstorm with slight and heavy hail
-
-    */
-
-    //"☁️☀️🌤️🌥️⛅️🌦️🌧️🌨️⛈️🌩️";
-    if (data["current_weather"]["weathercode"]==0) {
-        if (data["current_weather"]["is_day"]==1) {
-            weather_icon = "☀️";
-        } else {
-            weather_icon = "🌙";
+    var lastWeatherReport = localStorage.getItem("lastWeatherReport") || 0;
+    var WeatherDiff = (Date.parse(new Date())-lastWeatherReport)/1000
+    if (WeatherDiff>10*60){
+        try {
+            const response = await fetch("https://api.open-meteo.com/v1/forecast?latitude="+lat+"&longitude="+lon+"&current_weather=true&temperature_unit="+document.getElementById("temp").value+"&is_day=true");        
+            data = await response.text();
+            localStorage.setItem("lastWeatherReport", Date.parse(new Date()));
+        } catch (error) {
+            data = "no data"
         }
-    } else if ([1,2,3].includes(data["current_weather"]["weathercode"])) {
-        weather_icon = "☁️";
-    } else if ([45,48].includes(data["current_weather"]["weathercode"])) {
-        weather_icon = "☁️";
-    } else if ([51,53,55].includes(data["current_weather"]["weathercode"])) {
-        weather_icon = "🌧️";
-    } else if ([56,57].includes(data["current_weather"]["weathercode"])) {
-        weather_icon = "🌧️";
-    } else if ([61,63,65].includes(data["current_weather"]["weathercode"])) {
-        weather_icon = "🌧️";
-    } else if ([66,67].includes(data["current_weather"]["weathercode"])) {
-        weather_icon = "🌧️";
-    } else if ([71,73,75].includes(data["current_weather"]["weathercode"])) {
-        weather_icon = "❄️";
-    } else if ([77].includes(data["current_weather"]["weathercode"])) {
-        weather_icon = "❄️";
-    } else if ([80,81,82].includes(data["current_weather"]["weathercode"])) {
-        weather_icon = "🌧️";
-    } else if ([85,86].includes(data["current_weather"]["weathercode"])) {
-        weather_icon = "❄️";
-    } else if ([95].includes(data["current_weather"]["weathercode"])) {
-        weather_icon = "⛈️";
-    } else if ([96,99].includes(data["current_weather"]["weathercode"])) {
-        weather_icon = "⛈️";
+        data = JSON.parse(data)
+        //console.log(data)
+
+        /* 
+
+        Code 	Description
+        0 	Clear sky
+        1, 2, 3 	Mainly clear, partly cloudy, and overcast
+        45, 48 	Fog and depositing rime fog
+        51, 53, 55 	Drizzle: Light, moderate, and dense intensity
+        56, 57 	Freezing Drizzle: Light and dense intensity
+        61, 63, 65 	Rain: Slight, moderate and heavy intensity
+        66, 67 	Freezing Rain: Light and heavy intensity
+        71, 73, 75 	Snow fall: Slight, moderate, and heavy intensity
+        77 	Snow grains
+        80, 81, 82 	Rain showers: Slight, moderate, and violent
+        85, 86 	Snow showers slight and heavy
+        95 * 	Thunderstorm: Slight or moderate
+        96, 99 * 	Thunderstorm with slight and heavy hail
+
+        */
+
+        //"☁️☀️🌤️🌥️⛅️🌦️🌧️🌨️⛈️🌩️";
+        if (data["current_weather"]["weathercode"]==0) {
+            if (data["current_weather"]["is_day"]==1) {
+                weather_icon = "☀️";
+            } else {
+                weather_icon = "🌙";
+            }
+        } else if ([1,2,3].includes(data["current_weather"]["weathercode"])) {
+            weather_icon = "☁️";
+        } else if ([45,48].includes(data["current_weather"]["weathercode"])) {
+            weather_icon = "☁️";
+        } else if ([51,53,55].includes(data["current_weather"]["weathercode"])) {
+            weather_icon = "🌧️";
+        } else if ([56,57].includes(data["current_weather"]["weathercode"])) {
+            weather_icon = "🌧️";
+        } else if ([61,63,65].includes(data["current_weather"]["weathercode"])) {
+            weather_icon = "🌧️";
+        } else if ([66,67].includes(data["current_weather"]["weathercode"])) {
+            weather_icon = "🌧️";
+        } else if ([71,73,75].includes(data["current_weather"]["weathercode"])) {
+            weather_icon = "❄️";
+        } else if ([77].includes(data["current_weather"]["weathercode"])) {
+            weather_icon = "❄️";
+        } else if ([80,81,82].includes(data["current_weather"]["weathercode"])) {
+            weather_icon = "🌧️";
+        } else if ([85,86].includes(data["current_weather"]["weathercode"])) {
+            weather_icon = "❄️";
+        } else if ([95].includes(data["current_weather"]["weathercode"])) {
+            weather_icon = "⛈️";
+        } else if ([96,99].includes(data["current_weather"]["weathercode"])) {
+            weather_icon = "⛈️";
+        } else {
+            weather_icon = "";
+        }
+
+        var weatherString = "<a href='https://www.wunderground.com/hourly/"+lat+","+lon+"' target='_blank' style='text-decoration:none;'>" + Math.round(data["current_weather"]["temperature"]) + "" + data["current_weather_units"]["temperature"]+" "+weather_icon+"</a>"
+        localStorage.setItem("lastWeatherString", weatherString);
+    } else if (WeatherDiff<=10*60) {
+        var weatherString = localStorage.getItem("lastWeatherString") || "";
     } else {
-        weather_icon = "";
+        var weatherString = "";
     }
-
-    document.getElementById('weather').innerHTML = "<a href='https://www.wunderground.com/hourly/"+lat+","+lon+"' target='_blank' style='text-decoration:none;'>" + Math.round(data["current_weather"]["temperature"]) + "" + data["current_weather_units"]["temperature"]+" "+weather_icon+"</a>";
+    document.getElementById('weather').innerHTML = weatherString;
     document.getElementById('weather').style.display = "block";
-
     //return data
 }
+
+/**
+ * OPML <-> bespoke RSS JSON translator (no deps)
+ * Works in browsers and Node.
+ *
+ * Export options:
+ *   - title: OPML <head><title>...</title>
+ *   - groupBy: 'none' | 'feedTitle'  (default: 'feedTitle')
+ *     If 'feedTitle', we put items in folders by feedTitle when available.
+ */
+const RssOpmlIO = (() => {
+  // ---------------------------
+  // Utilities
+  // ---------------------------
+  const esc = (s = "") =>
+    String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&apos;");
+
+  const uniq = (arr) => Array.from(new Set(arr));
+
+  const toArray = (maybeJsonOrArray) => {
+    if (Array.isArray(maybeJsonOrArray)) return maybeJsonOrArray;
+    if (maybeJsonOrArray == null) return [];
+    if (typeof maybeJsonOrArray === "string") {
+      try { return JSON.parse(maybeJsonOrArray); } catch {}
+    }
+    return [];
+  };
+
+  const toArticlesArray = (maybeJsonOrArray) => {
+    const arr = toArray(maybeJsonOrArray);
+    // guard: ensure we're looking at "article-ish" objects
+    return Array.isArray(arr) ? arr.filter(o => o && (o.feedUrl || o.feedTitle || o.link)) : [];
+  };
+
+  // Attribute parser for <outline ...> tags (regex-based, good enough for OPML)
+  const parseOutlineAttrs = (tag) => {
+    const attrs = {};
+    const re = /([^\s=]+)\s*=\s*(['"])(.*?)\2/g;
+    let m;
+    while ((m = re.exec(tag))) {
+      attrs[m[1]] = m[3];
+    }
+    return attrs;
+  };
+
+  // Find all outline tags (both self-closing and openers); we only need attributes.
+  const findOutlineTags = (xml) => {
+    const tags = [];
+    const re = /<outline\b[^>]*\/?>/gi;
+    let m;
+    while ((m = re.exec(xml))) {
+      tags.push(m[0]);
+    }
+    return tags;
+  };
+
+  // Build a nice display title from URL if we have nothing else.
+  const fallbackTitleFromUrl = (url) => {
+    try {
+      const u = new URL(url);
+      return u.hostname.replace(/^www\./, "");
+    } catch {
+      return url;
+    }
+  };
+
+  // ---------------------------
+  // EXPORT: JSON -> OPML
+  // ---------------------------
+  /**
+   * @param {object} rssJson - Your app's JSON object.
+   * @param {object} [opts]
+   * @param {string} [opts.title="Exported Feeds"]
+   * @param {"none"|"feedTitle"} [opts.groupBy="feedTitle"]
+   * @returns {string} OPML XML
+   */
+  function jsonToOpml(rssJson, opts = {}) {
+    const title = opts.title || "Exported Feeds";
+    const groupBy = opts.groupBy || "feedTitle";
+
+    // 1) Gather feed URLs:
+    const feedsFromList = toArray(rssJson.feeds); // may be a JSON string
+    const articles = toArticlesArray(rssJson.articles);
+    const feedsFromArticles = uniq(
+      articles.map(a => a.feedUrl).filter(Boolean)
+    );
+
+    const allFeedUrls = uniq([...feedsFromList, ...feedsFromArticles]);
+
+    // 2) Build feed metadata map (title, htmlUrl best-effort) from articles:
+    const byFeed = new Map();
+    for (const url of allFeedUrls) {
+      byFeed.set(url, { title: null, htmlUrl: null });
+    }
+    for (const a of articles) {
+      const url = a.feedUrl;
+      if (!url || !byFeed.has(url)) continue;
+      const cur = byFeed.get(url);
+      // Prefer a consistent title if we see one
+      if (!cur.title && a.feedTitle) cur.title = a.feedTitle;
+      // htmlUrl: try to infer from an article link's origin if it looks like the site
+      if (!cur.htmlUrl && a.link) {
+        try { cur.htmlUrl = new URL(a.link).origin; } catch {}
+      }
+      byFeed.set(url, cur);
+    }
+
+    // 3) Grouping
+    let bodyXml = "";
+    if (groupBy === "feedTitle") {
+      // Group multiple feeds that share the same feedTitle (rare but possible)
+      const groups = new Map(); // title => [{ url, title, htmlUrl }]
+      for (const url of allFeedUrls) {
+        const meta = byFeed.get(url);
+        const t = meta?.title || fallbackTitleFromUrl(url);
+        if (!groups.has(t)) groups.set(t, []);
+        groups.get(t).push({ url, title: t, htmlUrl: meta?.htmlUrl || null });
+      }
+      // Emit folders (one per title). If a folder has >1 different feeds, fine;
+      // if it has only 1, it's still a folder—harmless. Change if you prefer flat singletons.
+      for (const [t, items] of groups.entries()) {
+        bodyXml += `  <outline text="${esc(t)}" title="${esc(t)}">\n`;
+        for (const it of items) {
+          bodyXml += `    <outline text="${esc(it.title)}" title="${esc(it.title)}" type="rss" xmlUrl="${esc(it.url)}"${it.htmlUrl ? ` htmlUrl="${esc(it.htmlUrl)}"` : ""} />\n`;
+        }
+        bodyXml += `  </outline>\n`;
+      }
+    } else {
+      // Flat list
+      for (const url of allFeedUrls) {
+        const meta = byFeed.get(url);
+        const t = meta?.title || fallbackTitleFromUrl(url);
+        bodyXml += `  <outline text="${esc(t)}" title="${esc(t)}" type="rss" xmlUrl="${esc(url)}"${meta?.htmlUrl ? ` htmlUrl="${esc(meta.htmlUrl)}"` : ""} />\n`;
+      }
+    }
+
+    // 4) Build OPML
+    const opml =
+`<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+<head>
+  <title>${esc(title)}</title>
+  <dateCreated>${new Date().toUTCString()}</dateCreated>
+</head>
+<body>
+${bodyXml}</body>
+</opml>`;
+    return opml;
+  }
+
+  // ---------------------------
+  // IMPORT: OPML -> JSON
+  // ---------------------------
+  /**
+   * @param {string} opmlXml
+   * @returns {object} minimal JSON object that your app can accept
+   *                   (keeps your original schema shape as much as possible)
+   */
+  function opmlToJson(opmlXml) {
+    // 1) Collect all <outline ...> tags and pick those with xmlUrl
+    const tags = findOutlineTags(opmlXml || "");
+    const xmlUrls = [];
+    const feedNames = {};
+
+    for (const tag of tags) {
+      const attrs = parseOutlineAttrs(tag);
+      const url = attrs.xmlUrl || attrs.xmlurl; // case-insensitive-ish
+      if (url) {
+        xmlUrls.push(url);
+        feedNames[url] = attrs.title || attrs.text || null
+      }
+    }
+
+    const feeds = uniq(xmlUrls);
+
+    // 2) Reconstruct your app's JSON shape with safe defaults / placeholders.
+    //    (Adjust to taste if your app requires different defaults.)
+    const nowMs = Date.now();
+
+    return {
+      backstop: new Date(0),
+      regex_never_op: "i",
+      cardcutoff: "30",
+      votelib: "default_feeds",
+      lastLoad: 0,
+      upTFIDF: "{}",
+      downTFIDF: "{}",           
+      feeds: JSON.stringify(feeds, null, 0),
+      voteViewMode: "true",
+      regex_always: "",          
+      afterOpenMode: "true",
+      lastcooldown: "0.5",
+      articles: "[]",            
+      feed_names : JSON.stringify(feedNames, null, 0)
+    };
+  }
+
+  return { jsonToOpml, opmlToJson };
+})();
 
 document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
 

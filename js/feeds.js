@@ -714,7 +714,7 @@ if (!localStorage.getItem("backstop")) {
 }
 
 if (!localStorage.getItem("backstop")) {
-    localStorage.setItem("regex_never", "Deal of the Day:|Daily Deal:|on Sale|\\% Off|\\$\\d+ Off|Slate Quiz|The Crossword:|Wordle");
+    localStorage.setItem("regex_never", "Deal of the Day:|Daily Deal:|on Sale|\\% Off|\\$\\d+ Off");
     localStorage.setItem("regex_never_op", "i");
 }
 
