@@ -1498,8 +1498,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             <div class="card-body">
                                     <h5 class="card-title">Support the People Who Built <i>My RSS Algo</i>!</h5>
                                     <p class="card-text">
-                                        The Legal Innovation &amp; Technology Lab (LIT Lab) is a collaboration between Suffolk Law's Clinical Program and Institute on Legal Innovation and Technology. Your support empowers students to create cutting-edge legal tech solutions that make a real impact in communities, while gaining hands-on experience through one of the nation's top clinical programs.
-                                        Your gift fuels innovation, access to justice, and the future of legal services.
+                                        Your support empowers students and staff at Suffolk's Legal Innovation &amp; Technology Lab (LIT Lab) to create cutting-edge legal tech solutions that make a real impact in communities, while giving students hands-on experience at one of the nation's top clinical programs. Your gift fuels innovation, access to justice, and the future of legal services.
                                     </p>
                                 <div style="text-align:right;">
                                     <a href="https://www.givecampus.com/campaigns/70271/donations/new" class="btn btn-primary" target="_blank">Donate</a>
