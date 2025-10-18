@@ -1,4 +1,4 @@
-var version = "v1.22.1";
+var version = "v1.23.1";
 
 //history.replaceState('', document.title, window.location.pathname);
 //window.scrollTo(0, 0);
@@ -793,15 +793,15 @@ function declutter(title_source,id_source,tf_source,n=0){
     });
 
 
-    //const pocketPopCheckbox = document.getElementById("pocket-pop");
+    const passtoPopCheckbox = document.getElementById("passto-pop");
     // Retrieve ignore images value from localStorage (if available)
-    //const pocketPopModeState = localStorage.getItem("pocketPopMode") === "true";
-    //pocketPopCheckbox.checked = pocketPopModeState;
+    const passtoPopModeState = localStorage.getItem("passtoPopMode") === "true";
+    passtoPopCheckbox.checked = passtoPopModeState;
     // Update ignore images value and save to localStorage when checkbox value changes
-    //pocketPopCheckbox.addEventListener("change", function () {
-    //    const newPocketPopImages = pocketPopCheckbox.checked;
-    //    localStorage.setItem("pocketPopMode", newPocketPopImages);
-    //});
+    passtoPopCheckbox.addEventListener("change", function () {
+        const newpasstoPopImages = passtoPopCheckbox.checked;
+        localStorage.setItem("passtoPopMode", newpasstoPopImages);
+    });
 
     const voteViewCheckbox = document.getElementById("vote-view");
     // Retrieve ignore images value from localStorage (if available)
@@ -1546,15 +1546,20 @@ function declutter(title_source,id_source,tf_source,n=0){
 
                         if (mastodon) {
                             favicon = masto_profile
-                            card_body_text = ` <h5 class="card-title">A Post From <a href="https://joinmastodon.org/" target="_blank" class="masto_post">Mastodon</a></h5><div style="height:100%;overflow-y:auto;">${description}</div>`
-                            share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div><div class="pocket_share"><a href="javascript:void('')" class="save_to_pocket"><div style="background: url('images/cached_logos/pocket.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
+                            card_body_text = `<h5 class="card-title">A Post From <a href="https://joinmastodon.org/" target="_blank" class="masto_post">Mastodon</a></h5><div style="height:100%;overflow-y:auto;">${description}</div>`
+                            //share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div><div class="passto_share"><a href="javascript:void('')" class="save_to_passto"><div style="background: url('images/cached_logos/pocket.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
                         } else {
                             favicon = "https://"+domain_from_link+"/favicon.ico"
                             card_body_text = `<h5 class="card-title">${title}</h5><p class="card-text">${description}</p>`
-                            share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div>
-                                <div class="pocket_share"><a href="javascript:void('')" class="save_to_pocket"><div style="background: url('images/cached_logos/pocket.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
+                            //share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodons</a></div>
+                          //      <div class="passto_share"><a href="javascript:void('')" class="save_to_passto"><div style="background: url('images/cached_logos/pocket.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
                         }
-                        share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div>`
+                        if (document.getElementById("masto_instance").value.trim()!=""){
+                            share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div>`
+                        } else {
+                            share_html = `<div class="masto_share" style="display:none"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div>`
+                        }
+                        share_html += `<div class="passto_share" style="display:none"><a href="javascript:void('')" class="save_to_passto"><div style="background: url('images/cached_logos/pocket.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
 
                         if (savedIgnoreImages){
                             img_html = `
@@ -1609,7 +1614,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                         newsFeedContainer.appendChild(article);
 
                         const mastoButton = article.querySelector(".share_to_mastodon");
-                        //const pocketButton = article.querySelector(".save_to_pocket");
+                        const passtoButton = article.querySelector(".save_to_passto");
 
                         const upvoteButton = article.querySelector(".upvote");
                         const downvoteButton = article.querySelector(".downvote");
@@ -1661,41 +1666,41 @@ function declutter(title_source,id_source,tf_source,n=0){
                             
                         });
 
-                        //pocketButton.addEventListener("click", function() {
+                        passtoButton.addEventListener("click", function() {
 
-                        //    save_to_poeket(itemId)
+                            save_to_passto(itemId)
 
-                        //    if (savedautoVote) {
-                        //        upvotes[itemId] = true;
-                        //        localStorage.setItem("upvotes", JSON.stringify(upvotes));
-                        //        localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
-                        //        updateArticleStyles();
-                        //    }
+                            if (savedautoVote) {
+                                upvotes[itemId] = true;
+                                localStorage.setItem("upvotes", JSON.stringify(upvotes));
+                                localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
+                                updateArticleStyles();
+                            }
 
-                        //    if (voteViewModeState){
-                        //        const articleIndex = parseInt(article.getAttribute("data-article-index"));
-                        //        readArticles[itemId] = new Date().toISOString();
-                        //        localStorage.setItem("read", JSON.stringify(readArticles));
+                            if (voteViewModeState){
+                                const articleIndex = parseInt(article.getAttribute("data-article-index"));
+                                readArticles[itemId] = new Date().toISOString();
+                                localStorage.setItem("read", JSON.stringify(readArticles));
         
                                 // Mark the article as read in the articles array
-                        //        articles[articleIndex].isRead = true;
+                                articles[articleIndex].isRead = true;
         
                                 // Get the parent container of the clicked skip button
-                        //        const articleContainer = skipButton.closest(".article-container");
+                                const articleContainer = skipButton.closest(".article-container");
         
                                 // Update the Open button behavior
-                        //        updateOpenButton(articleContainer);
+                                updateOpenButton(articleContainer);
         
                                 // Move the article container to the end of the list
-                        //        moveCardToEnd(articleContainer);
+                                moveCardToEnd(articleContainer);
         
                                 // Update the unread count
-                        //        updateItemCount();
-                        //        get_quote();  
-                        //        setTimeout( function() {}, 100);
-                        //    }
+                                updateItemCount();
+                                get_quote();  
+                                setTimeout( function() {}, 100);
+                            }
                             
-                        //});
+                        });
 
                         upvoteButton.addEventListener("click", function() {
                             if (downvotes[itemId]) {
@@ -2781,7 +2786,7 @@ function declutter(title_source,id_source,tf_source,n=0){
 
     function MastodonShare(target){
 
-        if ( document.getElementById("masto_instance").value=="") {
+        if ( document.getElementById("masto_instance").value.trim()=="" ) {
             my_instance = "mastodon.social"
             // Get the Mastodon domain
             domain = prompt("Enter your Mastodon domain. If you want to change this later, you can do so in 'Settings.'", my_instance);
@@ -2807,10 +2812,10 @@ function declutter(title_source,id_source,tf_source,n=0){
     }
 
 
-    function save_to_poeket(url){
-        var win = window.open( "https://getpocket.com/edit?url="+ encodeURIComponent(url), "pocket" );
+    function save_to_passto(url){
+        var win = window.open( "https://getpassto.com/edit?url="+ encodeURIComponent(url), "passto" );
 
-        if (pocketPopModeState) {
+        if (passtoPopModeState) {
             setTimeout( function() {
                 win.close();
             }, 1000);

@@ -93,19 +93,19 @@ select {
     display: flex;
     flex-wrap: wrap;
 }
-.pocket_share{
+.passto_share{
     position: absolute;
     top: 5px;
     right: 5px;
     z-index:100;
 }
-.pocket_share a {
+.passto_share a {
     text-decoration: none;
 }
 .masto_share{
     position: absolute;
     top: 5px;
-    right: 8px;
+    right: 8px; 
     z-index:100;
 }
 .masto_share a {
