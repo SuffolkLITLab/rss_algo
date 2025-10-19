@@ -2342,7 +2342,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             "Patience is a superpower.",
                             'In life and on apps, always question defaults. Fiddle with some "settings," and see what happens.',
                             "Civilization is a positive-sum game.",
-                            "Few things threaten good work more than the state of being in a rush. Breathe..."
+                            "Few things threaten good work more than being in a rush. Breathe..."
                         ]
                 if (document.getElementById('my_settings').style.display=="none") {       
                     document.getElementById('news-feed').style.display = "flex";
