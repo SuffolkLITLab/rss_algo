@@ -2340,7 +2340,8 @@ function declutter(title_source,id_source,tf_source,n=0){
                             "Be kind. Have Fun. Try something new.",
                             "Patience is a superpower.",
                             "In life and on apps, always question defaults. Fiddle with some settings, and see what happens.",
-                            "Civilization is a positive-sum game."
+                            "Civilization is a positive-sum game.",
+                            "There is nothing more corrosive to good work/being our best selves than the state of being in a rush."
                         ]
                 if (document.getElementById('my_settings').style.display=="none") {       
                     document.getElementById('news-feed').style.display = "flex";
