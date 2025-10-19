@@ -17,11 +17,11 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="images/blue-icon-180x180.png">
 
-    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.23.0">
-	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.23.0">
-    <script src="js/spin/spin.min.js?v=v1.23.0"></script>
+    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.24.0">
+	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.24.0">
+    <script src="js/spin/spin.min.js?v=v1.24.0"></script>
 
-    <script src="js/report.js?v=v1.23.0"></script>    
+    <script src="js/report.js?v=v1.24.0"></script>    
     <script src="js/feeds.js?trained_on=2024-08-13b"></script>
 
 </head>
@@ -29,6 +29,7 @@
     <div class="container">
         <div style="float:left;width:100%;margin-top: 20px;">
             <div class="menu">
+                <button id="donate" class="btn btn-secondary" style="float:left;">❤️</button>
                 <button id="summarize-news" class="btn btn-secondary" style="float:left;">🤖</button>
                 <button id="refresh" class="btn btn-secondary" style="float:left;" onCLick="document.getElementById('loading').style.display = 'block';toggle_settings(clear=true);document.getElementById('sum_msg').style.display = 'none';document.getElementById('search_msg').style.display = 'none';document.getElementById('news-feed').style.display = 'none';document.getElementById('mark-all').style.display = 'none';document.getElementById('refresh-all').style.display = 'none';window.location.reload();">↺</button>
                 <!--<span class="love"><a href="blog" id="math" class="btn btn-secondary">❤️ Letters</a></span>-->
@@ -79,67 +80,34 @@
             </p>
             <h4>Privacy</h4>
             <p>
-                You don't need an account, nor do you need to provide any personally identifying information, to use <i>My RSS Algo</i>. Any searches or votes you make are stored only in your browser as part of <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localstorage</a>. The same is true for any other persistent data (e.g., your filters and the choices you make below). Presumably GitHub (which hosts this site) keeps some log files. When fetching your feeds we make use of a couple of proxy servers. First we use our own, then as fallbacks: <a href="https://corsproxy.io/" target="_blank">corsproxy.io</a> and <a href="https://cors.lol/" target="_blank">cors.lol</a> respectivly. FWIW, corsproxy claims not to keep log files. The publishers of these feeds, however, only see the IP addresses of the proxy servers when they are downloaded. We do, however, embed preview images and a site's <a href="https://en.wikipedia.org/wiki/Favicon" target="_blank">favicon</a> as part of most article cards. So, unless you have the "Exclude preview images and favicons..." option checked below, simply loading your timeline will download those files, likely producing log files on the servers they came from. And of course, if you follow a link to an article, you'll access that article and set in motion all that comes with that. Also, if you check the "Show local weather" option below, your browser will share your location with <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a>'s weather <a href="https://en.wikipedia.org/wiki/API" target="_blank">API</a>. Simiarly, if you add an API Key under <i>Magical AI Fairy Dust</i> below, when you click 🤖, the headlines and introductory sentences of your feeds may be shared with your LLM provider depedning on your prompt. 
+                You don't need an account, nor do you need to provide any personally identifying information, to use <i>My RSS Algo</i>. Any searches or votes you make are stored only in your browser as part of <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localstorage</a>. The same is true for any other persistent data (e.g., your filters and the choices you make below). Presumably GitHub (which hosts this site) keeps some log files. When fetching your feeds we make use of a couple of proxy servers. First we use our own, then as fallbacks: <a href="https://corsproxy.io/" target="_blank">corsproxy.io</a> and <a href="https://cors.lol/" target="_blank">cors.lol</a> respectivly. FWIW, corsproxy claims not to keep log files. The publishers of these feeds, however, only see the IP addresses of the proxy servers when they are downloaded. We do, however, embed preview images and a site's <a href="https://en.wikipedia.org/wiki/Favicon" target="_blank">favicon</a> as part of most article cards. So, unless you have the "Exclude preview images and favicons..." option checked below, simply loading your timeline will download those files, likely producing log files on the servers they came from. And of course, if you follow a link to an article, you'll access that article and set in motion all that comes with that. Also, if you check the "Show local weather" option below, your browser will share your location with <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a>'s weather <a href="https://en.wikipedia.org/wiki/API" target="_blank">API</a>. Similarly, if you add an API Key under <i>Magical AI Fairy Dust</i> below, when you click 🤖, the headlines and introductory sentences of your feeds may be shared with your LLM provider depedning on your prompt. You can, however, use a <a href="https://lmstudio.ai/" target="_blank">local LLM</a> and avoid sharing your prompt with anyone.
             </p>
-            <h4>Cooldown Clock</h4>
-            <p>
-                There's no need to download every feed every time you hit refresh. So this site waits a defined period before downloading content. If you refresh the page before the end of this cooldown period, it will recalculate ratings based on recent votes and filter what it displays based on the other options here, but it won't try to download your feeds. Welcome to the finite scoll. Currently the cooldown period is set to <b><i><span id="cooldown-value">0.25</span></i> hours</b>. <i>You can change this below, but you must refresh the page to see results. <span class="highlighted"><b>If you set a cooldown period that is shorter than the current value, you will have to wait for the old period to pass before the new one takes effect. So, once you set it and refresh, there's no quickly going back.</b></span></i>
-            </p>
-            <p>
-                <input type="range" id="cooldown-slider" min="0.25" max="4" value="0.25" step="0.25" style="width:100%;">
-            </p>
+
             <div class="row" style="margin-bottom: 10px;">
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
-                    <h4>A Note on Performance</h4>
-                    <p>
-                        The options you choose here will effect this site's performance. Generally speaking, the more inclusive your choices the larger your timeline will be and the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.
-                    </p>
                     <h4>Images</h4>
                     <p>
                         <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Exclude preview images and <a href="https://en.wikipedia.org/wiki/Favicon" target="_blank">favicons</a> (i.e., load w/o thumbnails and site icons). <i>Refresh page to see results</i>.</label>
                     </p>
+ 
                 </div>
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
-                    <h4>Similar Articles</h4>
+                    <h4>Weather</h4>
                     <p>
-                        You can hide/group articles that are "too" similar to each other. To measure similarity we use <a href="https://towardsdatascience.com/text-vectorization-term-frequency-inverse-document-frequency-tfidf-5a3f9604da6d" target="_blank">vectorizations</a> of cards based on TF-IDF. Leave the <a href="https://en.wikipedia.org/wiki/Cosine_similarity" target="_blank">cosine similarity</a> cutoff at 1 to keep all articles. Setting the cutoff to something lower will hide all but one of the acticles with similarity greater than the cutoff. This will display a list of "hidden" articles at the bottom of the top-most rated article card for that group. <b><i>Note: this will slow down sorting of your articles, esp. for larger timelines. Also, all items in a group other than the top-most are marked as "read" to hide them from your timeline. This cannot be undone!</i></b> Cosine Similarity for cutoff: <b><i><span id="sim-cutoff-value">1</span></i></b>. <i>Refresh page to see results</i>.
+                        <label for="weather-report"><input type="checkbox" id="weather-report" value="1"> Show local weather in degrees <select oninput="localStorage.setItem('temp', this.value)" id="temp" style="width:45px;"><option value="fahrenheit">F</option><option value="celsius">C</option></select> (shares location with <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a>'s weather <a href="https://en.wikipedia.org/wiki/API" target="_blank">API</a>). <i>Refresh page to see results</i>.</label>
                     </p>
-                    <p>
-                        <input type="range" id="sim-cutoff" min="0.5" max="1" value="1" step="0.01" style="width:100%;">
-                    </p>
-                </div>
-            </div>
-            <h4>Ratings Cutoff</h4>
-            <p>
-                After the recommendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and positive numbers are above average. Z-Score for cutoff: <b><i><span id="cutoff-value">-2</span></i></b>. <i>Refresh page to see results</i>.
-            </p>
-            <p>
-                <input type="range" id="cutoff-slider" min="-3.5" max="3.5" value="-1.5" step="0.01" style="width:100%;">
-            </p>
-            <h4>Positive vs. Negative</h4>
-            <p>
-                When calculating ratings, how much influence should <i>down votes</i> have compared to <i>up votes</i>? If you choose 0, they don't count at all. If you choose 1, they count equally. If you choose 2, they'll count twice as much as <i>up votes</i>. Why not just set this to 1? Well, people don't seem to respond equally to positive and negative experience. See <a href="https://en.wikipedia.org/wiki/Negativity_bias" target="_blank">negativity bias</a>. Current value: <b><i><span id="negativity-value">1.25</span></i></b>. <i>Refresh page to see results</i>.
-            </p>
-            <p>
-                <input type="range" id="negativity-slider" min="0" max="2" value="1.25" step="0.01" style="width:100%;">
-            </p>
-            <div class="row" style="margin-bottom: 10px;">
-                <div class="col-md-6 col-sm-12" style="overflow:hidden;">
-                    <h4>Positive</h4>
-                    <p>
-                        Here are your <b><i>most-positive</i></b> words and their approximate TF-IDF, treating all up-voted cards as a single document: <span id="upwords">not enough data</span>
-                    </p>
-                    <button id="clear-upvotes" class="btn btn-danger btn-block">Clear Upvotes</button>
-                </div>
-                <div class="col-md-6 col-sm-12" style="overflow:hidden;">
-                    <h4>Negative</h4>
-                    <p>
-                        Here are your <b><i>most-negative</i></b> words and their approximate TF-IDF, treating all down-voted cards as a single document: <span id="downwords">not enough data</span>
-                    </p>
-                    <button id="clear-downvotes" class="btn btn-danger btn-block">Clear Downvotes</button>
+                    
                 </div>
             </div>
 
+
+            <h4>Cooldown Clock</h4>
+            <p>
+                There's no need to download every feed every time you hit refresh. So this site waits a defined period before downloading content. If you refresh the page before the end of this cooldown period, it will recalculate ratings based on recent votes and filter what it displays based on the other options here, but it won't try to download your feeds. Welcome to the finite scroll. Currently the cooldown period is set to <b><i><span id="cooldown-value">0.25</span></i> hours</b>. <i>You can change this below, but you must refresh the page to see results. <span class="highlighted"><b>If you set a cooldown period that is shorter than the current value, you will have to wait for the old period to pass before the new one takes effect. So, once you set it and refresh, there's no quickly going back.</b></span></i>
+            </p>
+            <p>
+                <input type="range" id="cooldown-slider" min="0.25" max="4" value="0.25" step="0.25" style="width:100%;">
+            </p>
             <h4>Cards on Screen</h4>
             <p>
                 In addition to the above ratings cutoff, you can set a limit on the maximum number of cards visible at one time. If there are more unread cards than can fit on the screen, they will show following the page refresh after you've cleared space for them. Max Cards: <b><i><span id="max-cards-value">200</span></i></b>. <i>Refresh page to see results</i>.
@@ -147,8 +115,7 @@
             <p>
                 <input type="range" id="max-cards-slider" min="1" max="500" value="200" step="1" style="width:100%;">
             </p>
-
-            <div class="row" style="margin-bottom: 10px;">
+                        <div class="row" style="margin-bottom: 10px;">
                 <h4>Promote &amp; Mute with Regular Expressions</h4>
                 <p>You can use <a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">regular expressions</a> to be confident you don't miss, or alternatively, never see, certain articles. Your input  below will be fed into JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank">RegExp()</a> as a constructor, where the first input is a string and the second is an optional operator. These are fed to <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match" target="_blank">.match()</a>. If you include a regex under <i>Bump Up</i>, any matches to said expression will have 1 added to their score, which normally maxes out at 1, putting them at the top of your feed. Matches to the regex under <i>Mute</i>, however, will be hidden from your timeline. The match is performed against an article's: (1) title; (2) description; (3) feed name; and (3) link.  Note: using the <i>search</i> feature overides these settings as it searches "all" articles. Leave string inputs blank to take no action. <i>Refresh page to see results</i>.</p>
                 <h5>Bump Up</h5>
@@ -161,33 +128,108 @@
                 <p><input id="regex_never" value="" oninput="localStorage.regex_never=this.value" style="width: calc(100% - 65px);">
                 <input id="regex_never_op" value="" oninput="localStorage.regex_never_op=this.value" style="width:50px" value="i"></p>
             </div>
+
+            <h4>Positive vs. Negative</h4>
+                    <p>
+                        When calculating ratings, how much influence should <i>down votes</i> have compared to <i>up votes</i>? If you choose 0, they don't count at all. If you choose 1, they count equally. If you choose 2, they'll count twice as much as <i>up votes</i>. Why not just set this to 1? Well, people don't seem to respond equally to positive and negative experience. See <a href="https://en.wikipedia.org/wiki/Negativity_bias" target="_blank">negativity bias</a>. Current value: <b><i><span id="negativity-value">1.25</span></i></b>. <i>Refresh page to see results</i>.
+                    </p>
+                    <p>
+                        <input type="range" id="negativity-slider" min="0" max="2" value="1.25" step="0.01" style="width:100%;">
+                    </p>
+
+            <h4>Ratings Cutoff</h4>
+            <p>
+                After the recommendations kick in, each of your cards is given a rating which is used to order the above list. We also truncate the list based on the following cutoff value. We use the <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">z-score</a> of the rating. The z-score of a value is just the number of standard deviations it is away from the mean (average). So the average score of your cards is always 0. Negative numbers are below average, and positive numbers are above average. Z-Score for cutoff: <b><i><span id="cutoff-value">-2</span></i></b>. <i>Refresh page to see results</i>.
+            </p>
+            <p>
+                <input type="range" id="cutoff-slider" min="-3.5" max="3.5" value="-1.5" step="0.01" style="width:100%;">
+            </p>
+
+
             <div class="row">
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
-                    <h4  style="display:none">Auto-Close passto Pop-ups</h4>
-                    <p  style="display:none">If you don't have a <a href="https://help.getpassto.com/category/846-category" target="_blank">passto plugin</a> installed, you can use the <a href="https://getpassto.com" target="_blank">passto</a> button in the upper-right corner of each card to save items to  passto. This opens a new window. If you're already signed into passto you can have these windows close themselves after 1 second. <i><b>Depending on your device, this may or may not be enough time for it to save. YMMV!</b></i> If you aren't already signed in they will open and close without saving. So, only check the box below if you are signed in.</p>
-                    <p  style="display:none">
-                        <label for="passto-pop"><input type="checkbox" id="passto-pop" value="1"> Close the <i>saved to passto</i> window 1 sec after opening. <i>Refresh page to see results</i>.</label>
-                    </p>
-                    <h4>Auto-Vote</h4>
+
+                    <h4>A Note on Performance</h4>
                     <p>
-                        <label for="auto-vote"><input type="checkbox" id="auto-vote" value="1"> When: (1)sharing to Mastodon; or (2) opening an article, give it a thumbs up. <i>Refresh page to see results</i>.</label>
+                        The options you choose here will effect this site's performance. Generally speaking, the more you ask the site to do (e.g., show a lot of cards) the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.
                     </p>
-                    <h4>After Opening</h4>
+                    <h4>Similar Articles</h4>
                     <p>
-                        <label for="after-open"><input type="checkbox" id="after-open" value="1"> Mark cards as "Seen" after opening articles. <i>Refresh page to see results</i>.</label>
+                        You can hide/group articles that are "too" similar to each other. To measure similarity we use <a href="https://towardsdatascience.com/text-vectorization-term-frequency-inverse-document-frequency-tfidf-5a3f9604da6d" target="_blank">vectorizations</a> of cards based on TF-IDF. Leave the <a href="https://en.wikipedia.org/wiki/Cosine_similarity" target="_blank">cosine similarity</a> cutoff at 1 to keep all articles. Setting the cutoff to something lower will hide all but one of the acticles with similarity greater than the cutoff. This will display a list of "hidden" articles at the bottom of the top-most rated article card for that group. <b><i>Note: this will slow down sorting of your articles, esp. for larger timelines. Also, all items in a group other than the top-most are marked as "read" to hide them from your timeline. This cannot be undone!</i></b> Cosine Similarity for cutoff: <b><i><span id="sim-cutoff-value">1</span></i></b>. <i>Refresh page to see results</i>.
                     </p>
-                    <h4>After Votes</h4>
                     <p>
-                        <label for="vote-view"><input type="checkbox" id="vote-view" value="1"> Mark cards as "Seen" after up or down votes. <i>Refresh page to see results</i>.</label>
+                        <input type="range" id="sim-cutoff" min="0.5" max="1" value="1" step="0.01" style="width:100%;">
                     </p>
+                    <h4>History</h4>
+                    <p>
+                        Display content from the last <b><i><span id="lookback-value">7</span> days</i></b>. <i>Refresh page to see results</i>.
+                    </p>
+                    <p>
+                        <input type="range" id="lookback-slider" min="1" max="15" value="7" style="width:100%;">
+                    </p>
+                    <p>
+                        You can limit how much you see in your timeline by adjusting the slider above. If you clear you reading history, however, it will remove older articles, not just hide them. This will effect your recommendations since they are based on your interactions with old articles (did you vote them up or down).
+                    </p>
+                    <p>
+                    <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
+                    </p>
+                    <h4>Pass URL to Pop-Up</h4>
+                    <p>This feature adds a button to the upper-right corner of each card that opens a new window based on the URL you construct below. Use it to pass the card's <i>{{url}}</i> and/or <i>{{title}}</i> as parameters to some other url. Here are some example use cases:</p> 
+                    <ul>
+                    <li>Reddit: <code>https://www.reddit.com/submit?url={{url}}&title={{title}}</code> (assumes you're logged in)</li>
+                    <li>Bluesky: <code>https://bsky.app/intent/compose?text={{title}}. See {{url}}</code> (assumes you're logged in)</li>
+                    <li>LinkedIn: <code>https://www.linkedin.com/feed/?shareActive=true&shareUrl={{url}}</code> (assumes you're logged in)</li>
+                    <li>Instapaper: <code>https://www.instapaper.com/api/add?username=USERNAME&password=PASSWORD&url={{url}}&title={{title}}</code> (you'll need to edit USERNAME and PASSWORD)</li>
+                    <li>Pinboard: <code>https://pinboard.in/add?url={{url}}&title={{title}}</code>  (assumes you're logged in)</li>
+                    <li>Archive.today: <code>https://archive.ph/submit/?url={{url}}</code></li>
+                    <li>Internet Archive: <code>https://web.archive.org/save/{{url}}</code></li>
+                    </ul>
+                    <p>
+                        Construct your URL here:
+                    </p>
+                    <p><input id="passto_url" value="" oninput="localStorage.passto_url=this.value"></p>
+                    <p>
+                    </p>
+                    <p>
+                        <label for="passto-pop"><input type="checkbox" id="passto-pop" value="1"> Close the pop-up window 1 sec after opening. Some use cases don't require you to view your pop-up, only open it (e.g., Instapaper above). So, you can have them close automatically after 1 second. <i><b>Depending on your device, this may or may not be enough time for it to do what you want. YMMV!</b></i></label>
+                    </p>
+                    <p><i>Refresh page to see results</i>.</p>
                     <h4>Share to Mastodon</h4>
+                    <p>
+                        <i>This feature predates Pass URL to Pop-up which can be used to recreate its functionality. It remains here to maintain backwards compatability.</i>
+                    </p>
                     <p>
                         Add your server below to enable a <i>share to mastodon</i> button for each article card. Since users of <a href="https://joinmastodon.org/" target="_blank">Mastodon</a> use different servers/instances, we need to collect that information to enable sharing (i.e., so we can queue your post on the right server). If you'd like to use this feature, enter your server here (e.g. "mastodon.social"):
                     </p>
                     <p><input id="masto_instance" value="" oninput="localStorage.instance=this.value"></p>
+
+                </div>
+                <div class="col-md-6 col-sm-12" style="overflow:hidden;">
+
+                    
+                    <h4>Auto Vote</h4>
+                    <p>
+                        <label for="auto-vote"><input type="checkbox" id="auto-vote" value="1"> When: (1) opening an article; (2) passing a URL to a pop-up; or (3) sharing to Mastodon, give it a thumbs up. <i>Refresh page to see results</i>.</label>
+                    </p>
+                    <!--
+                    <h4>After Opening an Article</h4>
+                    <p>
+                        <label for="after-open"><input type="checkbox" id="after-open" value="1"> Mark cards as "Seen" after opening articles. <i>Refresh page to see results</i>.</label>
+                    -->
+                    <h4>After Votes</h4>
+                    <p>
+                        <label for="vote-view"><input type="checkbox" id="vote-view" value="1"> Mark a card as "Seen" after voting it up or down, includes <i>auto votes</i>. <i>Refresh page to see results</i>.</label>
+                    </p>
+
+                    <h4>Show Cards You've Seen</h4>
+                    <p>
+                        <label for="hiddenMode"><input type="checkbox" id="hiddenMode" value="1"> Show cards marked as "Seen" at the end of the list but grayed out. <i>Refresh page to see results</i>.</label>
+                    </p>
+
+
                     <h4>Margic AI Fairy Dust</h4>
                     <p>
-                        Because everyone else is doing it, you now have the option to add AI. 😜 To learn more, like why this is even here, read this <a href="https://sadlynothavocdinosaur.com/posts/rss-reader" target="_blank">blog post</a>. Depending on your prompt below, this feature may share feed data with your LLM provider when 🤖 is clicked. <i>Refresh page to see results</i>.
+                        Because everyone else is doing it, you now have the option to add AI. 😜 To learn more, like why this is even here, read this <a href="https://sadlynothavocdinosaur.com/posts/rss-reader" target="_blank">blog post</a>. Depending on your prompt below, this feature may share feed data with your LLM provider when 🤖 is clicked. You can, however, use a <a href="https://lmstudio.ai/" target="_blank">local LLM</a> and avoid sharing your prompt with anyone. <i>Refresh page to see results</i>.
                     </p>
                     <p>
                         API Base
@@ -200,30 +242,8 @@
                     <p>
                         Your prompt<br><i>{{news-feed}}</i> will be repaced by your headlines and introductory sentences. 
                     </p>
-                    <p><textarea id="prompt_pref" value="" oninput="localStorage.prompt_pref=this.value"></textarea>
-                </div>
-                <div class="col-md-6 col-sm-12" style="overflow:hidden;">
-                    <h4>Weather</h4>
-                    <p>
-                        <label for="weather-report"><input type="checkbox" id="weather-report" value="1"> Show local weather in degrees <select oninput="localStorage.setItem('temp', this.value)" id="temp" style="width:45px;"><option value="fahrenheit">F</option><option value="celsius">C</option></select> (shares location with <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a>'s weather <a href="https://en.wikipedia.org/wiki/API" target="_blank">API</a>). <i>Refresh page to see results</i>.</label>
-                    </p>
-                    <h4>Show Cards You've Seen</h4>
-                    <p>
-                        <label for="hiddenMode"><input type="checkbox" id="hiddenMode" value="1"> Show cards marked as "Seen" at the end of the list but grayed out. <i>Refresh page to see results</i>.</label>
-                    </p>
-                    <h4>History</h4>
-                    <p>
-                        Display content from the last <b><i><span id="lookback-value">7</span> days</i></b>. <i>Refresh page to see results</i>.
-                    </p>
-                    <p>
-                        <input type="range" id="lookback-slider" min="1" max="15" value="7" style="width:100%;">
-                    </p>
-                    <p>
-                        You can limit how much you see in your timeline by adjusting the slider above. If you clear you reading history, however, it will remove older articles, not just hide them. This will effect your recommendations since they are based on your interactions with old articles (did you vote them up or down).
-                    </p>
-                    <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
-                    <button id="factory-reset" class="btn btn-danger btn-block factory-reset" onClick="reset_all();"><b>RESET ALL</b></button>
-
+                    <p><textarea id="prompt_pref" value="" oninput="localStorage.prompt_pref=this.value"></textarea>    
+                    
                     <h4>Your Data</h4>
                     <p>
                         You can download the My RSS Algo data stored in your browser to a file. This is helpful for backups and if you want to move your history et al. between devices or readers. 
@@ -232,15 +252,49 @@
                         If you click <i>Download All</i> it will include all of your votes and reading history. <i>Donwload OPLM</i> exports only your feeds. The <a href="https://en.wikipedia.org/wiki/OPML" target="_blank">OPLM standard</a> can also be used to move your feeds to another RSS Reader. 
                     </p>
                     <p>
-                        <i>Upload</i> can read both our full data downloads (.json) and standard OPLM files (.oplm). So, you can use it to load a backup or a copy feeds from another reader. 
+                        <i>Upload</i> can read both our full data downloads (.json) and standard OPLM files (.oplm). So, you can use it to load a backup or a copy of feeds from another reader. 
                     </p>
                     <input id="upload" type="file" style="display: none;"/> 
                     <p style="display: flex;">
                         <a href="javascript:saveTextAsFile(JSON.stringify(localStorage,null,2),'My_RSS_algo_data_'+getTodayString()+'.json');" class="btn btn-primary">Download All</a>&nbsp;<a href="javascript:saveTextAsFile(RssOpmlIO.jsonToOpml(localStorage,{title: 'My RSS Export', groupBy: 'feedTitle'}),'My_RSS_algo_data_'+getTodayString()+'.oplm');" class="btn btn-primary">Donwload OPLM</a>&nbsp;
                         <a href="javascript:upload_file()" class="btn btn-danger">Upload</a>
                     </p>
+                    
+                    <h4>Restore Defaults</h4>
+                    <p>
+                        If you want to overwrite all of your data with the current site defaults, hit the big red button.
+                    </p>
+                    <p>
+                        <button id="factory-reset" class="btn btn-danger btn-block factory-reset" onClick="reset_all();"><b>RESET ALL</b></button>
+                    </p>
+                </div>
+                
+            </div>
+
+            <div class="row" style="margin: 0 0 10px 0;border-top: solid 1px #ccc;padding-top:15px">
+                <div class="col-md-6 col-sm-12" style="overflow:hidden;">
+                    <h4>Positive</h4>
+                    <p>
+                        Here are your <b><i>most-positive</i></b> words and their approximate TF-IDF, treating all up-voted cards as a single document: <span id="upwords">not enough data</span>
+                    </p>
+                    <button id="clear-upvotes" class="btn btn-danger btn-block">Clear Upvotes</button>
+
+                </div>
+                <div class="col-md-6 col-sm-12" style="overflow:hidden;">
+                    <h4>Negative</h4>
+                    <p>
+                        Here are your <b><i>most-negative</i></b> words and their approximate TF-IDF, treating all down-voted cards as a single document: <span id="downwords">not enough data</span>
+                    </p>
+                    <button id="clear-downvotes" class="btn btn-danger btn-block">Clear Downvotes</button>
                 </div>
             </div>
+            <div class="row" style="margin: 0px;border-top: solid 1px #ccc;padding-top:15px;border-bottom: solid 1px #ccc;">
+                <p>
+                    Image credits: <img src="images/externallink.png" style="width:23px;margin-right:5px"/> <a href="https://commons.wikimedia.org/wiki/File:2017-fr.wp-blue-externallinks.svg" target="_blank">2017-fr.wp-blue-externallinks.svg</a>
+                </p>
+            </div>
+
+
         </div>
 
         <div id="refresh-all">
@@ -264,6 +318,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 
-<script src="js/functions.js?v=v1.23.0"></script>    
+<script src="js/functions.js?v=v1.24.0"></script>    
 
 </html>

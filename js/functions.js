@@ -1,4 +1,4 @@
-var version = "v1.23.0";
+var version = "v1.24.0";
 
 //history.replaceState('', document.title, window.location.pathname);
 //window.scrollTo(0, 0);
@@ -99,6 +99,9 @@ document.getElementById("regex_never_op").value = regex_never_op;
 
 const instance =  localStorage.getItem("instance") || "";
 document.getElementById("masto_instance").value = instance;
+
+const passto_url =  localStorage.getItem("passto_url") || "";
+document.getElementById("passto_url").value = passto_url;
 
 const api_base =  localStorage.getItem("api_base") || "https://api.openai.com/v1/chat/completions";
 document.getElementById("api_base").value = api_base;
@@ -287,6 +290,11 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
+   const donateButton = document.getElementById("donate");
+    // Toggle between light and dark mode
+    donateButton.addEventListener("click", function () {
+        window.open( "https://www.givecampus.com/campaigns/70271/donations/new", "_donate" );
+    });
 
      const hiddenCardsCheckbox = document.getElementById("hiddenMode");
 
@@ -817,22 +825,23 @@ function declutter(title_source,id_source,tf_source,n=0){
         const newvoteViewImages = voteViewCheckbox.checked;
         localStorage.setItem("voteViewMode", newvoteViewImages);
     });
+
     
-    
-    const afterOpenCheckbox = document.getElementById("after-open");
-    // Retrieve ignore images value from localStorage (if available)
-    if (localStorage.getItem("afterOpenMode")) {
-        afterOpenModeState = localStorage.getItem("afterOpenMode") === "true";
-    } else {
-        afterOpenModeState = true;
-        localStorage.setItem("afterOpenMode", afterOpenModeState);
-    }
-    afterOpenCheckbox.checked = afterOpenModeState;
-    // Update ignore images value and save to localStorage when checkbox value changes
-    afterOpenCheckbox.addEventListener("change", function () {
-        const newafterOpenImages = afterOpenCheckbox.checked;
-        localStorage.setItem("afterOpenMode", newafterOpenImages);
-    });
+    //const afterOpenCheckbox = document.getElementById("after-open");
+    //// Retrieve ignore images value from localStorage (if available)
+    //if (localStorage.getItem("afterOpenMode")) {
+    //    afterOpenModeState = localStorage.getItem("afterOpenMode") === "true";
+    //} else {
+    //    afterOpenModeState = true;
+    //    localStorage.setItem("afterOpenMode", afterOpenModeState);
+    //}
+    //afterOpenCheckbox.checked = afterOpenModeState;
+    //// Update ignore images value and save to localStorage when checkbox value changes
+    //afterOpenCheckbox.addEventListener("change", function () {
+    //    const newafterOpenImages = afterOpenCheckbox.checked;
+    //    localStorage.setItem("afterOpenMode", newafterOpenImages);
+    //});    
+
 
 
     const autoVoteCheckbox = document.getElementById("auto-vote");
@@ -1547,19 +1556,29 @@ function declutter(title_source,id_source,tf_source,n=0){
                         if (mastodon) {
                             favicon = masto_profile
                             card_body_text = `<h5 class="card-title">A Post From <a href="https://joinmastodon.org/" target="_blank" class="masto_post">Mastodon</a></h5><div style="height:100%;overflow-y:auto;">${description}</div>`
-                            //share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div><div class="passto_share"><a href="javascript:void('')" class="save_to_passto"><div style="background: url('images/cached_logos/pocket.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
+                            //share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div><div class="passto_share"><a href="javascript:void('')" class="save_to_passto"><div style="background: url('images/cached_logos/externallink.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
                         } else {
                             favicon = "https://"+domain_from_link+"/favicon.ico"
                             card_body_text = `<h5 class="card-title">${title}</h5><p class="card-text">${description}</p>`
                             //share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodons</a></div>
-                          //      <div class="passto_share"><a href="javascript:void('')" class="save_to_passto"><div style="background: url('images/cached_logos/pocket.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
+                          //      <div class="passto_share"><a href="javascript:void('')" class="save_to_passto"><div style="background: url('images/cached_logos/externallink.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
                         }
                         if (document.getElementById("masto_instance").value.trim()!=""){
-                            share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div>`
+                            if (document.getElementById("passto_url").value.trim()=="") {
+                                share_html = `<div class="masto_share"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div>`
+                            } else {
+                                share_html = `<div class="masto_share" style="padding-right:25px;"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div>`
+
+                            }
                         } else {
                             share_html = `<div class="masto_share" style="display:none"><a href="javascript:void('')" class="share_to_mastodon">Mastodon</a></div>`
                         }
-                        share_html += `<div class="passto_share" style="display:none"><a href="javascript:void('')" class="save_to_passto"><div style="background: url('images/cached_logos/pocket.png');background-position: 0px -9px; width:35px;height:40px;"></div></a></div>`
+                        if (document.getElementById("passto_url").value.trim()=="") {
+                            passto_style = " style='display:none'";
+                        } else {
+                            passto_style = ""
+                        }
+                        share_html += `<div class="passto_share"`+passto_style+`><a href="javascript:void('')" class="save_to_passto"><div style="background: url('images/externallink.png');width:23px;height:23px;margin-top:2px;background-size: contain;opacity:0.7"></div></a></div>`
 
                         if (savedIgnoreImages){
                             img_html = `
@@ -1668,7 +1687,8 @@ function declutter(title_source,id_source,tf_source,n=0){
 
                         passtoButton.addEventListener("click", function() {
 
-                            save_to_passto(itemId)
+                            //save_to_passto(itemId)
+                            save_to_passto(link,title)
 
                             if (savedautoVote) {
                                 upvotes[itemId] = true;
@@ -1815,6 +1835,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 updateArticleStyles();
                             }
 
+                            afterOpenModeState = false
                             if (!isRead && afterOpenModeState) {
                                 const articleIndex = parseInt(article.getAttribute("data-article-index"));
                                 readArticles[itemId] = new Date().toISOString();
@@ -2811,9 +2832,14 @@ function declutter(title_source,id_source,tf_source,n=0){
         window.open(url, '_blank');
     }
 
+    function save_to_passto(url,title=""){
 
-    function save_to_passto(url){
-        var win = window.open( "https://getpassto.com/edit?url="+ encodeURIComponent(url), "passto" );
+        var pop_url = document.getElementById("passto_url").value.trim()
+
+        pop_url = pop_url.replace(/{{url}}/gi,  encodeURIComponent(url))
+        pop_url = pop_url.replace(/{{title}}/gi,  encodeURIComponent(title))
+        
+        var win = window.open( pop_url, "_blank" );
 
         if (passtoPopModeState) {
             setTimeout( function() {
@@ -3144,7 +3170,7 @@ ${bodyXml}</body>
       feeds: JSON.stringify(feeds, null, 0),
       voteViewMode: "true",
       regex_always: "",          
-      afterOpenMode: "true",
+      //afterOpenMode: "true",
       lastcooldown: "0.5",
       articles: "[]",            
       feed_names : JSON.stringify(feedNames, null, 0)

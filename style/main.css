@@ -1,5 +1,10 @@
 /* Mastodon Content */
 
+code{
+    overflow-wrap: break-word;
+    word-break: break-all;
+}
+
 .invisible {
     display: inline-block;
     font-size: 0;
@@ -174,6 +179,11 @@ select {
     margin: 2px 5px 0 0;
 }
 
+#donate{
+    margin-right: 4.5px;
+}
+
+
 #summarize-news{
     display:none;
     margin-right: 4.5px;
@@ -191,6 +201,14 @@ select {
 
 .dark-mode #sum_msg {
     background:#775c03;
+}
+
+#passto_url {
+    width:100%;
+}
+
+#masto_instance {
+    width:100%;
 }
 
 #api_base {
