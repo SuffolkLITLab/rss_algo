@@ -2342,7 +2342,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             "Patience is a superpower.",
                             "In life and on apps, always question defaults. Fiddle with some settings, and see what happens.",
                             "Civilization is a positive-sum game.",
-                            "There is nothing more corrosive to good work/being our best selves than the state of being in a rush."
+                            "Few things threaten good work more than the state of being in a rush. Breathe..."
                         ]
                 if (document.getElementById('my_settings').style.display=="none") {       
                     document.getElementById('news-feed').style.display = "flex";
@@ -2625,6 +2625,9 @@ function declutter(title_source,id_source,tf_source,n=0){
                         </div>
                         <div class="modal-body">
                             <p>
+                                You can import and overwrite the current feed list by <a href="javascript:upload_file()">uploading an OPLM file</a>, or you can use any of the options below.
+                            </p>
+                            <p>
                                 Remove individual feeds using the "Remove" buttons below, OR wipe and/or replace your existing list of feeds. If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>.
                             </p> 
                             <p>
@@ -2660,7 +2663,7 @@ function declutter(title_source,id_source,tf_source,n=0){
                             <p>
                             <hr>
                             <p>
-                                <b>Current Feeds</b>: You experience was built on top of <a href="?feeds=${localStorage.getItem("votelib")}">myrssalgo.org/?feeds=${localStorage.getItem("votelib")}</a>. Share that link to have folks start where you do.
+                                <b>Current Feeds</b>: You experience was built on top of <a href="?feeds=${localStorage.getItem("votelib")}">myrssalgo.org/?feeds=${localStorage.getItem("votelib")}</a>. Share that link to have folks start where you did.
                             </p>
                             <table cellpadding="5px" width="100%">${feedList}</table>
                         </div>
