@@ -1,4 +1,4 @@
-var version = "v1.24.0";
+var version = "v1.24.1";
 
 //history.replaceState('', document.title, window.location.pathname);
 //window.scrollTo(0, 0);
@@ -1835,8 +1835,9 @@ function declutter(title_source,id_source,tf_source,n=0){
                                 updateArticleStyles();
                             }
 
-                            afterOpenModeState = false
-                            if (!isRead && afterOpenModeState) {
+                            if (savedautoVote && voteViewModeState) {
+                            //afterOpenModeState = false
+                            //if (!isRead && afterOpenModeState) {
                                 const articleIndex = parseInt(article.getAttribute("data-article-index"));
                                 readArticles[itemId] = new Date().toISOString();
                                 localStorage.setItem("read", JSON.stringify(readArticles));
