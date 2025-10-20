@@ -109,7 +109,7 @@ document.getElementById("api_base").value = api_base;
 const api_key =  localStorage.getItem("api_key") || "";
 document.getElementById("api_key").value = api_key;
 
-const prompt_pref =  localStorage.getItem("prompt_pref") || `Read the following collection of headlines and introductory sentences for a set of news posts. Then provide a short summary/briefing based on their content and only their content.\n-----\n{{news-feed}}\n-----\nNow provide your briefing. Keep it short, no more than 100 words!`;
+const prompt_pref =  localStorage.getItem("prompt_pref") || `Read the following list of headlines and introductory sentences then provide a short briefing based on the news you find. If a story shows up multiple times, place it closer to the top of your summary. Remember, there may not be room for everything, prioritize.\n-----\n{{news-feed}}\n-----\nNow provide your briefing. Keep it short, no more than 100 words!`;
 document.getElementById("prompt_pref").value = prompt_pref;
 
 if (api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
