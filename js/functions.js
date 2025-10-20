@@ -2904,7 +2904,7 @@ async function weatherAPI(lat,lon){
     var data;
     var lastWeatherReport = localStorage.getItem("lastWeatherReport") || 0;
     var WeatherDiff = (Date.parse(new Date())-lastWeatherReport)/1000
-    if (WeatherDiff>10*60){
+    if (WeatherDiff>15*60){
         try {
             const response = await fetch("https://api.open-meteo.com/v1/forecast?latitude="+lat+"&longitude="+lon+"&current_weather=true&temperature_unit="+document.getElementById("temp").value+"&is_day=true");        
             data = await response.text();
