@@ -2534,10 +2534,10 @@ function declutter(title_source,id_source,tf_source,n=0){
       
           llm_messages.push({"role": "user", "content": prompt_text})
           var data = {
-                    "model": "gpt-4o-mini",//"gpt-3.5-turbo-1106", 
+                    "model": "gpt-4.1-nano",//"gpt-3.5-turbo-1106", 
                     "messages": llm_messages,
-                    "temperature": 0.0,
-                    "max_tokens": 500
+                    "temperature": 0.0//,
+                    //"max_tokens": 500
                   };
             
         console.log(data);
