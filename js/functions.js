@@ -1,4 +1,4 @@
-var version = "v1.24.1";
+var version = "v1.24.2";
 
 //history.replaceState('', document.title, window.location.pathname);
 //window.scrollTo(0, 0);
@@ -2907,8 +2907,9 @@ async function weatherAPI(lat,lon){
     var data;
     var lastWeatherReport = localStorage.getItem("lastWeatherReport") || 0;
     var WeatherDiff = (Date.parse(new Date())-lastWeatherReport)/1000
+    var weatherString = localStorage.getItem("lastWeatherString") || "";
 
-    if (WeatherDiff>15*60 | (localStorage.getItem('temp')=="fahrenheit" & !localStorage.getItem("lastWeatherString").match("F")) | (localStorage.getItem('temp')=="celsius" & !localStorage.getItem("lastWeatherString").match("C"))){
+    if (WeatherDiff>15*60 | (localStorage.getItem('temp')=="fahrenheit" & !weatherString.match("F")) | (localStorage.getItem('temp')=="celsius" & !weatherString.match("C"))){
         try {
             const response = await fetch("https://api.open-meteo.com/v1/forecast?latitude="+lat+"&longitude="+lon+"&current_weather=true&temperature_unit="+document.getElementById("temp").value+"&is_day=true");        
             data = await response.text();
