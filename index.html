@@ -85,13 +85,17 @@
 
             <div class="row" style="margin-bottom: 10px;">
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
-                    <h4>Images</h4>
+                    <h4>A Note on Performance</h4>
                     <p>
-                        <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Exclude preview images and <a href="https://en.wikipedia.org/wiki/Favicon" target="_blank">favicons</a> (i.e., load w/o thumbnails and site icons). <i>Refresh page to see results</i>.</label>
+                        The options you choose here will effect this site's performance. Generally speaking, the more you ask the site to do (e.g., show a lot of cards) the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.
                     </p>
  
                 </div>
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
+                    <h4>Images</h4>
+                    <p>
+                        <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Exclude preview images and <a href="https://en.wikipedia.org/wiki/Favicon" target="_blank">favicons</a> (i.e., load w/o thumbnails and site icons). <i>Refresh page to see results</i>.</label>
+                    </p>
                     <h4>Weather</h4>
                     <p>
                         <label for="weather-report"><input type="checkbox" id="weather-report" value="1"> Show local weather in degrees <select oninput="localStorage.setItem('temp', this.value)" id="temp" style="width:45px;"><option value="fahrenheit">F</option><option value="celsius">C</option></select> (shares location with <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a>'s weather <a href="https://en.wikipedia.org/wiki/API" target="_blank">API</a>). <i>Refresh page to see results</i>.</label>
@@ -110,7 +114,7 @@
             </p>
             <h4>Cards on Screen</h4>
             <p>
-                In addition to the above ratings cutoff, you can set a limit on the maximum number of cards visible at one time. If there are more unread cards than can fit on the screen, they will show following the page refresh after you've cleared space for them. Consider also, that each refresh triggers a recalculation of the card rankings based on your interactions. So, a selection with more screens (fewer cards) will be more "responsive." Currently Max Cards is set to: <b><i><span id="max-cards-value">200</span></i></b>. <i>Refresh page to see results</i>.
+                In addition to the ratings cutoff below, you can set a limit on the maximum number of cards visible at one time. If there are more unread cards than can fit on the screen, they will show following the page refresh after you've cleared space for them. Consider also, that each refresh triggers a recalculation of the card rankings based on your interactions. So, a selection with more screens (fewer cards) will be more "responsive." Max Cards: <b><i><span id="max-cards-value">200</span></i></b>. <i>Refresh page to see results</i>.
             </p>
             <p>
                 <input type="range" id="max-cards-slider" min="1" max="500" value="200" step="1" style="width:100%;">
@@ -149,10 +153,6 @@
             <div class="row">
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
 
-                    <h4>A Note on Performance</h4>
-                    <p>
-                        The options you choose here will effect this site's performance. Generally speaking, the more you ask the site to do (e.g., show a lot of cards) the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.
-                    </p>
                     <h4>Similar Articles</h4>
                     <p>
                         You can hide/group articles that are "too" similar to each other. To measure similarity we use <a href="https://towardsdatascience.com/text-vectorization-term-frequency-inverse-document-frequency-tfidf-5a3f9604da6d" target="_blank">vectorizations</a> of cards based on TF-IDF. Leave the <a href="https://en.wikipedia.org/wiki/Cosine_similarity" target="_blank">cosine similarity</a> cutoff at 1 to keep all articles. Setting the cutoff to something lower will hide all but one of the acticles with similarity greater than the cutoff. This will display a list of "hidden" articles at the bottom of the top-most rated article card for that group. <b><i>Note: this will slow down sorting of your articles, esp. for larger timelines. Also, all items in a group other than the top-most are marked as "read" to hide them from your timeline. This cannot be undone!</i></b> Cosine Similarity for cutoff: <b><i><span id="sim-cutoff-value">1</span></i></b>. <i>Refresh page to see results</i>.
@@ -197,8 +197,7 @@
                     <h4>Share to Mastodon</h4>
                     <p>
                         <i>This feature predates Pass URL to Pop-up which can be used to recreate its functionality. It remains here to maintain backwards compatability.</i>
-                    </p>
-                    <p>
+                    
                         Add your server below to enable a <i>share to mastodon</i> button for each article card. Since users of <a href="https://joinmastodon.org/" target="_blank">Mastodon</a> use different servers/instances, we need to collect that information to enable sharing (i.e., so we can queue your post on the right server). If you'd like to use this feature, enter your server here (e.g. "mastodon.social"):
                     </p>
                     <p><input id="masto_instance" value="" oninput="localStorage.instance=this.value"></p>
@@ -262,7 +261,7 @@
                     
                     <h4>Restore Defaults</h4>
                     <p>
-                        If you want to overwrite all of your data with the current site defaults, hit the big red button.
+                        If you want to overwrite all of your data with the current site defaults, hit the big red <i>RESET ALL</i> button.
                     </p>
                     <p>
                         <button id="factory-reset" class="btn btn-danger btn-block factory-reset" onClick="reset_all();"><b>RESET ALL</b></button>
