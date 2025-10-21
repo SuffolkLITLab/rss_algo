@@ -2589,7 +2589,7 @@ document.addEventListener("DOMContentLoaded", function() {
             //console.log("prompt_text: "+prompt_text)
 
             if ((document.getElementById("prompt_pref").value.search(/{{news-feed}}/g)>=0) && (cardDetails.substring(0,100000*4).trim().length<=0)) {
-                let text = `There doesn't seem to be anything in your news feed. Your LLM will likely make something up!!!!! Click OK is that's what you want.`;
+                let text = `There doesn't seem to be anything in your news feed. Your LLM will likely make something up!!!!! Click OK if that's what you want.`;
                 if (confirm(text) == true) {
                     openai_call(prompt_text);    
                 } else {
