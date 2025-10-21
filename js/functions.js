@@ -2341,7 +2341,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             "Patience is a superpower.",
                             'In life and on apps, always question defaults. Fiddle with some "settings," and see what happens.',
                             "Civilization is a positive-sum game.",
-                            "Few things threaten good work more than rushing. Breathe..."
+                            "Few things threaten good work more than rushing... Breathe."
                         ]
                 if (document.getElementById('my_settings').style.display=="none") {       
                     document.getElementById('news-feed').style.display = "flex";
@@ -2453,7 +2453,7 @@ document.addEventListener("DOMContentLoaded", function() {
         saved_articles =  JSON.parse(localStorage.getItem("articles")) || [];
 
         regex = new RegExp(newSearch, "i")
-        matching_regex.innerHTML = `Results matching <b>"${newSearch}"</b>  (<a href="${document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch)}" target="_blank">link to search</a>).`;
+        matching_regex.innerHTML = `<a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">Regular expression</a> matching results for <b>"${newSearch}"</b> (<a href="${document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch)}" target="_blank">link to search</a>).`;
 
         saved_articles.forEach(articleData => {
             testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl
