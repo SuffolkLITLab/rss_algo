@@ -1,4 +1,4 @@
-var version = "v1.24.2";
+var version = "v1.25.0";
 
 //history.replaceState('', document.title, window.location.pathname);
 //window.scrollTo(0, 0);
@@ -360,7 +360,6 @@ document.addEventListener("DOMContentLoaded", function() {
         var feed_name = "default_feeds"
         rssFeeds = JSON.parse(localStorage.getItem("feeds")) || feed_lib[feed_name];
     }
-    
 
     function arr2obj(arr) {
         return arr.reduce(
@@ -516,7 +515,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return data;
     }
 
-function declutter(title_source,id_source,tf_source,n=0){
+    function declutter(title_source,id_source,tf_source,n=0){
 
         //document.getElementById('loading').style.display = "block";
         //console.log("starts",document.getElementById('loading').style.display )
@@ -726,9 +725,6 @@ function declutter(title_source,id_source,tf_source,n=0){
         lookbackValueElement.textContent = newLookback;
         localStorage.setItem("lookback", newLookback);
     });
-
-
-
 
     const simcutSlider = document.getElementById("sim-cutoff");
     const simcutValueElement = document.getElementById("sim-cutoff-value");
@@ -2410,8 +2406,7 @@ function declutter(title_source,id_source,tf_source,n=0){
        
     });            
     
-    loadNews(true);
-
+    
     const addFeedButton = document.getElementById("add-feed");
     addFeedButton.addEventListener("click", function() {
         if (rssFeeds.length>=60) {
@@ -2440,6 +2435,8 @@ function declutter(title_source,id_source,tf_source,n=0){
     const matching_regex = document.getElementById("matching_regex");
 
     function regex_search(newSearch) {
+
+        window.history.pushState({}, "", document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch));
         
         document.getElementById('unread-count').style.display = "none";
         document.getElementById('read-count').style.display = "none";
@@ -2456,7 +2453,7 @@ function declutter(title_source,id_source,tf_source,n=0){
         saved_articles =  JSON.parse(localStorage.getItem("articles")) || [];
 
         regex = new RegExp(newSearch, "i")
-        matching_regex.innerHTML = `Results matching <b>"${newSearch}"</b>. `;
+        matching_regex.innerHTML = `Results matching <b>"${newSearch}"</b>  (<a href="${document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch)}" target="_blank">link to search</a>).`;
 
         saved_articles.forEach(articleData => {
             testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl
@@ -2491,12 +2488,13 @@ function declutter(title_source,id_source,tf_source,n=0){
     var searchResults = [];
     const runSearch = document.getElementById("search_btn");
     runSearch.addEventListener("click", function() {
-        const newSearch = prompt("Search titles, descriptions, feed names, and links (case-insensitive regex match on \"all\" articles):");
+        const newSearch = prompt("Search titles, descriptions, feed names, and links (case-insensitive regex match on ALL articles):");
         if (newSearch === null) {
             return; //break out of the function early
-        }   
+        } 
         regex_search(newSearch);
     });
+
 
     async function openai_call(prompt_text) {
 
@@ -2854,6 +2852,13 @@ function declutter(title_source,id_source,tf_source,n=0){
                 win.close();
             }, 1000);
         }
+    }
+    
+    if (searchParams.has('regex')){
+        document.getElementById('loading').style.display = "none";
+        regex_search(decodeURI(searchParams.get('regex')))
+    } else {
+        loadNews(true);
     }
 
 });
