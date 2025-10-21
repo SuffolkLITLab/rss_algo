@@ -1,4 +1,4 @@
-var version = "v1.25.0";
+var version = "v1.26.0";
 
 //history.replaceState('', document.title, window.location.pathname);
 //window.scrollTo(0, 0);
@@ -2208,7 +2208,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 } else {
                     words += ", &amp; "
                 }
-                words += word + " ("+Math.round(word_list[word])+")"
+                words += "<a href='.?regex=\\b"+word.replaceAll("-","(-|\\s|\\.)")+"\\b'>"+ word + "</a> ("+Math.round(word_list[word])+")"
                 i+=1
             }
         } else {
@@ -2857,6 +2857,11 @@ document.addEventListener("DOMContentLoaded", function() {
     if (searchParams.has('regex')){
         document.getElementById('loading').style.display = "none";
         regex_search(decodeURI(searchParams.get('regex')))
+        if (savedWeather){
+            getUserWeather();
+        }
+        document.getElementById('upwords').innerHTML = topWords(upTFIDF,downTFIDF);
+        document.getElementById('downwords').innerHTML = topWords(downTFIDF,upTFIDF);
     } else {
         loadNews(true);
     }
