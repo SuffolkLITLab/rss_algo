@@ -3200,6 +3200,13 @@ ${bodyXml}</body>
   return { jsonToOpml, opmlToJson };
 })();
 
+document.addEventListener('keydown', function(event) {
+        if (event.metaKey && (event.key === 'R' || event.key === 'r')) {
+            window.history.pushState({}, '',  document.location.href.split('?')[0]);
+            window.location.reload();
+        }
+    });
+
 document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
 
 
