@@ -2208,7 +2208,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 } else {
                     words += ", &amp; "
                 }
-                words += "<a href='.?regex=\\b"+word.replaceAll("-","(\-|\\s|\\.)")+"\\b'>"+ word + "</a> ("+Math.round(word_list[word])+")"
+                words += "<a href='.?regex=\\b"+word.replaceAll("-","(\\-|\\s|\\.)")+"\\b'>"+ word + "</a> ("+Math.round(word_list[word])+")"
                 i+=1
             }
         } else {
