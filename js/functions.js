@@ -750,18 +750,21 @@ function declutter(title_source,id_source,tf_source,n=0){
 
     const maxonpageSlider = document.getElementById("max-cards-slider");  
     const maxonpageValueElement = document.getElementById("max-cards-value");
+    const maxonpageValueElementCopy = document.getElementById("max-cards-value-copy");
     
     // Retrieve cardcutoff value from localStorage (if available)
     const max_on_page = localStorage.getItem("cardcutoff");
     if (max_on_page) {
         maxonpageSlider.value = max_on_page;
         maxonpageValueElement.textContent = max_on_page;
+        maxonpageValueElementCopy.textContent = max_on_page;
     }
 
     // Update cardcutoff value and save to localStorage when slider value changes
     maxonpageSlider.addEventListener("input", function () {
         const max_on_page = maxonpageSlider.value;
         maxonpageValueElement.textContent = max_on_page;
+        maxonpageValueElementCopy.textContent = max_on_page;
         localStorage.setItem("cardcutoff", max_on_page);
     });
 
@@ -2904,7 +2907,8 @@ async function weatherAPI(lat,lon){
     var data;
     var lastWeatherReport = localStorage.getItem("lastWeatherReport") || 0;
     var WeatherDiff = (Date.parse(new Date())-lastWeatherReport)/1000
-    if (WeatherDiff>15*60){
+
+    if (WeatherDiff>15*60 | (localStorage.getItem('temp')=="fahrenheit" & !localStorage.getItem("lastWeatherString").match("F")) | (localStorage.getItem('temp')=="celsius" & !localStorage.getItem("lastWeatherString").match("C"))){
         try {
             const response = await fetch("https://api.open-meteo.com/v1/forecast?latitude="+lat+"&longitude="+lon+"&current_weather=true&temperature_unit="+document.getElementById("temp").value+"&is_day=true");        
             data = await response.text();
