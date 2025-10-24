@@ -1,4 +1,4 @@
-var version = "v1.27.0";
+var version = "v1.27.1";
 
 load_gists_data();
 
@@ -285,10 +285,11 @@ control.addEventListener("change", function(event){
                             //console.log(key,JSON.stringify(value))
                             //localStorage.clear();
                             localStorage.setItem(key,value);
-                            localStorage.setItem("lastLoad",0);
+                            
                             dirty();
                         }
-                            window.location.reload(true);
+                        localStorage.setItem("lastLoad",0);
+                        window.location.reload(true);
                     } else {
                         alert("Error Parsing File: No feeds found. Check file format.")
                     } 
@@ -3266,10 +3267,12 @@ ${bodyXml}</body>
 })();
 
 document.addEventListener('keydown', function(event) {
-        if (event.metaKey && (event.key === 'R' || event.key === 'r')) {
-            sync_and_refresh();
-        }
-    });
+    if (event.metaKey && (event.key === 'R' || event.key === 'r')) {
+        window.event.preventDefault();
+        window.event.stopPropagation();
+        sync_and_refresh();
+    }
+});
 
 function gistClient({ token, apiVersion = "2022-11-28" }) {
   if (!token) throw new Error("Missing GitHub token (with `gist` scope).");
@@ -3398,7 +3401,28 @@ async function load_gists_data() {
         console.log("Load Gist",gist_json["lastChange"]>localStorage.getItem("lastChange"),(gist_json!=localStorage))
 
         if ((gist_json["lastChange"]>localStorage.getItem("lastChange")) && (gist_json!=localStorage)) {
-            localStorage = gist_json
+            var data_dump = {}
+            try {
+                // Code that might throw an error
+                data_dump = gist_json
+            } catch (error) {
+                // Code to execute if an error occurs in the try block
+                // The 'error' variable contains information about the error
+                data_dump = RssOpmlIO.opmlToJson(gist_text)
+            }               
+            if (data_dump["feeds"]!="[]"){
+                localStorage.clear();
+                for (const [key, value] of Object.entries(data_dump)) {
+                    //console.log(key,JSON.stringify(value))
+                    //localStorage.clear();
+                    localStorage.setItem(key,value);
+                    //localStorage.setItem("lastLoad",0);
+                }
+                window.location.reload(true);
+            } else {
+                alert("Error Parsing File: No feeds found.")
+            } 
+            //localStorage = gist_json
         } 
     }
 
@@ -3446,9 +3470,9 @@ async function pull_gists_data() {
                     //console.log(key,JSON.stringify(value))
                     //localStorage.clear();
                     localStorage.setItem(key,value);
-                    localStorage.setItem("lastLoad",0);
-                    window.location.reload(true);
                 }
+                localStorage.setItem("lastLoad",0);
+                window.location.reload(true);
             } else {
                 alert("Error Parsing File: No feeds found.")
             } 
