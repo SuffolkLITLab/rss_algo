@@ -219,6 +219,14 @@ select {
     width:100%;
 }
 
+#gist_name {
+    width:100%;
+}
+
+#gist_token {
+    width:100%;
+}
+
 #prompt_pref {
     width:100%;
     height:160px;

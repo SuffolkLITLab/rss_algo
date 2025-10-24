@@ -17,11 +17,11 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="images/blue-icon-180x180.png">
 
-    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.26.0">
-	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.26.0">
-    <script src="js/spin/spin.min.js?v=v1.26.0"></script>
+    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.27.0">
+	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.27.0">
+    <script src="js/spin/spin.min.js?v=v1.27.0"></script>
 
-    <script src="js/report.js?v=v1.26.0"></script>    
+    <script src="js/report.js?v=v1.27.0"></script>    
     <script src="js/feeds.js?trained_on=2024-08-13b"></script>
 
 </head>
@@ -31,7 +31,7 @@
             <div class="menu">
                 <button id="donate" class="btn btn-secondary" style="float:left;">❤️</button>
                 <button id="summarize-news" class="btn btn-secondary" style="float:left;">🤖</button>
-                <button id="refresh" class="btn btn-secondary" style="float:left;" onCLick="document.getElementById('loading').style.display = 'block';toggle_settings(clear=true);document.getElementById('sum_msg').style.display = 'none';document.getElementById('search_msg').style.display = 'none';document.getElementById('news-feed').style.display = 'none';document.getElementById('mark-all').style.display = 'none';document.getElementById('refresh-all').style.display = 'none';window.history.pushState({}, '',  document.location.href.split('?')[0]);window.location.reload();">↺</button>
+                <button id="refresh" class="btn btn-secondary" style="float:left;" onCLick="sync_and_refresh()">↺</button>
                 <!--<span class="love"><a href="blog" id="math" class="btn btn-secondary">❤️ Letters</a></span>-->
                 <button id="toggle-mode" class="btn btn-secondary" aria-label="Toggle Dark Mode">🌗</button>
                 <button id="manage-feeds" class="btn btn-secondary">Feeds</button>
@@ -114,7 +114,7 @@
             </p>
             <h4>Cards on Screen</h4>
             <p>
-                In addition to the ratings cutoff below, you can set a limit on the maximum number of cards visible at one time. If there are more unread cards than can fit on the screen, they will show following the page refresh after you've cleared space for them. Consider also, that each refresh triggers a recalculation of the card rankings based on your interactions. So, a selection with more screens (fewer cards) will be more "responsive." Max Cards: <b><i><span id="max-cards-value">200</span></i></b>. <i>Refresh page to see results</i>.
+                In addition to the ratings cutoff below, you can set a limit on the maximum number of cards visible at one time. If there are more unread cards than can fit on the screen, they will show following the page refresh after you've cleared space for them. Consider also, that each refresh triggers a recalculation of the card rankings based on your interactions. So, a selection with more screens (fewer cards) will be more "responsive," and take less time to chug through calculations. Max Cards: <b><i><span id="max-cards-value">200</span></i></b>. <i>Refresh page to see results</i>.
             </p>
             <p>
                 <input type="range" id="max-cards-slider" min="1" max="500" value="200" step="1" style="width:100%;">
@@ -153,13 +153,6 @@
             <div class="row">
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
 
-                    <h4>Similar Articles</h4>
-                    <p>
-                        You can hide/group articles that are "too" similar to each other. To measure similarity we use <a href="https://towardsdatascience.com/text-vectorization-term-frequency-inverse-document-frequency-tfidf-5a3f9604da6d" target="_blank">vectorizations</a> of cards based on TF-IDF. Leave the <a href="https://en.wikipedia.org/wiki/Cosine_similarity" target="_blank">cosine similarity</a> cutoff at 1 to keep all articles. Setting the cutoff to something lower will hide all but one of the acticles with similarity greater than the cutoff. This will display a list of "hidden" articles at the bottom of the top-most rated article card for that group. <b><i>Note: this will slow down sorting of your articles, esp. for larger timelines. Also, all items in a group other than the top-most are marked as "read" to hide them from your timeline. This cannot be undone!</i></b> Cosine Similarity for cutoff: <b><i><span id="sim-cutoff-value">1</span></i></b>. <i>Refresh page to see results</i>.
-                    </p>
-                    <p>
-                        <input type="range" id="sim-cutoff" min="0.5" max="1" value="1" step="0.01" style="width:100%;">
-                    </p>
                     <h4>History</h4>
                     <p>
                         Display content from the last <b><i><span id="lookback-value">7</span> days</i></b>. <i>Refresh page to see results</i>.
@@ -173,39 +166,7 @@
                     <p>
                     <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
                     </p>
-                    <h4>Pass URL to Pop-Up</h4>
-                    <p>This feature adds a button to the upper-right corner of each card that opens a new window based on the URL you construct below. Use it to pass the card's <i>{{url}}</i> and/or <i>{{title}}</i> as parameters to some other url. Here are some example use cases:</p> 
-                    <ul>
-                    <li>Reddit: <code>https://www.reddit.com/submit?url={{url}}&title={{title}}</code> (assumes you're logged in)</li>
-                    <li>Bluesky: <code>https://bsky.app/intent/compose?text={{title}}. See {{url}}</code> (assumes you're logged in)</li>
-                    <li>LinkedIn: <code>https://www.linkedin.com/feed/?shareActive=true&shareUrl={{url}}</code> (assumes you're logged in)</li>
-                    <li>Instapaper: <code>https://www.instapaper.com/api/add?username=USERNAME&password=PASSWORD&url={{url}}&title={{title}}</code> (you'll need to edit USERNAME and PASSWORD)</li>
-                    <li>Pinboard: <code>https://pinboard.in/add?url={{url}}&title={{title}}</code>  (assumes you're logged in)</li>
-                    <li>Archive.today: <code>https://archive.ph/submit/?url={{url}}</code></li>
-                    <li>Internet Archive: <code>https://web.archive.org/save/{{url}}</code></li>
-                    </ul>
-                    <p>
-                        Construct your URL here:
-                    </p>
-                    <p><input id="passto_url" value="" oninput="localStorage.passto_url=this.value"></p>
-                    <p>
-                    </p>
-                    <p>
-                        <label for="passto-pop"><input type="checkbox" id="passto-pop" value="1"> Close the pop-up window 1 sec after opening. Some use cases don't require you to view your pop-up, only open it (e.g., Instapaper above). So, you can have them close automatically after 1 second. <i><b>Depending on your device, this may or may not be enough time for it to do what you want. YMMV!</b></i></label>
-                    </p>
-                    <p><i>Refresh page to see results</i>.</p>
-                    <h4>Share to Mastodon</h4>
-                    <p>
-                        <i>This feature predates Pass URL to Pop-up which can be used to recreate its functionality. It remains here to maintain backwards compatability.</i>
-                    
-                        Add your server below to enable a <i>share to mastodon</i> button for each article card. Since users of <a href="https://joinmastodon.org/" target="_blank">Mastodon</a> use different servers/instances, we need to collect that information to enable sharing (i.e., so we can queue your post on the right server). If you'd like to use this feature, enter your server here (e.g. "mastodon.social"):
-                    </p>
-                    <p><input id="masto_instance" value="" oninput="localStorage.instance=this.value"></p>
 
-                </div>
-                <div class="col-md-6 col-sm-12" style="overflow:hidden;">
-
-                    
                     <h4>Auto Vote</h4>
                     <p>
                         <label for="auto-vote"><input type="checkbox" id="auto-vote" value="1"> When: (1) opening an article; (2) passing a URL to a pop-up; or (3) sharing to Mastodon, give it a thumbs up. <i>Refresh page to see results</i>.</label>
@@ -226,18 +187,59 @@
                     </p>
 
 
+                    <h4>Pass URL to Pop-Up</h4>
+                    <p>This feature adds a button to the upper-right corner of each card that opens a new window based on the URL you construct below. Use it to pass the card's <i>{{url}}</i> and/or <i>{{title}}</i> as parameters to some other url. Here are some example use cases:</p> 
+                    <ul>
+                    <li>Reddit: <code>https://www.reddit.com/submit?url={{url}}&title={{title}}</code> (assumes you're logged in)</li>
+                    <li>Bluesky: <code>https://bsky.app/intent/compose?text={{title}}. See {{url}}</code> (assumes you're logged in)</li>
+                    <li>LinkedIn: <code>https://www.linkedin.com/feed/?shareActive=true&shareUrl={{url}}</code> (assumes you're logged in)</li>
+                    <li>Instapaper: <code>https://www.instapaper.com/api/add?username=USERNAME&password=PASSWORD&url={{url}}&title={{title}}</code> (you'll need to edit USERNAME and PASSWORD)<sup>&dagger;</sup></li>
+                    <li>Pinboard: <code>https://pinboard.in/add?url={{url}}&title={{title}}</code>  (assumes you're logged in)</li>
+                    <li>Archive.today: <code>https://archive.ph/submit/?url={{url}}</code></li>
+                    <li>Internet Archive: <code>https://web.archive.org/save/{{url}}</code></li>
+                    </ul>
+                    <p>
+                        Construct your URL here:
+                    </p>
+                    <p><input id="passto_url" value="" oninput="localStorage.passto_url=this.value"></p>
+                    <p>
+                    </p>
+                    <p>
+                        <label for="passto-pop"><input type="checkbox" id="passto-pop" value="1"> Close the pop-up window 1 sec after opening. Some use cases don't require you to view your pop-up, only open it (e.g., Instapaper above). So, you can have them close automatically after 1 second. <i><b>Depending on your device, this may or may not be enough time for it to do what you want. YMMV!</b></i></label>
+                    </p>
+                    <p><i>Refresh page to see results</i>.</p>
+                    <h4>Share to Mastodon</h4>
+                    <p>
+                        <i>This feature predates Pass URL to Pop-up which can be used to recreate its functionality. It remains here to maintain backwards compatability.</i>
+                    </p>
+                    <p>
+                        Add your server below to enable a <i>share to mastodon</i> button for each article card. Since users of <a href="https://joinmastodon.org/" target="_blank">Mastodon</a> use different servers/instances, we need to collect that information to enable sharing (i.e., so we can queue your post on the right server). If you'd like to use this feature, enter your server here (e.g. "mastodon.social"):
+                    </p>
+                    <p><input id="masto_instance" value="" oninput="localStorage.instance=this.value"></p>
+
+                </div>
+                <div class="col-md-6 col-sm-12" style="overflow:hidden;">
+
+                    <h4>Similar Articles</h4>
+                    <p>
+                        You can hide/group articles that are "too" similar to each other. To measure similarity we use <a href="https://towardsdatascience.com/text-vectorization-term-frequency-inverse-document-frequency-tfidf-5a3f9604da6d" target="_blank">vectorizations</a> of cards based on TF-IDF. Leave the <a href="https://en.wikipedia.org/wiki/Cosine_similarity" target="_blank">cosine similarity</a> cutoff at 1 to keep all articles. Setting the cutoff to something lower will hide all but one of the acticles with similarity greater than the cutoff. This will display a list of "hidden" articles at the bottom of the top-most rated article card for that group. <b><i>Note: this will slow down sorting of your articles, esp. for larger timelines. Also, all items in a group other than the top-most are marked as "read" to hide them from your timeline. This cannot be undone!</i></b> Cosine Similarity for cutoff: <b><i><span id="sim-cutoff-value">1</span></i></b>. <i>Refresh page to see results</i>.
+                    </p>
+                    <p>
+                        <input type="range" id="sim-cutoff" min="0.5" max="1" value="1" step="0.01" style="width:100%;">
+                    </p>
+                    
+
+
                     <h4>Margic AI Fairy Dust</h4>
                     <p>
                         Because everyone else is doing it, you now have the option to add AI. 😜 To learn more, like why this is even here, read this <a href="https://sadlynothavocdinosaur.com/posts/rss-reader" target="_blank">blog post</a>. Depending on your prompt below, this feature may share feed data with your LLM provider when 🤖 is clicked. You can, however, use a <a href="https://lmstudio.ai/" target="_blank">local LLM</a> and avoid sharing your prompt with anyone. <i>Refresh page to see results</i>.
                     </p>
                     <p>
-                        API Base
-                    </p>
-                    <p><input id="api_base" value="" oninput="localStorage.api_base=this.value"></p>
+                        API Base</br>
+                    <input id="api_base" value="" oninput="localStorage.api_base=this.value"></p>
                     <p>
-                        API Key
-                    </p>
-                    <p><input id="api_key" value="" oninput="localStorage.api_key=this.value"></p>
+                        API Key<sup>&dagger;</sup></br>
+                        <input id="api_key" value="" oninput="localStorage.api_key=this.value"></p>
                     <p>
                         Your prompt<br><i>{{news-feed}}</i> will be repaced by your headlines and introductory sentences. 
                     </p>
@@ -259,16 +261,41 @@
                         <a href="javascript:upload_file()" class="btn btn-danger">Upload</a>
                     </p>
                     
-                    <h4>Restore Defaults</h4>
+
+                    <h4>Cloud Sync</h4>
+                    <p>
+                        If you want to use <i>My RSS Algo</i> across devices or browsers, you'll need an online copy of your articles, settings, and interactions. If you choose, you can <a href="https://gist.github.com/" target="_blank">create a Gist</a> on GitHub to hold this data (Gists can't be empty. So make a file called <code>my_rss_algo.json</code> with the body <code>{}</code>). <a href="https://github.com/settings/personal-access-tokens" target="_blank">Create a fine-grained access token</a> under <i>Account</i> with permissions only to access Gists. If you provide this token and the Gist's name below, this data will turn on Cloud Sync. This will sync your data with the Gist every time you use the ☁️↺ feature.</p>
+                        <p> To use your saved Gist on a new device, enter this data there, and <i>Push</i> or <i>Pull</i> as appropriate to avoid overwriting the data you want to keep. After this first sync, you ☁️↺ will make sure you're using the most recent version of your data. If you're at all worried about overwriting you data, download a backup before entering this data.
+                    </p>
+                    <p>
+                        Gist ID (i.e., <code>https://gist.github.com/USER/<span style="background:yellow">GIST_ID</span></code>)</br>
+                    <input id="gist_name" value="" oninput="localStorage.gist_name=this.value"></p>
+                    <p>
+                        Access Token<sup>&dagger;</sup></br>
+                    <input id="gist_token" value="" oninput="localStorage.gist_token=this.value"></p>
+                    <p>
+                        <button id="pull-current" class="btn btn-danger btn-block pull-current" style="margin-bottom: 0px;" onClick="push_gists_data()"><b>Push: Overwrite ☁️ with local</b></button>
+                    </p>
+                    <p>
+                        <button id="pull-current" class="btn btn-danger btn-block pull-current" onClick="pull_gists_data()"><b>Pull: Overwrite local with ☁️</b></button>
+                    </p>
+
+                </div>
+                
+            </div>
+
+            <div class="row" style="margin: 0 0 10px 0;border-top: solid 1px #ccc;padding-top:15px">
+
+                                 <h4>Restore Defaults</h4>
                     <p>
                         If you want to overwrite all of your data with the current site defaults, hit the big red <i>RESET ALL</i> button.
                     </p>
                     <p>
                         <button id="factory-reset" class="btn btn-danger btn-block factory-reset" onClick="reset_all();"><b>RESET ALL</b></button>
                     </p>
-                </div>
-                
             </div>
+
+
 
             <div class="row" style="margin: 0 0 10px 0;border-top: solid 1px #ccc;padding-top:15px">
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
@@ -289,6 +316,7 @@
             </div>
             <div class="row" style="margin: 0px;border-top: solid 1px #ccc;padding-top:15px;border-bottom: solid 1px #ccc;">
                 <p>
+                    <sup>&dagger;</sup>If you save your data to a file or enable Cloud Sync, <b>all of your data (including any passwords or tokens) will be stored in plain text</b> as part of your data file/Gist. Think very carfully about this and who might have access to these, and remember that even if you don't save or enable Cloud Sync, your data always lives in your browser's cloud storage as plain text.</br>
                     Image credits: <img src="images/externallink.png" style="width:23px;margin-right:5px"/> <a href="https://commons.wikimedia.org/wiki/File:2017-fr.wp-blue-externallinks.svg" target="_blank">2017-fr.wp-blue-externallinks.svg</a> (appears when using <i>Pass URL to Pop-up</i>)
                 </p>
             </div>
@@ -297,7 +325,7 @@
         </div>
 
         <div id="refresh-all">
-            <button id="mark-above-seen" class="btn btn-primary btn-block" style="margin: 15px 0 0;" onClick="document.getElementById('loading').style.display = 'block';toggle_settings(clear=true);document.getElementById('sum_msg').style.display = 'none';document.getElementById('search_msg').style.display = 'none';document.getElementById('news-feed').style.display = 'none';document.getElementById('mark-all').style.display = 'none';document.getElementById('refresh-all').style.display = 'none';window.history.pushState({}, '',  document.location.href.split('?')[0]);window.location.reload();">↺ Refresh</button>
+            <button id="mark-above-seen" class="btn btn-primary btn-block" style="margin: 15px 0 0;" onClick="sync_and_refresh()">↺ Refresh</button>
         </div>
 
         <div class="footer">
@@ -317,6 +345,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 
-<script src="js/functions.js?v=v1.26.0"></script>    
+<script src="js/functions.js?v=v1.27.0"></script>    
 
 </html>

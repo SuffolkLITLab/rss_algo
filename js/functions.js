@@ -1,4 +1,40 @@
-var version = "v1.26.0";
+var version = "v1.27.0";
+
+load_gists_data();
+
+var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
+
+function dirty() {
+    isDirty = true
+    localStorage.setItem("isDirty",true)
+    localStorage.setItem("lastChange", Date.parse(new Date()));
+}
+
+function notdirty() {
+    isDirty = false
+    localStorage.setItem("isDirty",false)
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const body = document.body;
+
+  function handleBodyChange(event) {
+    const targetElement = event.target;
+
+    // Check if the event target is an input or textarea
+    if (
+      targetElement.matches('input') ||
+      targetElement.matches('textarea')
+    ) {
+      console.log(`Element ID: ${targetElement.id}`);
+      dirty();
+    } 
+  }
+
+  // Use both 'input' and 'change' for full coverage
+  body.addEventListener('input', handleBodyChange);
+  body.addEventListener('change', handleBodyChange);
+});
 
 //history.replaceState('', document.title, window.location.pathname);
 //window.scrollTo(0, 0);
@@ -114,6 +150,18 @@ document.getElementById("prompt_pref").value = prompt_pref;
 
 if (api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
     document.getElementById('summarize-news').style.display = "block";
+}
+
+
+const gist_name =  localStorage.getItem("gist_name") || "";
+document.getElementById("gist_name").value = gist_name;
+
+const gist_token =  localStorage.getItem("gist_token") || "";
+document.getElementById("gist_token").value = gist_token;
+
+if (gist_name.length>0 && gist_token.length>0) {
+    document.getElementById('refresh').innerHTML = "☁️ ↺";
+    document.getElementById('mark-above-seen').innerHTML = "☁️ ↺ Sync &amp; Refresh";
 }
 
 function reset_all() {
@@ -238,8 +286,9 @@ control.addEventListener("change", function(event){
                             //localStorage.clear();
                             localStorage.setItem(key,value);
                             localStorage.setItem("lastLoad",0);
-                            window.location.reload(true);
+                            dirty();
                         }
+                            window.location.reload(true);
                     } else {
                         alert("Error Parsing File: No feeds found. Check file format.")
                     } 
@@ -1074,9 +1123,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
                                 try {
                                     if (xml.documentElement.nodeName=="feed") {
-                                        description = item.querySelector("content").textContent;
+                                        description = item.querySelector("content").textContent; //.innerHTML.replaceAll(/(<([^>]+)>)/gi," ")
                                     } else {
-                                        description = item.querySelector("description").textContent;
+                                        description = item.querySelector("description").textContent; //.innerHTML.replaceAll(/(<([^>]+)>)/gi," ")
                                     }                                    
                                 } catch (error) {
                                     console.log("Empty Description",feedUrl,link)
@@ -1658,6 +1707,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 localStorage.setItem("upvotes", JSON.stringify(upvotes));
                                 localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
                                 updateArticleStyles();
+                                dirty();
                             }
 
                             if (voteViewModeState){
@@ -1680,6 +1730,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 // Update the unread count
                                 updateItemCount();
                                 get_quote();  
+                                dirty();
                             }
                             
                         });
@@ -1694,6 +1745,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 localStorage.setItem("upvotes", JSON.stringify(upvotes));
                                 localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
                                 updateArticleStyles();
+                                dirty();
                             }
 
                             if (voteViewModeState){
@@ -1716,6 +1768,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 // Update the unread count
                                 updateItemCount();
                                 get_quote();  
+                                dirty();
                                 setTimeout( function() {}, 100);
                             }
                             
@@ -1756,9 +1809,11 @@ document.addEventListener("DOMContentLoaded", function() {
                                 // Update the unread count
                                 updateItemCount();
                                 get_quote();  
+                                dirty();
                             } else {
                                 updateArticleStyles();
                             }
+                            dirty();
                             
                         });
 
@@ -1798,9 +1853,12 @@ document.addEventListener("DOMContentLoaded", function() {
                                 // Update the unread count
                                 updateItemCount();
                                 get_quote();  
+                                dirty();
                             } else {
                                 updateArticleStyles();
                             }
+                            dirty();
+
                         });
 
                         skipButton.addEventListener("click", function () {
@@ -1823,6 +1881,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             // Update the unread count
                             updateItemCount();
                             get_quote();
+                            dirty();
                         });
 
                         readButton.addEventListener("click", function() {
@@ -1832,6 +1891,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 localStorage.setItem("upvotes", JSON.stringify(upvotes));
                                 localStorage.setItem("upvotes", JSON.stringify(arr2obj(Object.entries(upvotes).slice(-max_arts*1.25))));
                                 updateArticleStyles();
+                                dirty();
                             }
 
                             if (savedautoVote && voteViewModeState) {
@@ -1856,6 +1916,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 // Update the unread count
                                 updateItemCount();
                                 get_quote();
+                                dirty();
                             }
                         });
 
@@ -2369,7 +2430,8 @@ document.addEventListener("DOMContentLoaded", function() {
         for (var member in upvotes) delete upvotes[member];
 
         // Update article styles and the feed list
-        updateFeedList();            
+        updateFeedList();       
+        dirty();     
     });
 
     const clearDownvotesButton = document.getElementById("clear-downvotes");
@@ -2382,6 +2444,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Update article styles and the feed list
         updateFeedList();
+        dirty();
     });
 
     const clearReadHistoryButton = document.getElementById("clear-read-history");
@@ -2403,6 +2466,8 @@ document.addEventListener("DOMContentLoaded", function() {
         updateFeedList();
         updateItemCount();
         //get_quote();
+
+        dirty();
        
     });            
     
@@ -3202,11 +3267,219 @@ ${bodyXml}</body>
 
 document.addEventListener('keydown', function(event) {
         if (event.metaKey && (event.key === 'R' || event.key === 'r')) {
-            window.history.pushState({}, '',  document.location.href.split('?')[0]);
-            window.location.reload();
+            sync_and_refresh();
         }
     });
 
+function gistClient({ token, apiVersion = "2022-11-28" }) {
+  if (!token) throw new Error("Missing GitHub token (with `gist` scope).");
+
+  const BASE = "https://api.github.com";
+  const headers = {
+    "Accept": "application/vnd.github+json",
+    "Authorization": `Bearer ${token}`,
+    "X-GitHub-Api-Version": apiVersion,
+  };
+
+  // --- Helpers ---
+  async function handle(res) {
+    const text = await res.text();
+    let data;
+    try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+    if (!res.ok) {
+      const msg = (data && (data.message || data.error)) || res.statusText;
+      throw new Error(`GitHub API error ${res.status}: ${msg}`);
+    }
+    return data;
+  }
+
+  // --- Core operations ---
+  return {
+    /**
+     * Create a new gist.
+     * @param {Object} options
+     * @param {string} options.description - Gist description
+     * @param {boolean} options.public - true = public, false = secret
+     * @param {Record<string,{content:string}>} options.files - { "name.ext": { content: "..." } }
+     * @returns {Promise<Object>} Gist object
+     */
+    async create({ description = "", public: isPublic = false, files = {} } = {}) {
+      const res = await fetch(`${BASE}/gists`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ description, public: isPublic, files })
+      });
+      return handle(res);
+    },
+
+    /**
+     * Read a gist (metadata + file map). To read raw file content,
+     * use the returned files[filename].raw_url with fetch.
+     * @param {string} gistId
+     * @returns {Promise<Object>} Gist object
+     */
+    async read(gistId) {
+      if (!gistId) throw new Error("gistId is required");
+      const res = await fetch(`${BASE}/gists/${gistId}`, { headers });
+      return handle(res);
+    },
+
+    /**
+     * Update (write to) a gist: change description, add/replace/delete files.
+     * To delete a file, set its value to null.
+     * @param {string} gistId
+     * @param {Object} options
+     * @param {string} [options.description]
+     * @param {Record<string,{content?:string, filename?:string}|null>} [options.files]
+     * @returns {Promise<Object>} Updated gist object
+     */
+    async update(gistId, { description, files } = {}) {
+      if (!gistId) throw new Error("gistId is required");
+      const res = await fetch(`${BASE}/gists/${gistId}`, {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify({ description, files })
+      });
+      return handle(res);
+    },
+
+    /**
+     * Convenience: replace the content of a single file in a gist.
+     * Creates the file if it doesn't exist.
+     */
+    async writeFile(gistId, filename, content) {
+      return this.update(gistId, { files: { [filename]: { content } } });
+    },
+
+    /**
+     * Convenience: read the raw text of a single file within a gist.
+     */
+    async readFile(gistId, filename) {
+      const gist = await this.read(gistId);
+      const file = gist.files?.[filename];
+      if (!file?.raw_url) throw new Error(`File "${filename}" not found in gist ${gistId}`);
+      const res = await fetch(file.raw_url);
+      if (!res.ok) throw new Error(`Failed to fetch raw file: ${res.statusText}`);
+      return res.text();
+    }
+  };
+}
+
+gist_json = {}
+async function save_gists_data() {
+
+    const token = localStorage.getItem("gist_token"); // Must have "gist" permission
+    const gist = gistClient({ token });
+
+    gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json") || "0"
+
+    gist_json = JSON.parse(gist_text)
+
+    console.log("Save Gist:",gist_json["lastChange"],localStorage.getItem("lastChange"),(gist_json!=localStorage))
+
+    if ((gist_json["lastChange"]<localStorage.getItem("lastChange")) && (gist_json!=localStorage)) {
+        written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+        notdirty();
+    }
+
+    window.location.reload();
+}
+
+async function load_gists_data() {
+
+    if (localStorage.getItem("gist_name").length>0 && localStorage.getItem("gist_token").length>0) {
+        const token = localStorage.getItem("gist_token"); // Must have "gist" permission
+        const gist = gistClient({ token });
+
+        gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json");
+
+        gist_json = JSON.parse(gist_text)
+
+        console.log("Load Gist",gist_json["lastChange"]>localStorage.getItem("lastChange"),(gist_json!=localStorage))
+
+        if ((gist_json["lastChange"]>localStorage.getItem("lastChange")) && (gist_json!=localStorage)) {
+            localStorage = gist_json
+        } 
+    }
+
+}
+
+
+async function push_gists_data() {
+
+    if (localStorage.getItem("gist_name").length>0 && localStorage.getItem("gist_token").length>0) {
+        let text = "This will overwrite and replace your cloud data with local data.";
+        if (confirm(text) == true) {
+            const token = localStorage.getItem("gist_token"); // Must have "gist" permission
+            const gist = gistClient({ token });
+
+            written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+        }
+    } else {
+        alert("Please add both a Gist ID and fine-grained token.")
+    }
+
+}
+
+async function pull_gists_data() {
+
+    if (localStorage.getItem("gist_name").length>0 && localStorage.getItem("gist_token").length>0) {
+        let text = "This will overwrite and replace your local data with cloud data.";
+        if (confirm(text) == true) {
+            const token = localStorage.getItem("gist_token"); // Must have "gist" permission
+            const gist = gistClient({ token });
+
+            gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json");
+
+            var data_dump = {}
+            try {
+                // Code that might throw an error
+                data_dump = JSON.parse(gist_text)
+            } catch (error) {
+                // Code to execute if an error occurs in the try block
+                // The 'error' variable contains information about the error
+                data_dump = RssOpmlIO.opmlToJson(gist_text)
+            }               
+            if (data_dump["feeds"]!="[]"){
+                localStorage.clear();
+                for (const [key, value] of Object.entries(data_dump)) {
+                    //console.log(key,JSON.stringify(value))
+                    //localStorage.clear();
+                    localStorage.setItem(key,value);
+                    localStorage.setItem("lastLoad",0);
+                    window.location.reload(true);
+                }
+            } else {
+                alert("Error Parsing File: No feeds found.")
+            } 
+        }
+    } else {
+        alert("Please add both a Gist ID and fine-grained token.")
+    }
+
+}
+
+function sync_and_refresh(){
+
+    toggle_settings(clear=true);
+    document.getElementById('sum_msg').style.display = 'none';
+    document.getElementById('search_msg').style.display = 'none';
+    document.getElementById('news-feed').style.display = 'none';
+    document.getElementById('mark-all').style.display = 'none';
+    document.getElementById('refresh-all').style.display = 'none';
+    window.history.pushState({}, '',  document.location.href.split('?')[0]);
+    
+    if (isDirty==true && localStorage.getItem("gist_name").length>0 && localStorage.getItem("gist_token").length>0) {
+        document.getElementById('loading').innerHTML = '&nbsp;Syncing with cloud . . .&nbsp;';
+        document.getElementById('loading').style.display = 'block';
+        save_gists_data();
+    } else {
+        document.getElementById('loading').style.display = 'block';
+        window.location.reload();
+    }
+}
+
 document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
+
 
 
