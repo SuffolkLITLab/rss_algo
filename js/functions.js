@@ -1,11 +1,15 @@
-var version = "v1.27.4";
+var version = "v1.27.5";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
-function dirty() {
+function dirty(timestamp=true) {
     isDirty = true
     localStorage.setItem("isDirty",true)
-    localStorage.setItem("lastChange", Date.parse(new Date()));
+    if (timestamp) {
+        localStorage.setItem("lastChange", Date.parse(new Date()));
+    } else {
+        localStorage.setItem("lastChange", localStorage.getItem("lastChange") || 0);
+    }
 }
 
 function notdirty() {
@@ -1002,7 +1006,7 @@ document.addEventListener("DOMContentLoaded", function() {
         start_spinner('spinner_here',tickcolor);
 
         if (loadFeeds) {
-            dirty();
+            dirty(timestamp=false);
 
             localStorage.setItem("lastLoad", Date.parse(new Date()));
             localStorage.setItem("lastcooldown", savedcooldown);
@@ -3416,7 +3420,7 @@ async function load_gists_data() {
 
             gist_json = JSON.parse(gist_text)
 
-            console.log("Loade Gist:",gist_json["lastChange"],">",localStorage.getItem("lastChange"),gist_json["lastChange"]>localStorage.getItem("lastChange"))
+            console.log("Load Gist:",gist_json["lastChange"],">",localStorage.getItem("lastChange"),gist_json["lastChange"]>localStorage.getItem("lastChange"))
 
             if (gist_json["lastChange"]>localStorage.getItem("lastChange")) {
                 var data_dump = {}
@@ -3434,13 +3438,13 @@ async function load_gists_data() {
                         //console.log(key,JSON.stringify(value))
                         //localStorage.clear();
                         localStorage.setItem(key,value);
-                        //localStorage.setItem("lastLoad",0);
+                        
                     }
+                    //localStorage.setItem("lastLoad",0);
                     //window.location.reload(true);
                 } else {
                     alert("Error Parsing File: No feeds found.")
                 } 
-                //localStorage = gist_json
             } 
 
         } catch (error) {
@@ -3501,7 +3505,7 @@ async function pull_gists_data() {
                         //localStorage.clear();
                         localStorage.setItem(key,value);
                     }
-                    localStorage.setItem("lastLoad",0);
+                    //localStorage.setItem("lastLoad",0);
                     window.location.reload(true);
                 } else {
                     alert("Error Parsing File: No feeds found.")
