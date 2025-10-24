@@ -1,4 +1,4 @@
-var version = "v1.27.3";
+var version = "v1.27.4";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -282,10 +282,9 @@ control.addEventListener("change", function(event){
                         for (const [key, value] of Object.entries(data_dump)) {
                             //console.log(key,JSON.stringify(value))
                             //localStorage.clear();
-                            localStorage.setItem(key,value);
-                            
-                            dirty();
+                            localStorage.setItem(key,value);                            
                         }
+                        dirty();
                         localStorage.setItem("lastLoad",0);
                         window.location.reload(true);
                     } else {
@@ -443,6 +442,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const stopwords = ['i','me','my','myself','we','our','ours','ourselves','you','your','yours','yourself','yourselves','he','him','his','himself','she','her','hers','herself','it','its','itself','they','them','their','theirs','themselves','what','which','who','whom','this','that','these','those','am','is','are','was','were','be','been','being','have','has','had','having','do','does','did','doing','a','an','the','and','but','if','or','because','as','until','while','of','at','by','for','with','about','against','between','into','through','during','before','after','above','below','to','from','up','down','in','out','on','off','over','under','again','further','then','once','here','there','when','where','why','how','all','any','both','each','few','more','most','other','some','such','no','nor','not','only','own','same','so','than','too','very','s','t','can','will','just','don','should','now','p','span','https','http']
 
     var articles =  JSON.parse(localStorage.getItem("articles")) || [];
+
     try {
         articles.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
         //console.log(articles)
@@ -1383,8 +1383,6 @@ document.addEventListener("DOMContentLoaded", function() {
                         n_feeds+=1
                     });
             });
-
-
         } else {
 
             setTimeout(function(){
@@ -2921,7 +2919,9 @@ document.addEventListener("DOMContentLoaded", function() {
     
     async function check_gists_data() {
 
-        await load_gists_data();
+        data_dump = await load_gists_data();
+
+        //articles = data_dump["articles"];
 
         if (searchParams.has('regex')){
             document.getElementById('loading').style.display = "none";
@@ -2935,6 +2935,7 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             window.history.pushState({}, '',  document.location.href.split('?')[0]);
             loadNews(true);
+            updateItemCount();
         }
 
     }
@@ -3379,7 +3380,7 @@ function gistClient({ token, apiVersion = "2022-11-28" }) {
   };
 }
 
-//gist_json = {}
+gist_json = {}
 async function save_gists_data() {
 
     try {
@@ -3390,14 +3391,15 @@ async function save_gists_data() {
 
         gist_json = JSON.parse(gist_text)
 
-        console.log("Save Gist:",gist_json["lastChange"],localStorage.getItem("lastChange"),(gist_json!=localStorage))
+        console.log("Save Gist:",gist_json["lastChange"],"<",localStorage.getItem("lastChange"),gist_json["lastChange"]<localStorage.getItem("lastChange"))
 
-        if ((gist_json["lastChange"]<localStorage.getItem("lastChange")) && (gist_json!=localStorage)) {
-            written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+        if (gist_json["lastChange"]<localStorage.getItem("lastChange")) {
             notdirty();
+            written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
         }
     } catch (error) {
         alert("Error accessing your saved cloud data: Unable to save local data to cloud.")
+        dirty();
     }
 
     window.location.reload();
@@ -3414,9 +3416,9 @@ async function load_gists_data() {
 
             gist_json = JSON.parse(gist_text)
 
-            console.log("Load Gist",gist_json["lastChange"]>localStorage.getItem("lastChange"),(gist_json!=localStorage))
+            console.log("Loade Gist:",gist_json["lastChange"],">",localStorage.getItem("lastChange"),gist_json["lastChange"]>localStorage.getItem("lastChange"))
 
-            if ((gist_json["lastChange"]>localStorage.getItem("lastChange")) && (gist_json!=localStorage)) {
+            if (gist_json["lastChange"]>localStorage.getItem("lastChange")) {
                 var data_dump = {}
                 try {
                     // Code that might throw an error
@@ -3446,6 +3448,7 @@ async function load_gists_data() {
         }
     }
 
+    return data_dump
 }
 
 
@@ -3459,6 +3462,8 @@ async function push_gists_data() {
                 const gist = gistClient({ token });
 
                 written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+                alert("Local data has been copied to the cloud.")
+
             } catch (error) {
                 alert("Error accessing your saved cloud data: Unable to push local data.")
             }
@@ -3531,14 +3536,14 @@ function sync_and_refresh(){
     }
 }
 
-window.addEventListener('beforeunload', (event) => {
-    if (isDirty) {
+//window.addEventListener('beforeunload', (event) => {
+//    if (isDirty) {
         // The presence of this code triggers the confirmation dialog.
-        event.preventDefault(); 
+//        event.preventDefault(); 
         // This is for older browsers that may still use it.
-        event.returnValue = ''; 
-    }
-});
+//        event.returnValue = ''; 
+//    }
+//});
 
 document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
 
