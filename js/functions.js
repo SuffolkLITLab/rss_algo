@@ -1,15 +1,11 @@
-var version = "v1.27.5";
+var version = "v1.27.6";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
 function dirty(timestamp=true) {
     isDirty = true
     localStorage.setItem("isDirty",true)
-    if (timestamp) {
-        localStorage.setItem("lastChange", Date.parse(new Date()));
-    } else {
-        localStorage.setItem("lastChange", localStorage.getItem("lastChange") || 0);
-    }
+    localStorage.setItem("lastChange", Date.parse(new Date()));
 }
 
 function notdirty() {
@@ -1006,7 +1002,7 @@ document.addEventListener("DOMContentLoaded", function() {
         start_spinner('spinner_here',tickcolor);
 
         if (loadFeeds) {
-            dirty(timestamp=false);
+            dirty();
 
             localStorage.setItem("lastLoad", Date.parse(new Date()));
             localStorage.setItem("lastcooldown", savedcooldown);
@@ -1985,6 +1981,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             // Update the unread count
                             updateItemCount();
                             get_quote();
+                            dirty();
                         }
                     });
                 }, 150); 
