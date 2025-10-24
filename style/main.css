@@ -339,7 +339,7 @@ select {
     content:url("../images/lit-lab-torch-inverted.png");
 }
 
-@media only screen and (max-width: 520px) {
+@media only screen and (max-width: 555px) {
     #footer_logo_long {
         display:none;
     }

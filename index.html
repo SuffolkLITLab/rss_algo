@@ -247,25 +247,25 @@
                     
                     <h4>Your Data</h4>
                     <p>
-                        You can download the My RSS Algo data stored in your browser to a file. This is helpful for backups and if you want to move your history et al. between devices or readers. 
+                        You can save the My RSS Algo data stored in your browser to a file. This is helpful for backups and if you want to move your history et al. between devices or readers. 
                     </p>
                     <p>
-                        If you click <i>Download All</i> it will include all of your votes and reading history. <i>Donwload OPLM</i> exports only your feeds. The <a href="https://en.wikipedia.org/wiki/OPML" target="_blank">OPLM standard</a> can also be used to move your feeds to another RSS Reader. 
+                        If you click <i>Save All</i> it will include all of your votes and reading history. <i>Save OPLM</i> exports only your feeds. The <a href="https://en.wikipedia.org/wiki/OPML" target="_blank">OPLM standard</a> can also be used to move your feeds to another RSS Reader. 
                     </p>
                     <p>
-                        <i>Upload</i> can read both our full data downloads (.json) and standard OPLM files (.oplm). So, you can use it to load a backup or a copy of feeds from another reader. 
+                        <i>Open</i> can read both our full saved data files (.json) and standard OPLM files (.oplm). So, you can use it to load a backup or a copy of feeds from another reader. 
                     </p>
                     <input id="upload" type="file" style="display: none;"/> 
                     <p style="display: flex;">
-                        <a href="javascript:saveTextAsFile(JSON.stringify(localStorage,null,2),'My_RSS_algo_data_'+getTodayString()+'.json');" class="btn btn-primary">Download All</a>&nbsp;<a href="javascript:saveTextAsFile(RssOpmlIO.jsonToOpml(localStorage,{title: 'My RSS Export', groupBy: 'feedTitle'}),'My_RSS_algo_data_'+getTodayString()+'.oplm');" class="btn btn-primary">Donwload OPLM</a>&nbsp;
-                        <a href="javascript:upload_file()" class="btn btn-danger">Upload</a>
+                        <a href="javascript:saveTextAsFile(JSON.stringify(localStorage,null,2),'My_RSS_algo_data_'+getTodayString()+'.json');" class="btn btn-primary">Save All</a>&nbsp;<a href="javascript:saveTextAsFile(RssOpmlIO.jsonToOpml(localStorage,{title: 'My RSS Export', groupBy: 'feedTitle'}),'My_RSS_algo_data_'+getTodayString()+'.oplm');" class="btn btn-primary">Save OPLM</a>&nbsp;
+                        <a href="javascript:upload_file()" class="btn btn-danger">Open</a>
                     </p>
                     
 
-                    <h4>Cloud Sync (🚨 Experimental 🚨)</h4>
+                    <h4>Cloud Sync</br><font size=-1>🚨 Experimental Feature🚨</font></h4>
                     <p>
                         If you want to use <i>My RSS Algo</i> across devices or browsers, you'll need an online copy of your articles, settings, and interactions. If you choose, you can <a href="https://gist.github.com/" target="_blank">create a Gist</a> on GitHub to hold this data (Gists can't be empty. So make a file called <code>my_rss_algo.json</code> with the body <code>{}</code>). <a href="https://github.com/settings/personal-access-tokens" target="_blank">Create a fine-grained access token</a> under <i>Account</i> with permissions only to access Gists. If you provide this token and the Gist's name below, this data will turn on Cloud Sync. This will sync your data with the Gist every time you use the ☁️↺ feature.</p>
-                        <p> To use your saved Gist on a new device, enter this data there, and <i>Push</i> or <i>Pull</i> as appropriate to avoid overwriting the data you want to keep. After this first sync, you ☁️↺ will make sure you're using the most recent version of your data. If you're at all worried about overwriting you data, download a backup before entering this data.
+                        <p> To use your saved Gist on a new device, enter this data there, and <i>Push</i> or <i>Pull</i> as appropriate to avoid overwriting the data you want to keep. After this first sync, you ☁️↺ will make sure you're using the most recent version of your data. If you're at all worried about overwriting you data, save a backup before entering this data.
                     </p>
                     <p>
                         Gist ID (i.e., <code>https://gist.github.com/USER/<span style="background:yellow">GIST_ID</span></code>)</br>
@@ -335,7 +335,8 @@
             </a>
             <span style="float:right">
                 <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">top</a> | 
-                <a href="https://github.com/SuffolkLITLab/rss_algo/issues" target="_blank">feedback</a> | 
+                <a href="https://bsky.app/profile/suffolklitlab.org" target="_blank">Bluesky</a> | 
+                <a href="https://github.com/SuffolkLITLab/rss_algo/issues" target="_blank">issues</a> | 
                 <a href="https://github.com/colarusso/rss_algo" target="_blank">GitHub</a> | <span id="version"></span>
             </span>
         </div>

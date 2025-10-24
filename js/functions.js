@@ -1,6 +1,4 @@
-var version = "v1.27.1";
-
-load_gists_data();
+var version = "v1.27.2";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -2345,8 +2343,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function updateItemCount() {
 
-        var url= document.location.href;
-        window.history.pushState({}, "", url.split("?")[0]);
+        //var url= document.location.href;
+        //window.history.pushState({}, "", url.split("?")[0]);
 
         const readCount = Object.keys(readArticles).length.toLocaleString("en-US");
         var unreadCount = (countUnreadArticles() - document.querySelectorAll(".article-container[data-article-index='sponsor']").length).toLocaleString("en-US"); 
@@ -2920,19 +2918,31 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
     
-    if (searchParams.has('regex')){
-        document.getElementById('loading').style.display = "none";
-        regex_search(decodeURI(searchParams.get('regex')))
-        if (savedWeather){
-            getUserWeather();
+    async function check_gists_data() {
+
+        await load_gists_data();
+
+        if (searchParams.has('regex')){
+            document.getElementById('loading').style.display = "none";
+            regex_search(decodeURI(searchParams.get('regex')))
+            if (savedWeather){
+                getUserWeather();
+            }
+            document.getElementById('upwords').innerHTML = topWords(upTFIDF,downTFIDF);
+            document.getElementById('downwords').innerHTML = topWords(downTFIDF,upTFIDF);  
+            updateItemCount();       
+        } else {
+            window.history.pushState({}, '',  document.location.href.split('?')[0]);
+            loadNews(true);
         }
-        document.getElementById('upwords').innerHTML = topWords(upTFIDF,downTFIDF);
-        document.getElementById('downwords').innerHTML = topWords(downTFIDF,upTFIDF);
-    } else {
-        loadNews(true);
+
     }
 
+    check_gists_data();
+
 });
+
+
 
 
 function start_spinner(target_id,tickcolor='#000') {
@@ -3368,21 +3378,25 @@ function gistClient({ token, apiVersion = "2022-11-28" }) {
   };
 }
 
-gist_json = {}
+//gist_json = {}
 async function save_gists_data() {
 
-    const token = localStorage.getItem("gist_token"); // Must have "gist" permission
-    const gist = gistClient({ token });
+    try {
+        const token = localStorage.getItem("gist_token"); // Must have "gist" permission
+        const gist = gistClient({ token });
 
-    gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json") || "0"
+        gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json") || "0"
 
-    gist_json = JSON.parse(gist_text)
+        gist_json = JSON.parse(gist_text)
 
-    console.log("Save Gist:",gist_json["lastChange"],localStorage.getItem("lastChange"),(gist_json!=localStorage))
+        console.log("Save Gist:",gist_json["lastChange"],localStorage.getItem("lastChange"),(gist_json!=localStorage))
 
-    if ((gist_json["lastChange"]<localStorage.getItem("lastChange")) && (gist_json!=localStorage)) {
-        written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
-        notdirty();
+        if ((gist_json["lastChange"]<localStorage.getItem("lastChange")) && (gist_json!=localStorage)) {
+            written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+            notdirty();
+        }
+    } catch (error) {
+        alert("Error accessing your saved cloud data: Unable to save local data to cloud.")
     }
 
     window.location.reload();
@@ -3390,40 +3404,45 @@ async function save_gists_data() {
 
 async function load_gists_data() {
 
-    if (localStorage.getItem("gist_name").length>0 && localStorage.getItem("gist_token").length>0) {
-        const token = localStorage.getItem("gist_token"); // Must have "gist" permission
-        const gist = gistClient({ token });
+    if (document.getElementById('gist_name').value.length>0 && document.getElementById('gist_token').value.length>0) {
+        try {
+            const token = localStorage.getItem("gist_token"); // Must have "gist" permission
+            const gist = gistClient({ token });
 
-        gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json");
+            gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json");
 
-        gist_json = JSON.parse(gist_text)
+            gist_json = JSON.parse(gist_text)
 
-        console.log("Load Gist",gist_json["lastChange"]>localStorage.getItem("lastChange"),(gist_json!=localStorage))
+            console.log("Load Gist",gist_json["lastChange"]>localStorage.getItem("lastChange"),(gist_json!=localStorage))
 
-        if ((gist_json["lastChange"]>localStorage.getItem("lastChange")) && (gist_json!=localStorage)) {
-            var data_dump = {}
-            try {
-                // Code that might throw an error
-                data_dump = gist_json
-            } catch (error) {
-                // Code to execute if an error occurs in the try block
-                // The 'error' variable contains information about the error
-                data_dump = RssOpmlIO.opmlToJson(gist_text)
-            }               
-            if (data_dump["feeds"]!="[]"){
-                localStorage.clear();
-                for (const [key, value] of Object.entries(data_dump)) {
-                    //console.log(key,JSON.stringify(value))
-                    //localStorage.clear();
-                    localStorage.setItem(key,value);
-                    //localStorage.setItem("lastLoad",0);
-                }
-                window.location.reload(true);
-            } else {
-                alert("Error Parsing File: No feeds found.")
+            if ((gist_json["lastChange"]>localStorage.getItem("lastChange")) && (gist_json!=localStorage)) {
+                var data_dump = {}
+                try {
+                    // Code that might throw an error
+                    data_dump = gist_json
+                } catch (error) {
+                    // Code to execute if an error occurs in the try block
+                    // The 'error' variable contains information about the error
+                    data_dump = RssOpmlIO.opmlToJson(gist_text)
+                }               
+                if (data_dump["feeds"]!="[]"){
+                    localStorage.clear();
+                    for (const [key, value] of Object.entries(data_dump)) {
+                        //console.log(key,JSON.stringify(value))
+                        //localStorage.clear();
+                        localStorage.setItem(key,value);
+                        //localStorage.setItem("lastLoad",0);
+                    }
+                    //window.location.reload(true);
+                } else {
+                    alert("Error Parsing File: No feeds found.")
+                } 
+                //localStorage = gist_json
             } 
-            //localStorage = gist_json
-        } 
+
+        } catch (error) {
+            alert("Error accessing your saved cloud data: Unable to sync, using local data.")
+        }
     }
 
 }
@@ -3431,13 +3450,17 @@ async function load_gists_data() {
 
 async function push_gists_data() {
 
-    if (localStorage.getItem("gist_name").length>0 && localStorage.getItem("gist_token").length>0) {
+    if (document.getElementById('gist_name').value.length>0 && document.getElementById('gist_token').value.length>0) {
         let text = "This will overwrite and replace your cloud data with local data.";
         if (confirm(text) == true) {
-            const token = localStorage.getItem("gist_token"); // Must have "gist" permission
-            const gist = gistClient({ token });
+            try{
+                const token = localStorage.getItem("gist_token"); // Must have "gist" permission
+                const gist = gistClient({ token });
 
-            written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+                written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+            } catch (error) {
+                alert("Error accessing your saved cloud data: Unable to push local data.")
+            }
         }
     } else {
         alert("Please add both a Gist ID and fine-grained token.")
@@ -3447,35 +3470,39 @@ async function push_gists_data() {
 
 async function pull_gists_data() {
 
-    if (localStorage.getItem("gist_name").length>0 && localStorage.getItem("gist_token").length>0) {
+    if (document.getElementById('gist_name').value.length>0 && document.getElementById('gist_token').value.length>0) {
         let text = "This will overwrite and replace your local data with cloud data.";
         if (confirm(text) == true) {
-            const token = localStorage.getItem("gist_token"); // Must have "gist" permission
-            const gist = gistClient({ token });
+            try{
+                const token = localStorage.getItem("gist_token"); // Must have "gist" permission
+                const gist = gistClient({ token });
 
-            gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json");
+                gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json");
 
-            var data_dump = {}
-            try {
-                // Code that might throw an error
-                data_dump = JSON.parse(gist_text)
+                var data_dump = {}
+                try {
+                    // Code that might throw an error
+                    data_dump = JSON.parse(gist_text)
+                } catch (error) {
+                    // Code to execute if an error occurs in the try block
+                    // The 'error' variable contains information about the error
+                    data_dump = RssOpmlIO.opmlToJson(gist_text)
+                }               
+                if (data_dump["feeds"]!="[]"){
+                    localStorage.clear();
+                    for (const [key, value] of Object.entries(data_dump)) {
+                        //console.log(key,JSON.stringify(value))
+                        //localStorage.clear();
+                        localStorage.setItem(key,value);
+                    }
+                    localStorage.setItem("lastLoad",0);
+                    window.location.reload(true);
+                } else {
+                    alert("Error Parsing File: No feeds found.")
+                } 
             } catch (error) {
-                // Code to execute if an error occurs in the try block
-                // The 'error' variable contains information about the error
-                data_dump = RssOpmlIO.opmlToJson(gist_text)
-            }               
-            if (data_dump["feeds"]!="[]"){
-                localStorage.clear();
-                for (const [key, value] of Object.entries(data_dump)) {
-                    //console.log(key,JSON.stringify(value))
-                    //localStorage.clear();
-                    localStorage.setItem(key,value);
-                }
-                localStorage.setItem("lastLoad",0);
-                window.location.reload(true);
-            } else {
-                alert("Error Parsing File: No feeds found.")
-            } 
+                alert("Error accessing your saved cloud data: Unable to pull cloud data. Local data is unchanged.")
+            }
         }
     } else {
         alert("Please add both a Gist ID and fine-grained token.")
@@ -3492,8 +3519,8 @@ function sync_and_refresh(){
     document.getElementById('mark-all').style.display = 'none';
     document.getElementById('refresh-all').style.display = 'none';
     window.history.pushState({}, '',  document.location.href.split('?')[0]);
-    
-    if (isDirty==true && localStorage.getItem("gist_name").length>0 && localStorage.getItem("gist_token").length>0) {
+
+    if (isDirty==true && document.getElementById('gist_name').value.length>0 && document.getElementById('gist_token').value.length>0) {
         document.getElementById('loading').innerHTML = '&nbsp;Syncing with cloud . . .&nbsp;';
         document.getElementById('loading').style.display = 'block';
         save_gists_data();
@@ -3502,6 +3529,15 @@ function sync_and_refresh(){
         window.location.reload();
     }
 }
+
+//window.addEventListener('beforeunload', (event) => {
+//if (isDirty) {
+    // The presence of this code triggers the confirmation dialog.
+//    event.preventDefault(); 
+    // This is for older browsers that may still use it.
+//    event.returnValue = ''; 
+//}
+//});
 
 document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
 
