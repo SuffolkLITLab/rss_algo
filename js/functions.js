@@ -1,4 +1,4 @@
-var version = "v1.27.2";
+var version = "v1.27.3";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -1002,6 +1002,7 @@ document.addEventListener("DOMContentLoaded", function() {
         start_spinner('spinner_here',tickcolor);
 
         if (loadFeeds) {
+            dirty();
 
             localStorage.setItem("lastLoad", Date.parse(new Date()));
             localStorage.setItem("lastcooldown", savedcooldown);
@@ -3530,14 +3531,14 @@ function sync_and_refresh(){
     }
 }
 
-//window.addEventListener('beforeunload', (event) => {
-//if (isDirty) {
-    // The presence of this code triggers the confirmation dialog.
-//    event.preventDefault(); 
-    // This is for older browsers that may still use it.
-//    event.returnValue = ''; 
-//}
-//});
+window.addEventListener('beforeunload', (event) => {
+    if (isDirty) {
+        // The presence of this code triggers the confirmation dialog.
+        event.preventDefault(); 
+        // This is for older browsers that may still use it.
+        event.returnValue = ''; 
+    }
+});
 
 document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
 
