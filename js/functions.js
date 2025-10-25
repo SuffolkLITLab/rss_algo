@@ -1,4 +1,4 @@
-var version = "v1.27.6";
+var version = "v1.27.7";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -558,7 +558,7 @@ document.addEventListener("DOMContentLoaded", function() {
             crunch_numbers = true;
         }
 
-        //console.log("Fetching "+feedUrl+" ("+n_feeds+" of "+rssFeeds.length+")")
+        console.log("Fetching "+feedUrl+" ("+n_feeds+" of "+rssFeeds.length+")" + " Crunch Num: " + crunch_numbers)
         
         return data;
     }
@@ -959,7 +959,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return span.textContent || span.innerText;
     };
 
-    function loadNews(loadFeeds = true, singlefeed="") {
+    async function loadNews(loadFeeds = true, singlefeed="") {
 
         const lastLoad = localStorage.getItem("lastLoad") || 0;
         const lastcooldown = localStorage.getItem("lastcooldown") || 0.25;
@@ -1024,7 +1024,7 @@ document.addEventListener("DOMContentLoaded", function() {
             
             errors = 0;
 
-            use_feeds.forEach(feedUrl => {
+            await use_feeds.forEach(feedUrl => {
 
                 fetchFeed(feedUrl)
                     .then(data => {
@@ -1362,11 +1362,24 @@ document.addEventListener("DOMContentLoaded", function() {
                             console.log("THERE WAS AN ERROR")
                             //displayErrorPopup(feedTitle, feedUrl, errorMessage);
                             
+                            if (crunch_numbers) {
+                                reorderArticles();
+                                displayArticles();
+                                updateItemCount();
+                                displayed_cards = newsFeedContainer.childNodes.length
+                                //console.log(consolidated_from + " cards were consolidated to " + displayed_cards)
+                                console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
+                                lazyload();
+                                replace_broken();
+                                get_quote();
+                                decluter_cards = false;
+                            }
+                            if (1==2){
                             setTimeout(function(){
                                 crunch_numbers = true;
                                 dedup_articles();
                                 reorderArticles();
-                                displayArticles();
+                                //displayArticles();
                                 updateItemCount();
                                 displayed_cards = newsFeedContainer.childNodes.length
                                 //console.log(consolidated_from + " cards were consolidated to " + displayed_cards)
@@ -1378,6 +1391,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 document.getElementById('loading').style.display = "none";
                                 crunch_numbers = false;
                             }, 1);
+                            }
                         }
                         errors+=1
                         n_feeds+=1
@@ -2922,6 +2936,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         data_dump = await load_gists_data();
 
+        console.log("GIST DATA",data_dump)
+
         //articles = data_dump["articles"];
 
         if (searchParams.has('regex')){
@@ -2933,6 +2949,7 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('upwords').innerHTML = topWords(upTFIDF,downTFIDF);
             document.getElementById('downwords').innerHTML = topWords(downTFIDF,upTFIDF);  
             updateItemCount();       
+        //} else if (data_dump) {           
         } else {
             window.history.pushState({}, '',  document.location.href.split('?')[0]);
             loadNews(true);
