@@ -1,4 +1,4 @@
-var version = "v1.27.7";
+var version = "v1.27.8";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -308,6 +308,8 @@ var dfreq_last;
 
 
 document.addEventListener("DOMContentLoaded", function() {
+
+    check_gists_data();
 
     const body = document.body;
 
@@ -2949,7 +2951,8 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('upwords').innerHTML = topWords(upTFIDF,downTFIDF);
             document.getElementById('downwords').innerHTML = topWords(downTFIDF,upTFIDF);  
             updateItemCount();       
-        //} else if (data_dump) {           
+        } else if (data_dump) {         
+            window.location.reload();  
         } else {
             window.history.pushState({}, '',  document.location.href.split('?')[0]);
             loadNews(true);
@@ -2958,7 +2961,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     }
 
-    check_gists_data();
+    //check_gists_data();
 
 });
 
