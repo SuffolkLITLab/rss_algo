@@ -42,7 +42,7 @@
             <div style="float:left;width:100%;padding-top: 8px;">
                 <p>
                     <span id="description_more">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader <a href="javascript:void();" onClick="document.getElementById('description_more').style.display = 'none';document.getElementById('description').style.display = 'block';">. . .</a></span> 
-                    <span id="description" style="display: none;">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader built at the <a href="https://suffolklitlab.org/" target="_blank">Suffolk LIT Lab</a>. Use 👍 &amp; 👎 + <i>Seen</i> or <i>Open</i> to feed the algo. Refresh this page to update card order et al. Searches, votes, &amp; settings don't leave your device. Customize your algo and timeline behavior in <i>Settings</i>. Curate sources in <i>Feeds</i>&mdash;starter lists available. Add feeds with the blue <i>plus</i> button. For project updates, visit <a href="https://github.com/colarusso/rss_algo" target="_blank">our GitHub page</a>.
+                    <span id="description" style="display: none;">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader built at the <a href="https://suffolklitlab.org/" target="_blank">Suffolk LIT Lab</a>. Use 👍 &amp; 👎 + <i>Seen</i> or <i>Open</i> to feed the algo. Refresh this page to update card order et al. By default, searches, votes, &amp; settings don't leave your device. Customize your algo and timeline in <i>Settings</i>. Curate sources in <i>Feeds</i>&mdash;starter lists available. Add feeds with the blue <i>plus</i> button. For project updates, visit <a href="https://github.com/colarusso/rss_algo" target="_blank">our GitHub page</a>.
 
                     [<a href="javascript:void();" onClick="document.getElementById('description').style.display = 'none';document.getElementById('description_more').style.display = 'block';">shrink description</a>]
                     </span>
@@ -53,7 +53,7 @@
             </div>
             <div style="float:left;width:100%;">
                 <span style="float:right">
-                    <a id="a_settings" href="javascript:void('')" onClick="toggle_settings()">Settings</a>
+                    <a id="a_settings" href="javascript:void('')" onClick="toggle_settings()">Settings<span class="feed_errors"><sup style="text-decoration: none;display: inline-block;">&nbsp;⚠️</sup></span></a>
                 </span>
                 <span id="unread-count" class="text-danger">New: ?</span>
                 <span id="read-count" class="text-success">Seen: ?</span>
@@ -71,6 +71,19 @@
         <div id="mark-all"></div>
 
         <div id="my_settings" style="display:none;float:left;padding-top: 15px;">
+
+            <div class="feed_errors">
+                <div id="feed_error_msg">
+                    <p style="text-align: center;"><b>⚠️ There was an error reading the following feeds ⚠️</b></p>
+                    <p>If the problem presists, they may moved or incompatable with this tool. You can remove a feed by clicking on <i>remove</i> below.</p>
+                    <ul id="feed_error_list_links">
+                        <li>Links here</li>
+                    </ul>
+                    <p>This message will clear after your next download session (i.e., after your coooldown clock resets).</p>
+                </div>
+
+            </div>
+
             <h2>Settings</h2>
             <p>
                 You can manage your feeds by clicking <i>Feeds</i> at the top of this page. See additional controls below. To determine what articles you like, we make use of insights from <a href="https://towardsdatascience.com/text-vectorization-term-frequency-inverse-document-frequency-tfidf-5a3f9604da6d" target="_blank">TF-IDF</a>, comparing all the text from the cards you vote up or down with everything you've "seen." I hope to write a more complete explanation sometime. When I do, I'll put a link here. Until then, you can always look at <a href="https://github.com/colarusso/rss_algo" target="_blank">the code</a>.
@@ -112,6 +125,24 @@
             <p>
                 <input type="range" id="cooldown-slider" min="0.25" max="4" value="0.25" step="0.25" style="width:100%;">
             </p>
+
+
+            <h4>History</h4>
+            <p>
+                Display content from the last <b><i><span id="lookback-value">7</span> days</i></b>. <i>Refresh page to see results</i>.
+            </p>
+            <p>
+                <input type="range" id="lookback-slider" min="1" max="15" value="7" style="width:100%;">
+            </p>
+            <p>
+                You can limit how much you see in your timeline by adjusting the slider above. If you clear you reading history, however, it will remove older articles, not just hide them. This will effect your recommendations since they are based on your interactions with old articles (did you vote them up or down).
+            </p>
+            <p>
+            <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
+            </p>
+
+
+
             <h4>Cards on Screen</h4>
             <p>
                 In addition to the ratings cutoff below, you can set a limit on the maximum number of cards visible at one time. If there are more unread cards than can fit on the screen, they will show following the page refresh after you've cleared space for them. Consider also, that each refresh triggers a recalculation of the card rankings based on your interactions. So, a selection with more screens (fewer cards) will be more "responsive," and take less time to chug through calculations. Max Cards: <b><i><span id="max-cards-value">200</span></i></b>. <i>Refresh page to see results</i>.
@@ -119,19 +150,7 @@
             <p>
                 <input type="range" id="max-cards-slider" min="1" max="500" value="200" step="1" style="width:100%;">
             </p>
-                        <div class="row" style="margin-bottom: 10px;">
-                <h4>Promote &amp; Mute with Regular Expressions</h4>
-                <p>You can use <a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">regular expressions</a> to be confident you don't miss, or alternatively, never see, certain articles. Your input  below will be fed into JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank">RegExp()</a> as a constructor, where the first input is a string and the second is an optional operator. These are fed to <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match" target="_blank">.match()</a>. If you include a regex under <i>Bump Up</i>, any matches to said expression will have 1 added to their score, which normally maxes out at 1, putting them at the top of your feed. Matches to the regex under <i>Mute</i>, however, will be hidden from your timeline. The match is performed against an article's: (1) title; (2) description; (3) feed name; and (3) link.  Note: using the <i>search</i> feature overides these settings as it searches ALL articles. Leave string inputs blank to take no action. <i>Refresh page to see results</i>.</p>
-                <h5>Bump Up</h5>
-                <p>Like Barbie and Openhimer news? Try: <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">barbie|oppenheimer</span>, <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">i</span></p>
-                <p><input id="regex_always" value="" oninput="localStorage.regex_always=this.value" style="width: calc(100% - 65px);"> 
-                <input id="regex_always_op" value="" oninput="localStorage.regex_always_op=this.value" style="width:50px" value="i"></p>
 
-                <h5>Mute</h5>
-                <p>Dislike Barbie and Openhimer news? Try: <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">barbie|oppenheimer</span>, <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">i</span></p>
-                <p><input id="regex_never" value="" oninput="localStorage.regex_never=this.value" style="width: calc(100% - 65px);">
-                <input id="regex_never_op" value="" oninput="localStorage.regex_never_op=this.value" style="width:50px" value="i"></p>
-            </div>
 
             <h4>Positive vs. Negative</h4>
                     <p>
@@ -149,23 +168,23 @@
                 <input type="range" id="cutoff-slider" min="-3.5" max="3.5" value="-1.5" step="0.01" style="width:100%;">
             </p>
 
+            <div class="row" style="margin-bottom: 10px;">
+                <h4>Promote &amp; Mute with Regular Expressions</h4>
+                <p>You can use <a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">regular expressions</a> to be confident you don't miss, or alternatively, never see, certain articles. Your input  below will be fed into JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank">RegExp()</a> as a constructor, where the first input is a string and the second is an optional operator. These are fed to <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match" target="_blank">.match()</a>. If you include a regex under <i>Bump Up</i>, any matches to said expression will have 1 added to their score, which normally maxes out at 1, putting them at the top of your feed. Matches to the regex under <i>Mute</i>, however, will be hidden from your timeline. The match is performed against an article's: (1) title; (2) description; (3) feed name; and (3) link.  Note: using the <i>search</i> feature overides these settings as it searches ALL articles. Leave string inputs blank to take no action. <i>Refresh page to see results</i>.</p>
+                <h5>Bump Up</h5>
+                <p>Like Barbie and Openhimer news? Try: <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">barbie|oppenheimer</span>, <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">i</span></p>
+                <p><input id="regex_always" value="" oninput="localStorage.regex_always=this.value" style="width: calc(100% - 65px);"> 
+                <input id="regex_always_op" value="" oninput="localStorage.regex_always_op=this.value" style="width:50px" value="i"></p>
+
+                <h5>Mute</h5>
+                <p>Dislike Barbie and Openhimer news? Try: <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">barbie|oppenheimer</span>, <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">i</span></p>
+                <p><input id="regex_never" value="" oninput="localStorage.regex_never=this.value" style="width: calc(100% - 65px);">
+                <input id="regex_never_op" value="" oninput="localStorage.regex_never_op=this.value" style="width:50px" value="i"></p>
+            </div>
+
 
             <div class="row">
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
-
-                    <h4>History</h4>
-                    <p>
-                        Display content from the last <b><i><span id="lookback-value">7</span> days</i></b>. <i>Refresh page to see results</i>.
-                    </p>
-                    <p>
-                        <input type="range" id="lookback-slider" min="1" max="15" value="7" style="width:100%;">
-                    </p>
-                    <p>
-                        You can limit how much you see in your timeline by adjusting the slider above. If you clear you reading history, however, it will remove older articles, not just hide them. This will effect your recommendations since they are based on your interactions with old articles (did you vote them up or down).
-                    </p>
-                    <p>
-                    <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
-                    </p>
 
                     <h4>Auto Vote</h4>
                     <p>
@@ -217,9 +236,6 @@
                     </p>
                     <p><input id="masto_instance" value="" oninput="localStorage.instance=this.value"></p>
 
-                </div>
-                <div class="col-md-6 col-sm-12" style="overflow:hidden;">
-
                     <h4>Similar Articles</h4>
                     <p>
                         You can hide/group articles that are "too" similar to each other. To measure similarity we use <a href="https://towardsdatascience.com/text-vectorization-term-frequency-inverse-document-frequency-tfidf-5a3f9604da6d" target="_blank">vectorizations</a> of cards based on TF-IDF. Leave the <a href="https://en.wikipedia.org/wiki/Cosine_similarity" target="_blank">cosine similarity</a> cutoff at 1 to keep all articles. Setting the cutoff to something lower will hide all but one of the acticles with similarity greater than the cutoff. This will display a list of "hidden" articles at the bottom of the top-most rated article card for that group. <b><i>Note: this will slow down sorting of your articles, esp. for larger timelines. Also, all items in a group other than the top-most are marked as "read" to hide them from your timeline. This cannot be undone!</i></b> Cosine Similarity for cutoff: <b><i><span id="sim-cutoff-value">1</span></i></b>. <i>Refresh page to see results</i>.
@@ -227,7 +243,10 @@
                     <p>
                         <input type="range" id="sim-cutoff" min="0.5" max="1" value="1" step="0.01" style="width:100%;">
                     </p>
-                    
+
+
+                </div>
+                <div class="col-md-6 col-sm-12" style="overflow:hidden;">                    
 
 
                     <h4>Margic AI Fairy Dust</h4>
@@ -336,8 +355,9 @@
             <span style="float:right">
                 <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">top</a> | 
                 <a href="https://bsky.app/profile/suffolklitlab.org" target="_blank">Bluesky</a> | 
+                <a href="https://github.com/colarusso/rss_algo" target="_blank">GitHub</a> |
                 <a href="https://github.com/SuffolkLITLab/rss_algo/issues" target="_blank">issues</a> | 
-                <a href="https://github.com/colarusso/rss_algo" target="_blank">GitHub</a> | <span id="version"></span>
+                <span id="version"></span>
             </span>
         </div>
     </div>

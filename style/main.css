@@ -203,6 +203,24 @@ select {
     background:#775c03;
 }
 
+.feed_errors {
+    display:none;
+}
+
+#feed_error_msg {
+    float:left;
+    width:100%;
+    border-radius: 0.3rem;
+    background: #fdd4d4;
+    margin-top: 15px;
+    padding:15px 10px 15px 15px;
+    margin-bottom: 20px;
+}
+
+.dark-mode #feed_error_msg {
+    background:#b04c4c;
+}
+
 #passto_url {
     width:100%;
 }

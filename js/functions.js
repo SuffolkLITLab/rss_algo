@@ -1,4 +1,4 @@
-var version = "v1.27.8";
+var version = "v1.28";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -53,7 +53,7 @@ function show_timeline() {
     document.getElementById('spin_container').style.display = "block";
     document.getElementById('news-feed').style.display = "flex";
     document.getElementById('my_settings').style.display = "none";
-    document.getElementById('a_settings').innerHTML = "Settings";
+    document.getElementById('a_settings').innerHTML = `Settings<span class="feed_errors"><sup style="text-decoration: none;display: inline-block;">&nbsp;⚠️</sup></span>`;
 
     unreadcount = countUnreadArticles() - document.querySelectorAll(".article-container[data-article-index='sponsor']").length
     if (unreadcount>0) {
@@ -92,6 +92,7 @@ function toggle_settings(clear=false) {
             document.getElementById('sum_msg').style.display = "block";
         }
     }
+    update_feed_errors();
 }
 
 //function readArticles_in_window(){
@@ -305,7 +306,6 @@ control.addEventListener("change", function(event){
 
 var xml_doc;
 var dfreq_last;
-
 
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -1004,6 +1004,8 @@ document.addEventListener("DOMContentLoaded", function() {
         start_spinner('spinner_here',tickcolor);
 
         if (loadFeeds) {
+            feed_error_list = "";
+            localStorage.setItem("feed_error_list","")
             dirty();
 
             localStorage.setItem("lastLoad", Date.parse(new Date()));
@@ -1376,27 +1378,12 @@ document.addEventListener("DOMContentLoaded", function() {
                                 get_quote();
                                 decluter_cards = false;
                             }
-                            if (1==2){
-                            setTimeout(function(){
-                                crunch_numbers = true;
-                                dedup_articles();
-                                reorderArticles();
-                                //displayArticles();
-                                updateItemCount();
-                                displayed_cards = newsFeedContainer.childNodes.length
-                                //console.log(consolidated_from + " cards were consolidated to " + displayed_cards)
-                                console.log("Displayed Cards: " +displayed_cards+" ("+Math.round(100*displayed_cards/stored_art)+"%)");
-                                lazyload();
-                                replace_broken();
-                                get_quote();
-                                decluter_cards = false;
-                                document.getElementById('loading').style.display = "none";
-                                crunch_numbers = false;
-                            }, 1);
-                            }
                         }
                         errors+=1
                         n_feeds+=1
+                        stored_name = JSON.parse(localStorage.getItem("feed_names"))[feedUrl]
+                        feed_error_list += `<li><b>${stored_name}</b> - <a href="${feedUrl}" target="_blank">${feedUrl}</a> (<a href='javascript:remove_feed ("${stored_name}","${feedUrl}")'>remove</a>)</li>`;
+                        localStorage.setItem("feed_error_list",feed_error_list)
                     });
             });
         } else {
@@ -2007,6 +1994,8 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             document.getElementById("mark-all").innerHTML = ``
         }
+
+        update_feed_errors();
 
         // After all articles are displayed, update their styles
         updateArticleStyles();
@@ -3554,6 +3543,26 @@ function sync_and_refresh(){
     } else {
         document.getElementById('loading').style.display = 'block';
         window.location.reload();
+    }
+}
+
+function update_feed_errors() {
+    if (localStorage.getItem("feed_error_list")!="") {
+        document.getElementById("feed_error_list_links").innerHTML = localStorage.getItem("feed_error_list")
+        document.querySelectorAll('.feed_errors').forEach(item => {
+            item.style.display =  "inline";
+        })
+    }
+}
+
+
+function remove_feed(feedTitle,feedUrl) {
+    let text = "Choose OK to remove: "+feedTitle+"\n\n"+feedUrl+"\n\nChoose Cancel to keep things as they are. Note: If you remove this feed, old posts will remain visable in your timeline, but we will not fetch new ones.";
+    if (confirm(text) == true) {
+        rssFeeds = JSON.parse(localStorage.getItem("feeds"));
+        const feedIndex = rssFeeds.indexOf(feedUrl);
+        rssFeeds.splice(feedIndex, 1);
+        localStorage.setItem("feeds", JSON.stringify(rssFeeds));
     }
 }
 
