@@ -557,7 +557,7 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('loading').innerHTML = "<i>&nbsp;Loading feed "+(1+n_feeds)+" of "+rssFeeds.length+" . . .&nbsp;</i>" 
         }
 
-        if (n_feeds>=(rssFeeds.length)) {
+        if (n_feeds>=(rssFeeds.length-2)) {
             crunch_numbers = true;
         }
 
