@@ -498,10 +498,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // https://github.com/distribuyed/proxies?tab=readme-ov-file
         var proxy_00 = "https://workers-playground-dawn-hill-de20.dcolarusso.workers.dev/?url=";
-        var proxy_01 = "https://corsproxy.io/?";
+        //var proxy_01 = "https://corsproxy.io/?";
         //var proxy_01 = "https://api.allorigins.win/raw?url=";
+        //var proxy_01 = "https://cors-anywhere.com/";
         //var proxy_01 = "https://tools.suffolklitlab.org/rss_proxy/?url=";
-        var proxy_02 = "https://api.cors.lol/?url=";
+        var proxy_01 = "https://api.cors.lol/?url=";
         var feedUrl_prox = proxy_00 + encodeURIComponent(feedUrl);
 
         async function fetchRSS(url) {

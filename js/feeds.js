@@ -379,7 +379,7 @@ var feeds_arxiv_sm = [
 
 var feeds_arlington = [
     // Your Arlington
-    "https://www.yourarlington.com/?format=feed&type=rss",
+    "https://yourarlington.com/feed/",
 ]
 
 var feeds_malawyers = [
@@ -428,7 +428,7 @@ var feeds_long_list = [
     "https://pluralistic.net/feed/",
 
     // Fix the News
-    "https://fixthenews.com/rss/",
+    "https://fixthenews.com/feed/",
 
     // Public Notice
     //"https://www.publicnotice.co/feed",
