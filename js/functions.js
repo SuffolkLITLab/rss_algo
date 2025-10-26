@@ -1,4 +1,4 @@
-var version = "v1.28";
+var version = "v1.28.1";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -1075,7 +1075,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
                             var unknown_pubDate = false
                             if (xml.documentElement.nodeName=="feed") {
-                                pubDate = new Date(item.querySelector("published").textContent);                                
+                                try{
+                                    pubDate = new Date(item.querySelector("published").textContent);                                
+                                } catch (error) {
+                                    pubDate = new Date(item.querySelector("updated").textContent);   
+                                }
                             } else {
                                 try {
                                     pubDate = new Date(item.querySelector("pubDate").textContent);                                    
