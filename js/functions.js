@@ -2409,9 +2409,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 items = [
                             "Be kind. Have Fun. Try something new.",
                             "Patience is a superpower.",
+                            "Zero-sum thinking may not be the root of all evil, but all evil is rooted in zero-sum thinking.",
                             'In life and on apps, always question defaults. Fiddle with some "settings," and see what happens.',
                             "Civilization is a positive-sum game.",
-                            "Few things threaten good work more than rushing... Breathe."
+                            "Few things threaten good work more than rushing... Breathe.",
+                            `When something isn't working, consider metaphorically—or literally—hitting "refresh."`
                         ]
                 if (document.getElementById('my_settings').style.display=="none") {       
                     document.getElementById('news-feed').style.display = "flex";
