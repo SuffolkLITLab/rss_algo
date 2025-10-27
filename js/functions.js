@@ -498,11 +498,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // https://github.com/distribuyed/proxies?tab=readme-ov-file
         var proxy_00 = "https://workers-playground-dawn-hill-de20.dcolarusso.workers.dev/?url=";
-        //var proxy_01 = "https://corsproxy.io/?";
+        var proxy_01 = "https://corsproxy.io/?";
         //var proxy_01 = "https://api.allorigins.win/raw?url=";
         //var proxy_01 = "https://cors-anywhere.com/";
         //var proxy_01 = "https://tools.suffolklitlab.org/rss_proxy/?url=";
-        var proxy_01 = "https://api.cors.lol/?url=";
+        //var proxy_01 = "https://api.cors.lol/?url=";
         var feedUrl_prox = proxy_00 + encodeURIComponent(feedUrl);
 
         async function fetchRSS(url) {
@@ -557,7 +557,7 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('loading').innerHTML = "<i>&nbsp;Loading feed "+(1+n_feeds)+" of "+rssFeeds.length+" . . .&nbsp;</i>" 
         }
 
-        if (n_feeds>=(rssFeeds.length-2)) {
+        if (n_feeds>=Math.ceil(rssFeeds.length*0.985)) {
             crunch_numbers = true;
         }
 
@@ -1029,7 +1029,7 @@ document.addEventListener("DOMContentLoaded", function() {
             
             errors = 0;
 
-            await use_feeds.forEach(feedUrl => {
+            use_feeds.forEach(feedUrl => {
 
                 fetchFeed(feedUrl)
                     .then(data => {
