@@ -1,4 +1,4 @@
-var version = "v1.28.1";
+var version = "v1.29.0";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -2686,7 +2686,7 @@ document.addEventListener("DOMContentLoaded", function() {
     manageFeedsButton.addEventListener("click", function() {
 
         const feedList = rssFeeds.map((feed, index) => `
-            <tr style="border-top:1px solid #eee"><td colspan=2><b>${feed_names[feed]}</b></td><tr>
+            <tr style="border-top:1px solid #eee"><td colspan=2><b>${feed_names[feed]}</b> (<a href='./?regex=${encodeURI(feed.replaceAll("?","\\?").replaceAll("+","\\+").replaceAll(".","\\."))}'>search</a>)</td><tr>
             <tr><td width="1%">
             <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
             </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
@@ -2773,7 +2773,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 rssFeeds = feed_lib[feed_name]
                 localStorage.setItem("feeds",rssFeeds)
                 feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
-                    <tr style="border-top:1px solid #eee"><td colspan=2><b>${feed_names[feed]}</b></td><tr>
+                    <tr style="border-top:1px solid #eee"><td colspan=2><b>${feed_names[feed]}</b> (<a href='./?regex=${encodeURI(feed.replaceAll("?","\\?").replaceAll("+","\\+").replaceAll(".","\\."))}'>search</a>)</td><tr>
                     <tr><td width="1%">
                     <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
                     </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
@@ -2819,7 +2819,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 rssFeeds = []
                 localStorage.setItem("feeds",JSON.stringify(rssFeeds))
                 feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
-                    <tr style="border-top:1px solid #eee"><td colspan=2><b>${feed_names[feed]}</b></td><tr>
+                    <tr style="border-top:1px solid #eee"><td colspan=2><b>${feed_names[feed]}</b> (<a href='./?regex=${encodeURI(feed.replaceAll("?","\\?").replaceAll("+","\\+").replaceAll(".","\\."))}'>search</a>)</td><tr>
                     <tr><td width="1%">
                     <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
                     </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
@@ -2864,7 +2864,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById('mark-all').style.display = "none";
                 updateFeedList();
                 feedListModalElement.querySelector("table").innerHTML = rssFeeds.map((feed, index) => `
-                    <tr style="border-top:1px solid #eee"><td colspan=2><b>${feed_names[feed]}</b></td><tr>
+                    <tr style="border-top:1px solid #eee"><td colspan=2><b>${feed_names[feed]}</b> (<a href='./?regex=${encodeURI(feed.replaceAll("?","\\?").replaceAll("+","\\+").replaceAll(".","\\."))}'>search</a>)</td><tr>
                     <tr><td width="1%">
                     <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
                     </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
