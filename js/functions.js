@@ -3100,10 +3100,8 @@ async function weatherAPI(lat,lon){
 
         var weatherString = "<a href='https://www.wunderground.com/hourly/"+lat+","+lon+"' target='_blank' style='text-decoration:none;'>" + Math.round(data["current_weather"]["temperature"]) + "" + data["current_weather_units"]["temperature"]+" "+weather_icon+"</a>"
         localStorage.setItem("lastWeatherString", weatherString);
-    } else if (WeatherDiff<=10*60) {
-        var weatherString = localStorage.getItem("lastWeatherString") || "";
     } else {
-        var weatherString = "";
+        var weatherString = localStorage.getItem("lastWeatherString") || "";
     }
     document.getElementById('weather').innerHTML = weatherString;
     document.getElementById('weather').style.display = "block";
