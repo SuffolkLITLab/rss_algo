@@ -17,11 +17,11 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="images/blue-icon-180x180.png">
 
-    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.30.0">
-	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.30.0">
-    <script src="js/spin/spin.min.js?v=v1.30.0"></script>
+    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.31.0">
+	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.31.0">
+    <script src="js/spin/spin.min.js?v=v1.31.0"></script>
 
-    <script src="js/report.js?v=v1.30.0"></script>    
+    <script src="js/report.js?v=v1.31.0"></script>    
     <script src="js/feeds.js?trained_on=2024-08-13b"></script>
 
 </head>
@@ -96,7 +96,7 @@
             </p>
             <h4>Privacy</h4>
             <p>
-                You don't need an account, nor do you need to provide any personally identifying information, to use <i>My RSS Algo</i>. Any searches or votes you make are stored only in your browser as part of <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localstorage</a>. The same is true for any other persistent data (e.g., your filters and the choices you make below). Presumably GitHub (which hosts this site) keeps some log files. When fetching your feeds we make use of a couple of proxy servers. First we use our own, then as fallbacks: <a href="https://corsproxy.io/" target="_blank">corsproxy.io</a> and <a href="https://cors.lol/" target="_blank">cors.lol</a> respectivly. FWIW, corsproxy claims not to keep log files. The publishers of these feeds, however, only see the IP addresses of the proxy servers when they are downloaded. We do, however, embed preview images and a site's <a href="https://en.wikipedia.org/wiki/Favicon" target="_blank">favicon</a> as part of most article cards. So, unless you have the "Exclude preview images and favicons..." option checked below, simply loading your timeline will download those files, likely producing log files on the servers they came from. And of course, if you follow a link to an article, you'll access that article and set in motion all that comes with that. Also, if you check the "Show local weather" option below, your browser will share your location with <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a>'s weather <a href="https://en.wikipedia.org/wiki/API" target="_blank">API</a>. Similarly, if you add an API Key under <i>Magical AI Fairy Dust</i>, when you click 🤖, the headlines and introductory sentences of your feeds may be shared with your LLM provider depedning on your prompt. You can, however, use a <a href="https://lmstudio.ai/" target="_blank">local LLM</a> and avoid sharing your prompt with anyone.
+                You don't need an account, nor do you need to provide any personally identifying information, to use <i>My RSS Algo</i>. By default, any searches or votes you make are stored only in your browser as part of <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localstorage</a>. The same is true for any other persistent data (e.g., your filters and the choices you make below). Presumably GitHub (which hosts this site) keeps some log files. When fetching your feeds we make use of a couple of proxy servers. First we use our own, then as fallbacks: <a href="https://corsproxy.io/" target="_blank">corsproxy.io</a> and <a href="https://cors.lol/" target="_blank">cors.lol</a> respectivly. FWIW, corsproxy claims not to keep log files. The publishers of these feeds, however, only see the IP addresses of the proxy servers when they are downloaded. We do, however, embed preview images and a site's <a href="https://en.wikipedia.org/wiki/Favicon" target="_blank">favicon</a> as part of most article cards. So, unless you have the "Images: Exclude preview images and favicons..." option checked below, simply loading your timeline will download those files, likely producing log files on the servers they came from. And of course, if you follow a link to an article, you'll access that article and set in motion all that comes with that. Also, if you check the "Show local weather" option below, your browser will share your location with <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a>'s weather <a href="https://en.wikipedia.org/wiki/API" target="_blank">API</a>. Similarly, if you add an API Key under <i>Magical AI Fairy Dust</i>, when you click 🤖, the headlines and introductory sentences of your feeds may be shared with your LLM provider depending on your prompt. You can, however, use a <a href="https://lmstudio.ai/" target="_blank">local LLM</a> and avoid sharing your prompt with anyone. Importantly, if you turn on the <i>Cloud Sync</i> feature, all of your data will be shared to a GitHub Gist you control. 
             </p>
 
             <div class="row" style="margin-bottom: 10px;">
@@ -138,7 +138,7 @@
                 <input type="range" id="lookback-slider" min="1" max="15" value="7" style="width:100%;">
             </p>
             <p>
-                You can limit how much you see in your timeline by adjusting the slider above. If you clear you reading history, however, it will remove older articles, not just hide them. This will effect your recommendations since they are based on your interactions with old articles (did you vote them up or down). <i>Refresh page to see results</i>.
+                You can limit how much you see in your timeline by adjusting the slider above. If you clear your reading history, however, it will remove older articles, not just hide them. This will effect your recommendations since they are based on your interactions with old articles (did you vote them up or down). <i>Refresh page to see results</i>.
             </p>
             <p>
             <button id="clear-read-history" class="btn btn-danger btn-block">Clear Reading History</button>
@@ -252,9 +252,9 @@
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">                    
 
 
-                    <h4>Margic AI Fairy Dust</h4>
+                    <h4>Magic AI Fairy Dust</h4>
                     <p>
-                        Because everyone else is doing it, you now have the option to add AI. 😜 To learn more, like why this is even here, read this <a href="https://sadlynothavocdinosaur.com/posts/rss-reader" target="_blank">blog post</a>. Depending on your prompt below, this feature may share feed data with your LLM provider when 🤖 is clicked. You can, however, use a <a href="https://lmstudio.ai/" target="_blank">local LLM</a> and avoid sharing your prompt with anyone. <i>Refresh page to see results</i>.
+                        Because everyone else is doing it, you now have the option to add AI. 😜 To learn more, like why this is even here, read this <a href="https://sadlynothavocdinosaur.com/posts/rss-reader" target="_blank">blog post</a>. Depending on your prompt below, this feature may share feed data with your LLM provider when 🤖 is clicked. You can, however, use a <a href="https://lmstudio.ai/" target="_blank">local LLM</a> and avoid sharing your prompt with anyone. 
                     </p>
                     <p>
                         API Base</br>
@@ -266,6 +266,13 @@
                         Your prompt<br><i>{{news-feed}}</i> will be repaced by your headlines and introductory sentences. 
                     </p>
                     <p><textarea id="prompt_pref" value="" oninput="localStorage.prompt_pref=this.value"></textarea>    
+
+                    <p>
+                        <label for="check-anchor"><input type="checkbox" id="check-anchor" value="1"> If the above's prompt output includes links, check to see if their <i>anchor text</i> is found on the page. Turn links <font color='red'>red</font> if <i>anchor text</i> is not on the page.</label>
+                    </p>
+                    <p>
+                        <i>Refresh page to see results</i>.
+                    </p>
                     
                     <h4>Your Data</h4>
                     <p>
@@ -275,7 +282,7 @@
                         If you click <i>Save All</i> it will include all of your votes and reading history. <i>Save OPLM</i> exports only your feeds. The <a href="https://en.wikipedia.org/wiki/OPML" target="_blank">OPLM standard</a> can also be used to move your feeds to another RSS Reader. 
                     </p>
                     <p>
-                        <i>Open</i> can read both our full saved data files (.json) and standard OPLM files (.oplm). So, you can use it to load a backup or a copy of feeds from another reader. 
+                        <i>Open</i> can read both our full saved data files (.json) and standard OPLM files (.oplm). So, you can use it to load a file you saved above or a copy of feeds from another reader. 
                     </p>
                     <input id="upload" type="file" style="display: none;"/> 
                     <p style="display: flex;">
@@ -370,6 +377,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 
-<script src="js/functions.js?v=v1.30.0"></script>    
+<script src="js/functions.js?v=v1.31.0"></script>    
 
 </html>

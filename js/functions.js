@@ -1,4 +1,4 @@
-var version = "v1.30.0";
+var version = "v1.31.0";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -144,7 +144,7 @@ document.getElementById("api_base").value = api_base;
 const api_key =  localStorage.getItem("api_key") || "";
 document.getElementById("api_key").value = api_key;
 
-const prompt_pref =  localStorage.getItem("prompt_pref") || `Read the following list of headlines and introductory sentences then provide a short briefing based on the news you find. If a story shows up multiple times, place it closer to the top of your summary. Remember, there may not be room for everything, prioritize. \n-----\n{{news-feed}}\n-----\nNow provide your briefing. Keep it short, no more than 100 words! Also, wrap all proper nouns in <a> tags with hrefs pointing to \`./?regex=PROPER NOUN\` (e.g., <a href="./?regex=George Washington">George Washington</a>). Be sure these nouns are ones mentioned in the text provided above.`;
+const prompt_pref =  localStorage.getItem("prompt_pref") || `Read the following list of headlines and introductory sentences then provide a short briefing based on the news you find. If a story shows up multiple times, place it closer to the top of your summary. Remember, there may not be room for everything, prioritize. \n-----\n{{news-feed}}\n-----\nNow provide your briefing. Keep it short, no more than 100 words! Also, wrap all proper nouns in <a> tags with hrefs pointing to \`./?regex=PROPER NOUN\` (e.g., "George <a href='./?regex=Washington'>Washington</a>"). Be sure these nouns appear in the text provided above, and wrap the smallest meaningful part of multi-word nouns in the anchor tag (e.g., link to one's surname, not their full name). `;
 document.getElementById("prompt_pref").value = prompt_pref;
 
 if (api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
@@ -909,6 +909,21 @@ document.addEventListener("DOMContentLoaded", function() {
         localStorage.setItem("autoVote", newautoVote);
     });
 
+    const checkAnchorCheckbox = document.getElementById("check-anchor");
+    // Retrieve ignore images value from localStorage (if available)
+    if (localStorage.getItem("checkAnchor")) {
+        savedCheckAnchor = localStorage.getItem("checkAnchor") === "true";
+    } else {
+        savedCheckAnchor = true;
+        localStorage.setItem("checkAnchor", savedCheckAnchor);
+    }
+    checkAnchorCheckbox.checked = savedCheckAnchor;
+    // Update ignore images value and save to localStorage when checkbox value changes
+    checkAnchorCheckbox.addEventListener("change", function () {
+        const newCheckAnchor = checkAnchorCheckbox.checked;
+        localStorage.setItem("checkAnchor", newCheckAnchor);
+    });
+
 
     const ignoreImagesCheckbox = document.getElementById("ignore-images");
     // Retrieve ignore images value from localStorage (if available)
@@ -919,6 +934,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const newIgnoreImages = ignoreImagesCheckbox.checked;
         localStorage.setItem("ignoreImages", newIgnoreImages);
     });
+
 
     const weatherCheckbox = document.getElementById("weather-report");
     // Retrieve ignore images value from localStorage (if available)
@@ -2581,6 +2597,10 @@ document.addEventListener("DOMContentLoaded", function() {
             try {
               console.log(xhr.responseText);
               LLM_text = JSON.parse(xhr.responseText)["choices"][0]["message"]["content"];
+              if (savedCheckAnchor) {
+                console.log("Checking links in LLM output...")
+                LLM_text = flagLinksNotInText(LLM_text, document.body.innerText);
+              }
               llm_messages.push({"role": "assistant", "content": LLM_text})
             } catch (error) {
               llm_messages.pop();
@@ -2622,7 +2642,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const sumNewsFeedsButton = document.getElementById("summarize-news");
     sumNewsFeedsButton.addEventListener("click", function() {
         
-        if (document.getElementById("news-feed").innerText!=""){
+        if (document.getElementById("news-feed").innerText!="" | new URLSearchParams(window.location.search).has('regex')){
 
             document.getElementById('sum_msg').style.display = "block";
             if (searching){
@@ -2937,9 +2957,6 @@ document.addEventListener("DOMContentLoaded", function() {
         if (searchParams.has('regex')){
             document.getElementById('loading').style.display = "none";
             regex_search(decodeURI(searchParams.get('regex')))
-            if (savedWeather){
-                getUserWeather();
-            }
             document.getElementById('upwords').innerHTML = topWords(upTFIDF,downTFIDF);
             document.getElementById('downwords').innerHTML = topWords(downTFIDF,upTFIDF);  
             updateItemCount();
@@ -3577,6 +3594,43 @@ function remove_feed(feedTitle,feedUrl) {
         rssFeeds.splice(feedIndex, 1);
         localStorage.setItem("feeds", JSON.stringify(rssFeeds));
     }
+}
+
+function flagLinksNotInText(html, plainText) {
+  // Normalize the plain text for robust matching
+  const norm = s => s
+    .normalize('NFKC')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const textNorm = norm(plainText);
+
+  // Parse the HTML string into a document
+  let doc;
+  if (typeof DOMParser !== 'undefined') {
+    doc = new DOMParser().parseFromString(html, 'text/html');
+  } else if (typeof document !== 'undefined') {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    doc = { body: div }; // minimal shape
+  } else {
+    // Environment without a DOM — return original HTML unchanged
+    return html;
+  }
+
+  // Check each anchor's text against the plain text
+  const links = (doc.body.querySelectorAll ? doc.body.querySelectorAll('a') : doc.body.getElementsByTagName('a'));
+  for (const a of links) {
+    const anchorText = norm(a.textContent || '');
+    const found = anchorText && textNorm.includes(anchorText);
+    if (!found) {
+      // Color the link red without clobbering other inline styles
+      a.style.color = 'red';
+    }
+  }
+
+  return doc.body.innerHTML;
 }
 
 window.addEventListener('beforeunload', (event) => {
