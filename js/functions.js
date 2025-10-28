@@ -1,4 +1,4 @@
-var version = "v1.29.0";
+var version = "v1.30.0";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -285,7 +285,7 @@ control.addEventListener("change", function(event){
                             //localStorage.clear();
                             localStorage.setItem(key,value);                            
                         }
-                        dirty();
+                        notdirty();
                         localStorage.setItem("lastLoad",0);
                         window.location.reload(true);
                     } else {
@@ -929,10 +929,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const newWeather = weatherCheckbox.checked;
         localStorage.setItem("weather", newWeather);
     });  
-
-    if (savedWeather){
-        getUserWeather();
-    }
 
     const savedtemp = localStorage.getItem("temp") || "fahrenheit"
     document.getElementById("temp").value = savedtemp
@@ -2934,7 +2930,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         data_dump = await load_gists_data();
 
-        console.log("GIST DATA",data_dump)
+        //console.log("GIST DATA",data_dump)
 
         //articles = data_dump["articles"];
 
@@ -2946,13 +2942,19 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             document.getElementById('upwords').innerHTML = topWords(upTFIDF,downTFIDF);
             document.getElementById('downwords').innerHTML = topWords(downTFIDF,upTFIDF);  
-            updateItemCount();       
+            updateItemCount();
+            if (savedWeather){
+                getUserWeather();
+            } 
         } else if (data_dump) {         
             window.location.reload();  
         } else {
             window.history.pushState({}, '',  document.location.href.split('?')[0]);
             loadNews(true);
             updateItemCount();
+            if (savedWeather){
+                getUserWeather();
+            } 
         }
 
     }
@@ -3474,6 +3476,7 @@ async function push_gists_data() {
     if (document.getElementById('gist_name').value.length>0 && document.getElementById('gist_token').value.length>0) {
         let text = "This will overwrite and replace your cloud data with local data.";
         if (confirm(text) == true) {
+
             try{
                 const token = localStorage.getItem("gist_token"); // Must have "gist" permission
                 const gist = gistClient({ token });
@@ -3510,7 +3513,9 @@ async function pull_gists_data() {
                     // Code to execute if an error occurs in the try block
                     // The 'error' variable contains information about the error
                     data_dump = RssOpmlIO.opmlToJson(gist_text)
-                }               
+                }  
+                
+                //console.log("GIST DATA",data_dump["feeds"]!="[]")
                 if (data_dump["feeds"]!="[]"){
                     localStorage.clear();
                     for (const [key, value] of Object.entries(data_dump)) {
@@ -3518,6 +3523,7 @@ async function pull_gists_data() {
                         //localStorage.clear();
                         localStorage.setItem(key,value);
                     }
+                    notdirty();
                     //localStorage.setItem("lastLoad",0);
                     window.location.reload(true);
                 } else {
@@ -3573,14 +3579,16 @@ function remove_feed(feedTitle,feedUrl) {
     }
 }
 
-//window.addEventListener('beforeunload', (event) => {
-//    if (isDirty) {
+window.addEventListener('beforeunload', (event) => {
+    if (isDirty==true && document.getElementById('gist_name').value.length>0 && document.getElementById('gist_token').value.length>0) {
         // The presence of this code triggers the confirmation dialog.
-//        event.preventDefault(); 
+        event.preventDefault(); 
         // This is for older browsers that may still use it.
-//        event.returnValue = ''; 
-//    }
-//});
+        event.returnValue = ''; 
+    }
+});
+
+//delete upTFIDF["the-new-yorker"];localStorage.setItem("upTFIDF", JSON.stringify(upTFIDF));
 
 document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
 
