@@ -2599,7 +2599,7 @@ document.addEventListener("DOMContentLoaded", function() {
               LLM_text = JSON.parse(xhr.responseText)["choices"][0]["message"]["content"];
               if (savedCheckAnchor) {
                 console.log("Checking links in LLM output...")
-                LLM_text = flagLinksNotInText(LLM_text, document.body.innerText);
+                LLM_text = flagLinksNotInText(LLM_text, document.body.innerText).replace("&lt","<").replace("&gt",">");
               }
               llm_messages.push({"role": "assistant", "content": LLM_text})
             } catch (error) {
@@ -3599,9 +3599,9 @@ function remove_feed(feedTitle,feedUrl) {
 function flagLinksNotInText(html, plainText) {
   // Normalize the plain text for robust matching
   const norm = s => s
-    .normalize('NFKC')
+    //.normalize('NFKC')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    //.replace(/\s+/g, ' ')
     .trim();
 
   const textNorm = norm(plainText);
