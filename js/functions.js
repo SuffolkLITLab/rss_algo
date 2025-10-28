@@ -1,4 +1,4 @@
-var version = "v1.31.0";
+var version = "v1.32.0";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -3639,6 +3639,38 @@ window.addEventListener('beforeunload', (event) => {
         event.returnValue = ''; 
     }
 });
+
+
+
+function checkAdblockAndSuggest() {
+  const bait = document.createElement('div');
+  bait.className = 'ads ad ad-banner ad-slot adsbox googleads adsbygoogle';
+  bait.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;';
+  document.body.appendChild(bait);
+
+  const cs = getComputedStyle(bait);
+  const blocked =
+    cs.display === 'none' ||
+    cs.visibility === 'hidden' ||
+    bait.offsetParent === null ||
+    bait.offsetHeight === 0 ||
+    bait.clientHeight === 0;
+
+  bait.remove();
+
+
+  if (!blocked && !localStorage.getItem('adblock_suggested')) {
+      document.getElementById('ad_blocker').style.display = "block";
+  //  alert("Looks like you're not using an ad blocker. For privacy and fewer trackers, consider installing one (e.g., uBlock Origin).");
+  //  localStorage.setItem('adblock_suggested', '1');
+  }
+
+  return blocked; // true if an ad blocker seems present
+}
+
+// optional: run on page load
+document.addEventListener('DOMContentLoaded', checkAdblockAndSuggest);
+
 
 //delete upTFIDF["the-new-yorker"];localStorage.setItem("upTFIDF", JSON.stringify(upTFIDF));
 

@@ -203,6 +203,20 @@ select {
     background:#775c03;
 }
 
+#ad_blocker {
+    display:none;
+    float:left;
+    width:100%;
+    border-radius: 0.3rem;
+    background: #ffcf31;
+    margin: 0px 0px 15px 0px;
+    padding:15px 10px 15px 15px;
+}
+
+.dark-mode #ad_blocker {
+    background:#775c03;
+}
+
 .feed_errors {
     display:none;
 }
@@ -212,9 +226,8 @@ select {
     width:100%;
     border-radius: 0.3rem;
     background: #fdd4d4;
-    margin-top: 15px;
+    margin: 0px 0px 15px 0px;
     padding:15px 10px 15px 15px;
-    margin-bottom: 20px;
 }
 
 .dark-mode #feed_error_msg {

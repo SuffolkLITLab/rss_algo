@@ -17,11 +17,11 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="images/blue-icon-180x180.png">
 
-    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.31.0">
-	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.31.0">
-    <script src="js/spin/spin.min.js?v=v1.31.0"></script>
+    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.32.0">
+	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.32.0">
+    <script src="js/spin/spin.min.js?v=v1.32.0"></script>
 
-    <script src="js/report.js?v=v1.31.0"></script>    
+    <script src="js/report.js?v=v1.32.0"></script>    
     <script src="js/feeds.js?trained_on=2024-08-13b"></script>
 
 </head>
@@ -72,6 +72,11 @@
 
         <div id="my_settings" style="display:none;float:left;padding-top: 15px;">
 
+            <div id="ad_blocker">
+                It looks like you do NOT have an ad blocker installed. Consider <a href="https://www.pcmag.com/picks/best-ad-blockers" target="_blank">installing one</a> for a better online experience. <a href="javascript:void('')" onClick="document.getElementById('ad_blocker').style.display = 'none';localStorage.setItem('adblock_suggested', '1');">Dismiss this message.</a>
+            </div>
+
+
             <div class="feed_errors">
                 <div id="feed_error_msg">
                     <p><b>⚠️ There was an error reading the following feeds:</b> 
@@ -84,7 +89,6 @@
                         Be patient. Some sites may be readable only intermittently. Use the <i>search</i> link to see if you've downloaded any articles from a feed recently. 
                     </p>
                 </div>
-
             </div>
 
             <h2>Settings</h2>
@@ -377,6 +381,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 
-<script src="js/functions.js?v=v1.31.0"></script>    
+<script src="js/functions.js?v=v1.32.0"></script>    
 
 </html>
