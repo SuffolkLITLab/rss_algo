@@ -144,7 +144,7 @@ document.getElementById("api_base").value = api_base;
 const api_key =  localStorage.getItem("api_key") || "";
 document.getElementById("api_key").value = api_key;
 
-const prompt_pref =  localStorage.getItem("prompt_pref") || `Read the following list of headlines and introductory sentences then provide a short briefing based on the news you find. If a story shows up multiple times, place it closer to the top of your summary. Remember, there may not be room for everything, prioritize. \n-----\n{{news-feed}}\n-----\nNow provide your briefing. Keep it short, no more than 100 words! Also, wrap all proper nouns in <a> tags with hrefs pointing to \`./?regex=PROPER NOUN\` (e.g., "George <a href='./?regex=Washington'>Washington</a>"). Be sure these nouns appear in the text provided above, and wrap the smallest meaningful part of multi-word nouns in the anchor tag (e.g., link to one's surname, not their full name). `;
+const prompt_pref =  localStorage.getItem("prompt_pref") || `Read the following list of headlines and introductory sentences then provide a short briefing based on the news you find. If a story shows up multiple times, place it closer to the top of your summary. Remember, there may not be room for everything, prioritize. \n-----\n{{news-feed}}\n-----\nNow provide your briefing. Keep it short, no more than 100 words! Also, wrap all proper nouns in <a> tags with hrefs pointing to \`./?regex=PROPER NOUN\` (e.g., "George <a href='./?regex=\bWashington\b'>Washington</a>"). Be sure these nouns appear in the text provided above, and wrap the smallest meaningful part of multi-word nouns in the anchor tag (e.g., link to one's surname, not their full name). Also make sure that the regex parameter in the link matches the anchor text exactly except it should be straddled by non-word breaks (i.e., \`\b\`).`;
 document.getElementById("prompt_pref").value = prompt_pref;
 
 if (api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
@@ -3628,7 +3628,7 @@ function flagLinksNotInText(html, plainText) {
     const found = anchorText && textNorm.includes(anchorText);
     if (!found) {
       // Color the link red without clobbering other inline styles
-      a.style.color = 'red';
+      a.style.color = '#ff4848';
     }
   }
 
@@ -3677,87 +3677,87 @@ document.addEventListener('DOMContentLoaded', checkAdblockAndSuggest);
 
 
 
-  // Customize if you keep placeholder elsewhere or want a different cutoff
-  const PLACEHOLDER = "images/placeholder.png";
-  const MAX_RATIO = 3;
+// Customize if you keep placeholder elsewhere or want a different cutoff
+const PLACEHOLDER = "images/placeholder.png";
+const MAX_RATIO = 3;
 
-  function isTooWide(img) {
-    // Guard against 0 height just in case
-    return img.naturalHeight > 0 && (img.naturalWidth / img.naturalHeight) > MAX_RATIO;
-  }
+function isTooWide(img) {
+// Guard against 0 height just in case
+return img.naturalHeight > 0 && (img.naturalWidth / img.naturalHeight) > MAX_RATIO;
+}
 
-  function triggerPlaceholder(img) {
-    // Don’t loop or override if we’re already showing the placeholder
-    const srcNow = img.currentSrc || img.src || "";
-    if (srcNow.indexOf(PLACEHOLDER) !== -1) return;
+function triggerPlaceholder(img) {
+// Don’t loop or override if we’re already showing the placeholder
+const srcNow = img.currentSrc || img.src || "";
+if (srcNow.indexOf(PLACEHOLDER) !== -1) return;
 
-    // Prefer to trigger the existing inline onerror (so your behavior stays centralized)
-    // Note: Synthetic 'error' events work in modern browsers for inline/on* and addEventListener handlers.
-    img.dispatchEvent(new Event("error", { bubbles: false, cancelable: true }));
+// Prefer to trigger the existing inline onerror (so your behavior stays centralized)
+// Note: Synthetic 'error' events work in modern browsers for inline/on* and addEventListener handlers.
+img.dispatchEvent(new Event("error", { bubbles: false, cancelable: true }));
 
-    // Fallback: if nothing swapped the src (e.g., a custom handler removed), set it explicitly.
-    if ((img.currentSrc || img.src || "").indexOf(PLACEHOLDER) === -1) {
-      img.src = PLACEHOLDER;
+// Fallback: if nothing swapped the src (e.g., a custom handler removed), set it explicitly.
+if ((img.currentSrc || img.src || "").indexOf(PLACEHOLDER) === -1) {
+    img.src = PLACEHOLDER;
+}
+}
+
+// Handle images as they finish loading (use capture: true because 'load' doesn’t bubble)
+document.addEventListener("load", function (e) {
+const img = e.target;
+if (!(img instanceof HTMLImageElement)) return;
+
+// Only act on the lazyloaded ones (by class or data attribute)
+if (!img.classList.contains("lazyload") && !img.hasAttribute("data-src")) return;
+
+if (isTooWide(img)) {
+    triggerPlaceholder(img);
+}
+}, true);
+
+// Edge cases:
+// 1) Images that are already loaded from cache before this script runs.
+// 2) Images whose src gets set by the lazyloader but load so fast you miss the event.
+//    Watch for src changes and also check immediately if complete.
+const watchImg = (img) => {
+if (img.complete) {
+    // If already loaded, evaluate immediately
+    if (isTooWide(img)) triggerPlaceholder(img);
+} else {
+    // Nothing else to do; the 'load' listener above will catch it
+}
+// Observe future src swaps (in case lazyload updates src later)
+mo.observe(img, { attributes: true, attributeFilter: ["src"] });
+};
+
+const mo = new MutationObserver((mutations) => {
+for (const m of mutations) {
+    if (m.type === "attributes" && m.attributeName === "src") {
+    const img = m.target;
+    if (img instanceof HTMLImageElement && img.complete && isTooWide(img)) {
+        triggerPlaceholder(img);
     }
-  }
-
-  // Handle images as they finish loading (use capture: true because 'load' doesn’t bubble)
-  document.addEventListener("load", function (e) {
-    const img = e.target;
-    if (!(img instanceof HTMLImageElement)) return;
-
-    // Only act on the lazyloaded ones (by class or data attribute)
-    if (!img.classList.contains("lazyload") && !img.hasAttribute("data-src")) return;
-
-    if (isTooWide(img)) {
-      triggerPlaceholder(img);
     }
-  }, true);
+}
+});
 
-  // Edge cases:
-  // 1) Images that are already loaded from cache before this script runs.
-  // 2) Images whose src gets set by the lazyloader but load so fast you miss the event.
-  //    Watch for src changes and also check immediately if complete.
-  const watchImg = (img) => {
-    if (img.complete) {
-      // If already loaded, evaluate immediately
-      if (isTooWide(img)) triggerPlaceholder(img);
-    } else {
-      // Nothing else to do; the 'load' listener above will catch it
+// Register all current lazy images
+document.querySelectorAll("img.lazyload, img[data-src]").forEach(watchImg);
+
+// Optional: if your page injects more lazy images later, observe the DOM to attach watchers.
+// (Safe to omit if your images are all in the initial HTML.)
+const domObserver = new MutationObserver((mutations) => {
+for (const m of mutations) {
+    for (const node of m.addedNodes) {
+    if (node instanceof HTMLImageElement &&
+        (node.classList.contains("lazyload") || node.hasAttribute("data-src"))) {
+        watchImg(node);
+    } else if (node.querySelectorAll) {
+        node.querySelectorAll("img.lazyload, img[data-src]").forEach(watchImg);
     }
-    // Observe future src swaps (in case lazyload updates src later)
-    mo.observe(img, { attributes: true, attributeFilter: ["src"] });
-  };
-
-  const mo = new MutationObserver((mutations) => {
-    for (const m of mutations) {
-      if (m.type === "attributes" && m.attributeName === "src") {
-        const img = m.target;
-        if (img instanceof HTMLImageElement && img.complete && isTooWide(img)) {
-          triggerPlaceholder(img);
-        }
-      }
     }
-  });
-
-  // Register all current lazy images
-  document.querySelectorAll("img.lazyload, img[data-src]").forEach(watchImg);
-
-  // Optional: if your page injects more lazy images later, observe the DOM to attach watchers.
-  // (Safe to omit if your images are all in the initial HTML.)
-  const domObserver = new MutationObserver((mutations) => {
-    for (const m of mutations) {
-      for (const node of m.addedNodes) {
-        if (node instanceof HTMLImageElement &&
-            (node.classList.contains("lazyload") || node.hasAttribute("data-src"))) {
-          watchImg(node);
-        } else if (node.querySelectorAll) {
-          node.querySelectorAll("img.lazyload, img[data-src]").forEach(watchImg);
-        }
-      }
-    }
-  });
-  domObserver.observe(document.documentElement, { childList: true, subtree: true });
+}
+});
+domObserver.observe(document.documentElement, { childList: true, subtree: true });
 
 
 //delete upTFIDF["the-new-yorker"];localStorage.setItem("upTFIDF", JSON.stringify(upTFIDF));
