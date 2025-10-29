@@ -1519,6 +1519,8 @@ document.addEventListener("DOMContentLoaded", function() {
             local_cutoff = savedcutoff;
         }
 
+        //console.log("LL",local_list)
+
         if (decluter_cut<1 && crunch_numbers) {
             dfreq_all = calculateDF(articles)
         }
@@ -1604,7 +1606,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 
                 if ((!HiddenModeState && !isRead) || (HiddenModeState)) {
 
-                    if ((Date.parse(pubDate) >= Date.parse(twoWeeksAgo)) && priorityRating >= ratings_mean+ratings_std*(practical_cutoff) && i<max_on_page) {
+                    if ((Date.parse(pubDate) >= Date.parse(twoWeeksAgo)) && (priorityRating >= ratings_mean+ratings_std*(practical_cutoff) || (practical_cutoff<=-10)) && i<max_on_page) {
 
                         const article = document.createElement("div");
                         article.setAttribute("data-article-index", index); 
@@ -2543,10 +2545,12 @@ document.addEventListener("DOMContentLoaded", function() {
         regex = new RegExp(newSearch, "i")
         matching_regex.innerHTML = `<a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">Regular expression</a> matching results for <b>"${newSearch}"</b> (<a href="${document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch)}" target="_blank">link to search</a>).`;
 
+        //console.log(regex)
+
         saved_articles.forEach(articleData => {
             testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl
-            //console.log(testString)
             if (testString.match(regex)) {
+                //console.log(articleData)
                 searchResults.push(articleData);
             }
         });
