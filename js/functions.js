@@ -1,4 +1,4 @@
-var version = "v1.33.1";
+var version = "v1.33.2";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -573,91 +573,94 @@ document.addEventListener("DOMContentLoaded", function() {
         //console.log("starts",document.getElementById('loading').style.display )
 
         var similar_arts = []
+        
+        if (n_feeds==rssFeeds.length) {
 
-        const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
+            const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
 
-        k=0;
-        articleContainers.forEach(articleContainer => {
+            k=0;
+            articleContainers.forEach(articleContainer => {
 
-            if(k>n) {
-                const itemId = articleContainer.getAttribute("data-item-id");
-                if (id_source!=itemId) {
-                    
-                    if (articleContainer.querySelector(".card-text")) {
-                        art_text = articleContainer.querySelector(".card-text").innerHTML
-                    } else {
-                        art_text = ""
-                    }
-                    text = articleContainer.querySelector(".card-title").innerHTML + " " + art_text
+                if(k>n) {
+                    const itemId = articleContainer.getAttribute("data-item-id");
+                    if (id_source!=itemId) {
+                        
+                        if (articleContainer.querySelector(".card-text")) {
+                            art_text = articleContainer.querySelector(".card-text").innerHTML
+                        } else {
+                            art_text = ""
+                        }
+                        text = articleContainer.querySelector(".card-title").innerHTML + " " + art_text
 
-                    tf = countWords(text)
+                        tf = countWords(text)
 
-                    if (Object.keys(tf_source).length>Object.keys(tf).length){
-                        tf_source_tmp = JSON.parse(JSON.stringify(tf_source));
-                        tf_tmp = JSON.parse(JSON.stringify(tf)); 
-                        flipped = 0
-                    } else {
-                        tf_source_tmp = JSON.parse(JSON.stringify(tf)); 
-                        tf_tmp = JSON.parse(JSON.stringify(tf_source));
-                        flipped = 1
-                    }
+                        if (Object.keys(tf_source).length>Object.keys(tf).length){
+                            tf_source_tmp = JSON.parse(JSON.stringify(tf_source));
+                            tf_tmp = JSON.parse(JSON.stringify(tf)); 
+                            flipped = 0
+                        } else {
+                            tf_source_tmp = JSON.parse(JSON.stringify(tf)); 
+                            tf_tmp = JSON.parse(JSON.stringify(tf_source));
+                            flipped = 1
+                        }
 
-                    var array1 = [];
-                    var array2 = [];
-                    for (word in tf_source_tmp) {
-                        try {
-                            idf = Math.log(1+dfreq_all["n_docs"]/dfreq_all["df_arr"][word]);                            
-                        } catch (error) {
-                            this_here = 1
-                            if (tf_tmp[word]) {
-                                 this_here+=1;
+                        var array1 = [];
+                        var array2 = [];
+                        for (word in tf_source_tmp) {
+                            try {
+                                idf = Math.log(1+dfreq_all["n_docs"]/dfreq_all["df_arr"][word]);                            
+                            } catch (error) {
+                                this_here = 1
+                                if (tf_tmp[word]) {
+                                    this_here+=1;
+                                }
+                                idf = Math.log(1+dfreq_all["n_docs"]/this_here);                             
                             }
-                            idf = Math.log(1+dfreq_all["n_docs"]/this_here);                             
-                        }
 
-                        if (tf_source_tmp[word] && idf) {
-                            array1.push((tf_source_tmp[word])*idf)
-                        } else {
-                            array1.push(0)
+                            if (tf_source_tmp[word] && idf) {
+                                array1.push((tf_source_tmp[word])*idf)
+                            } else {
+                                array1.push(0)
+                            }
+                            if (tf_tmp[word]) {
+                                array2.push(tf_tmp[word]*idf)
+                            } else {
+                                array2.push(0)
+                            }
                         }
-                        if (tf_tmp[word]) {
-                            array2.push(tf_tmp[word]*idf)
-                        } else {
-                            array2.push(0)
-                        }
-                    }
-                    score = cosinesim(array1, array2);
+                        score = cosinesim(array1, array2);
 
-                    //console.log(n,score,decluter_cut,tf_source,tf,array1, array2)
-                    //delete array1, array2, tf_source_tmp, tf_tmp
-                    
-                    //if ((score>=0.5) || (itemId=="https://www.npr.org/2023/09/13/1199168440/how-strong-is-republicans-impeachment-inquiry-into-president-biden")) {
-                    if (score>=decluter_cut) {
-                        //console.log(Object.keys(tf_source_tmp).length,Object.keys(tf_tmp).length)
-                        //console.log(score)//,flipped,itemId,tf_source_tmp,tf_tmp,array1, array2)
-                        //console.log(tf_source,tf)
-                        //console.log("-",title_source,"\n-",articleContainer.querySelector(".card-title").innerHTML )
+                        //console.log(n,score,decluter_cut,tf_source,tf,array1, array2)
+                        //delete array1, array2, tf_source_tmp, tf_tmp
                         
-                        //var el = articleContainer.querySelector(".similar");
-                        //console.log(el)
-                        //el.innerHTML += `<li>`+title_source+`</li>`
-                        
-                        similar_arts.push([articleContainer.querySelector(".card-title").innerHTML,itemId])
+                        //if ((score>=0.5) || (itemId=="https://www.npr.org/2023/09/13/1199168440/how-strong-is-republicans-impeachment-inquiry-into-president-biden")) {
+                        if (score>=decluter_cut) {
+                            //console.log(Object.keys(tf_source_tmp).length,Object.keys(tf_tmp).length)
+                            //console.log(score)//,flipped,itemId,tf_source_tmp,tf_tmp,array1, array2)
+                            //console.log(tf_source,tf)
+                            //console.log("-",title_source,"\n-",articleContainer.querySelector(".card-title").innerHTML )
+                            
+                            //var el = articleContainer.querySelector(".similar");
+                            //console.log(el)
+                            //el.innerHTML += `<li>`+title_source+`</li>`
+                            
+                            similar_arts.push([articleContainer.querySelector(".card-title").innerHTML,itemId])
 
-                        readArticles[itemId] = new Date().toISOString();
-                        localStorage.setItem("read", JSON.stringify(readArticles));
+                            readArticles[itemId] = new Date().toISOString();
+                            localStorage.setItem("read", JSON.stringify(readArticles));
 
-                        articleContainer.remove()
+                            articleContainer.remove()
+                        }
                     }
                 }
-            }
-            k+=1;
-            //document.getElementById('loading').style.display = "none";
+                k+=1;
+                //document.getElementById('loading').style.display = "none";
 
-        });
+            });
 
-        return similar_arts
+            return similar_arts
 
+        }
     }
 
     function updateArticleStyles() {
