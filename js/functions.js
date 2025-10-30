@@ -558,7 +558,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         if (n_feeds>=Math.ceil(rssFeeds.length*0.985)) {
-            document.getElementById('loading').innerHTML = '&nbsp;Almost . . .&nbsp;';
+            document.getElementById('loading').innerHTML = '&nbsp;Loading that one last bit . . .&nbsp;';
             crunch_numbers = true;
         }
 
@@ -1404,7 +1404,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         errors+=1
                         n_feeds+=1
                         stored_name = JSON.parse(localStorage.getItem("feed_names"))[feedUrl]
-                        feed_error_list += `<li><b>${stored_name}</b> - <a href="${feedUrl}" target="_blank">${feedUrl}</a> (<a href='./?regex=${encodeURI(feedUrl.replaceAll("?","\\?").replaceAll("+","\\+").replaceAll(".","\\."))}'>search</a> (${count_cards(feedUrl)} cards) | <a href='javascript:remove_feed ("${stored_name}","${feedUrl}")'>remove</a>)</li>`;
+                        feed_error_list += `<li><b>${stored_name}</b> - <a href="${feedUrl}" target="_blank">${feedUrl}</a> (<a href='./?regex=${encodeURI(feedUrl.replaceAll("?","\\?").replaceAll("+","\\+").replaceAll(".","\\."))}'>search</a> - ${count_cards(feedUrl)} cards | <a href='javascript:remove_feed ("${stored_name}","${feedUrl}")'>remove</a>)</li>`;
                         localStorage.setItem("feed_error_list",feed_error_list)
                     });
             });
