@@ -558,7 +558,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         if (n_feeds>=Math.ceil(rssFeeds.length*0.985)) {
-            document.getElementById('loading').innerHTML = '&nbsp;Almost done . . .&nbsp;';
+            document.getElementById('loading').innerHTML = '&nbsp;Almost . . .&nbsp;';
             crunch_numbers = true;
         }
 
@@ -1311,6 +1311,10 @@ document.addEventListener("DOMContentLoaded", function() {
                                             mediaThumbnail = "images/cached_logos/arxiv.png"
                                         } else if (link.includes("lawfaremedia.org")) {
                                             mediaThumbnail = "images/cached_logos/lawfare.png"
+                                        } else if (link.includes("yourarlington.com")) {
+                                            mediaThumbnail = "images/cached_logos/yourarlington.png"
+                                        }  else if (link.includes("boston.com")) {
+                                            mediaThumbnail = "images/cached_logos/boston.com.png"
                                         }                                          
                                         
                                         //} else if (link.includes("")) {
@@ -1400,7 +1404,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         errors+=1
                         n_feeds+=1
                         stored_name = JSON.parse(localStorage.getItem("feed_names"))[feedUrl]
-                        feed_error_list += `<li><b>${stored_name}</b> - <a href="${feedUrl}" target="_blank">${feedUrl}</a> (<a href='./?regex=${encodeURI(feedUrl.replaceAll("?","\\?").replaceAll("+","\\+").replaceAll(".","\\."))}'>search</a> | <a href='javascript:remove_feed ("${stored_name}","${feedUrl}")'>remove</a>)</li>`;
+                        feed_error_list += `<li><b>${stored_name}</b> - <a href="${feedUrl}" target="_blank">${feedUrl}</a> (<a href='./?regex=${encodeURI(feedUrl.replaceAll("?","\\?").replaceAll("+","\\+").replaceAll(".","\\."))}'>search</a> (${count_cards(feedUrl)} cards) | <a href='javascript:remove_feed ("${stored_name}","${feedUrl}")'>remove</a>)</li>`;
                         localStorage.setItem("feed_error_list",feed_error_list)
                     });
             });
@@ -2707,7 +2711,7 @@ document.addEventListener("DOMContentLoaded", function() {
     manageFeedsButton.addEventListener("click", function() {
 
         const feedList = rssFeeds.map((feed, index) => `
-            <tr style="border-top:1px solid #eee"><td colspan=2><b>${feed_names[feed]}</b> (<a href='./?regex=${encodeURI(feed.replaceAll("?","\\?").replaceAll("+","\\+").replaceAll(".","\\."))}'>search</a>)</td><tr>
+            <tr style="border-top:1px solid #eee"><td colspan=2><b>${feed_names[feed]}</b> (<a href='./?regex=${encodeURI(feed.replaceAll("?","\\?").replaceAll("+","\\+").replaceAll(".","\\."))}'>${count_cards(feed)} cards</a>)</td><tr>
             <tr><td width="1%">
             <button class="btn btn-danger remove-feed" data-feed-index="${index}">Remove</button>
             </td><td width="100%"><textarea style="width:100%;word-wrap:break-word;resize: none;" readonly>${feed}</textarea></td></tr>
@@ -2734,7 +2738,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             <p>
                                 If an option below inludes a parenthetical, that means it comes with a pre-trained algo focusing on the named theme. Your interactions will of course refine its operation, and FWIW, it includes the same feeds as others with the same name. It's just the intial focus that's different.
                             </p>
-                            <select id="feed_list">
+                            <select id="feed_list" onLoad="feed_list_update">
                                 <option value="default_feeds">Generic US Mix</option>
                                 <option value="default_feeds_legal_tech">Generic US Mix (legal tech &amp; AI)</option>
                                 <option value="default_feeds_science">Generic US Mix (math, science, &amp; space)</option>
@@ -2761,7 +2765,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             <p>
                             <hr>
                             <p>
-                                <b>Current Feeds</b>: You experience was built on top of <a href="?feeds=${localStorage.getItem("votelib")}">myrssalgo.org/?feeds=${localStorage.getItem("votelib")}</a>. Share that link to have folks start where you did.
+                                <b>Current Feeds</b>: Your experience was built on top of <a href="?feeds=${localStorage.getItem("votelib")}">myrssalgo.org/?feeds=${localStorage.getItem("votelib")}</a>. Share that link to have folks start where you did.
                             </p>
                             <table cellpadding="5px" width="100%">${feedList}</table>
                         </div>
@@ -2771,6 +2775,8 @@ document.addEventListener("DOMContentLoaded", function() {
         `;
 
         document.body.insertAdjacentHTML("beforeend", feedListModal);
+
+        document.getElementById('feed_list').value=localStorage.getItem("votelib");
 
         const feedListModalElement = document.getElementById("feedListModal");
         feedListModalElement.addEventListener("hidden.bs.modal", function() {
@@ -3745,6 +3751,18 @@ for (const m of mutations) {
     }
 }
 });
+
+
+function count_cards(lookfor) {
+    count = 0;
+    JSON.parse(localStorage.getItem("articles")).forEach((element) => {
+        if (element["feedUrl"]==lookfor){
+            //console.log(element); // Directly access the element
+            count+=1
+        }
+    });
+    return count
+} 
 
 // Register all current lazy images
 document.querySelectorAll("img.lazyload, img[data-src]").forEach(watchImg);
