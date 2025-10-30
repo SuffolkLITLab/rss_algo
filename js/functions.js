@@ -1,4 +1,4 @@
-var version = "v1.33.0";
+var version = "v1.33.1";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -1551,8 +1551,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
             if (match==0) {
 
-                
-                if ((!searching) && (i==2 && !isRead) && (Math.random()<=0.15) && ((n_feeds>=rssFeeds.length) || (n_feeds==0))) {
+                ads_on = false
+                if (ads_on && (!searching) && (i==2 && !isRead) && (Math.random()<=0.15) && ((n_feeds>=rssFeeds.length) || (n_feeds==0))) {
 
                     
                     //suffolk = 1
@@ -3432,9 +3432,9 @@ async function save_gists_data() {
         console.log("Save Gist:",gist_json["lastChange"],"<",localStorage.getItem("lastChange"),gist_json["lastChange"]<localStorage.getItem("lastChange"))
 
         if (gist_json["lastChange"]<localStorage.getItem("lastChange")) {
-            notdirty();
             written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
         }
+        notdirty();
     } catch (error) {
         alert("Error accessing your saved cloud data: Unable to save local data to cloud.")
         dirty();
@@ -3568,11 +3568,16 @@ function sync_and_refresh(){
     document.getElementById('refresh-all').style.display = 'none';
     window.history.pushState({}, '',  document.location.href.split('?')[0]);
 
+    document.getElementById("read-count").textContent = `Seen: ?`;
+    document.getElementById("unread-count").textContent = `New: ?`;
+
     if (isDirty==true && document.getElementById('gist_name').value.length>0 && document.getElementById('gist_token').value.length>0) {
         document.getElementById('loading').innerHTML = '&nbsp;Syncing with cloud . . .&nbsp;';
         document.getElementById('loading').style.display = 'block';
         save_gists_data();
     } else {
+        notdirty();
+        document.getElementById('loading').innerHTML = '&nbsp;One moment . . .&nbsp;';
         document.getElementById('loading').style.display = 'block';
         window.location.reload();
     }
