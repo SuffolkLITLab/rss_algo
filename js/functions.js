@@ -2733,7 +2733,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 You can import and overwrite the current feed list by <a href="javascript:upload_file()">uploading an OPLM file</a>, or you can use any of the options below.
                             </p>
                             <p>
-                                Remove individual feeds using the "Remove" buttons below, OR wipe and/or replace your existing list of feeds. If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>.
+                                Remove individual feeds using the "Remove" buttons below, OR wipe and/or replace your existing list of feeds. If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>. Add feeds with the blue + button on the main page.
                             </p> 
                             <p>
                                 Consider starting with a premade list. Then over time you can whittle it down and add new feeds as you like. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
