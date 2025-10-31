@@ -558,7 +558,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         if (n_feeds>=Math.ceil(rssFeeds.length*0.985)) {
-            document.getElementById('loading').innerHTML = '&nbsp;Loading that one last bit . . .&nbsp;';
+            document.getElementById('loading').innerHTML = '&nbsp;Finishing up . . .&nbsp;';
             crunch_numbers = true;
         }
 
