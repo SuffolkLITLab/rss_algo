@@ -464,7 +464,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var dfreq = calculateDF(articles.filter(article => readArticles[article.itemId]))
     var dfreq_all = {}
     var crunch_numbers = false
-    //var decluter_cards = true
+    var decluter_cards = true
 
     var ratings_mean = 0;
     var ratings_std = 0;
@@ -571,10 +571,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
         //document.getElementById('loading').style.display = "block";
         //console.log("starts",document.getElementById('loading').style.display )
-
         var similar_arts = []
         
-        if (n_feeds==rssFeeds.length) {
+        if ((n_feeds==rssFeeds.length) | (decluter_cards)) {
 
             const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
 
@@ -1015,7 +1014,9 @@ document.addEventListener("DOMContentLoaded", function() {
         //decluter_cards = true
         if ((lastLoad>time_padding) || (rssFeeds.length==0)) {
             loadFeeds = false;
-            //decluter_cards = false;
+            decluter_cards = true;
+        } else {
+            decluter_cards = false
         }
         
         document.getElementById('spin_container').innerHTML = `<div style="float:left;width:100%;height:115px;"><div id="spinner_here" style="margin:0 auto;width:65px;">&nbsp;</div></div>`;
