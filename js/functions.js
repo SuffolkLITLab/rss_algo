@@ -464,7 +464,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var dfreq = calculateDF(articles.filter(article => readArticles[article.itemId]))
     var dfreq_all = {}
     var crunch_numbers = false
-    var decluter_cards = true
+    //var decluter_cards = true
 
     var ratings_mean = 0;
     var ratings_std = 0;
@@ -658,6 +658,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
             });
 
+            if (similar_arts.length>0) {
+                console.log("SIMILAR:",similar_arts)
+            }
+
             return similar_arts
 
         }
@@ -678,7 +682,8 @@ document.addEventListener("DOMContentLoaded", function() {
             const itemId = articleContainer.getAttribute("data-item-id");
 
             var similar_arts = []
-            if (decluter_cut<1 && crunch_numbers && decluter_cards) {
+            //console.log("SIMILAR:",decluter_cut, crunch_numbers)
+            if (decluter_cut<1 && crunch_numbers) {
                 console.log("decluttering")
                 if (articleContainer.querySelector(".card-text")) {
                     art_text = articleContainer.querySelector(".card-text").innerHTML
@@ -785,7 +790,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const simcutValueElement = document.getElementById("sim-cutoff-value");
     
     // Retrieve lookback value from localStorage (if available)
-    const decluter_cut = localStorage.getItem("decluter_cut") || 1;
+    decluter_cut = localStorage.getItem("decluter_cut") || 1;
     if (decluter_cut) {
         simcutSlider.value = decluter_cut;
         simcutValueElement.textContent = decluter_cut;
@@ -796,6 +801,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const newsimcut= simcutSlider.value;
         simcutValueElement.textContent = newsimcut;
         localStorage.setItem("decluter_cut", newsimcut);
+        decluter_cut = newsimcut;
     });
 
 
@@ -1006,10 +1012,10 @@ document.addEventListener("DOMContentLoaded", function() {
             var time_padding = Date.parse(new Date())-lastcooldown*60*60*1000 //750000
         }
 
-        decluter_cards = true
+        //decluter_cards = true
         if ((lastLoad>time_padding) || (rssFeeds.length==0)) {
             loadFeeds = false;
-            decluter_cards = false;
+            //decluter_cards = false;
         }
         
         document.getElementById('spin_container').innerHTML = `<div style="float:left;width:100%;height:115px;"><div id="spinner_here" style="margin:0 auto;width:65px;">&nbsp;</div></div>`;
@@ -1379,7 +1385,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             lazyload();
                             replace_broken();
                             get_quote();
-                            decluter_cards = false;
+                            //decluter_cards = false;
                         }
                     })
                     .catch(error => {
@@ -1401,7 +1407,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 lazyload();
                                 replace_broken();
                                 get_quote();
-                                decluter_cards = false;
+                                //decluter_cards = false;
                             }
                         }
                         errors+=1
@@ -1425,7 +1431,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 lazyload();
                 replace_broken();
                 get_quote();
-                decluter_cards = false;
+                //decluter_cards = false;
                 document.getElementById('loading').style.display = "none";
                 crunch_numbers = false;
             }, 1);
