@@ -546,9 +546,6 @@ var feeds_long_list = [
     // JOTWELL
     "https://feedpress.me/jotwell",
     
-    // Sarah Glassmeyer
-    "https://sarahglassmeyer.com/?feed=rss2",    
-    
     // Sadly Not Havoc Dinosaur
     "https://sadlynothavocdinosaur.com/feed.xml",
     
