@@ -203,6 +203,11 @@ select {
     background:#775c03;
 }
 
+#cooldown_clock {
+    float:right;
+    color:#6c757d;
+}
+
 #ad_blocker {
     display:none;
     float:left;

@@ -1,4 +1,4 @@
-var version = "v1.33.2";
+var version = "v1.34";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -1034,6 +1034,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             localStorage.setItem("lastLoad", Date.parse(new Date()));
             localStorage.setItem("lastcooldown", savedcooldown);
+            timer.restart(localStorage.getItem("lastLoad"), localStorage.getItem("cooldown"));
 
             localStorage.setItem("feeds", JSON.stringify(rssFeeds));
 
@@ -2438,9 +2439,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 items = [
                             "Be kind. Have Fun. Try something new.",
                             "Patience is a superpower.",
+                            "For any sufficiently long-running unsolved problem, solutions are both more &amp; less complex than you think.",
+                            "Who you are isn't a function of what you can do (economic utility, intelligence, etc.) but rather what you want done. We are the changes we want to see in the world.",
+                            "Evil is what occurs in the absence of consideration for others.",
                             "Zero-sum thinking may not be the root of all evil, but all evil is rooted in zero-sum thinking.",
                             'In life and on apps, always question defaults. Fiddle with some "settings," and see what happens.',
                             "Civilization is a positive-sum game.",
+                            "There are no magic solutions, only trade-offs.",
                             "Few things threaten good work more than rushing... Breathe.",
                             `When something isn't working, consider metaphorically—or literally—hitting "refresh."`
                         ]
@@ -3574,6 +3579,99 @@ async function pull_gists_data() {
     }
 
 }
+
+
+function startSpanCountdownAsync(span, epochStr, hoursFromEpoch, opts = {}) {
+const el = typeof span === 'string' ? document.querySelector(span) : span;
+if (!el) throw new Error('Span element not found.');
+let tickMs = Math.max(100, Number(opts.tickMs ?? 1000));
+
+let timerId = null;
+let stopped = false;
+let currentResolve = null;
+let currentReject = null;
+let currentPromise = null;
+let targetMs = 0;
+
+const parseEpochMs = (v) => {
+    const n = Number(String(v).trim());
+    if (!Number.isFinite(n)) throw new Error('Invalid epoch time.');
+    return n < 1_000_000_000_000 ? n * 1000 : n; // seconds vs ms
+};
+
+const formatRemaining = (ms) => {
+    if (ms <= 0) return '00:00:00';
+    const totalSec = Math.floor(ms / 1000);
+    const days = Math.floor(totalSec / 86_400);
+    const hours = Math.floor((totalSec % 86_400) / 3600);
+    const mins = Math.floor((totalSec % 3600) / 60);
+    const secs = totalSec % 60;
+    const hh = String(hours).padStart(2, '0');
+    const mm = String(mins).padStart(2, '0');
+    const ss = String(secs).padStart(2, '0');
+    return days > 0 ? `${days}d ${hh}:${mm}:${ss}` : `${hh}:${mm}:${ss}`;
+};
+
+const clearTimer = () => { if (timerId) { clearInterval(timerId); timerId = null; } };
+
+const beginRun = (epochAny, hoursAny, newOpts = {}) => {
+    // Cancel previous run (if any) and resolve its promise as canceled.
+    if (currentResolve) currentResolve({ canceled: true, reason: 'restart' });
+    clearTimer();
+
+    if (newOpts.tickMs != null) tickMs = Math.max(100, Number(newOpts.tickMs));
+
+    stopped = false;
+    const epochMs = parseEpochMs(epochAny);
+    targetMs = epochMs + Number(hoursAny) * 3_600_000;
+    if (!Number.isFinite(targetMs)) throw new Error('Invalid hours value.');
+
+    currentPromise = new Promise((resolve, reject) => {
+    currentResolve = resolve;
+    currentReject = reject;
+
+    const tick = () => {
+        if (stopped) return;
+        const remaining = targetMs - Date.now();
+        if (remaining <= 0) {
+        el.innerText = '00:00:00';
+        clearTimer();
+        stopped = true;
+        resolve({ canceled: false, targetTime: new Date(targetMs) });
+        return;
+        }
+        el.innerText = formatRemaining(remaining);
+    };
+
+    queueMicrotask(tick);          // don’t block the current call stack
+    timerId = setInterval(tick, tickMs);
+    });
+};
+
+// Kick off the initial run
+beginRun(epochStr, hoursFromEpoch, opts);
+
+return {
+    stop() {
+    if (!stopped) {
+        stopped = true;
+        clearTimer();
+        if (currentResolve) currentResolve({ canceled: true, reason: 'stop' });
+    }
+    },
+    /** Restart with new epoch/hours (optionally a new tick interval). */
+    restart(newEpoch, newHours, newOpts = {}) {
+    beginRun(newEpoch, newHours, newOpts);
+    return this;
+    },
+    /** Current completion promise (replaced on each restart). */
+    get done() { return currentPromise; },
+    /** Target time for the current run. */
+    get targetTime() { return new Date(targetMs); }
+};
+}
+
+const timer = startSpanCountdownAsync('#countdown', localStorage.getItem("lastLoad"), localStorage.getItem("cooldown"));
 
 function sync_and_refresh(){
 
