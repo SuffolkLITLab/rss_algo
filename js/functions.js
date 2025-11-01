@@ -286,7 +286,7 @@ control.addEventListener("change", function(event){
                             localStorage.setItem(key,value);                            
                         }
                         notdirty();
-                        localStorage.setItem("lastLoad",0);
+                        //localStorage.setItem("lastLoad",0);
                         window.location.reload(true);
                     } else {
                         alert("Error Parsing File: No feeds found. Check file format.")
@@ -1034,7 +1034,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
             localStorage.setItem("lastLoad", Date.parse(new Date()));
             localStorage.setItem("lastcooldown", savedcooldown);
-            timer.restart(localStorage.getItem("lastLoad"), localStorage.getItem("cooldown"));
 
             localStorage.setItem("feeds", JSON.stringify(rssFeeds));
 
@@ -1438,6 +1437,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 crunch_numbers = false;
             }, 1);
         }
+
+        timer.restart(localStorage.getItem("lastLoad"), localStorage.getItem("lastcooldown"));
 
         crunch_numbers = false;
 
@@ -3671,7 +3672,7 @@ return {
 };
 }
 
-const timer = startSpanCountdownAsync('#countdown', localStorage.getItem("lastLoad"), localStorage.getItem("cooldown"));
+const timer = startSpanCountdownAsync('#countdown', localStorage.getItem("lastLoad"), localStorage.getItem("lastcooldown"));
 
 function sync_and_refresh(){
 
