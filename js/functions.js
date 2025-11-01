@@ -2440,7 +2440,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             "Be kind. Have Fun. Try something new.",
                             "Patience is a superpower.",
                             "For any sufficiently long-running unsolved problem, solutions are both more &amp; less complex than you think.",
-                            "Who you are isn't a function of what you can do (economic utility, intelligence, etc.) but what you want done. You are the change you want to see in the world.",
+                            "Who you are isn't about what you can do (economic utility, intelligence, etc.) but what you want done. You are the change you want to see in the world.",
                             "Evil is what occurs in the absence of consideration for others.",
                             "Zero-sum thinking may not be the root of all evil, but all evil is rooted in zero-sum thinking.",
                             'In life and on apps, always question defaults. Fiddle with some "settings," and see what happens.',
