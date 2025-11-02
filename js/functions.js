@@ -2424,6 +2424,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
     }
 
+    var quote_index = 0;
     function get_quote() {
         
             HiddenModeState = localStorage.getItem("hiddenMode") === "true";
@@ -2454,12 +2455,17 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (document.getElementById('my_settings').style.display=="none") {       
                     document.getElementById('news-feed').style.display = "flex";
                 }
+                console.log(n_feeds)
+                if ((n_feeds==0) | (n_feeds==Math.ceil(rssFeeds.length*0.985))) {
+                    quote_index = Math.floor(Math.random()*items.length)
+                }
                 const quote = document.createElement("div");
                 quote.className = `end_quote`;
-                quote.innerHTML = items[Math.floor(Math.random()*items.length)];
+                quote.innerHTML = items[quote_index];
                 newsFeedContainer.textContent = "";
                 document.getElementById('spin_container').innerHTML = `` 
                 newsFeedContainer.appendChild(quote);    
+                
             } else if (unreadcount.toLocaleString("en-US")==0) {
                 document.getElementById('spin_container').innerHTML = `` 
             }
