@@ -3735,6 +3735,9 @@ function flagLinksNotInText(html, plainText) {
 
   const textNorm = norm(plainText);
 
+  // Helper to escape regex specials in anchor text
+  const escapeRegExp = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
   // Parse the HTML string into a document
   let doc;
   if (typeof DOMParser !== 'undefined') {
@@ -3748,11 +3751,15 @@ function flagLinksNotInText(html, plainText) {
     return html;
   }
 
-  // Check each anchor's text against the plain text
+  // Check each anchor's text against the plain text using \banchorText\b
   const links = (doc.body.querySelectorAll ? doc.body.querySelectorAll('a') : doc.body.getElementsByTagName('a'));
   for (const a of links) {
     const anchorText = norm(a.textContent || '');
-    const found = anchorText && textNorm.includes(anchorText);
+    if (!anchorText) continue;
+
+    const pattern = new RegExp(`\\b${escapeRegExp(anchorText)}\\b`, 'i'); // same as anchorText, bounded by \b
+    const found = pattern.test(textNorm);
+
     if (!found) {
       // Color the link red without clobbering other inline styles
       a.style.color = '#ff4848';
@@ -3761,6 +3768,7 @@ function flagLinksNotInText(html, plainText) {
 
   return doc.body.innerHTML;
 }
+
 
 window.addEventListener('beforeunload', (event) => {
     if (isDirty==true && document.getElementById('gist_name').value.length>0 && document.getElementById('gist_token').value.length>0) {
