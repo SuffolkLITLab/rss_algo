@@ -2442,12 +2442,11 @@ document.addEventListener("DOMContentLoaded", function() {
                             "Be kind. Have Fun. Try something new.",
                             "Patience is a superpower.",
                             "For any sufficiently long-running unsolved problem, solutions are both more &amp; less complex than you think.",
-                            "Who you are isn't about what you can do (economic utility, intelligence, etc.) but what you want done. You <i><b>are</b></i> the change you want to see in the world.",
+                            "Who you are isn't about what you can do (economic utility, intelligence, etc.) but what you want to do. You <i><b>are</b></i> the change you want to see in the world.",
                             "Evil is what happens when one fails to consider the needs of others.",
                             "Zero-sum thinking may not be the root of all evil, but all evil is rooted in zero-sum thinking.",
                             'In life and on apps, always question defaults. Fiddle with some "settings," and see what happens.',
                             "Civilization is a positive-sum game.",
-                            "There isn't one magic solution, only trade-offs.",
                             "Few things threaten good work more than rushing... Breathe.",
                             `When something isn't working, consider metaphorically—or literally—hitting "refresh."`,
                             "Like what you see here? Consider making a <a href='https://www.givecampus.com/campaigns/70271/donations/new' target='_blank'>donation</a> to the <a href='https://suffolklitlab.org/' target='_blank'>LIT Lab</a> where this site was built."
