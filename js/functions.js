@@ -561,11 +561,11 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('loading').style.display = "none";
             document.getElementById('loading').innerHTML = "<i>&nbsp;Loading . . .&nbsp;</i>";
             if (savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
-                sum_msg.innerHTML = `Processing LLM prompt... `;
-                document.getElementById('sum_msg').style.display = "block";
+                //sum_msg.innerHTML = `Processing LLM prompt... `;
+                //document.getElementById('sum_msg').style.display = "block";
                 console.log("SAVE & RUN LLM")
-                await save_gists_data(silent=true);
                 run_llm();
+                save_gists_data(silent=true);
             }
         } else {
             document.getElementById('loading').innerHTML = "<i>&nbsp;Loading feed "+(1+n_feeds)+" of "+rssFeeds.length+" . . .&nbsp;</i>" 
@@ -2712,7 +2712,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
       }
 
-function run_llm() {
+async function run_llm() {
         
         if (document.getElementById("news-feed").innerText!="" | new URLSearchParams(window.location.search).has('regex')){
 
