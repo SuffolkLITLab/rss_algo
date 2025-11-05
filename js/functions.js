@@ -1,4 +1,4 @@
-var version = "v1.37.6";
+var version = "v1.37.7";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -77,7 +77,7 @@ function hide_timeline(){
     document.getElementById('a_settings').innerHTML = "Timeline";
     document.getElementById('search_msg').style.display = "none";
     document.getElementById('sum_msg').style.display = "none";
-    sum_msg
+    //sum_msg
 }
 
 function toggle_settings(clear=false) {
@@ -2728,7 +2728,7 @@ async function run_llm() {
             show_timeline();
 
             summarizing = true;
-            sum_msg.innerHTML = `Processing LLM prompt... `;
+            document.getElementById('sum_msg').innerHTML = `Processing LLM prompt... `;
             document.getElementById('sum_msg').style.display = "block";
             //prompt_text = document.getElementById("prompt_pref").value+document.getElementById("news-feed").innerText.substring(0,13000*4);
 
