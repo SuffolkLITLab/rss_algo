@@ -2668,7 +2668,7 @@ document.addEventListener("DOMContentLoaded", function() {
               LLM_text = JSON.parse(xhr.responseText)["choices"][0]["message"]["content"];
               if (savedCheckAnchor) {
                 console.log("Checking links in LLM output...")
-                LLM_text = flagLinksNotInText(LLM_text, document.body.innerText).replace("&lt","<").replace("&gt",">");
+                LLM_text = flagLinksNotInText(LLM_text, document.getElementById("news-feed").innerText).replace("&lt","<").replace("&gt",">");
               }
               llm_messages.push({"role": "assistant", "content": LLM_text})
             } catch (error) {
@@ -3814,10 +3814,10 @@ function flagLinksNotInText(html, plainText) {
         try {
           // Build regex value: \b<escaped rawText>\b
           const escaped = escapeRegExp(rawText);
-          const regexValue = `\\b${escaped}\\b`;
+          const regexValue = `\\b${escaped.replaceAll("\.","\.\?")}\\b`;
 
           // Resolve relative URLs against current location if available; otherwise fall back to a dummy base
-          const base = (typeof location !== 'undefined' && location.href) ? location.href : 'http://example.com/';
+          const base = (typeof location !== 'undefined' && location.href) ? location.href : 'https://myrssalgo.org/';
           const u = new URL(href, base);
 
           u.searchParams.set('regex', regexValue); // URLSearchParams will encode backslashes, spaces, etc.
@@ -3826,7 +3826,7 @@ function flagLinksNotInText(html, plainText) {
         } catch {
           // If URL parsing fails, do a light fallback: replace `regex=` value if present, else append it.
           const escaped = escapeRegExp(rawText);
-          const regexValue = `\\b${escaped}\\b`;
+          const regexValue = `\\b${escaped.replaceAll("\.","\.\?")}\\b`;
           if (/\bregex=/.test(href)) {
             a.setAttribute('href', href.replace(/(\bregex=)[^&#]*/i, `$1${encodeURIComponent(regexValue)}`));
           } else {
