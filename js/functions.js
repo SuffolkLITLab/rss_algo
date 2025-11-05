@@ -1,4 +1,4 @@
-var version = "v1.37.1";
+var version = "v1.37.2";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
