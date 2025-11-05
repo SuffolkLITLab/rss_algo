@@ -1,4 +1,4 @@
-var version = "v1.37.7";
+var version = "v1.37.8";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -700,7 +700,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             match_text = itemId + " " + articleContainer.querySelector(".card-title").innerText + " " + articleContainer.querySelector(".card-text").innerText + " " + articleContainer.querySelector(".feed_search").dataset.itemId 
 
-            if ((n_feeds>=rssFeeds.length) || ((n_feeds==0) && crunch_numbers)) {
+            if (((n_feeds>=rssFeeds.length) || ((n_feeds==0) && crunch_numbers)) && regex_flag!="") {
                 regex = new RegExp(regex_flag, regex_flag_op); 
                 if (match_text.match(regex)) {
                     articleContainer.querySelector(".card-title").innerHTML += " 🚩"
