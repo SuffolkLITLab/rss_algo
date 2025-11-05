@@ -1,4 +1,4 @@
-var version = "v1.37.4";
+var version = "v1.37.5";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -565,7 +565,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 //sum_msg.innerHTML = `Processing LLM prompt... `;
                 //document.getElementById('sum_msg').style.display = "block";
                 console.log("SAVE & RUN LLM")
-                run_llm();
+                await run_llm();
                 await save_gists_data(silent=true);
             }
 
