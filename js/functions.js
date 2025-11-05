@@ -1,4 +1,4 @@
-var version = "v1.37.2";
+var version = "v1.37.3";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -3515,7 +3515,7 @@ async function save_gists_data(silent=false) {
         }
         notdirty();
     } catch (error) {
-        alert("Error accessing your saved cloud data: Unable to save local data to cloud.")
+        alert("Error accessing your saved cloud data: Unable to save local data to cloud. Error: "+error)
         dirty();
     }
 
