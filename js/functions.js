@@ -1,4 +1,4 @@
-var version = "v1.36";
+var version = "v1.37.0";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -683,15 +683,19 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         consolidated_from = articleContainers.length
 
+        const escapeRegExp = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
         j = 0;
         articleContainers.forEach(articleContainer => {
             const itemId = articleContainer.getAttribute("data-item-id");
 
             match_text = itemId + " " + articleContainer.querySelector(".card-title").innerText + " " + articleContainer.querySelector(".card-text").innerText + " " + articleContainer.querySelector(".feed_search").dataset.itemId 
 
-            regex = new RegExp(regex_flag, regex_flag_op); 
-            if (match_text.match(regex)) {
-                articleContainer.querySelector(".card-title").innerHTML += " 🚩"
+            if ((n_feeds>=rssFeeds.length) || ((n_feeds==0) && crunch_numbers)) {
+                regex = new RegExp(regex_flag, regex_flag_op); 
+                if (match_text.match(regex)) {
+                    articleContainer.querySelector(".card-title").innerHTML += " 🚩"
+                }
             }
 
             var similar_arts = []
@@ -749,7 +753,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         html += `Similar Articles: <ul>`
                     }
                     for (art in similar_arts){
-                        html += `<li><a href="`+similar_arts[art][1]+`" target="_blank">`+similar_arts[art][0]+`</a></li>`
+                        html += `<li><a href="`+similar_arts[art][1]+`" target="_blank">`+similar_arts[art][0]+`</a> (`+`<a href="./?regex=`+escapeRegExp(similar_arts[art][1])+`">`+`see card</a>)</li>`
                     }
                     if (similar_arts.length>0){
                         html += `</ul>`
@@ -945,6 +949,22 @@ document.addEventListener("DOMContentLoaded", function() {
     checkAnchorCheckbox.addEventListener("change", function () {
         const newCheckAnchor = checkAnchorCheckbox.checked;
         localStorage.setItem("checkAnchor", newCheckAnchor);
+    });
+
+
+    const checkAutoLLMCheckbox = document.getElementById("auto-llm");
+    // Retrieve ignore images value from localStorage (if available)
+    if (localStorage.getItem("checkAutoLLM")) {
+        savedCheckAutoLLM = localStorage.getItem("checkAutoLLM") === "true";
+    } else {
+        savedCheckAutoLLM = true;
+        localStorage.setItem("checkAutoLLM", savedCheckAutoLLM);
+    }
+    checkAutoLLMCheckbox.checked = savedCheckAutoLLM;
+    // Update ignore images value and save to localStorage when checkbox value changes
+    checkAutoLLMCheckbox.addEventListener("change", function () {
+        const savedCheckAutoLLM = checkAutoLLMCheckbox.checked;
+        localStorage.setItem("checkAutoLLM", savedCheckAutoLLM);
     });
 
 
@@ -2440,7 +2460,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     var quote_index = 0;
     function get_quote() {
-        
+
             HiddenModeState = localStorage.getItem("hiddenMode") === "true";
             unreadcount = countUnreadArticles() - document.querySelectorAll(".article-container[data-article-index='sponsor']").length
             if (unreadcount>0) {
@@ -2480,7 +2500,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 
             } else if (unreadcount.toLocaleString("en-US")==0) {
                 document.getElementById('spin_container').innerHTML = `` 
-            }
+            } else if (n_feeds>=rssFeeds.length && savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
+                save_gists_data(silent=true);
+                run_llm();
+            }    
+
             if (document.getElementById('my_settings').style.display=="none") {
                 document.getElementById('news-feed').style.display = "flex";
             }
@@ -2684,8 +2708,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
       }
 
-    const sumNewsFeedsButton = document.getElementById("summarize-news");
-    sumNewsFeedsButton.addEventListener("click", function() {
+function run_llm() {
         
         if (document.getElementById("news-feed").innerText!="" | new URLSearchParams(window.location.search).has('regex')){
 
@@ -2741,6 +2764,11 @@ document.addEventListener("DOMContentLoaded", function() {
             alert("Try again after feeds have finished loading.")
         }
 
+    }
+
+    const sumNewsFeedsButton = document.getElementById("summarize-news");
+    sumNewsFeedsButton.addEventListener("click", function() {
+        run_llm();
     });
 
     const manageFeedsButton = document.getElementById("manage-feeds");
@@ -3464,7 +3492,7 @@ function gistClient({ token, apiVersion = "2022-11-28" }) {
 }
 
 gist_json = {}
-async function save_gists_data() {
+async function save_gists_data(silent=false) {
 
     try {
         const token = localStorage.getItem("gist_token"); // Must have "gist" permission
@@ -3485,7 +3513,9 @@ async function save_gists_data() {
         dirty();
     }
 
-    window.location.reload();
+    if (!silent) {
+        window.location.reload();
+    }
 }
 
 async function load_gists_data() {
