@@ -1,4 +1,4 @@
-var version = "v1.34";
+var version = "v1.35";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -2442,7 +2442,6 @@ document.addEventListener("DOMContentLoaded", function() {
                             "Be kind. Have Fun. Try something new.",
                             "Patience is a superpower.",
                             "For any sufficiently long-running unsolved problem, solutions are both more &amp; less complex than you think.",
-                            "What matters isn't what you can do (economic utility, intelligence, etc.) but what you choose to.",
                             "Evil is what happens when one fails to consider the needs of others.",
                             "Zero-sum thinking may not be the root of all evil, but all evil is rooted in zero-sum thinking.",
                             'In life and on apps, always question defaults. Fiddle with some "settings," and see what happens.',
@@ -2572,10 +2571,11 @@ document.addEventListener("DOMContentLoaded", function() {
         regex = new RegExp(newSearch, "i")
         matching_regex.innerHTML = `<a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">Regular expression</a> matching results for <b>"${newSearch}"</b> (<a href="${document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch)}" target="_blank">link to search</a>).`;
 
-        //console.log(regex)
+        //console.log(regex)        
 
         saved_articles.forEach(articleData => {
-            testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl
+            testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl + " hasUpvote_is_" + upvotes[articleData.link]  + " hasDownvote_is_" +  downvotes[articleData.link]
+            console.log(" hasUpvote_is_" + articleData.hasUpvote)
             if (testString.match(regex)) {
                 //console.log(articleData)
                 searchResults.push(articleData);
@@ -3726,48 +3726,75 @@ function remove_feed(feedTitle,feedUrl) {
 }
 
 function flagLinksNotInText(html, plainText) {
-  // Normalize the plain text for robust matching
-  const norm = s => s
-    //.normalize('NFKC')
-    .toLowerCase()
-    //.replace(/\s+/g, ' ')
-    .trim();
+  // Normalize for matching (case-insensitive, trim)
+  const norm = s => s.toLowerCase().trim();
 
   const textNorm = norm(plainText);
 
-  // Helper to escape regex specials in anchor text
+  // Escape regex specials in the anchor text (for the regex param value)
   const escapeRegExp = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-  // Parse the HTML string into a document
+  // Parse the HTML string
   let doc;
   if (typeof DOMParser !== 'undefined') {
     doc = new DOMParser().parseFromString(html, 'text/html');
   } else if (typeof document !== 'undefined') {
     const div = document.createElement('div');
     div.innerHTML = html;
-    doc = { body: div }; // minimal shape
+    doc = { body: div };
   } else {
-    // Environment without a DOM — return original HTML unchanged
-    return html;
+    return html; // no DOM environment
   }
 
-  // Check each anchor's text against the plain text using \banchorText\b
   const links = (doc.body.querySelectorAll ? doc.body.querySelectorAll('a') : doc.body.getElementsByTagName('a'));
+
   for (const a of links) {
-    const anchorText = norm(a.textContent || '');
-    if (!anchorText) continue;
+    const rawText = (a.textContent || '').trim();
+    const anchorText = norm(rawText);
 
-    const pattern = new RegExp(`\\b${escapeRegExp(anchorText)}\\b`, 'i'); // same as anchorText, bounded by \b
-    const found = pattern.test(textNorm);
-
-    if (!found) {
-      // Color the link red without clobbering other inline styles
+    // 1) Color red if the (normalized) anchor text doesn't appear in plainText
+    if (!anchorText || !textNorm.includes(anchorText)) {
       a.style.color = '#ff4848';
+    }
+
+    // 2) Replace/insert the ?regex=... part of the link using the *anchor text* bounded by \b
+    //    - Use the original (un-lowercased) visible text, but escape regex metacharacters.
+    if (a.hasAttribute('href')) {
+      const href = a.getAttribute('href');
+
+      // Only attempt URL rewriting for http(s) and relative URLs (skip mailto:, tel:, etc.)
+      const isSkippableScheme = /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(href) && !/^https?:/i.test(href);
+      if (!isSkippableScheme) {
+        try {
+          // Build regex value: \b<escaped rawText>\b
+          const escaped = escapeRegExp(rawText);
+          const regexValue = `\\b${escaped}\\b`;
+
+          // Resolve relative URLs against current location if available; otherwise fall back to a dummy base
+          const base = (typeof location !== 'undefined' && location.href) ? location.href : 'http://example.com/';
+          const u = new URL(href, base);
+
+          u.searchParams.set('regex', regexValue); // URLSearchParams will encode backslashes, spaces, etc.
+          // Write back the possibly-relative form (preserve relative if it started relative)
+          a.setAttribute('href', href.startsWith('http') ? u.toString() : u.pathname + u.search + u.hash);
+        } catch {
+          // If URL parsing fails, do a light fallback: replace `regex=` value if present, else append it.
+          const escaped = escapeRegExp(rawText);
+          const regexValue = `\\b${escaped}\\b`;
+          if (/\bregex=/.test(href)) {
+            a.setAttribute('href', href.replace(/(\bregex=)[^&#]*/i, `$1${encodeURIComponent(regexValue)}`));
+          } else {
+            const sep = href.includes('?') ? '&' : '?';
+            a.setAttribute('href', `${href}${sep}regex=${encodeURIComponent(regexValue)}`);
+          }
+        }
+      }
     }
   }
 
   return doc.body.innerHTML;
 }
+
 
 
 window.addEventListener('beforeunload', (event) => {

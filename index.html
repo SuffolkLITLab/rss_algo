@@ -17,11 +17,11 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="images/blue-icon-180x180.png">
 
-    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.34">
-	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.34">
-    <script src="js/spin/spin.min.js?v=v1.34"></script>
+    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.35">
+	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.35">
+    <script src="js/spin/spin.min.js?v=v1.35"></script>
 
-    <script src="js/report.js?v=v1.34"></script>    
+    <script src="js/report.js?v=v1.35"></script>    
     <script src="js/feeds.js?trained_on=2024-08-13b"></script>
 
 </head>
@@ -63,7 +63,7 @@
         </div>
 
         <div id="sum_msg"></div>
-        <div id="search_msg"><span id="matching_regex"></span> <i>Search results are presented in reverse chronological order. They include articles marked as "Seen." They ignore ratings and history cutoffs as well as regex filters. This screen does, however, respect the "Cards on Screen" cap, which is set to <span id="max-cards-value-copy">200</span> articles. Older content may not be visible as we only hold on to a fixed amount. Reload page using an in-page ↺ to clear this search.</i></div>
+        <div id="search_msg"><span id="matching_regex"></span> <i>Search results are presented in reverse chronological order. They include articles marked as "Seen." They ignore ratings and history cutoffs as well as regex filters. This screen does, however, respect the "Cards on Screen" cap, which is set to <span id="max-cards-value-copy">200</span> articles. Older content may not be visible as we discard old artciles to save space. Reload page using an in-page ↺ to clear this search.</i></div>
         <div id="spin_container"></div>
         <div id="news-feed" class="row gy-3">
             <!-- News articles will be dynamically added here -->
@@ -272,7 +272,7 @@
                     <p><textarea id="prompt_pref" value="" oninput="localStorage.prompt_pref=this.value"></textarea>    
 
                     <p>
-                        <label for="check-anchor"><input type="checkbox" id="check-anchor" value="1"> If the above's prompt output includes links, check to see if their <i>anchor text</i> is found on the page. Turn links <font color='#ff4848'>red</font> if <i>anchor text</i> is not on the page.</label>
+                        <label for="check-anchor"><input type="checkbox" id="check-anchor" value="1"> If the above's prompt output includes links, check to see if their <i>anchor text</i> is found on the page. Turn links <font color='#ff4848'>red</font> if <i>anchor text</i> is not on the page. Also, make sure the anchor link points at <code>./?regex=\bANCHOR_TEXT\b</code>. This is an overly specific QC feature designed for the default LLM prompt.</label>
                     </p>
                     <p>
                         <i>Refresh page to see results</i>.
@@ -337,6 +337,7 @@
                     <p>
                         Here are your <b><i>most-positive</i></b> words and their approximate TF-IDF, treating all up-voted cards as a single document: <span id="upwords">not enough data</span>
                     </p>
+                    <p><a href="./?regex=hasUpvote_is_true">See recent articles with up votes</a></p>
                     <button id="clear-upvotes" class="btn btn-danger btn-block">Clear Upvotes</button>
 
                 </div>
@@ -345,6 +346,7 @@
                     <p>
                         Here are your <b><i>most-negative</i></b> words and their approximate TF-IDF, treating all down-voted cards as a single document: <span id="downwords">not enough data</span>
                     </p>
+                    <p><a href="./?regex=hasDownvote_is_true">See recent articles with down votes</a></p>
                     <button id="clear-downvotes" class="btn btn-danger btn-block">Clear Downvotes</button>
                 </div>
             </div>
@@ -382,6 +384,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 
-<script src="js/functions.js?v=v1.34"></script>    
+<script src="js/functions.js?v=v1.35"></script>    
 
 </html>
