@@ -561,7 +561,8 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('loading').style.display = "none";
             document.getElementById('loading').innerHTML = "<i>&nbsp;Loading . . .&nbsp;</i>";
             if (savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
-                document.getElementById('sum_msg').innerHTML = "";
+                sum_msg.innerHTML = `Processing LLM prompt... `;
+                document.getElementById('sum_msg').style.display = "block";
                 console.log("SAVE & RUN LLM")
                 await save_gists_data(silent=true);
                 run_llm();
