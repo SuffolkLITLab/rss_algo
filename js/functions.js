@@ -1,4 +1,4 @@
-var version = "v1.35";
+var version = "v1.36";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -132,6 +132,13 @@ document.getElementById("regex_never").value = regex_never;
 const regex_never_op =  localStorage.getItem("regex_never_op") || "";
 document.getElementById("regex_never_op").value = regex_never_op;
 
+const regex_flag =  localStorage.getItem("regex_flag") || "";
+document.getElementById("regex_flag").value = regex_flag;
+
+const regex_flag_op =  localStorage.getItem("regex_flag_op") || "";
+document.getElementById("regex_flag_op").value = regex_flag_op;
+
+
 const instance =  localStorage.getItem("instance") || "";
 document.getElementById("masto_instance").value = instance;
 
@@ -144,7 +151,7 @@ document.getElementById("api_base").value = api_base;
 const api_key =  localStorage.getItem("api_key") || "";
 document.getElementById("api_key").value = api_key;
 
-const prompt_pref =  localStorage.getItem("prompt_pref") || `Read the following list of headlines and introductory sentences then provide a short briefing based on the news you find. If a story shows up multiple times, place it closer to the top of your summary. Remember, there may not be room for everything, prioritize. \n-----\n{{news-feed}}\n-----\nNow provide your briefing. Keep it short, no more than 100 words! Also, wrap all proper nouns in <a> tags with hrefs pointing to \`./?regex=PROPER NOUN\` (e.g., "George <a href='./?regex=\bWashington\b'>Washington</a>"). Be sure these nouns appear in the text provided above, and wrap the smallest meaningful part of multi-word nouns in the anchor tag (e.g., link to one's surname, not their full name). Also make sure that the regex parameter in the link matches the anchor text exactly except it should be straddled by non-word breaks (i.e., \`\b\`).`;
+const prompt_pref =  localStorage.getItem("prompt_pref") || `Now provide your briefing. Keep it short, no more than 100 words! Also, wrap all proper nouns in <a> tags with hrefs pointing to \`./?regex=PROPER NOUN\` (e.g., "George <a href='./?regex=\bWashington\b'>Washington</a>"). Be sure these nouns appear in the text provided above in the same form (e.g., U.S. vs US), and wrap the smallest meaningful part of multi-word nouns in the anchor tag (e.g., link to one's surname, not their full name). Also make sure that the regex parameter in the link matches the anchor text exactly except it should be straddled by non-word breaks (i.e., \`\b\`). Remember, you should only craft links for proper nouns (i.e., names of individual persons, places, or things starting with a capital letter). Don't link to common nouns.`;
 document.getElementById("prompt_pref").value = prompt_pref;
 
 if (api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
@@ -679,6 +686,13 @@ document.addEventListener("DOMContentLoaded", function() {
         j = 0;
         articleContainers.forEach(articleContainer => {
             const itemId = articleContainer.getAttribute("data-item-id");
+
+            match_text = itemId + " " + articleContainer.querySelector(".card-title").innerText + " " + articleContainer.querySelector(".card-text").innerText + " " + articleContainer.querySelector(".feed_search").dataset.itemId 
+
+            regex = new RegExp(regex_flag, regex_flag_op); 
+            if (match_text.match(regex)) {
+                articleContainer.querySelector(".card-title").innerHTML += " 🚩"
+            }
 
             var similar_arts = []
             //console.log("SIMILAR:",decluter_cut, crunch_numbers)
@@ -3326,7 +3340,9 @@ ${bodyXml}</body>
 
     return {
       backstop: new Date(0),
+      regex_always_op: "i",
       regex_never_op: "i",
+      regex_flag_op: "i",
       cardcutoff: "30",
       votelib: "default_feeds",
       lastLoad: 0,
