@@ -1,4 +1,4 @@
-var version = "v1.37.0";
+var version = "v1.37.1";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -560,6 +560,11 @@ document.addEventListener("DOMContentLoaded", function() {
         if (n_feeds>=rssFeeds.length) {
             document.getElementById('loading').style.display = "none";
             document.getElementById('loading').innerHTML = "<i>&nbsp;Loading . . .&nbsp;</i>";
+            if (savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
+                console.log("SAVE & RUN LLM")
+                save_gists_data(silent=true);
+                run_llm();
+            }
         } else {
             document.getElementById('loading').innerHTML = "<i>&nbsp;Loading feed "+(1+n_feeds)+" of "+rssFeeds.length+" . . .&nbsp;</i>" 
         }
@@ -2500,9 +2505,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 
             } else if (unreadcount.toLocaleString("en-US")==0) {
                 document.getElementById('spin_container').innerHTML = `` 
-            } else if (n_feeds>=rssFeeds.length && savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
-                save_gists_data(silent=true);
-                run_llm();
             }    
 
             if (document.getElementById('my_settings').style.display=="none") {
