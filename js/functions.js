@@ -560,13 +560,15 @@ document.addEventListener("DOMContentLoaded", function() {
         if (n_feeds>=rssFeeds.length) {
             document.getElementById('loading').style.display = "none";
             document.getElementById('loading').innerHTML = "<i>&nbsp;Loading . . .&nbsp;</i>";
+            console.log("SAVE & RUN LLM", n_feeds, rssFeeds.length, crunch_numbers)
             if (savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
                 //sum_msg.innerHTML = `Processing LLM prompt... `;
                 //document.getElementById('sum_msg').style.display = "block";
                 console.log("SAVE & RUN LLM")
                 run_llm();
-                save_gists_data(silent=true);
+                await save_gists_data(silent=true);
             }
+
         } else {
             document.getElementById('loading').innerHTML = "<i>&nbsp;Loading feed "+(1+n_feeds)+" of "+rssFeeds.length+" . . .&nbsp;</i>" 
         }
@@ -3803,7 +3805,9 @@ function flagLinksNotInText(html, plainText) {
     const anchorText = norm(rawText);
 
     // 1) Color red if the (normalized) anchor text doesn't appear in plainText
-    if (!anchorText || !textNorm.includes(anchorText)) {
+    
+    if (!anchorText || !textNorm.match(escapeRegExp(anchorText).replaceAll("\.","\.\?"))) {
+    //if (!anchorText || !textNorm.includes(anchorText)) {
       a.style.color = '#ff4848';
     }
 
