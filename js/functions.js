@@ -1,4 +1,4 @@
-var version = "v1.37.3";
+var version = "v1.37.4";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -2692,7 +2692,7 @@ document.addEventListener("DOMContentLoaded", function() {
                   LLM_text = `There was an ERROR calling the LLM. Make sure you are using a valid endpoint and API Key. The credentials may have expired.`
                 }            
               } catch (error) {
-                LLM_text = `There was an ERROR calling the LLM. Make sure you are using a valid endpoint and API Key. The credentials may have expired.`
+                LLM_text = `There was an ERROR calling the LLM. Make sure you are using a valid endpoint and API Key. The credentials may have expired.\n\n`+error
               }
             }
             sum_msg.innerHTML = LLM_text.replaceAll("\n","<br>") + " <div style='width:100%;text-align:center;font-size:14px;margin-top:3px;'> <a href='https://sadlynothavocdinosaur.com/posts/rss-reader' target='_blank'>Magic AI Fairy Dust</a> </div>";
@@ -3504,18 +3504,24 @@ async function save_gists_data(silent=false) {
         const token = localStorage.getItem("gist_token"); // Must have "gist" permission
         const gist = gistClient({ token });
 
-        gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json") || "0"
+        if (!silent) {
+            gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json") || "0"
 
-        gist_json = JSON.parse(gist_text)
+            gist_json = JSON.parse(gist_text)
 
-        console.log("Save Gist:",gist_json["lastChange"],"<",localStorage.getItem("lastChange"),gist_json["lastChange"]<localStorage.getItem("lastChange"))
+            console.log("Save Gist:",gist_json["lastChange"],"<",localStorage.getItem("lastChange"),gist_json["lastChange"]<localStorage.getItem("lastChange"))
 
-        if (gist_json["lastChange"]<localStorage.getItem("lastChange")) {
-            written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+            if (gist_json["lastChange"]<localStorage.getItem("lastChange")) {
+                written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+            }
+        } else {
+                written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+
         }
         notdirty();
+
     } catch (error) {
-        alert("Error accessing your saved cloud data: Unable to save local data to cloud. Error: "+error)
+        alert("Error accessing your saved cloud data: Unable to save local data to cloud.\n\n"+error)
         dirty();
     }
 
@@ -3563,7 +3569,7 @@ async function load_gists_data() {
             } 
 
         } catch (error) {
-            alert("Error accessing your saved cloud data: Unable to sync, using local data.")
+            alert("Error accessing your saved cloud data: Unable to sync, using local data.\n\n"+error)
         }
     }
 
@@ -3585,7 +3591,7 @@ async function push_gists_data() {
                 alert("Local data has been copied to the cloud.")
 
             } catch (error) {
-                alert("Error accessing your saved cloud data: Unable to push local data.")
+                alert("Error accessing your saved cloud data: Unable to push local data.\n\n"+error)
             }
         }
     } else {
@@ -3630,7 +3636,7 @@ async function pull_gists_data() {
                     alert("Error Parsing File: No feeds found.")
                 } 
             } catch (error) {
-                alert("Error accessing your saved cloud data: Unable to pull cloud data. Local data is unchanged.")
+                alert("Error accessing your saved cloud data: Unable to pull cloud data. Local data is unchanged.\n\n"+error)
             }
         }
     } else {
