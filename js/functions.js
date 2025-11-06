@@ -3521,8 +3521,13 @@ async function save_gists_data(silent=false) {
         notdirty();
 
     } catch (error) {
-        alert("Error accessing your saved cloud data: Unable to save local data to cloud.\n\n"+error)
-        dirty();
+
+        if (!silent) {
+            alert("Error accessing your saved cloud data: Unable to save local data to cloud.\n\n"+error)
+            dirty();
+        } else {
+            notdirty();
+        }
     }
 
     if (!silent) {
