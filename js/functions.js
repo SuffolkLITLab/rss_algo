@@ -1,4 +1,4 @@
-var version = "v1.37.9";
+var version = "v1.37.10";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -770,6 +770,15 @@ document.addEventListener("DOMContentLoaded", function() {
             j+=1;
 
         });
+
+
+        if (final_crunch && savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
+            console.log("SAVE & RUN LLM", n_feeds, rssFeeds.length, crunch_numbers)
+            //sum_msg.innerHTML = `Processing LLM prompt... `;
+            //document.getElementById('sum_msg').style.display = "block";
+            save_gists_data(silent=true);
+            run_llm();
+        }
 
     }
 
@@ -2515,13 +2524,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById('news-feed').style.display = "flex";
             }
 
-            if (final_crunch && savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
-                console.log("SAVE & RUN LLM", n_feeds, rssFeeds.length, crunch_numbers)
-                //sum_msg.innerHTML = `Processing LLM prompt... `;
-                //document.getElementById('sum_msg').style.display = "block";
-                save_gists_data(silent=true);
-                run_llm();
-            }
     }
     
     const clearUpvotesButton = document.getElementById("clear-upvotes");
