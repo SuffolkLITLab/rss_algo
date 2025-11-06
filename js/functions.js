@@ -1,4 +1,6 @@
-var version = "v1.37.10";
+var version = "v1.37.11";
+
+var auto_llm = true;
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -772,7 +774,8 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
 
-        if (final_crunch && savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
+        if (auto_llm & final_crunch && savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
+            auto_llm = false;
             console.log("SAVE & RUN LLM", n_feeds, rssFeeds.length, crunch_numbers)
             //sum_msg.innerHTML = `Processing LLM prompt... `;
             //document.getElementById('sum_msg').style.display = "block";
