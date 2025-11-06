@@ -700,7 +700,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             match_text = itemId + " " + articleContainer.querySelector(".card-title").innerText + " " + articleContainer.querySelector(".card-text").innerText + " " + articleContainer.querySelector(".feed_search").dataset.itemId 
 
-            if (((n_feeds>=rssFeeds.length) || ((n_feeds==0) && crunch_numbers)) && regex_flag!="") {
+            if (((n_feeds>=rssFeeds.length) || ((n_feeds==0) && (crunch_numbers))) && regex_flag!="") {
                 regex = new RegExp(regex_flag, regex_flag_op); 
                 if (match_text.match(regex)) {
                     articleContainer.querySelector(".card-title").innerHTML += " 🚩"
@@ -1366,8 +1366,12 @@ document.addEventListener("DOMContentLoaded", function() {
                                             mediaThumbnail = "images/cached_logos/lawfare.png"
                                         } else if (link.includes("yourarlington.com")) {
                                             mediaThumbnail = "images/cached_logos/yourarlington.png"
-                                        }  else if (link.includes("boston.com")) {
+                                        } else if (link.includes("boston.com")) {
                                             mediaThumbnail = "images/cached_logos/boston.com.png"
+                                        } else if (link.includes("ft.com")) {
+                                            mediaThumbnail = "images/cached_logos/ft.png"
+                                        } else if (link.includes("chronicle.com")) {
+                                            mediaThumbnail = "images/cached_logos/chronicle.png"
                                         }                                          
                                         
                                         //} else if (link.includes("")) {
@@ -3906,7 +3910,7 @@ document.addEventListener('DOMContentLoaded', checkAdblockAndSuggest);
 
 // Customize if you keep placeholder elsewhere or want a different cutoff
 const PLACEHOLDER = "images/placeholder.png";
-const MAX_RATIO = 3;
+const MAX_RATIO = 2.5;
 
 function isTooWide(img) {
 // Guard against 0 height just in case
