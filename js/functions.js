@@ -1,4 +1,4 @@
-var version = "v1.37.8";
+var version = "v1.37.9";
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
 
@@ -560,15 +560,6 @@ document.addEventListener("DOMContentLoaded", function() {
         if (n_feeds>=rssFeeds.length) {
             document.getElementById('loading').style.display = "none";
             document.getElementById('loading').innerHTML = "<i>&nbsp;Loading . . .&nbsp;</i>";
-            console.log("SAVE & RUN LLM", n_feeds, rssFeeds.length, crunch_numbers)
-            if (savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
-                //sum_msg.innerHTML = `Processing LLM prompt... `;
-                //document.getElementById('sum_msg').style.display = "block";
-                console.log("SAVE & RUN LLM")
-                save_gists_data(silent=true);
-                run_llm();
-            }
-
         } else {
             document.getElementById('loading').innerHTML = "<i>&nbsp;Loading feed "+(1+n_feeds)+" of "+rssFeeds.length+" . . .&nbsp;</i>" 
         }
@@ -702,7 +693,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             if (((n_feeds>=rssFeeds.length) || ((n_feeds==0) && (crunch_numbers))) && regex_flag!="") {
                 regex = new RegExp(regex_flag, regex_flag_op); 
-                if (match_text.match(regex)) {
+                if (match_text.match(regex) && !articleContainer.querySelector(".card-title").innerText.includes("🚩")) {
                     articleContainer.querySelector(".card-title").innerHTML += " 🚩"
                 }
             }
@@ -2517,6 +2508,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
             if (document.getElementById('my_settings').style.display=="none") {
                 document.getElementById('news-feed').style.display = "flex";
+            }
+
+            if (n_feeds>=rssFeeds.length && savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
+                console.log("SAVE & RUN LLM", n_feeds, rssFeeds.length, crunch_numbers)
+                //sum_msg.innerHTML = `Processing LLM prompt... `;
+                //document.getElementById('sum_msg').style.display = "block";
+                save_gists_data(silent=true);
+                run_llm();
             }
     }
     
