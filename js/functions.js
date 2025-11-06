@@ -471,6 +471,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var dfreq = calculateDF(articles.filter(article => readArticles[article.itemId]))
     var dfreq_all = {}
     var crunch_numbers = false
+    var final_crunch = false
     var decluter_cards = true
 
     var ratings_mean = 0;
@@ -567,6 +568,10 @@ document.addEventListener("DOMContentLoaded", function() {
         if (n_feeds>=Math.ceil(rssFeeds.length*0.985)) {
             document.getElementById('loading').innerHTML = '&nbsp;Finishing up . . .&nbsp;';
             crunch_numbers = true;
+        }
+
+        if (n_feeds>=rssFeeds.length) {
+            final_crunch = true;
         }
 
         console.log("Fetching "+feedUrl+" ("+n_feeds+" of "+rssFeeds.length+")" + " Crunch Num: " + crunch_numbers)
@@ -2510,7 +2515,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById('news-feed').style.display = "flex";
             }
 
-            if (n_feeds>=rssFeeds.length && savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
+            if (final_crunch && savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
                 console.log("SAVE & RUN LLM", n_feeds, rssFeeds.length, crunch_numbers)
                 //sum_msg.innerHTML = `Processing LLM prompt... `;
                 //document.getElementById('sum_msg').style.display = "block";
