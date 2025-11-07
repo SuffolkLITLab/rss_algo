@@ -3890,8 +3890,6 @@ window.addEventListener('beforeunload', (event) => {
     }
 });
 
-
-
 function checkAdblockAndSuggest() {
   const bait = document.createElement('div');
   bait.className = 'ads ad ad-banner ad-slot adsbox googleads adsbygoogle';
@@ -3921,15 +3919,13 @@ function checkAdblockAndSuggest() {
 // optional: run on page load
 document.addEventListener('DOMContentLoaded', checkAdblockAndSuggest);
 
-
-
 // Customize if you keep placeholder elsewhere or want a different cutoff
 const PLACEHOLDER = "images/placeholder.png";
 const MAX_RATIO = 2.5;
 
 function isTooWide(img) {
-// Guard against 0 height just in case
-return img.naturalHeight > 0 && (img.naturalWidth / img.naturalHeight) > MAX_RATIO;
+    // Guard against 0 height just in case
+    return img.naturalHeight < 100 || (img.naturalWidth / img.naturalHeight) > MAX_RATIO;
 }
 
 function triggerPlaceholder(img) {
