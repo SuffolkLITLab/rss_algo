@@ -1,5 +1,7 @@
 var version = "v1.37.12";
 
+document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
+
 var auto_llm = true;
 
 var isDirty = JSON.parse(localStorage.getItem("isDirty")) || false
@@ -4018,7 +4020,6 @@ domObserver.observe(document.documentElement, { childList: true, subtree: true }
 
 //delete upTFIDF["the-new-yorker"];localStorage.setItem("upTFIDF", JSON.stringify(upTFIDF));
 
-document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
 
 
 
