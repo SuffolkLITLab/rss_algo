@@ -763,7 +763,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     var el = articleContainer.querySelector(".similar");
                     html = ""
                     if (similar_arts.length>0){
-                        html += `Similar Articles: <ul>`
+                        html += `Similar Articles (`+similar_arts.length+`): <ul>`
                     }
                     for (art in similar_arts){
                         html += `<li><a href="`+similar_arts[art][1]+`" target="_blank">`+similar_arts[art][0]+`</a> (`+`<a href="./?regex=`+escapeRegExp(similar_arts[art][1])+`">`+`see card</a>)</li>`
@@ -1745,8 +1745,12 @@ document.addEventListener("DOMContentLoaded", function() {
                                 
                                 <div class="card-body">
                                         <!--<div class="priority-rating">${priorityRating}</div>-->
-                                        ${card_body_text}
-                                        <div class="similar"></div>
+                                        <div style="flex-grow:1">
+                                            ${card_body_text}
+                                            <p>
+                                                <div class="similar"></div>
+                                            </p>
+                                        </div>
                                         <p class="d-flex"><small class="text-muted">${local_pubDate}</small></p>
                                     <div class="d-flex justify-content-between">
                                         <div>
