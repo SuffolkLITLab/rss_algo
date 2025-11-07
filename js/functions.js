@@ -3925,7 +3925,7 @@ const MAX_RATIO = 2.5;
 
 function isTooWide(img) {
     // Guard against 0 height just in case
-    return img.naturalHeight < 100 || (img.naturalWidth / img.naturalHeight) > MAX_RATIO;
+    return img.naturalHeight < 80 || (img.naturalWidth / img.naturalHeight) > MAX_RATIO;
 }
 
 function triggerPlaceholder(img) {
