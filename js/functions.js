@@ -1,4 +1,4 @@
-var version = "v1.37.11";
+var version = "v1.37.12";
 
 var auto_llm = true;
 
@@ -567,9 +567,13 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('loading').innerHTML = "<i>&nbsp;Loading feed "+(1+n_feeds)+" of "+rssFeeds.length+" . . .&nbsp;</i>" 
         }
 
-        if (n_feeds>=Math.ceil(rssFeeds.length*0.985)) {
+        if (n_feeds==Math.ceil(rssFeeds.length*0.95)) {
             document.getElementById('loading').innerHTML = '&nbsp;Finishing up . . .&nbsp;';
             crunch_numbers = true;
+        } else if (n_feeds>=rssFeeds.length) {
+            crunch_numbers = true;
+        } else {
+            crunch_numbers = false;
         }
 
         if (n_feeds>=rssFeeds.length) {
@@ -772,16 +776,6 @@ document.addEventListener("DOMContentLoaded", function() {
             j+=1;
 
         });
-
-
-        if (auto_llm & final_crunch && savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
-            auto_llm = false;
-            console.log("SAVE & RUN LLM", n_feeds, rssFeeds.length, crunch_numbers)
-            //sum_msg.innerHTML = `Processing LLM prompt... `;
-            //document.getElementById('sum_msg').style.display = "block";
-            save_gists_data(silent=true);
-            run_llm();
-        }
 
     }
 
@@ -2509,7 +2503,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.getElementById('news-feed').style.display = "flex";
                 }
                 console.log(n_feeds)
-                if ((n_feeds==0) | (n_feeds==Math.ceil(rssFeeds.length*0.985))) {
+                if ((n_feeds==0) | (n_feeds==Math.ceil(rssFeeds.length*0.95))) {
                     quote_index = Math.floor(Math.random()*items.length)
                 }
                 const quote = document.createElement("div");
@@ -2526,6 +2520,16 @@ document.addEventListener("DOMContentLoaded", function() {
             if (document.getElementById('my_settings').style.display=="none") {
                 document.getElementById('news-feed').style.display = "flex";
             }
+
+            if (auto_llm & final_crunch && savedCheckAutoLLM && api_base.length>0 && api_key.length>0 && prompt_pref.length>0) {
+                auto_llm = false;
+                console.log("SAVE & RUN LLM", n_feeds, rssFeeds.length, crunch_numbers)
+                //sum_msg.innerHTML = `Processing LLM prompt... `;
+                //document.getElementById('sum_msg').style.display = "block";
+                save_gists_data(silent=true);
+                run_llm();
+            }
+
 
     }
     
