@@ -514,7 +514,7 @@ document.addEventListener("DOMContentLoaded", function() {
         //var proxy_01 = "https://api.allorigins.win/raw?url=";
         //var proxy_01 = "https://cors-anywhere.com/";
         //var proxy_01 = "https://tools.suffolklitlab.org/rss_proxy/?url=";
-        //var proxy_01 = "https://api.cors.lol/?url=";
+        var proxy_02 = "https://api.cors.lol/?url=";
         var feedUrl_prox = proxy_00 + encodeURIComponent(feedUrl);
 
         async function fetchRSS(url) {
@@ -536,18 +536,18 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.log("Trying first proxy for " + feedUrl);
                 feedUrl_prox = proxy_01 + encodeURIComponent(feedUrl);
                 response2 = await fetchRSS(feedUrl_prox);
-                //if (!response2) {
-                //    console.log("Trying second proxy for " + feedUrl);
-                //    feedUrl_prox = proxy_02 + feedUrl; //no encoding for this service
-                //    response3 = await fetchRSS(feedUrl_prox);
-                //    if (!response3) {
-                //        console.log("Error fetching with both proxies.");
-                //    } else {
-                //        response = response3
-                //    }
-                //} else {
+                if (!response2) {
+                    console.log("Trying second proxy for " + feedUrl);
+                    feedUrl_prox = proxy_02 + feedUrl; //no encoding for this service
+                    response3 = await fetchRSS(feedUrl_prox);
+                    if (!response3) {
+                        console.log("Error fetching with both proxies.");
+                    } else {
+                        response = response3
+                    }
+                } else {
                     response = response2
-                //}
+                }
             }
             return response;
         }
