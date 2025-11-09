@@ -2660,7 +2660,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (regex_flag_2!="") {
                 flag_regex = new RegExp(regex_flag_2, regex_flag_2_op); 
                 if (match_text.match(flag_regex) && !articleData.title.includes("🏁")) {
-                    articleData.title = "<a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🏁</a> " + articleData.title;
+                    articleData.title = "<a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a> " + articleData.title;
                     has_flag2 = true;
                 }
             }
