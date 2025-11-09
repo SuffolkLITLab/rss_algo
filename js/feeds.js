@@ -1,6 +1,6 @@
 var feeds_nyt = [
     // New York Times
-    "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml",
+    //"https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/US.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml",
@@ -37,7 +37,7 @@ var feeds_wapo = [
     //"https://www.washingtonpost.com/arcio/rss/",
     "https://www.washingtonpost.com/arcio/rss/category/politics/?itid=lk_inline_manual_2",
     "https://www.washingtonpost.com/arcio/rss/category/opinions/?itid=lk_inline_manual_7",
-    //"https://feeds.washingtonpost.com/rss/sports?itid=lk_inline_manual_20",
+    "https://www.washingtonpost.com/arcio/rss/category/sports/",
     "https://feeds.washingtonpost.com/rss/business/technology?itid=lk_inline_manual_31", // National
     "https://feeds.washingtonpost.com/rss/national?itid=lk_inline_manual_32",
     "https://feeds.washingtonpost.com/rss/world?itid=lk_inline_manual_36",
@@ -47,7 +47,7 @@ var feeds_wapo = [
 ]
 var feeds_wapo_sm = [
     // Washington Post
-    "https://feeds.washingtonpost.com/rss/business/technology?itid=lk_inline_manual_31",
+    "https://www.washingtonpost.com/arcio/rss/",
 ]
 
 var feeds_wsj = [
@@ -367,6 +367,7 @@ var feeds_hacker = [
     "https://hnrss.org/best",
 ]
 
+
 var feeds_arxiv = [
     // arXiv
     "https://rss.arxiv.org/rss/cs.LG", // machine learning
@@ -377,10 +378,12 @@ var feeds_arxiv_sm = [
     "https://rss.arxiv.org/rss/cs.LG+cs.AI", // machine learning + AI
 ]
 
+
 var feeds_arlington = [
     // Your Arlington
     "https://yourarlington.com/feed/",
 ]
+
 
 var feeds_malawyers = [
     // MA Lawyers Weekly
@@ -419,7 +422,7 @@ var feeds_long_list = [
     "https://api.quantamagazine.org/feed/",
 
     // 404 Media
-    //"https://www.404media.co/rss",
+    "https://www.404media.co/rss",
     
     // Techdirt
     "https://www.techdirt.com/feed/",

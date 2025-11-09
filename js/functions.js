@@ -1,4 +1,4 @@
-var version = "v1.37.12";
+var version = "v1.38.0";
 
 document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
 
@@ -141,6 +141,12 @@ document.getElementById("regex_flag").value = regex_flag;
 
 const regex_flag_op =  localStorage.getItem("regex_flag_op") || "";
 document.getElementById("regex_flag_op").value = regex_flag_op;
+
+const regex_flag_2 =  localStorage.getItem("regex_flag_2") || "";
+document.getElementById("regex_flag_2").value = regex_flag_2;
+
+const regex_flag_2_op =  localStorage.getItem("regex_flag_2_op") || "";
+document.getElementById("regex_flag_2_op").value = regex_flag_2_op;
 
 
 const instance =  localStorage.getItem("instance") || "";
@@ -704,10 +710,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
             match_text = itemId + " " + articleContainer.querySelector(".card-title").innerText + " " + articleContainer.querySelector(".card-text").innerText + " " + articleContainer.querySelector(".feed_search").dataset.itemId 
 
+            if (((n_feeds>=rssFeeds.length) || ((n_feeds==0) && (crunch_numbers))) && regex_flag_2!="") {
+                regex = new RegExp(regex_flag_2, regex_flag_2_op); 
+                if (match_text.match(regex) && !articleContainer.querySelector(".card-title").innerText.includes("🏁")) {
+                    articleContainer.querySelector(".card-title").innerHTML = "🏁 " + articleContainer.querySelector(".card-title").innerHTML
+                }
+            }
             if (((n_feeds>=rssFeeds.length) || ((n_feeds==0) && (crunch_numbers))) && regex_flag!="") {
                 regex = new RegExp(regex_flag, regex_flag_op); 
                 if (match_text.match(regex) && !articleContainer.querySelector(".card-title").innerText.includes("🚩")) {
-                    articleContainer.querySelector(".card-title").innerHTML += " 🚩"
+                    articleContainer.querySelector(".card-title").innerHTML = "🚩 " + articleContainer.querySelector(".card-title").innerHTML
                 }
             }
 
@@ -3400,6 +3412,7 @@ ${bodyXml}</body>
       regex_always_op: "i",
       regex_never_op: "i",
       regex_flag_op: "i",
+      regex_flag_2_op: "i",
       cardcutoff: "30",
       votelib: "default_feeds",
       lastLoad: 0,

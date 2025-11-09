@@ -17,11 +17,11 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="images/blue-icon-180x180.png">
 
-    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.37.12">
-	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.37.12">
-    <script src="js/spin/spin.min.js?v=v1.37.12"></script>
+    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.38.0">
+	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.38.0">
+    <script src="js/spin/spin.min.js?v=v1.38.0"></script>
 
-    <script src="js/report.js?v=v1.37.12"></script>    
+    <script src="js/report.js?v=v1.38.0"></script>    
     <script src="js/feeds.js?trained_on=2024-08-13b"></script>
 
 </head>
@@ -182,21 +182,25 @@
                 <h4>Promote &amp; Mute with Regular Expressions</h4>
                 <p>You can use <a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">regular expressions</a> to be confident you don't miss, or alternatively, never see, certain articles. Your input  below will be fed into JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank">RegExp()</a> as a constructor, where the first input is a string and the second is an optional operator. These are fed to <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match" target="_blank">.match()</a>. If you include a regex under <i>Bump Up</i>, any matches to said expression will have 1 added to their score, which normally maxes out at 1, putting them at the top of your feed. Matches to the regex under <i>Mute</i>, however, will be hidden from your timeline. The match is performed against an article's: (1) title; (2) description; (3) feed name; and (3) link.  Note: using the <i>search</i> feature overides these settings as it searches ALL articles. Leave string inputs blank to take no action. <i>Refresh page to see results</i>.</p>
                 <h5>Bump Up</h5>
-                <p>Like Barbie and Openhimer news? Try: <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">barbie|oppenheimer</span>, <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">i</span></p>
-                <p><input id="regex_always" value="" oninput="localStorage.regex_always=this.value" style="width: calc(100% - 65px);"> 
+                <p>Like Barbie and Openhimer news? Try: <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">barbie|oppenheimer</span>, <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">i</span><br>
+                    <input id="regex_always" value="" oninput="localStorage.regex_always=this.value" style="width: calc(100% - 65px);"> 
                 <input id="regex_always_op" value="" oninput="localStorage.regex_always_op=this.value" style="width:50px" value="i"></p>
 
                 <h5>Mute</h5>
-                <p>Dislike Barbie and Openhimer news? Try: <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">barbie|oppenheimer</span>, <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">i</span></p>
-                <p><input id="regex_never" value="" oninput="localStorage.regex_never=this.value" style="width: calc(100% - 65px);">
+                <p>Dislike Barbie and Openhimer news? Try: <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">barbie|oppenheimer</span>, <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">i</span><br>
+                    <input id="regex_never" value="" oninput="localStorage.regex_never=this.value" style="width: calc(100% - 65px);">
                 <input id="regex_never_op" value="" oninput="localStorage.regex_never_op=this.value" style="width:50px" value="i"></p>
             
             </div>
             <div class="row" style="margin-bottom: 10px;">
-                <h4>Flag with a Regular Expression 🚩 </h4>
-                <p>To draw attention to content using a regular expression without bumping or muting, add a RegEx below. If an article's (1) title; (2) description; (3) feed name; or (3) link matches this RegEx, a 🚩 will be appended to its title.</p>
-                <p><input id="regex_flag" value="" oninput="localStorage.regex_flag=this.value" style="width: calc(100% - 65px);">
+                <h4>Flag with a Regular Expression 🚩🏁</h4>
+                <p>To draw attention to content using a regular expression without bumping or muting, add a RegEx below. If an article's (1) title; (2) description; (3) feed name; or (3) link matches this RegEx, a falg will be placed before its title.</p>
+                <p>RegEx to add 🚩 <br>
+                <input id="regex_flag" value="" oninput="localStorage.regex_flag=this.value" style="width: calc(100% - 65px);">
                 <input id="regex_flag_op" value="" oninput="localStorage.regex_flag_op=this.value" style="width:50px" value="i"></p>
+                <p>RegEx to add 🏁 <br>
+                <input id="regex_flag_2" value="" oninput="localStorage.regex_flag_2=this.value" style="width: calc(100% - 65px);">
+                <input id="regex_flag_2_op" value="" oninput="localStorage.regex_flag_2_op=this.value" style="width:50px" value="i"></p>
                 
             </div>
 
@@ -399,6 +403,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 
-<script src="js/functions.js?v=v1.37.12"></script>    
+<script src="js/functions.js?v=v1.38.0"></script>    
 
 </html>
