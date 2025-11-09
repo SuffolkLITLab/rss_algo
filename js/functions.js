@@ -713,13 +713,13 @@ document.addEventListener("DOMContentLoaded", function() {
             if (((n_feeds>=rssFeeds.length) || ((n_feeds==0) && (crunch_numbers))) && regex_flag_2!="") {
                 regex = new RegExp(regex_flag_2, regex_flag_2_op); 
                 if (match_text.match(regex) && !articleContainer.querySelector(".card-title").innerText.includes("🏁")) {
-                    articleContainer.querySelector(".card-title").innerHTML = "🏁 " + articleContainer.querySelector(".card-title").innerHTML
+                    articleContainer.querySelector(".card-title").innerHTML = "<a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a> " + articleContainer.querySelector(".card-title").innerHTML
                 }
             }
             if (((n_feeds>=rssFeeds.length) || ((n_feeds==0) && (crunch_numbers))) && regex_flag!="") {
                 regex = new RegExp(regex_flag, regex_flag_op); 
                 if (match_text.match(regex) && !articleContainer.querySelector(".card-title").innerText.includes("🚩")) {
-                    articleContainer.querySelector(".card-title").innerHTML = "🚩 " + articleContainer.querySelector(".card-title").innerHTML
+                    articleContainer.querySelector(".card-title").innerHTML = "<a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a> " + articleContainer.querySelector(".card-title").innerHTML
                 }
             }
 
@@ -2653,7 +2653,27 @@ document.addEventListener("DOMContentLoaded", function() {
         //console.log(regex)        
 
         saved_articles.forEach(articleData => {
-            testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl + " hasUpvote_is_" + upvotes[articleData.link]  + " hasDownvote_is_" +  downvotes[articleData.link]
+
+            match_text = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl
+            has_flag1 = false;
+            has_flag2 = false;
+            if (regex_flag_2!="") {
+                flag_regex = new RegExp(regex_flag_2, regex_flag_2_op); 
+                if (match_text.match(flag_regex) && !articleData.title.includes("🏁")) {
+                    articleData.title = "<a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🏁</a> " + articleData.title;
+                    has_flag2 = true;
+                }
+            }
+            if (regex_flag!="") {
+                flag_regex = new RegExp(regex_flag, regex_flag_op); 
+                if (match_text.match(flag_regex) && !articleData.title.includes("🚩")) {
+                    articleData.title = "<a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a> " + articleData.title;
+                    has_flag1 = false;
+                }
+            }
+
+            testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl + " hasUpvote_is_" + upvotes[articleData.link]  + " hasDownvote_is_" +  downvotes[articleData.link] + " hasFlag1_is_" + has_flag1 + " hasFlag2_is_" + has_flag2
+
             console.log(" hasUpvote_is_" + articleData.hasUpvote)
             if (testString.match(regex)) {
                 //console.log(articleData)
