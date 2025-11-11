@@ -1,4 +1,4 @@
-var version = "v1.39.0";
+var version = "v1.40.0";
 
 document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
 
@@ -354,6 +354,7 @@ document.addEventListener("DOMContentLoaded", function() {
             toggleModeButton.innerHTML = "🌗"; // Moon emoji
             metaThemeColor.setAttribute('content', '#fff');
         }
+        dirty();
     });
 
    const donateButton = document.getElementById("donate");
@@ -2474,8 +2475,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 newsFeedContainer.appendChild(quote);    
  
                 if (((n_feeds>=rssFeeds.length) || final_crunch) && puzzles[getTodayString()] && localStorage.getItem("showCrosswords")=="true") {
-                    newsFeedContainer.innerHTML = `<p style='margin-bottom:0'> Welcome to the finite scroll. You're done! Enjoy this Monday mini. You can toggle this feature on/off under <i>Settings</i></p>`
-                    newsFeedContainer.innerHTML +=  puzzles[getTodayString()]
+                    //newsFeedContainer.innerHTML = `<p style='margin-bottom:0'> Welcome to the finite scroll. You're done! Enjoy this Monday mini. You can toggle this feature on/off under <i>Settings</i></p>`
+                    newsFeedContainer.innerHTML =  load_crossword(getTodayString()) //puzzles[getTodayString()]
                 }
                 
             } else if (unreadcount.toLocaleString("en-US")==0) {
@@ -3028,6 +3029,45 @@ async function run_llm() {
             }, 1000);
         }
     }
+
+    function load_crossword(target_key) {
+        puzzle_html = `<p style='margin-bottom:0'> Choose a Monday Mini: &nbsp;`
+        puzzle_html +=  `<select id='crossword_date' style='width:125px;' onChange="document.querySelector('iframe').src = puzzles[this.value];window.history.pushState({}, '', document.location.href.split('?')[0]+'?crossword='+this.value);">\n`
+        i = 0;
+        j = 0;
+        if (puzzles[target_key]) {
+            for (const key in puzzles) { 
+                if (key!="" & key<=getTodayString()) {
+                    puzzle_html +=  `<option value='${key}'`
+                    if (key==target_key) {
+                        puzzle_html +=  ` selected="seleced" `
+                        j=i;
+                    }
+                    puzzle_html +=  `>${key}</option>\n`
+                    i+=1;
+                }
+            }            
+        } else {
+            for (const key in puzzles) { 
+                if (key!="" & key<=getTodayString()) {
+                    last_key = key
+                    puzzle_html +=  `<option value='${key}'`
+                    puzzle_html +=  `>${key}</option>\n`
+                    j=i;
+                }
+                i+=1;
+            }
+            puzzle_html = puzzle_html.replace(new RegExp(`value='${last_key}'>${last_key}</option>\n` + '$'), `value='${last_key}' selected="selected">${last_key}</option>\n`);
+        }
+        puzzle_html +=  `</select>\n</p>\n`
+
+        puzzle_html +=  `<iframe style="height: 90vh; width: 100%;" src="${puzzles[Object.keys(puzzles)[j]]}" frameborder="0" allowfullscreen="true" allowtransparency="true" allow="clipboard-write *"></iframe>`
+
+
+        window.history.pushState({}, "", document.location.href.split("?")[0]+"?crossword="+Object.keys(puzzles)[j]);
+        
+        return puzzle_html
+    }
     
     async function check_gists_data() {
 
@@ -3039,20 +3079,15 @@ async function run_llm() {
 
         crossword = false 
 
-        console.log("crossword",searchParams.has('crossword'))
-
         if (searchParams.has('crossword')){
-            if (puzzles[searchParams.get('crossword')]) {
-                document.getElementById('loading').style.display = "none";
-                newsFeedContainer.innerHTML = `<p style='margin-bottom:0'> Enjoy this Monday mini from ${searchParams.get('crossword')}.</p>`
-                newsFeedContainer.innerHTML +=  puzzles[searchParams.get('crossword')]
-                updateItemCount();
-                document.getElementById("unread-count").style.display = "none";
-                if (savedWeather){
-                    getUserWeather();
-                } 
-                crossword = true       
-            }
+            document.getElementById('loading').style.display = "none";
+            newsFeedContainer.innerHTML = load_crossword(searchParams.get('crossword'));
+            updateItemCount();
+            document.getElementById("unread-count").style.display = "none";
+            if (savedWeather){
+                getUserWeather();
+            } 
+            crossword = true       
         } 
         
         if (crossword == false){
