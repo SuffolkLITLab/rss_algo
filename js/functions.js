@@ -1,4 +1,4 @@
-var version = "v1.38.0";
+var version = "v1.39.0";
 
 document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
 
@@ -1019,6 +1019,21 @@ document.addEventListener("DOMContentLoaded", function() {
     localStorage.setItem("temp", document.getElementById("temp").value);
     
 
+    const showCrosswordsCheckbox = document.getElementById("show-crosswords");
+    // Retrieve ignore images value from localStorage (if available)
+    if (localStorage.getItem("showCrosswords")) {
+        savedshowCrosswords = localStorage.getItem("showCrosswords") === "true";
+    } else {
+        savedshowCrosswords = true;
+        localStorage.setItem("showCrosswords", savedshowCrosswords);
+    }
+    showCrosswordsCheckbox.checked = savedshowCrosswords;
+    // Update ignore images value and save to localStorage when checkbox value changes
+    showCrosswordsCheckbox.addEventListener("change", function () {
+        const newshowCrosswords = showCrosswordsCheckbox.checked;
+        localStorage.setItem("showCrosswords", newshowCrosswords);
+    });
+
     function dedup_articles() {
         var uniqueArticles = [];
         var uniqueArticleIds = new Set();
@@ -1313,7 +1328,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                     
                                     if (Object.is(mediaThumbnail, null) || mediaThumbnail.includes("favicon")) {
 
-                                        mediaThumbnail =  get_cached_logo(link)   
+                                        mediaThumbnail =  get_cached_logo(link,mediaThumbnail)   
 
                                         //} else if (link.includes("")) {
                                         //    mediaThumbnail = "images/cached_logos/"
@@ -2452,9 +2467,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 const quote = document.createElement("div");
                 quote.className = `end_quote`;
                 quote.innerHTML = items[quote_index];
+
+                document.getElementById("news-feed").innerHTML =
                 newsFeedContainer.textContent = "";
                 document.getElementById('spin_container').innerHTML = `` 
                 newsFeedContainer.appendChild(quote);    
+ 
+                if (((n_feeds>=rssFeeds.length) || final_crunch) && puzzles[getTodayString()] && localStorage.getItem("showCrosswords")=="true") {
+                    newsFeedContainer.innerHTML = `<p style='margin-bottom:0'> Welcome to the finite scroll. You're done! Enjoy this Monday mini. You can toggle this feature on/off under <i>Settings</i></p>`
+                    newsFeedContainer.innerHTML +=  puzzles[getTodayString()]
+                }
                 
             } else if (unreadcount.toLocaleString("en-US")==0) {
                 document.getElementById('spin_container').innerHTML = `` 
@@ -3015,24 +3037,44 @@ async function run_llm() {
 
         //articles = data_dump["articles"];
 
-        if (searchParams.has('regex')){
-            document.getElementById('loading').style.display = "none";
-            regex_search(decodeURI(searchParams.get('regex')))
-            document.getElementById('upwords').innerHTML = topWords(upTFIDF,downTFIDF);
-            document.getElementById('downwords').innerHTML = topWords(downTFIDF,upTFIDF);  
-            updateItemCount();
-            if (savedWeather){
-                getUserWeather();
-            } 
-        } else if (data_dump) {         
-            window.location.reload();  
-        } else {
-            window.history.pushState({}, '',  document.location.href.split('?')[0]);
-            loadNews(true);
-            updateItemCount();
-            if (savedWeather){
-                getUserWeather();
-            } 
+        crossword = false 
+
+        console.log("crossword",searchParams.has('crossword'))
+
+        if (searchParams.has('crossword')){
+            if (puzzles[searchParams.get('crossword')]) {
+                document.getElementById('loading').style.display = "none";
+                newsFeedContainer.innerHTML = `<p style='margin-bottom:0'> Enjoy this Monday mini from ${searchParams.get('crossword')}.</p>`
+                newsFeedContainer.innerHTML +=  puzzles[searchParams.get('crossword')]
+                updateItemCount();
+                document.getElementById("unread-count").style.display = "none";
+                if (savedWeather){
+                    getUserWeather();
+                } 
+                crossword = true       
+            }
+        } 
+        
+        if (crossword == false){
+            if (searchParams.has('regex')){
+                document.getElementById('loading').style.display = "none";
+                regex_search(decodeURI(searchParams.get('regex')))
+                document.getElementById('upwords').innerHTML = topWords(upTFIDF,downTFIDF);
+                document.getElementById('downwords').innerHTML = topWords(downTFIDF,upTFIDF);  
+                updateItemCount();
+                if (savedWeather){
+                    getUserWeather();
+                } 
+            } else if (data_dump) {         
+                window.location.reload();  
+            } else {
+                window.history.pushState({}, '',  document.location.href.split('?')[0]);
+                loadNews(true);
+                updateItemCount();
+                if (savedWeather){
+                    getUserWeather();
+                } 
+            }
         }
 
     }
@@ -3890,7 +3932,7 @@ function isTooWide(img) {
     return img.naturalHeight < 80 || (img.naturalWidth / img.naturalHeight) > MAX_RATIO;
 }
 
-function get_cached_logo(link) {
+function get_cached_logo(link,mediaThumbnail) {
 
     if(link.includes("washingtonpost.com")){
         mediaThumbnail =  "images/cached_logos/wapo.webp";
@@ -3968,9 +4010,8 @@ function get_cached_logo(link) {
         mediaThumbnail = "images/cached_logos/ft.png"
     } else if (link.includes("chronicle.com")) {
         mediaThumbnail = "images/cached_logos/chronicle.png"
-    } else {
-        mediaThumbnail = link
-    } 
+    }
+
     return mediaThumbnail
 }
 
@@ -3979,12 +4020,13 @@ function triggerPlaceholder(img) {
     const srcNow = img.currentSrc || img.src || "";
     if (srcNow.indexOf(PLACEHOLDER) !== -1) return;
 
-    if (get_cached_logo(srcNow)!=srcNow) {
-      img.src = get_cached_logo(srcNow);
-    } else if (srcNow.includes("xkcd.com")) {
+    if (srcNow.includes("xkcd.com")) {
         // don't replace
+    } else if (get_cached_logo(srcNow,srcNow)!=srcNow) {
+      img.src = get_cached_logo(srcNow,img.currentSrc);
+    } else if (srcNow=="") {
+        // nothing
     } else {
-
         // Prefer to trigger the existing inline onerror (so your behavior stays centralized)
         // Note: Synthetic 'error' events work in modern browsers for inline/on* and addEventListener handlers.
         img.dispatchEvent(new Event("error", { bubbles: false, cancelable: true }));
