@@ -1312,84 +1312,9 @@ document.addEventListener("DOMContentLoaded", function() {
                                     }
                                     
                                     if (Object.is(mediaThumbnail, null) || mediaThumbnail.includes("favicon")) {
-                                        if(link.includes("washingtonpost.com")){
-                                            mediaThumbnail =  "images/cached_logos/wapo.webp";
-                                        } else if (link.includes("economist.com")) {
-                                            mediaThumbnail =  "images/cached_logos/economist.png";
-                                        } else if (link.includes("nytimes.com")) {
-                                            mediaThumbnail =  "images/cached_logos/nyt.jpg";
-                                        } else if (link.includes("wsj.com")) {
-                                            mediaThumbnail =  "images/cached_logos/wsj.png";
-                                        } else if (link.includes("npr.org")) {
-                                            mediaThumbnail =  "images/cached_logos/npr.png";
-                                        } else if (link.includes("techdirt.com")) {
-                                            mediaThumbnail =  "images/cached_logos/techdirt.jpg";
-                                        } else if (link.includes("screenrant.com")) {
-                                            mediaThumbnail =  "images/cached_logos/screenrant.png";
-                                        } else if (link.includes("mcsweeneys.net")) {
-                                            mediaThumbnail =  "images/cached_logos/mcsweenys.jpg";
-                                        } else if (link.includes("techcrunch.com")) {
-                                            mediaThumbnail =  "images/cached_logos/techcrunch.jpg";
-                                        } else if (link.includes("wgbh.org")) {
-                                            mediaThumbnail =  "images/cached_logos/gbh.png";
-                                        } else if (link.includes("masslawyersweekly.com")) {
-                                            mediaThumbnail =  "images/cached_logos/malawyersweekly.png";
-                                        } else if (link.includes("abovethelaw.com")) {
-                                            mediaThumbnail =  "images/cached_logos/atl.png";
-                                        } else if (link.includes("latimes.com")) {
-                                            mediaThumbnail =  "images/cached_logos/latimes.png";
-                                        } else if (link.includes("theatlantic.com")) {
-                                            mediaThumbnail =  "images/cached_logos/atlantic.png";
-                                        } else if (link.includes("bbc.co")) {
-                                            mediaThumbnail =  "images/cached_logos/bbc.jpg";
-                                        } else if (link.includes("lightspeedmagazine.com")) {
-                                            mediaThumbnail =  "images/cached_logos/lightspeed.png";
-                                        } else if (link.includes("clarkesworldmagazine.com")) {
-                                            mediaThumbnail =  "images/cached_logos/clarkesworld.jpg";
-                                        } else if (link.includes("escapepod.org")) {
-                                            mediaThumbnail =  "images/cached_logos/escapepod.jpg";
-                                        } else if (link.includes("rollingstone.com")) {
-                                            mediaThumbnail =  "images/cached_logos/rollingstone.png";
-                                        } else if (feedTitle.trim().startsWith("Hacker News")) {
-                                                mediaThumbnail =  "images/cached_logos/hackernews.jpeg";
-                                        } else if (link.includes("ssrn.com")) {
-                                            mediaThumbnail = "images/cached_logos/ssrn.png"
-                                        } else if (link.includes("arstechnica.com")) {
-                                            mediaThumbnail = "images/cached_logos/arstechnica.png"
-                                        } else if (link.includes("technologyreview.com")) {
-                                            mediaThumbnail = "images/cached_logos/mittechreview.png"
-                                        } else if (link.includes("nautil.us")) {
-                                            mediaThumbnail = "images/cached_logos/nautilus.png"
-                                        } else if (link.includes("smithsonianmag.com")) {
-                                            mediaThumbnail = "images/cached_logos/smithsonianmag.png"
-                                        } else if (link.includes("propublica.org")) {
-                                            mediaThumbnail = "images/cached_logos/propublica.png"
-                                        } else if (link.includes("schneier.com")) {
-                                            mediaThumbnail = "images/cached_logos/schneier.jpg"
-                                        } else if (link.includes("scientificamerican.com")) {
-                                            mediaThumbnail = "images/cached_logos/sciam.png"
-                                        } else if (link.includes("lexblog.com")) {
-                                            mediaThumbnail = "images/cached_logos/lexblog.png"
-                                        } else if (link.includes("artificiallawyer.com")) {
-                                            mediaThumbnail = "images/cached_logos/al.png"
-                                        } else if (link.includes("suffolklitlab.org")) {
-                                            mediaThumbnail = "images/cached_logos/lit.png"
-                                        } else if (link.includes("eff.org")) {
-                                            mediaThumbnail = "images/cached_logos/eff.png"
-                                        } else if (link.includes("arxiv.org")) {
-                                            mediaThumbnail = "images/cached_logos/arxiv.png"
-                                        } else if (link.includes("lawfaremedia.org")) {
-                                            mediaThumbnail = "images/cached_logos/lawfare.png"
-                                        } else if (link.includes("yourarlington.com")) {
-                                            mediaThumbnail = "images/cached_logos/yourarlington.png"
-                                        } else if (link.includes("boston.com")) {
-                                            mediaThumbnail = "images/cached_logos/boston.com.png"
-                                        } else if (link.includes("ft.com")) {
-                                            mediaThumbnail = "images/cached_logos/ft.png"
-                                        } else if (link.includes("chronicle.com")) {
-                                            mediaThumbnail = "images/cached_logos/chronicle.png"
-                                        }                                          
-                                        
+
+                                        mediaThumbnail =  get_cached_logo(link)   
+
                                         //} else if (link.includes("")) {
                                         //    mediaThumbnail = "images/cached_logos/"
                                         //}
@@ -3965,19 +3890,111 @@ function isTooWide(img) {
     return img.naturalHeight < 80 || (img.naturalWidth / img.naturalHeight) > MAX_RATIO;
 }
 
-function triggerPlaceholder(img) {
-// Don’t loop or override if we’re already showing the placeholder
-const srcNow = img.currentSrc || img.src || "";
-if (srcNow.indexOf(PLACEHOLDER) !== -1) return;
+function get_cached_logo(link) {
 
-// Prefer to trigger the existing inline onerror (so your behavior stays centralized)
-// Note: Synthetic 'error' events work in modern browsers for inline/on* and addEventListener handlers.
-img.dispatchEvent(new Event("error", { bubbles: false, cancelable: true }));
-
-// Fallback: if nothing swapped the src (e.g., a custom handler removed), set it explicitly.
-if ((img.currentSrc || img.src || "").indexOf(PLACEHOLDER) === -1) {
-    img.src = PLACEHOLDER;
+    if(link.includes("washingtonpost.com")){
+        mediaThumbnail =  "images/cached_logos/wapo.webp";
+    } else if (link.includes("economist.com")) {
+        mediaThumbnail =  "images/cached_logos/economist.png";
+    } else if (link.includes("nytimes.com")) {
+        mediaThumbnail =  "images/cached_logos/nyt.jpg";
+    } else if (link.includes("wsj.com")) {
+        mediaThumbnail =  "images/cached_logos/wsj.png";
+    } else if (link.includes("npr.org")) {
+        mediaThumbnail =  "images/cached_logos/npr.png";
+    } else if (link.includes("techdirt.com")) {
+        mediaThumbnail =  "images/cached_logos/techdirt.jpg";
+    } else if (link.includes("screenrant.com")) {
+        mediaThumbnail =  "images/cached_logos/screenrant.png";
+    } else if (link.includes("mcsweeneys.net")) {
+        mediaThumbnail =  "images/cached_logos/mcsweenys.jpg";
+    } else if (link.includes("techcrunch.com")) {
+        mediaThumbnail =  "images/cached_logos/techcrunch.jpg";
+    } else if (link.includes("wgbh.org")) {
+        mediaThumbnail =  "images/cached_logos/gbh.png";
+    } else if (link.includes("masslawyersweekly.com")) {
+        mediaThumbnail =  "images/cached_logos/malawyersweekly.png";
+    } else if (link.includes("abovethelaw.com")) {
+        mediaThumbnail =  "images/cached_logos/atl.png";
+    } else if (link.includes("latimes.com")) {
+        mediaThumbnail =  "images/cached_logos/latimes.png";
+    } else if (link.includes("theatlantic.com")) {
+        mediaThumbnail =  "images/cached_logos/atlantic.png";
+    } else if (link.includes("bbc.co")) {
+        mediaThumbnail =  "images/cached_logos/bbc.jpg";
+    } else if (link.includes("lightspeedmagazine.com")) {
+        mediaThumbnail =  "images/cached_logos/lightspeed.png";
+    } else if (link.includes("clarkesworldmagazine.com")) {
+        mediaThumbnail =  "images/cached_logos/clarkesworld.jpg";
+    } else if (link.includes("escapepod.org")) {
+        mediaThumbnail =  "images/cached_logos/escapepod.jpg";
+    } else if (link.includes("rollingstone.com")) {
+        mediaThumbnail =  "images/cached_logos/rollingstone.png";
+   // } else if (feedTitle.trim().startsWith("Hacker News")) {
+   //     mediaThumbnail =  "images/cached_logos/hackernews.jpeg";
+    } else if (link.includes("ssrn.com")) {
+        mediaThumbnail = "images/cached_logos/ssrn.png"
+    } else if (link.includes("arstechnica.com")) {
+        mediaThumbnail = "images/cached_logos/arstechnica.png"
+    } else if (link.includes("technologyreview.com")) {
+        mediaThumbnail = "images/cached_logos/mittechreview.png"
+    } else if (link.includes("nautil.us")) {
+        mediaThumbnail = "images/cached_logos/nautilus.png"
+    } else if (link.includes("smithsonianmag.com")) {
+        mediaThumbnail = "images/cached_logos/smithsonianmag.png"
+    } else if (link.includes("propublica.org")) {
+        mediaThumbnail = "images/cached_logos/propublica.png"
+    } else if (link.includes("schneier.com")) {
+        mediaThumbnail = "images/cached_logos/schneier.jpg"
+    } else if (link.includes("scientificamerican.com")) {
+        mediaThumbnail = "images/cached_logos/sciam.png"
+    } else if (link.includes("lexblog.com")) {
+        mediaThumbnail = "images/cached_logos/lexblog.png"
+    } else if (link.includes("artificiallawyer.com")) {
+        mediaThumbnail = "images/cached_logos/al.png"
+    } else if (link.includes("suffolklitlab.org")) {
+        mediaThumbnail = "images/cached_logos/lit.png"
+    } else if (link.includes("eff.org")) {
+        mediaThumbnail = "images/cached_logos/eff.png"
+    } else if (link.includes("arxiv.org")) {
+        mediaThumbnail = "images/cached_logos/arxiv.png"
+    } else if (link.includes("lawfaremedia.org")) {
+        mediaThumbnail = "images/cached_logos/lawfare.png"
+    } else if (link.includes("yourarlington.com")) {
+        mediaThumbnail = "images/cached_logos/yourarlington.png"
+    } else if (link.includes("boston.com")) {
+        mediaThumbnail = "images/cached_logos/boston.com.png"
+    } else if (link.includes("ft.com")) {
+        mediaThumbnail = "images/cached_logos/ft.png"
+    } else if (link.includes("chronicle.com")) {
+        mediaThumbnail = "images/cached_logos/chronicle.png"
+    } else {
+        mediaThumbnail = link
+    } 
+    return mediaThumbnail
 }
+
+function triggerPlaceholder(img) {
+    // Don’t loop or override if we’re already showing the placeholder
+    const srcNow = img.currentSrc || img.src || "";
+    if (srcNow.indexOf(PLACEHOLDER) !== -1) return;
+
+    if (get_cached_logo(srcNow)!=srcNow) {
+      img.src = get_cached_logo(srcNow);
+    } else if (srcNow.includes("xkcd.com")) {
+        // don't replace
+    } else {
+
+        // Prefer to trigger the existing inline onerror (so your behavior stays centralized)
+        // Note: Synthetic 'error' events work in modern browsers for inline/on* and addEventListener handlers.
+        img.dispatchEvent(new Event("error", { bubbles: false, cancelable: true }));
+
+        // Fallback: if nothing swapped the src (e.g., a custom handler removed), set it explicitly.
+        if ((img.currentSrc || img.src || "").indexOf(PLACEHOLDER) === -1) {
+            img.src = PLACEHOLDER;
+        }
+
+    }
 }
 
 // Handle images as they finish loading (use capture: true because 'load' doesn’t bubble)
