@@ -2603,7 +2603,7 @@ document.addEventListener("DOMContentLoaded", function() {
         saved_articles =  JSON.parse(localStorage.getItem("articles")) || [];
 
         regex = new RegExp(newSearch, "i")
-        matching_regex.innerHTML = `<a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">Regular expression</a> matching results for <span class='code_highlight'>${newSearch}</span> (<a href="${document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch)}" target="_blank">link to search</a>).`;
+        matching_regex.innerHTML = `<a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">Regular expression</a> matching results for <span class='code_highlight'>${newSearch}</span>&nbsp;(<a href="${document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch)}" target="_blank">link to search</a>).`;
 
         //console.log(regex)        
 
