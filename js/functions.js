@@ -2603,7 +2603,7 @@ document.addEventListener("DOMContentLoaded", function() {
         saved_articles =  JSON.parse(localStorage.getItem("articles")) || [];
 
         regex = new RegExp(newSearch, "i")
-        matching_regex.innerHTML = `<a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">Regular expression</a> matching results for <b>"${newSearch}"</b> (<a href="${document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch)}" target="_blank">link to search</a>).`;
+        matching_regex.innerHTML = `<a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">Regular expression</a> matching results for <span class='code_highlight'>${newSearch}</span> (<a href="${document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch)}" target="_blank">link to search</a>).`;
 
         //console.log(regex)        
 
@@ -2829,7 +2829,7 @@ async function run_llm() {
                                 Consider starting with a premade list. Then over time you can whittle it down and add new feeds as you like. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
                             </p>
                             <p>
-                                If an option below inludes a parenthetical, that means it comes with a pre-trained algo focusing on the named theme. Your interactions will of course refine its operation, and FWIW, it includes the same feeds as others with the same name. It's just the intial focus that's different.
+                                If an option below inludes a parenthetical, that means it comes with a pre-trained algo focusing on the named theme. Your interactions will refine its operation, and FWIW, it includes the same feeds as others with the same name. It's just the intial focus that's different.
                             </p>
                             <select id="feed_list" onLoad="feed_list_update">
                                 <option value="default_feeds">Generic US Mix</option>

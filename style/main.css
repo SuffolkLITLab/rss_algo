@@ -5,6 +5,14 @@ code{
     word-break: break-all;
 }
 
+.code_highlight {
+    font-family: "Courier New", Courier, monospace;
+    background:rgb(124, 123, 123);
+    padding: 3px 5px;
+    color:white;
+    border-radius: 3px;
+}
+
 .invisible {
     display: inline-block;
     font-size: 0;
