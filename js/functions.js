@@ -2977,6 +2977,7 @@ async function run_llm() {
 
         feedListModalElement.querySelector(".modal-body").addEventListener("click", function(event) {
             if (event.target.classList.contains("remove-feed")) {
+                dirty();
                 const feedIndex = event.target.getAttribute("data-feed-index");
                 rssFeeds.splice(feedIndex, 1);
                 localStorage.setItem("feeds",rssFeeds)

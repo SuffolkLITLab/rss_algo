@@ -117,10 +117,10 @@
             <p>
                 We embed preview images and a site's <a href="https://en.wikipedia.org/wiki/Favicon" target="_blank">favicon</a> as part of most article cards. So, unless you have the "Images: Exclude preview images and favicons..." option checked below, simply loading your timeline will download those files, likely producing log files on the servers they came from. And of course, if you follow a link to an article, you'll access that article and set in motion all that comes with that.
             </p>
-            <p>If you make it through all of your articles, and it's Monday, we may embed a <a href="./?crossword=2025-11-17">small crossword puzzle</a> as a reward. This will load content from <a href="https://crosshare.org/" target="_blank">crosshare.org</a>, an open-source ad-free crossword site.</p>
+            <p>If you make it through all of your articles, and it's Monday, we may embed a <a href="./?crossword=2025-11-17">small crossword puzzle</a> as a reward. This will load content from <a href="https://crosshare.org/" target="_blank">crosshare.org</a>, an open-source ad-free crossword site. You can, however, turn this off below.</p>
             <p>
                 If you check the "Show local weather" option below, your browser will share your location with <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a>'s weather <a href="https://en.wikipedia.org/wiki/API" target="_blank">API</a>. Similarly, if you add an API Key under <i>Magical AI Fairy Dust</i>, when you click 🤖, the headlines and introductory sentences of your feeds may be shared with your LLM provider depending on your prompt. You can, however, use a <a href="https://lmstudio.ai/" target="_blank">local LLM</a> and avoid sharing your prompt with anyone. </p>
-            <p>Importantly, if you turn on the <i>Cloud Sync</i> feature, all of your data will be shared to a GitHub Gist you control. 
+            <p>Importantly, if you turn on the <i>Cloud Sync</i> feature, all of your stored data will be shared to a GitHub Gist you control. 
             </p>
 
             <div class="row" style="margin-bottom: 10px;">
@@ -142,7 +142,7 @@
                     </p>
                     <h4>Monday Mini (Crossword)</h4>
                     <p>
-                        <label for="show-crosswords"><input type="checkbox" id="show-crosswords" value="1"> Display a <a href="./?crossword=2025-11-17">mini</a> (5X5 crossword) on Mondays at the end of your finite scroll. <i>Refresh page to see results</i>.</label>
+                        <label for="show-crosswords"><input type="checkbox" id="show-crosswords" value="1"> Display a <a href="./?crossword=2025-11-17">mini</a> (~5X5 crossword) on Mondays at the end of your finite scroll. <i>Refresh page to see results</i>.</label>
                     </p>
                     
                 </div>
@@ -209,7 +209,7 @@
             </div>
             <div class="row" style="margin-bottom: 10px;">
                 <h4>Flag with a Regular Expression <a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a><a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a></h4>
-                <p>To draw attention to content using a regular expression without bumping or muting, add a RegEx below. If an article's (1) title; (2) description; (3) feed name; or (3) link matches this RegEx, a falg will be placed before its title.</p>
+                <p>To draw attention to content using a regular expression without bumping or muting, add a RegEx below. If an article's (1) title; (2) description; (3) feed name; or (3) link matches this RegEx, a flag will be placed before its title.</p>
                 <p>You can click on the RegEx1 (<a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a>) or RegEx2 (<a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a>) flag to run a search for either.</p>
                 <p>RegEx to add <a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a> <br>
                 <input id="regex_flag" value="" oninput="localStorage.regex_flag=this.value" style="width: calc(100% - 65px);">
@@ -334,7 +334,7 @@
                     <p>
                         If you want to use <i>My RSS Algo</i> across devices or browsers, you'll need an online copy of your articles, settings, and interactions. If you choose, you can <a href="https://gist.github.com/" target="_blank">create a Gist</a> on GitHub to hold this data (Gists can't be empty. So make a file called <code>my_rss_algo.json</code> with the body <code>{}</code>). <a href="https://github.com/settings/personal-access-tokens" target="_blank">Create a fine-grained access token</a> under <i>Account</i> with permissions only to access Gists. If you provide this token and the Gist's name below, this data will turn on Cloud Sync. This will sync your data with the Gist every time you use the ☁️↺ feature.</p>
                         <p>ACTIVATING THIS FEATURE MEANS YOUR DATA WILL LEAVE YOUR DEVICE.</p>
-                        <p> To use your saved Gist on a new device, enter this data there, and <i>Push</i> or <i>Pull</i> as appropriate to avoid overwriting the data you want to keep. After this first sync, you ☁️↺ will make sure you're using the most recent version of your data. If you're at all worried about overwriting you data, save a backup before entering this data.
+                        <p> To use your saved Gist on a new device, enter this data there, and <i>Push</i> or <i>Pull</i> as appropriate to avoid overwriting the data you want to keep. After this first sync, clicking ☁️↺ will make sure you're using the most recent version of your data. This feature is experimental. If you're at all worried about overwriting your data, save a backup before entering this data.
                     </p>
                     <p>
                         Gist ID (i.e., <code>https://gist.github.com/USER/<span style="background:yellow">GIST_ID</span></code>)</br>
@@ -387,7 +387,7 @@
             </div>
             <div class="row" style="margin: 0px;border-top: solid 1px #ccc;padding-top:15px;border-bottom: solid 1px #ccc;">
                 <p>
-                    <sup>&dagger;</sup>If you save your data to a file or enable Cloud Sync, <b>all of your data (including any passwords or tokens) will be stored in plain text</b> as part of your data file/Gist. Think very carfully about this and who might have access to these, and remember that even if you don't save or enable Cloud Sync, your data always lives in your browser's cloud storage as plain text.</br>
+                    <sup>&dagger;</sup>If you save your data to a file or enable Cloud Sync, <b>all of your data (including any passwords or tokens) will be stored in plain text</b> as part of your data file/Gist. Think very carfully about this and who might have access to these, and remember that even if you don't save or enable Cloud Sync, your data always lives in your browser's <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localstorage</a> as plain text.</br>
                     Image credits: <img src="images/externallink.png" style="width:23px;margin-right:5px"/> <a href="https://commons.wikimedia.org/wiki/File:2017-fr.wp-blue-externallinks.svg" target="_blank">2017-fr.wp-blue-externallinks.svg</a> (appears when using <i>Pass URL to Pop-up</i>)
                 </p>
             </div>
