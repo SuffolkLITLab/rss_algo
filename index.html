@@ -87,7 +87,7 @@
                     </ul>
                     <p>This message will refresh after your next full-download session (i.e., after your coooldown clock resets). If this issue persists, these feeds may have moved or no longer work with this reader. You can remove a feed by clicking on <i>remove</i> above.</p>
                     <p>
-                        Be patient. Use the <i>search</i> link to see if you've downloaded any articles from a feed recently. Some sites (esp. smaller ones) may only be accessable off and on. Don't give up too easily. 
+                        <b>Be patient.</b> Use <i>search cards</i> above to see if you've downloaded any articles from a feed recently. Some sites (esp. smaller ones) may only be accessable off and on. Don't give up too easily. 
                     </p>
                 </div>
             </div>
@@ -117,7 +117,7 @@
             <p>
                 We embed preview images and a site's <a href="https://en.wikipedia.org/wiki/Favicon" target="_blank">favicon</a> as part of most article cards. So, unless you have the "Images: Exclude preview images and favicons..." option checked below, simply loading your timeline will download those files, likely producing log files on the servers they came from. And of course, if you follow a link to an article, you'll access that article and set in motion all that comes with that.
             </p>
-            <p>If you make it through all of your articles to the end of your finite scroll and it's Monday, we may embed a small crossword puzzle as a reward. This will load content from <a href="https://crosshare.org/" target="_blank">crosshare.org</a>, an open-source ad-free crossword site.</p>
+            <p>If you make it through all of your articles, and it's Monday, we may embed a small crossword puzzle as a reward. This will load content from <a href="https://crosshare.org/" target="_blank">crosshare.org</a>, an open-source ad-free crossword site.</p>
             <p>
                 If you check the "Show local weather" option below, your browser will share your location with <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a>'s weather <a href="https://en.wikipedia.org/wiki/API" target="_blank">API</a>. Similarly, if you add an API Key under <i>Magical AI Fairy Dust</i>, when you click 🤖, the headlines and introductory sentences of your feeds may be shared with your LLM provider depending on your prompt. You can, however, use a <a href="https://lmstudio.ai/" target="_blank">local LLM</a> and avoid sharing your prompt with anyone. </p>
             <p>Importantly, if you turn on the <i>Cloud Sync</i> feature, all of your data will be shared to a GitHub Gist you control. 
@@ -192,25 +192,29 @@
 
             <div class="row" style="margin-bottom: 10px;">
                 <h4>Promote &amp; Mute with Regular Expressions</h4>
-                <p>You can use <a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">regular expressions</a> to be confident you don't miss, or alternatively, never see, certain articles. Your input  below will be fed into JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank">RegExp()</a> as a constructor, where the first input is a string and the second is an optional operator. These are fed to <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match" target="_blank">.match()</a>. If you include a regex under <i>Bump Up</i>, any matches to said expression will have 1 added to their score, which normally maxes out at 1, putting them at the top of your feed. Matches to the regex under <i>Mute</i>, however, will be hidden from your timeline. The match is performed against an article's: (1) title; (2) description; (3) feed name; and (3) link.  Note: using the <i>search</i> feature overides these settings as it searches ALL articles. Leave string inputs blank to take no action. <i>Refresh page to see results</i>.</p>
+                <p>You can use <a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">regular expressions</a> to be confident you don't miss, or alternatively, never see, certain articles. Your input  below will be fed into JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank">RegExp()</a> as a constructor, where the first input is a string and the second is an optional operator. These are fed to <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match" target="_blank">.match()</a>. If you include a regex under <i>Bump Up</i>, any matches to said expression will have 1 added to their score, which normally maxes out at 1, putting them at the top of your feed. Matches to the regex under <i>Mute</i>, however, will be hidden from your timeline. The match is performed against an article's: (1) title; (2) description; (3) feed name; and (3) link.  Note: using the <i>search</i> feature overides these settings as it searches ALL articles. Leave string inputs blank to take no action. </p>
+                <p>Cards that have been bumpped up will include a ⇧ in their footer. <i>Refresh page to see results</i>.</p>
                 <h5>Bump Up</h5>
-                <p>Like Barbie and Openhimer news? Try: <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">barbie|oppenheimer</span>, <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">i</span><br>
+                <p>Like Barbie and Openhimer news? Try: <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">barbie|oppenheimer</span>, <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">i</span>. See <a id="search_always" href="javascript:void();">bumpped up content</a></p>
+                <p>
                     <input id="regex_always" value="" oninput="localStorage.regex_always=this.value" style="width: calc(100% - 65px);"> 
                 <input id="regex_always_op" value="" oninput="localStorage.regex_always_op=this.value" style="width:50px" value="i"></p>
 
                 <h5>Mute</h5>
-                <p>Dislike Barbie and Openhimer news? Try: <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">barbie|oppenheimer</span>, <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">i</span><br>
+                <p>Dislike Barbie and Openhimer news? Try: <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">barbie|oppenheimer</span>, <span style="background:rgb(123, 123, 123);padding: 3px 5px;color:white;border-radius: 3px;">i</span>. See <a id="search_never" href="javascript:void();">muted content</a></p>
+                <p>
                     <input id="regex_never" value="" oninput="localStorage.regex_never=this.value" style="width: calc(100% - 65px);">
                 <input id="regex_never_op" value="" oninput="localStorage.regex_never_op=this.value" style="width:50px" value="i"></p>
             
             </div>
             <div class="row" style="margin-bottom: 10px;">
-                <h4>Flag with a Regular Expression 🚩🏁</h4>
+                <h4>Flag with a Regular Expression <a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a><a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a></h4>
                 <p>To draw attention to content using a regular expression without bumping or muting, add a RegEx below. If an article's (1) title; (2) description; (3) feed name; or (3) link matches this RegEx, a falg will be placed before its title.</p>
-                <p>RegEx to add 🚩 <br>
+                <p>You can click on the RegEx1 (<a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a>) or RegEx2 (<a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a>) flag to run a search for either.</p>
+                <p>RegEx to add <a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a> <br>
                 <input id="regex_flag" value="" oninput="localStorage.regex_flag=this.value" style="width: calc(100% - 65px);">
                 <input id="regex_flag_op" value="" oninput="localStorage.regex_flag_op=this.value" style="width:50px" value="i"></p>
-                <p>RegEx to add 🏁 <br>
+                <p>RegEx to add <a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a><br>
                 <input id="regex_flag_2" value="" oninput="localStorage.regex_flag_2=this.value" style="width: calc(100% - 65px);">
                 <input id="regex_flag_2_op" value="" oninput="localStorage.regex_flag_2_op=this.value" style="width:50px" value="i"></p>
                 

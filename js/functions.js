@@ -684,9 +684,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
             });
 
-            if (similar_arts.length>0) {
-                console.log("SIMILAR:",similar_arts)
-            }
+            //if (similar_arts.length>0) {
+            //    console.log("SIMILAR:",similar_arts)
+            //}
 
             return similar_arts
 
@@ -1691,6 +1691,12 @@ document.addEventListener("DOMContentLoaded", function() {
                             }
                         }
 
+                        if (priorityRating>=1) { 
+                            bumped = `<a href="./?regex=${encodeURI(regex_always)}" style="text-decoration:none;">⇧</a> &nbsp;&nbsp;&nbsp;`
+                        } else {
+                            bumped = ""
+                        }
+
                         article.innerHTML = `
                             <div class="card">
                                 ${share_html}
@@ -1717,7 +1723,8 @@ document.addEventListener("DOMContentLoaded", function() {
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <button class="feed_search" data-item-id="${feedUrl}"><img class="favicon" src="${favicon}" height="18px"> <small class="feed-tag">&nbsp;&nbsp;${feedTitle}</small></button>  
+                                    ${bumped}
+                                    <button class="feed_search" data-item-id="${feedUrl}"><img class="favicon" src="${favicon}" height="18px"> <small class="feed-tag">&nbsp;&nbsp;${feedTitle} </small></button>  
                                     <span class="btn remove_feed" data-feed-index="${feedUrl}" data-feed-name="${feedTitle}">🚫</span>
                                 </div>
                             </div>
@@ -2622,7 +2629,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl + " hasUpvote_is_" + upvotes[articleData.link]  + " hasDownvote_is_" +  downvotes[articleData.link] + " hasFlag1_is_" + has_flag1 + " hasFlag2_is_" + has_flag2
 
-            console.log(" hasUpvote_is_" + articleData.hasUpvote)
+            //console.log(" hasUpvote_is_" + articleData.hasUpvote)
             if (testString.match(regex)) {
                 //console.log(articleData)
                 searchResults.push(articleData);
@@ -2647,6 +2654,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
         document.getElementById("results-count").textContent = `Results: ${displayed_cards}`;
 
+        window.scrollTo(0, 0);
+
+
         lazyload();
         replace_broken();
     }
@@ -2659,6 +2669,16 @@ document.addEventListener("DOMContentLoaded", function() {
             return; //break out of the function early
         } 
         regex_search(newSearch);
+    });
+
+    const runSearchAlways = document.getElementById("search_always");
+    runSearchAlways.addEventListener("click", function() {
+        regex_search(regex_always);
+    });
+
+    const runSearchNever = document.getElementById("search_never");
+    runSearchNever.addEventListener("click", function() {
+        regex_search(regex_never);
     });
 
 
