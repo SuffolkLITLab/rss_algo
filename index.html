@@ -3,12 +3,12 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>My RSS Algo</title>
-	<meta property="og:site_name" content="My RSS Algo"/>
+    <title>The Finite Scroll</title>
+	<meta property="og:site_name" content="The Finite Scroll"/>
 	<meta property="og:type" content="website"/>
-	<meta property="og:title" content="My RSS Algo"/>
+	<meta property="og:title" content="The Finite Scroll"/>
 	<meta property="og:description" content="An open source client-side algorithmically-driven RSS reader, living with your data on your device."/>
-    <meta property="og:image" content="https://myrssalgo.org/images/preview.png"/>
+    <meta property="og:image" content="https://thefinitescroll.org/images/preview.png"/>
     <link rel="apple-touch-icon" href="images/blue-icon-180x180.png"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#fff">
@@ -17,11 +17,11 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="images/blue-icon-180x180.png">
 
-    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.40.0">
-	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.40.0">
-    <script src="js/spin/spin.min.js?v=v1.40.0"></script>
+    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.0.0">
+	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.0.0">
+    <script src="js/spin/spin.min.js?v=v1.0.0"></script>
 
-    <script src="js/report.js?v=v1.40.0"></script>    
+    <script src="js/report.js?v=v1.0.0"></script>    
     <script src="js/feeds.js?trained_on=2024-08-13b"></script>
     <script src="js/puzzles.js?trained_on=2024-08-13b"></script>
 
@@ -43,11 +43,11 @@
                 <button id="add-feed" class="btn btn-primary">+</button>
             </div>
             <div id="weather" style="float:right;margin-right:5px;"></div>
-            <div style="float:left;"><h1 class="my-1">My RSS Algo</h1></div>
+            <div style="float:left;"><h1 class="my-1">The Finite Scroll</h1></div>
             <div style="float:left;width:100%;padding-top: 8px;">
                 <p>
                     <span id="description_more">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader <a href="javascript:void();" onClick="document.getElementById('description_more').style.display = 'none';document.getElementById('description').style.display = 'block';">. . .</a></span> 
-                    <span id="description" style="display: none;">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader built at the <a href="https://suffolklitlab.org/" target="_blank">Suffolk LIT Lab</a>. Use 👍 &amp; 👎 + <i>Seen</i> or <i>Open</i> to feed the algo. Refresh this page to update card order. By default, searches, votes, &amp; settings don't leave your device. Customize your algo and timeline in <i>Settings</i>. Curate sources in <i>Feeds</i>. Add feeds with the blue <i>plus</i> button. For project updates, visit <a href="https://github.com/colarusso/rss_algo" target="_blank">our GitHub page</a>.
+                    <span id="description" style="display: none;">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader built at the <a href="https://suffolklitlab.org/" target="_blank">Suffolk LIT Lab</a>. Use 👍 &amp; 👎 + <i>Seen</i> or <i>Open</i> to feed the algo. Refresh this page to update card order. By default, searches, votes, &amp; settings don't leave your device. Customize your algo and timeline in <i>Settings</i>. Curate sources in <i>Feeds</i>. Add feeds with the blue <i>plus</i> button. For project updates, visit <a href="https://github.com/SuffolkLITLab/the_finite_scroll" target="_blank">our GitHub page</a>.
 
                     [<a href="javascript:void();" onClick="document.getElementById('description').style.display = 'none';document.getElementById('description_more').style.display = 'block';">shrink description</a>]
                     </span>
@@ -98,7 +98,7 @@
 
             <h2>Settings</h2>
             <p>
-                You can manage your feeds by clicking <i>Feeds</i> at the top of this page. See additional controls below. To determine what articles you like, we make use of insights from <a href="https://towardsdatascience.com/text-vectorization-term-frequency-inverse-document-frequency-tfidf-5a3f9604da6d" target="_blank">TF-IDF</a>, comparing all the text from the cards you vote up or down with everything you've "seen." I hope to write a more complete explanation sometime. When I do, I'll put a link here. Until then, you can always look at <a href="https://github.com/colarusso/rss_algo" target="_blank">the code</a>.
+                You can manage your feeds by clicking <i>Feeds</i> at the top of this page. See additional controls below. To determine what articles you like, we make use of insights from <a href="https://towardsdatascience.com/text-vectorization-term-frequency-inverse-document-frequency-tfidf-5a3f9604da6d" target="_blank">TF-IDF</a>, comparing all the text from the cards you vote up or down with everything you've "seen." I hope to write a more complete explanation sometime. When I do, I'll put a link here. Until then, you can always look at <a href="https://github.com/SuffolkLITLab/the_finite_scroll" target="_blank">the code</a>.
             </p>
             <p>
                 <i>Note: when figuring out what you "like" we look only at the card's domain, title, description, and the RSS Feed's name. We don't look at the content of the article. We convert all feed names into hypenated words. That's why you might see things like nyt-top-stories (NYT > Top Stories) in the word lists below. Also, we do something similar for an article's domain (e.g. nytimes-com).</i>
@@ -117,7 +117,7 @@
 
             <h4>Privacy</h4>
             <p>
-                You don't need an account, nor do you need to provide any personally identifying information, to use <i>My RSS Algo</i>. By default, any searches or votes you make are stored only in your browser as part of <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localstorage</a>. The same is true for any other persistent data (e.g., your filters and the choices you make below). Presumably GitHub (which hosts this site) keeps some log files. When fetching your feeds we make use of a couple of proxy servers. First we use our own, then as fallbacks: <a href="https://corsproxy.io/" target="_blank">corsproxy.io</a> and <a href="https://cors.lol/" target="_blank">cors.lol</a> respectivly. FWIW, corsproxy claims not to keep log files. The publishers of these feeds, however, only see the IP addresses of the proxy servers when they are downloaded.</p>
+                You don't need an account, nor do you need to provide any personally identifying information, to use <i>The Finite Scroll</i>. By default, any searches or votes you make are stored only in your browser as part of <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localstorage</a>. The same is true for any other persistent data (e.g., your filters and the choices you make below). Presumably GitHub (which hosts this site) keeps some log files. When fetching your feeds we make use of a couple of proxy servers. First we use our own, then as fallbacks: <a href="https://corsproxy.io/" target="_blank">corsproxy.io</a> and <a href="https://cors.lol/" target="_blank">cors.lol</a> respectivly. FWIW, corsproxy claims not to keep log files. The publishers of these feeds, however, only see the IP addresses of the proxy servers when they are downloaded.</p>
             <p>
                 We embed preview images and a site's <a href="https://en.wikipedia.org/wiki/Favicon" target="_blank">favicon</a> as part of most article cards. So, unless you have the "Images: Exclude preview images and favicons..." option checked below, simply loading your timeline will download those files, likely producing log files on the servers they came from. And of course, if you follow a link to an article, you'll access that article and set in motion all that comes with that.
             </p>
@@ -329,14 +329,14 @@
                     </p>
                     <input id="upload" type="file" style="display: none;"/> 
                     <p style="display: flex;">
-                        <a href="javascript:saveTextAsFile(JSON.stringify(localStorage,null,2),'My_RSS_algo_data_'+getTodayString()+'.json');" class="btn btn-primary">Save All</a>&nbsp;<a href="javascript:saveTextAsFile(RssOpmlIO.jsonToOpml(localStorage,{title: 'My RSS Export', groupBy: 'feedTitle'}),'My_RSS_algo_data_'+getTodayString()+'.oplm');" class="btn btn-primary">Save OPLM</a>&nbsp;
+                        <a href="javascript:saveTextAsFile(JSON.stringify(localStorage,null,2),'the_finite_scroll_data_'+getTodayString()+'.json');" class="btn btn-primary">Save All</a>&nbsp;<a href="javascript:saveTextAsFile(RssOpmlIO.jsonToOpml(localStorage,{title: 'My RSS Export', groupBy: 'feedTitle'}),'the_finite_scroll_data_'+getTodayString()+'.oplm');" class="btn btn-primary">Save OPLM</a>&nbsp;
                         <a href="javascript:upload_file()" class="btn btn-danger">Open</a>
                     </p>
                     
 
                     <h4>Cloud Sync</br><font size=-1>🚨 Experimental Feature 🚨</font></h4>
                     <p>
-                        If you want to use <i>My RSS Algo</i> across devices or browsers, you'll need an online copy of your articles, settings, and interactions. If you choose, you can <a href="https://gist.github.com/" target="_blank">create a Gist</a> on GitHub to hold this data (Gists can't be empty. So make a file called <code>my_rss_algo.json</code> with the body <code>{}</code>). <a href="https://github.com/settings/personal-access-tokens" target="_blank">Create a fine-grained access token</a> under <i>Account</i> with permissions only to access Gists. If you provide this token and the Gist's name below, this data will turn on Cloud Sync. This will sync your data with the Gist every time you use the ☁️↺ feature.</p>
+                        If you want to use <i>The Finite Scroll</i> across devices or browsers, you'll need an online copy of your articles, settings, and interactions. If you choose, you can <a href="https://gist.github.com/" target="_blank">create a Gist</a> on GitHub to hold this data (Gists can't be empty. So make a file called <code>the_finite_scroll.json</code> with the body <code>{}</code>). <a href="https://github.com/settings/personal-access-tokens" target="_blank">Create a fine-grained access token</a> under <i>Account</i> with permissions only to access Gists. If you provide this token and the Gist's name below, this data will turn on Cloud Sync. This will sync your data with the Gist every time you use the ☁️↺ feature.</p>
                         <p>ACTIVATING THIS FEATURE MEANS YOUR DATA WILL LEAVE YOUR DEVICE.</p>
                         <p> To use your saved Gist on a new device, enter this data there, and <i>Push</i> or <i>Pull</i> as appropriate to avoid overwriting the data you want to keep. After this first sync, clicking ☁️↺ will make sure you're using the most recent version of your data. This feature is experimental. If you're at all worried about overwriting your data, save a backup before entering this data.
                     </p>
@@ -412,7 +412,7 @@
                 <a href="javascript:void('')" onClick="history.replaceState('', document.title, window.location.pathname);window.scrollTo(0, 0);">Top</a> | 
                 <a href="./?crossword=2025-11-17">Minis</a> | 
                 <a href="https://bsky.app/profile/suffolklitlab.org" target="_blank">Bluesky</a> | 
-                <a href="https://github.com/colarusso/rss_algo" target="_blank">GitHub</a> |
+                <a href="https://github.com/colarusso/the_finite_scroll" target="_blank">GitHub</a> |
                 <span id="version"></span><br>
                 <span id="cooldown_clock">
                 Cooldown: <span id="countdown">default 0.25 hours</span>
@@ -425,6 +425,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 
-<script src="js/functions.js?v=v1.40.0"></script>    
+<script src="js/functions.js?v=v1.0.0"></script>    
 
 </html>

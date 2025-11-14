@@ -1,4 +1,4 @@
-var version = "v1.40.0";
+var version = "v1.0.0";
 
 var msg_text = ``
 
@@ -1596,7 +1596,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <div class="card">
                             ${img_html}
                             <div class="card-body">
-                                    <h5 class="card-title">Support the People Who Built <i>My RSS Algo</i>!</h5>
+                                    <h5 class="card-title">Support the People Who Built <i>The Finite Scroll</i>!</h5>
                                     <p class="card-text">
                                         Your support empowers students and staff at Suffolk's Legal Innovation &amp; Technology Lab (LIT Lab) to create cutting-edge legal tech solutions that make a real impact in communities, while giving students hands-on experience at one of the nation's top clinical programs. Your gift fuels innovation, access to justice, and the future of legal services.
                                     </p>
@@ -2352,7 +2352,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             <p>Sometimes there are issues reaching a feed. If this error persists, you can remove this feed using the "Feeds" button.</p>
                         </div>
                         <div class="modal-footer">
-                            <button id="manage-feeds" class="btn btn-primary" style="width:100%" onClick="window.open('https://github.com/colarusso/rss_algo/tree/main#troubleshooting');">Troubleshoot this error</button>
+                            <button id="manage-feeds" class="btn btn-primary" style="width:100%" onClick="window.open('https://github.com/SuffolkLITLab/the_finite_scroll/blob/main/README.md#troubleshooting');">Troubleshoot this error</button>
                         </div>
                     </div>
                 </div>
@@ -2825,7 +2825,7 @@ async function run_llm() {
                                 You can import and overwrite the current feed list by <a href="javascript:upload_file()">uploading an OPLM file</a>, or you can use any of the options below.
                             </p>
                             <p>
-                                Remove individual feeds using the "Remove" buttons below, OR wipe and/or replace your existing list of feeds. If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>. Add feeds with the blue + button on the main page.
+                                Remove individual feeds using the "Remove" buttons below, OR wipe and/or replace your existing list of feeds. If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/the_finite_scroll/blob/main/README.md#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>. Add feeds with the blue + button on the main page.
                             </p> 
                             <p>
                                 Consider starting with a premade list. Then over time you can whittle it down and add new feeds as you like. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
@@ -2860,7 +2860,7 @@ async function run_llm() {
                             <p>
                             <hr>
                             <p>
-                                <b>Current Feeds</b>: Your experience was built on top of <a href="?feeds=${localStorage.getItem("votelib")}">myrssalgo.org/?feeds=${localStorage.getItem("votelib")}</a>. Share that link to have folks start where you did.
+                                <b>Current Feeds</b>: Your experience was built on top of <a href="?feeds=${localStorage.getItem("votelib")}">thefinitescroll.org/?feeds=${localStorage.getItem("votelib")}</a>. Share that link to have folks start where you did.
                             </p>
                             <table cellpadding="5px" width="100%">${feedList}</table>
                         </div>
@@ -3591,17 +3591,17 @@ async function save_gists_data(silent=false) {
         const gist = gistClient({ token });
 
         if (!silent) {
-            gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json") || "0"
+            gist_text = await gist.readFile(localStorage.getItem("gist_name"), "the_finite_scroll.json") || "0"
 
             gist_json = JSON.parse(gist_text)
 
             console.log("Save Gist:",gist_json["lastChange"],"<",localStorage.getItem("lastChange"),gist_json["lastChange"]<localStorage.getItem("lastChange"))
 
             if (gist_json["lastChange"]<localStorage.getItem("lastChange")) {
-                written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+                written = await gist.writeFile(localStorage.getItem("gist_name"), "the_finite_scroll.json", JSON.stringify(localStorage,null,2) );
             }
         } else {
-                written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+                written = await gist.writeFile(localStorage.getItem("gist_name"), "the_finite_scroll.json", JSON.stringify(localStorage,null,2) );
 
         }
         notdirty();
@@ -3628,7 +3628,7 @@ async function load_gists_data() {
             const token = localStorage.getItem("gist_token"); // Must have "gist" permission
             const gist = gistClient({ token });
 
-            gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json");
+            gist_text = await gist.readFile(localStorage.getItem("gist_name"), "the_finite_scroll.json");
 
             gist_json = JSON.parse(gist_text)
 
@@ -3678,7 +3678,7 @@ async function push_gists_data() {
                 const token = localStorage.getItem("gist_token"); // Must have "gist" permission
                 const gist = gistClient({ token });
 
-                written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+                written = await gist.writeFile(localStorage.getItem("gist_name"), "the_finite_scroll.json", JSON.stringify(localStorage,null,2) );
                 alert("Local data has been copied to the cloud.")
 
             } catch (error) {
@@ -3700,7 +3700,7 @@ async function pull_gists_data() {
                 const token = localStorage.getItem("gist_token"); // Must have "gist" permission
                 const gist = gistClient({ token });
 
-                gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json");
+                gist_text = await gist.readFile(localStorage.getItem("gist_name"), "the_finite_scroll.json");
 
                 var data_dump = {}
                 try {
@@ -3922,7 +3922,7 @@ function flagLinksNotInText(html, plainText) {
           const regexValue = `\\b${escaped.replaceAll("\.","\.\?")}\\b`;
 
           // Resolve relative URLs against current location if available; otherwise fall back to a dummy base
-          const base = (typeof location !== 'undefined' && location.href) ? location.href : 'https://myrssalgo.org/';
+          const base = (typeof location !== 'undefined' && location.href) ? location.href : 'https://thefinitescroll.org/';
           const u = new URL(href, base);
 
           u.searchParams.set('regex', regexValue); // URLSearchParams will encode backslashes, spaces, etc.
