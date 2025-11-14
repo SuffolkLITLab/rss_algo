@@ -1,6 +1,6 @@
 var version = "v1.40.0";
 
-var msg_text = ``
+var msg_text = `We are forking <i>My RSS Algo</i> and moving our focus to <a href="https://thefinitescroll.org" target="_blank" style="color:rgb(75, 75, 255)">The Finite Scroll.org</a>—because it's a better name. There's no plan to sunset <i>My RSS Algo</i> at this time, but we may not continue to release updates here. Note: Your full-data exports from <i>My RSS Algo</i> can be uploaded at <i>The Finite Scroll</i>.`
 
 document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
 
