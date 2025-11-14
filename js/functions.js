@@ -1,5 +1,7 @@
 var version = "v1.40.0";
 
+var msg_text = ``
+
 document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
 
 var auto_llm = true;
@@ -727,7 +729,7 @@ document.addEventListener("DOMContentLoaded", function() {
             var similar_arts = []
             //console.log("SIMILAR:",decluter_cut, crunch_numbers)
             if (decluter_cut<1 && crunch_numbers) {
-                console.log("decluttering")
+                //console.log("decluttering")
                 if (articleContainer.querySelector(".card-text")) {
                     art_text = articleContainer.querySelector(".card-text").innerHTML
                 } else {
@@ -2482,8 +2484,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 newsFeedContainer.appendChild(quote);    
  
                 if (((n_feeds>=rssFeeds.length) || final_crunch) && puzzles[getTodayString()] && localStorage.getItem("showCrosswords")=="true") {
-                    //newsFeedContainer.innerHTML = `<p style='margin-bottom:0'> Welcome to the finite scroll. You're done! Enjoy this Monday mini. You can toggle this feature on/off under <i>Settings</i></p>`
-                    newsFeedContainer.innerHTML =  load_crossword(getTodayString()) //puzzles[getTodayString()]
+                    //newsFeedContainer.innerHTML = `<p style='margin-bottom:0'> Welcome the end of your finite scroll. You're done! Enjoy this crossword. You can toggle this feature on/off in <i>Settings</i>.</p>`
+                    newsFeedContainer.innerHTML =  load_crossword(getTodayString(),toggle=true) //puzzles[getTodayString()]
                 }
                 
             } else if (unreadcount.toLocaleString("en-US")==0) {
@@ -3051,8 +3053,8 @@ async function run_llm() {
         }
     }
 
-    function load_crossword(target_key) {
-        puzzle_html = `<p style='margin-bottom:0'> Choose a Monday Mini: &nbsp;`
+    function load_crossword(target_key,toggle=false) {
+        puzzle_html = `<p style='margin-bottom:0'> Choose a Mini: &nbsp;`
         puzzle_html +=  `<select id='crossword_date' style='width:125px;' onChange="document.querySelector('iframe').src = puzzles[this.value];window.history.pushState({}, '', document.location.href.split('?')[0]+'?crossword='+this.value);">\n`
         i = 0;
         j = 0;
@@ -3080,9 +3082,14 @@ async function run_llm() {
             }
             puzzle_html = puzzle_html.replace(new RegExp(`value='${last_key}'>${last_key}</option>\n` + '$'), `value='${last_key}' selected="selected">${last_key}</option>\n`);
         }
-        puzzle_html +=  `</select>\n</p>\n`
+        puzzle_html +=  `</select>\n`
 
-        puzzle_html +=  `<iframe style="height: 90vh; width: 100%;" src="${puzzles[Object.keys(puzzles)[j]]}" frameborder="0" allowfullscreen="true" allowtransparency="true" allow="clipboard-write *"></iframe>`
+        if (toggle){
+            puzzle_html +=  `&nbsp;You can toggle this feature on/off in <i>Settings</i>.\n`
+
+        }
+
+        puzzle_html +=  `</p><iframe style="height: 90vh; width: 100%;" src="${puzzles[Object.keys(puzzles)[j]]}" frameborder="0" allowfullscreen="true" allowtransparency="true" allow="clipboard-write *"></iframe>`
 
 
         window.history.pushState({}, "", document.location.href.split("?")[0]+"?crossword="+Object.keys(puzzles)[j]);
@@ -3988,6 +3995,20 @@ function isTooWide(img) {
     return img.naturalHeight < 80 || (img.naturalWidth / img.naturalHeight) > MAX_RATIO;
 }
 
+const lastLoad = localStorage.getItem("lastMsg") || 0;
+var time_since_msg = Date.parse(new Date())-lastLoad
+var show_after = 30*24*60*60*1000 // 30 days
+if ((msg_text!='') & ((time_since_msg>show_after) | (localStorage.getItem("msgText")!=msg_text))) {
+    document.getElementById('msg_text').innerHTML = msg_text;
+    document.getElementById('banner_msg').style.display = "block";
+} 
+
+function hide_msg() {
+    document.getElementById('banner_msg').style.display = "none";
+    localStorage.setItem("lastMsg", Date.parse(new Date()));        
+    localStorage.setItem("msgText", msg_text);        
+}
+
 function get_cached_logo(link,mediaThumbnail) {
 
     if(link.includes("washingtonpost.com")){
@@ -4066,6 +4087,8 @@ function get_cached_logo(link,mediaThumbnail) {
         mediaThumbnail = "images/cached_logos/ft.png"
     } else if (link.includes("chronicle.com")) {
         mediaThumbnail = "images/cached_logos/chronicle.png"
+    } else if (link.includes("timharford.com")) {
+        mediaThumbnail = "images/cached_logos/timharford.png"
     }
 
     return mediaThumbnail

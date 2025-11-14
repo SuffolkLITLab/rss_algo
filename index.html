@@ -27,6 +27,10 @@
 
 </head>
 <body>
+    <div id="banner_msg">
+        <div class="banner_msg_close" onClick="hide_msg();">Dismiss</div>
+        <span id="msg_text"></span>
+    </div>
     <div class="container">
         <div style="float:left;width:100%;margin-top: 20px;">
             <div class="menu">
@@ -140,7 +144,7 @@
                     <p>
                         <label for="weather-report"><input type="checkbox" id="weather-report" value="1"> Show local weather in degrees <select oninput="localStorage.setItem('temp', this.value)" id="temp" style="width:45px;"><option value="fahrenheit">F</option><option value="celsius">C</option></select> (shares location with <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a>'s weather <a href="https://en.wikipedia.org/wiki/API" target="_blank">API</a>). <i>Refresh page to see results</i>.</label>
                     </p>
-                    <h4>Monday Mini (Crossword)</h4>
+                    <h4>Crosswords</h4>
                     <p>
                         <label for="show-crosswords"><input type="checkbox" id="show-crosswords" value="1"> Display a <a href="./?crossword=2025-11-17">mini</a> (~5X5 crossword) on Mondays at the end of your finite scroll. <i>Refresh page to see results</i>.</label>
                     </p>
