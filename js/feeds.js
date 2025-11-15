@@ -5,7 +5,7 @@ var feeds_nyt = [
     "https://rss.nytimes.com/services/xml/rss/nyt/US.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
-    "https://rss.nytimes.com/services/xml/rss/nyt/Sports.xml",
+    //"https://rss.nytimes.com/services/xml/rss/nyt/Sports.xml", //retired?
     "https://rss.nytimes.com/services/xml/rss/nyt/Space.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/Health.xml",
@@ -52,16 +52,23 @@ var feeds_wapo_sm = [
 
 var feeds_wsj = [
     // Wall Street Journal
-    "https://feeds.a.dj.com/rss/RSSOpinion.xml",
-    "https://feeds.a.dj.com/rss/RSSWorldNews.xml",
-    "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
-    "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
-    "https://feeds.a.dj.com/rss/RSSWSJD.xml", // Tech What's New
-    "https://feeds.a.dj.com/rss/RSSLifestyle.xml",
+    "https://feeds.content.dowjones.io/public/rss/RSSOpinion",
+    "https://feeds.content.dowjones.io/public/rss/RSSWorldNews",
+    "https://feeds.content.dowjones.io/public/rss/WSJcomUSBusiness",
+    "https://feeds.content.dowjones.io/public/rss/RSSMarketsMain",
+    "https://feeds.content.dowjones.io/public/rss/RSSWSJD", // Tech What's New
+    "https://feeds.content.dowjones.io/public/rss/RSSLifestyle",
+    "https://feeds.content.dowjones.io/public/rss/RSSUSnews",
+    "https://feeds.content.dowjones.io/public/rss/socialpoliticsfeed",
+    "https://feeds.content.dowjones.io/public/rss/socialeconomyfeed",
+    "https://feeds.content.dowjones.io/public/rss/RSSArtsCulture",
+    "https://feeds.content.dowjones.io/public/rss/RSSArtsCulture",
+    "https://feeds.content.dowjones.io/public/rss/RSSStyle",
+    "https://feeds.content.dowjones.io/public/rss/rsssportsfeed"
 ]
 var feeds_wsj_sm = [
     // Wall Street Journal
-    "https://feeds.a.dj.com/rss/RSSWorldNews.xml",
+    "https://feeds.content.dowjones.io/public/rss/RSSWorldNews",
 ]
 
 var feeds_latimes = [
@@ -196,14 +203,17 @@ var feeds_bbc_sm = [
     "http://feeds.bbci.co.uk/news/rss.xml",
 ]
 
-var feeds_patch = [
-    // Patch
-    "https://patch.com/feeds/aol/massachusetts/boston",
-    "https://patch.com/feeds/aol/massachusetts/somerville",
-    "https://patch.com/feeds/aol/massachusetts/cambridge",
-    "https://patch.com/feeds/aol/massachusetts/arlington",
-    "https://patch.com/feeds/aol/massachusetts/lexington",
+var feeds_politico = [
+    "http://rss.politico.com/congress.xml",
+    "http://rss.politico.com/healthcare.xml",
+    "http://rss.politico.com/defense.xml",
+    "http://rss.politico.com/economy.xml",
+    "http://rss.politico.com/energy.xml",
+    "https://rss.politico.com/politics-news.xml"
 ]
+var feeds_politico_sm = [
+    "https://rss.politico.com/politics-news.xml"
+]    
 
 var feeds_slate = [
     // Slate
@@ -323,7 +333,7 @@ var feeds_lawfare = [
         "https://www.lawfaremedia.org/feeds/cybersecurity-tech",
         "https://www.lawfaremedia.org/feeds/democracy-elections",
         "https://www.lawfaremedia.org/feeds/executive-branch",
-        //"https://www.lawfaremedia.org/feeds/foreign-relations-international-law", Running into erros
+        "https://www.lawfaremedia.org/feeds/foreign-relations-international-law", // Was running into erros
         "https://www.lawfaremedia.org/feeds/intelligence",
         "https://www.lawfaremedia.org/feeds/lawfare-news",
         "https://www.lawfaremedia.org/feeds/states-localities",
@@ -361,13 +371,6 @@ var feeds_lexblog_sm = [
     "https://www.lexblog.com/feed/",
 ]
 
-
-var feeds_hacker = [
-    // Hacker News
-    "https://hnrss.org/best",
-]
-
-
 var feeds_arxiv = [
     // arXiv
     "https://rss.arxiv.org/rss/cs.LG", // machine learning
@@ -379,6 +382,21 @@ var feeds_arxiv_sm = [
 ]
 
 
+var feeds_hacker = [
+    // Hacker News
+    "https://hnrss.org/best",
+]
+
+
+var feeds_patch = [
+    // Patch
+    "https://patch.com/feeds/aol/massachusetts/boston",
+    "https://patch.com/feeds/aol/massachusetts/somerville",
+    "https://patch.com/feeds/aol/massachusetts/cambridge",
+    "https://patch.com/feeds/aol/massachusetts/arlington",
+    "https://patch.com/feeds/aol/massachusetts/lexington",
+]
+
 var feeds_arlington = [
     // Your Arlington
     "https://yourarlington.com/feed/",
@@ -389,7 +407,6 @@ var feeds_malawyers = [
     // MA Lawyers Weekly
     "https://masslawyersweekly.com/feed/",
 ]
-
 
 var feeds_long_list = [
 
@@ -430,6 +447,9 @@ var feeds_long_list = [
     // Pluralistic
     "https://pluralistic.net/feed/",
 
+    // Anil Dash
+    "https://www.anildash.com/feed.xml",
+
     // Fix the News
     "https://fixthenews.com/feed/",
 
@@ -460,15 +480,17 @@ var feeds_long_list = [
     "https://www.technologyreview.com/feed/",
     
     // The Gradient
-    "https://thegradient.pub/rss/",   
+    //"https://thegradient.pub/rss/",   // silent
 
+    // Tim Harford
+    "https://timharford.com/feed",
 
 
     // Techcrunch
     "https://techcrunch.com/feed/",
 
     // The Information
-    //"https://www.theinformation.com/feed",
+    "https://www.theinformation.com/feed",
     
     // The Verge
     "https://www.theverge.com/rss/index.xml",
@@ -499,7 +521,10 @@ var feeds_long_list = [
 
     // Lit hub
     "https://lithub.com/feed/",
-
+    
+    //Chronical of Higher Ed
+    "https://www.chronicle.com/index.atom",
+    
 
     // 3blue1brown
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", 
@@ -509,6 +534,12 @@ var feeds_long_list = [
     
     // Veritasium 
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA", 
+
+    // Hank Green
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCOT2iLov0V7Re7ku_3UBtcQ",
+
+    // Elle Cordova
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCz4nLZcOvXBhLZ9Da23Z7LQ",
     
 
     // SCOTUS Blog
@@ -535,7 +566,8 @@ var feeds_long_list = [
     // EFF Updates
     "https://www.eff.org/rss/updates.xml",
 
-
+    // Legal Tech Monitor
+    "https://www.legaltechmonitor.com/feed",
 
     // Suffolk LIT Lab
     "https://suffolklitlab.org/feed/",
@@ -560,7 +592,6 @@ var feeds_long_list = [
     
     // Librarian of Things
     "https://librarian.aedileworks.com/feed/",
-    
 
 
     // Astronomy Picture of the Day
@@ -573,13 +604,13 @@ var feeds_long_list = [
     "https://spacenews.com/feed/",
     
     // Clarksworld
-    //"https://clarkesworldmagazine.com/feed/",
+    "https://clarkesworldmagazine.com/feed/",
     
     // Lightspeed
-    //"https://www.lightspeedmagazine.com/rss-2/",
+    "https://www.lightspeedmagazine.com/rss-2/",
     
     // Escape Pod
-    //"https://escapepod.org/feed/podcast/",
+    "https://escapepod.org/feed/podcast/",
     
     // Tor (Reactor)
     "https://reactormag.com/feed",   
@@ -597,7 +628,7 @@ var default_feeds = feeds_long_list
 .concat(feeds_economist_sm)
 .concat(feeds_guardian_sm)
 .concat(feeds_bbc_sm)
-//.concat(feeds_patch_sm)
+.concat(feeds_politico_sm)
 .concat(feeds_slate_sm)
 .concat(feeds_rollingstone_sm)
 .concat(feeds_arstechnica_sm)
@@ -605,8 +636,9 @@ var default_feeds = feeds_long_list
 .concat(feeds_phys_sm)
 .concat(feeds_wired_sm)
 .concat(feeds_aeon_sm)
-//.concat(feeds_lawfare_sm)
+.concat(feeds_lawfare_sm)
 .concat(feeds_lexblog_sm)
+//.concat(feeds_patch_sm)
 //.concat(feeds_arxiv_sm)
 ;
 
@@ -621,7 +653,7 @@ var feeds_long_list = feeds_long_list
 .concat(feeds_economist)
 .concat(feeds_guardian)
 .concat(feeds_bbc)
-.concat(feeds_patch)
+.concat(feeds_politico)
 .concat(feeds_slate)
 .concat(feeds_rollingstone)
 .concat(feeds_arstechnica)
@@ -629,10 +661,11 @@ var feeds_long_list = feeds_long_list
 .concat(feeds_phys)
 .concat(feeds_wired)
 .concat(feeds_aeon)
-//.concat(feeds_lawfare)
+.concat(feeds_lawfare)
 .concat(feeds_lexblog)
+.concat(feeds_patch)
+//.concat(feeds_arxiv)
 .concat(feeds_hacker)
-.concat(feeds_arxiv)
 .concat(feeds_arlington)
 .concat(feeds_malawyers)
 ;
