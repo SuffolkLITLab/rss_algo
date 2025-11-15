@@ -659,6 +659,7 @@ var default_feeds = feeds_long_list
 .concat(feeds_lawfare_sm)
 .concat(feeds_lexblog_sm)
 //.concat(feeds_arxiv_sm)
+//.concat(feeds_hacker)
 //.concat(feeds_patch_sm)
 ;
 
@@ -683,6 +684,7 @@ var feeds_long_list = feeds_long_list
 .concat(feeds_aeon)
 .concat(feeds_lawfare)
 .concat(feeds_lexblog)
+
 .concat(feeds_arxiv)
 .concat(feeds_hacker)
 .concat(feeds_patch)
