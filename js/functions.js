@@ -2588,7 +2588,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function regex_search(newSearch) {
 
-        window.history.pushState({}, "", document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch));
+        window.history.replaceState({}, "", document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch));            
         
         document.getElementById('unread-count').style.display = "none";
         document.getElementById('read-count').style.display = "none";
@@ -3091,8 +3091,7 @@ async function run_llm() {
 
         puzzle_html +=  `</p><iframe style="height: 90vh; width: 100%;" src="${puzzles[Object.keys(puzzles)[j]]}" frameborder="0" allowfullscreen="true" allowtransparency="true" allow="clipboard-write *"></iframe>`
 
-
-        window.history.pushState({}, "", document.location.href.split("?")[0]+"?crossword="+Object.keys(puzzles)[j]);
+        window.history.replaceState({}, "", document.location.href.split("?")[0]+"?crossword="+Object.keys(puzzles)[j]);
         
         return puzzle_html
     }
@@ -3128,10 +3127,11 @@ async function run_llm() {
                 if (savedWeather){
                     getUserWeather();
                 } 
-            } else if (data_dump) {         
-                window.location.reload();  
+            } else if (data_dump) {      
+                //window.location.reload();  
+                window.location.replace("document.URL");
             } else {
-                window.history.pushState({}, '',  document.location.href.split('?')[0]);
+                window.history.replaceState({}, '',  document.location.href.split('?')[0]);
                 loadNews(true);
                 updateItemCount();
                 if (savedWeather){
@@ -3617,7 +3617,8 @@ async function save_gists_data(silent=false) {
     }
 
     if (!silent) {
-        window.location.reload();
+        //window.location.reload();
+        window.location.replace(document.URL);
     }
 }
 
@@ -3837,6 +3838,7 @@ function sync_and_refresh(){
     document.getElementById('news-feed').style.display = 'none';
     document.getElementById('mark-all').style.display = 'none';
     document.getElementById('refresh-all').style.display = 'none';
+
     window.history.pushState({}, '',  document.location.href.split('?')[0]);
 
     document.getElementById("read-count").textContent = `Seen: ?`;
@@ -3850,7 +3852,9 @@ function sync_and_refresh(){
         notdirty();
         document.getElementById('loading').innerHTML = '&nbsp;One moment . . .&nbsp;';
         document.getElementById('loading').style.display = 'block';
+        //window.location.href = "."
         window.location.reload();
+        //window.location.replace(document.URL);
     }
 }
 
@@ -3862,7 +3866,6 @@ function update_feed_errors() {
         })
     }
 }
-
 
 function remove_feed(feedTitle,feedUrl) {
     let text = "Choose OK to remove: "+feedTitle+"\n\n"+feedUrl+"\n\nChoose Cancel to keep things as they are. Note: If you remove this feed, old posts will remain visable in your timeline, but we will not fetch new ones.";
@@ -4089,6 +4092,8 @@ function get_cached_logo(link,mediaThumbnail) {
         mediaThumbnail = "images/cached_logos/chronicle.png"
     } else if (link.includes("timharford.com")) {
         mediaThumbnail = "images/cached_logos/timharford.png"
+    } else if (link.includes("legaltechmonitor.com")) {
+        mediaThumbnail = "images/cached_logos/legal_tech_mon.png"
     }
 
     return mediaThumbnail
@@ -4188,6 +4193,13 @@ for (const m of mutations) {
 });
 domObserver.observe(document.documentElement, { childList: true, subtree: true });
 
+
+window.addEventListener('popstate', function(event) {
+  // This function runs when the back/forward button is clicked.
+  // The browser changes the URL back to the previous one before firing popstate.
+  // To force a full page reload for the URL now in the address bar, call reload().
+  window.location.reload();
+});
 
 //delete upTFIDF["the-new-yorker"];localStorage.setItem("upTFIDF", JSON.stringify(upTFIDF));
 
