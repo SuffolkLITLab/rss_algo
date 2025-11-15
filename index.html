@@ -46,10 +46,13 @@
             <div style="float:left;"><h1 class="my-1">The Finite Scroll</h1></div>
             <div style="float:left;width:100%;padding-top: 8px;">
                 <p>
-                    <span id="description_more">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader <a href="javascript:void();" onClick="document.getElementById('description_more').style.display = 'none';document.getElementById('description').style.display = 'block';">. . .</a></span> 
-                    <span id="description" style="display: none;">An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader built at the <a href="https://suffolklitlab.org/" target="_blank">Suffolk LIT Lab</a>. Use 👍 &amp; 👎 + <i>Seen</i> or <i>Open</i> to feed the algo. Refresh this page to update card order. By default, searches, votes, &amp; settings don't leave your device. Customize your algo and timeline in <i>Settings</i>. Curate sources in <i>Feeds</i>. Add feeds with the blue <i>plus</i> button. For project updates, visit <a href="https://github.com/SuffolkLITLab/the_finite_scroll" target="_blank">our GitHub page</a>.
-
-                    [<a href="javascript:void();" onClick="document.getElementById('description').style.display = 'none';document.getElementById('description_more').style.display = 'block';">shrink description</a>]
+                    <span id="description_more">&nbsp;&nbsp;&nbsp;&nbsp;An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader... <a href="javascript:void('');" onClick="document.getElementById('description_more').style.display = 'none';document.getElementById('description').style.display = 'block';" style="font-size:14px;text-transform: uppercase;">Show More</a></span> 
+                    <span id="description" style="display: none;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader built at the <a href="https://suffolklitlab.org/" target="_blank">Suffolk LIT Lab</a>. Use 👍 &amp; 👎 + <i>Seen</i> or <i>Open</i> to feed the algo. Refresh this page to update card order. By default, searches, votes, &amp; settings don't leave your device, and no login is required. Customize your algo and timeline in <i>Settings</i>. Curate sources in <i>Feeds</i>. Add feeds with the blue <i>plus</i> button. For project updates, visit <a href="https://github.com/SuffolkLITLab/the_finite_scroll" target="_blank">our GitHub page</a>.
+                        <br>&nbsp;&nbsp;&nbsp;&nbsp;
+                        Consider starting with one of our pre-made feed collections. You can load these in <i>Feeds</i> above. Then over time you can whittle it down and add new feeds as you like. To remove a feed from your collection, click 🚫 in a card's footer. To see other content from that feed before removing it, click on the feeds name in the footer.
+                        <br>&nbsp;&nbsp;&nbsp;&nbsp;To change how many cards appear on your screen, how far back they're pulled from, and how likely you will be to like what you see, explore <i>Settings</i> as the behavior of most features can be customized. 
+                    <a href="javascript:void('');" onClick="document.getElementById('description').style.display = 'none';document.getElementById('description_more').style.display = 'block';" style="font-size:14px;text-transform: uppercase;">Show Less</a>
                     </span>
                 </p>
             </div>
@@ -199,13 +202,13 @@
                 <p>You can use <a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">regular expressions</a> to be confident you don't miss, or alternatively, never see, certain articles. Your input  below will be fed into JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank">RegExp()</a> as a constructor, where the first input is a string and the second is an optional operator. These are fed to <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match" target="_blank">.match()</a>. If you include a regex under <i>Bump Up</i>, any matches to said expression will have 1 added to their score, which normally maxes out at 1, putting them at the top of your feed. Matches to the regex under <i>Mute</i>, however, will be hidden from your timeline. The match is performed against an article's: (1) title; (2) description; (3) feed name; and (3) link.  Note: using the <i>search</i> feature overides these settings as it searches ALL articles. Leave string inputs blank to take no action. </p>
                 <p>Cards that have been bumpped up will include a ⇧ in their footer. <i>Refresh page to see results</i>.</p>
                 <h5>Bump Up</h5>
-                <p>Like Barbie and Openhimer news? Try: <span class="code_highlight">barbie|oppenheimer</span>, <span  class="code_highlight">i</span>. See <a id="search_always" href="javascript:void();">bumpped up content</a></p>
+                <p>Like Barbie and Openhimer news? Try: <span class="code_highlight">barbie|oppenheimer</span>, <span  class="code_highlight">i</span>. See <a id="search_always" href="javascript:void('');">bumpped up content</a></p>
                 <p>
                     <input id="regex_always" value="" oninput="localStorage.regex_always=this.value" style="width: calc(100% - 65px);"> 
                 <input id="regex_always_op" value="" oninput="localStorage.regex_always_op=this.value" style="width:50px" value="i"></p>
 
                 <h5>Mute</h5>
-                <p>Dislike Barbie and Openhimer news? Try: <span class="code_highlight">barbie|oppenheimer</span>, <span class="code_highlight">i</span>. See <a id="search_never" href="javascript:void();">muted content</a></p>
+                <p>Dislike Barbie and Openhimer news? Try: <span class="code_highlight">barbie|oppenheimer</span>, <span class="code_highlight">i</span>. See <a id="search_never" href="javascript:void('');">muted content</a></p>
                 <p>
                     <input id="regex_never" value="" oninput="localStorage.regex_never=this.value" style="width: calc(100% - 65px);">
                 <input id="regex_never_op" value="" oninput="localStorage.regex_never_op=this.value" style="width:50px" value="i"></p>
