@@ -408,6 +408,14 @@ var feeds_malawyers = [
     "https://masslawyersweekly.com/feed/",
 ]
 
+var feeds_comonealthbeacon = [
+    "https://commonwealthbeacon.org/feed/",
+]
+
+var feeds_boston = [
+    "https://www.boston.com/feed/",
+]
+
 var feeds_long_list = [
 
     // PBS News Hour
@@ -435,9 +443,6 @@ var feeds_long_list = [
     "https://themarkup.org/feeds/rss.xml",
     
 
-    // Quanta Magazine
-    "https://api.quantamagazine.org/feed/",
-
     // 404 Media
     "https://www.404media.co/rss",
     
@@ -447,19 +452,32 @@ var feeds_long_list = [
     // Pluralistic
     "https://pluralistic.net/feed/",
 
-    // Anil Dash
-    "https://www.anildash.com/feed.xml",
 
     // Fix the News
     "https://fixthenews.com/feed/",
 
-    // Public Notice
-    //"https://www.publicnotice.co/feed",
+    //Chronical of Higher Ed
+    "https://www.chronicle.com/index.atom",
+    
+    // Quanta Magazine
+    "https://api.quantamagazine.org/feed/",
+
+    // Anil Dash
+    "https://www.anildash.com/feed.xml",
+
+    // Tim Harford
+    "https://timharford.com/feed",
     
     // Media Nation (Dan Kennedy)
     "https://dankennedy.net/feed/",
 
+    // Public Notice
+    //"https://www.publicnotice.co/feed",
 
+
+    
+    // MIT Tech Reviw
+    "https://www.technologyreview.com/feed/",
     
     // XKCD
     "https://xkcd.com/rss.xml",
@@ -472,18 +490,16 @@ var feeds_long_list = [
     
     // Citation Needed
     "https://www.citationneeded.news/rss/",
+
+    // One Usefulthing
+    "https://www.oneusefulthing.org/feed",    
     
     // Platformer
     "https://www.platformer.news/rss/",
 
-    // MIT Tech Reviw
-    "https://www.technologyreview.com/feed/",
-    
     // The Gradient
     //"https://thegradient.pub/rss/",   // silent
 
-    // Tim Harford
-    "https://timharford.com/feed",
 
 
     // Techcrunch
@@ -513,7 +529,7 @@ var feeds_long_list = [
     // ScientificAmerican
     "http://rss.sciam.com/ScientificAmerican-Global",
 
-    // Them Marginalian
+    // The Marginalian
     "https://feeds.feedburner.com/brainpickings/rss",
     
     // McSweeney's 
@@ -521,9 +537,6 @@ var feeds_long_list = [
 
     // Lit hub
     "https://lithub.com/feed/",
-    
-    //Chronical of Higher Ed
-    "https://www.chronicle.com/index.atom",
     
 
     // 3blue1brown
@@ -542,9 +555,21 @@ var feeds_long_list = [
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCz4nLZcOvXBhLZ9Da23Z7LQ",
     
 
+    // Law Dork
+    "https://www.lawdork.com/feed",
+
     // SCOTUS Blog
     "https://www.scotusblog.com/feed/",
+
+    // Thomson Reuters Institute 
+    "https://www.thomsonreuters.com/en-us/posts/feed/",
+
+    // Tech Policy Press
+    "https://techpolicy.press/rss/feed.xml",
     
+    // Above the Law
+    "https://abovethelaw.com/feed/",
+
     // Law Next
     "https://www.lawnext.com/feed",
     
@@ -554,12 +579,6 @@ var feeds_long_list = [
     // ExMachina Newsletter
     "https://buttondown.email/LawyerExMachina/rss",
     
-    // Above the Law
-    "https://abovethelaw.com/feed/",
-    
-    // Law Dork
-    "https://www.lawdork.com/feed",
-
     // Technology and Marketing Blog
     "https://blog.ericgoldman.org/feed",
     
@@ -572,11 +591,11 @@ var feeds_long_list = [
     // Suffolk LIT Lab
     "https://suffolklitlab.org/feed/",
 
-    // One Usefulthing
-    "https://www.oneusefulthing.org/feed",
-    
     // Artifical Lawyer
     "https://www.artificiallawyer.com/feed/",
+
+    // Alt-counsel
+    "https://www.alt-counsel.com/rss/",
     
     // JOTWELL
     "https://feedpress.me/jotwell",
@@ -594,6 +613,7 @@ var feeds_long_list = [
     "https://librarian.aedileworks.com/feed/",
 
 
+    
     // Astronomy Picture of the Day
     "https://apod.pixelweben.de/rss_en.xml",
     
@@ -638,8 +658,8 @@ var default_feeds = feeds_long_list
 .concat(feeds_aeon_sm)
 .concat(feeds_lawfare_sm)
 .concat(feeds_lexblog_sm)
-//.concat(feeds_patch_sm)
 //.concat(feeds_arxiv_sm)
+//.concat(feeds_patch_sm)
 ;
 
 var feeds_long_list = feeds_long_list
@@ -663,11 +683,13 @@ var feeds_long_list = feeds_long_list
 .concat(feeds_aeon)
 .concat(feeds_lawfare)
 .concat(feeds_lexblog)
-.concat(feeds_patch)
-//.concat(feeds_arxiv)
+.concat(feeds_arxiv)
 .concat(feeds_hacker)
+.concat(feeds_patch)
 .concat(feeds_arlington)
 .concat(feeds_malawyers)
+.concat(feeds_comonealthbeacon)
+.concat(feeds_boston)
 ;
 
 // localStorage.upTFIDF
