@@ -459,7 +459,7 @@ var feeds_blogs = [
     "https://heathercoxrichardson.substack.com/feed",
 
     // Public Notice
-    //"https://www.publicnotice.co/feed",
+    "https://www.publicnotice.co/feed",
 ]
 
 var feeds_legal_tech = [
@@ -529,6 +529,9 @@ var feeds_scifi = [
     
     // Tor (Reactor)
     "https://reactormag.com/feed",   
+
+    // Star Trek
+    "https://screenrant\.com/feed/tag/star-trek/",
 ]
 
 var feeds_patch = [
@@ -557,6 +560,10 @@ var feeds_comonealthbeacon = [
 
 var feeds_boston = [
     "https://www.boston.com/feed/",
+]
+
+var feeds_cloudcroft = [
+    "https://www.cloudcroftreader.com/feed",
 ]
 
 var feeds_long_list = [
@@ -742,6 +749,7 @@ var feeds_long_list = feeds_long_list
 .concat(feeds_malawyers)
 .concat(feeds_comonealthbeacon)
 .concat(feeds_boston)
+.concat(feeds_cloudcroft)
 ;
 
 // localStorage.upTFIDF
