@@ -1331,7 +1331,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                     
                                     if (Object.is(mediaThumbnail, null) || mediaThumbnail.includes("favicon")) {
 
-                                        mediaThumbnail =  get_cached_logo(link,mediaThumbnail)   
+                                        mediaThumbnail =  get_cached_logo(link,mediaThumbnail,feedUrl)   
 
                                         //} else if (link.includes("")) {
                                         //    mediaThumbnail = "images/cached_logos/"
@@ -4012,7 +4012,7 @@ function hide_msg() {
     localStorage.setItem("msgText", msg_text);        
 }
 
-function get_cached_logo(link,mediaThumbnail) {
+function get_cached_logo(link,mediaThumbnail,source_feed="") {
 
     if(link.includes("washingtonpost.com")){
         mediaThumbnail =  "images/cached_logos/wapo.webp";
@@ -4052,8 +4052,6 @@ function get_cached_logo(link,mediaThumbnail) {
         mediaThumbnail =  "images/cached_logos/escapepod.jpg";
     } else if (link.includes("rollingstone.com")) {
         mediaThumbnail =  "images/cached_logos/rollingstone.png";
-   // } else if (feedTitle.trim().startsWith("Hacker News")) {
-   //     mediaThumbnail =  "images/cached_logos/hackernews.jpeg";
     } else if (link.includes("ssrn.com")) {
         mediaThumbnail = "images/cached_logos/ssrn.png"
     } else if (link.includes("arstechnica.com")) {
@@ -4102,8 +4100,9 @@ function get_cached_logo(link,mediaThumbnail) {
         mediaThumbnail = "images/cached_logos/heathercoxrichardson.png"
     } else if (link.includes("theconversation.com")) {
         mediaThumbnail = "images/cached_logos/theconversation.png"
+    } else if (source_feed.includes("hnrss.org")) {
+         mediaThumbnail =  "images/cached_logos/hackernews.jpeg";
     }
-    
     return mediaThumbnail
 }
 
