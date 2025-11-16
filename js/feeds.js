@@ -431,6 +431,9 @@ var feeds_blogs = [
     
     // NonProfit Techy
     "https://www.nonprofittechy.com/feed/",
+
+    // Sarah Glassmeyer
+    "https://sarahglassmeyer.com/?feed=rss2",
         
     // Librarian of Things
     "https://librarian.aedileworks.com/feed/",

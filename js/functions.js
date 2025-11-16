@@ -1,4 +1,4 @@
-var version = "v1.0.0";
+var version = "v1.0.1";
 
 var msg_text = ``
 
@@ -3129,7 +3129,7 @@ async function run_llm() {
                 } 
             } else if (data_dump) {      
                 //window.location.reload();  
-                window.location.replace("document.URL");
+                window.location.replace(document.URL);
             } else {
                 window.history.replaceState({}, '',  document.location.href.split('?')[0]);
                 loadNews(true);
