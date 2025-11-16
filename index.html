@@ -51,8 +51,8 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;An open source client-side algorithmically-driven <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS</a> reader built at the <a href="https://suffolklitlab.org/" target="_blank">Suffolk LIT Lab</a>. Use 👍 &amp; 👎 + <i>Seen</i> or <i>Open</i> to feed the algo. Refresh this page to update card order. 
                         <br>&nbsp;&nbsp;&nbsp;&nbsp;By default, searches, votes, &amp; settings don't leave your device, and no login is required. Customize your algo and timeline in <i>Settings</i>. Curate sources in <i>Feeds</i>. Add feeds with the blue <i>plus</i> button. For project updates, visit <a href="https://github.com/SuffolkLITLab/the_finite_scroll" target="_blank">our GitHub page</a>.
                         <br>&nbsp;&nbsp;&nbsp;&nbsp;
-                        Consider starting with one of our pre-made feed collections. You can load these in <i>Feeds</i> above. Then over time you can whittle it down and add new feeds as you like. To remove a feed from your collection, click 🚫 in a card's footer. To see other content from that feed before removing it, click on the feeds name in the footer.
-                        <br>&nbsp;&nbsp;&nbsp;&nbsp;To change how many cards appear on your screen, how far back they're pulled from, and how likely you will be to like what you see, explore <i>Settings</i> as the behavior of most features can be customized. 
+                        Consider starting with one of our pre-made feed collections. You can select a pre-made feed in <i>Feeds</i> above, or just <a href="./?feeds=feeds_us_fire_hose">load the Fire Hose</a>. Then, over time you can whittle it down and add new feeds as you like. To remove a feed from your collection, click 🚫 in a card's footer. To see other content from that feed before removing it, click on the feed's name in the footer.
+                        <br>&nbsp;&nbsp;&nbsp;&nbsp;You can customize most features in <i>Settings</i>. To change how many cards appear on your screen, how far back they're pulled from, and how likely you will be to like what you see, just move a slider.
                     <a href="javascript:void('');" onClick="document.getElementById('description').style.display = 'none';document.getElementById('description_more').style.display = 'block';" style="font-size:14px;text-transform: uppercase;">Show Less</a>
                     </span>
                 </p>
@@ -218,7 +218,7 @@
             <div class="row" style="margin-bottom: 10px;">
                 <h4>Flag with a Regular Expression <a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a><a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a></h4>
                 <p>To draw attention to content using a regular expression without bumping or muting, add a RegEx below. If an article's (1) title; (2) description; (3) feed name; or (3) link matches this RegEx, a flag will be placed before its title.</p>
-                <p>You can click on the RegEx1 (<a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a>) or RegEx2 (<a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a>) flag to run a search for either.</p>
+                <p>You can click on the RegEx1 (<a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a>) or RegEx2 (<a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a>) flag to run a search for either collection.</p>
                 <p>RegEx to add <a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a> <br>
                 <input id="regex_flag" value="" oninput="localStorage.regex_flag=this.value" style="width: calc(100% - 65px);">
                 <input id="regex_flag_op" value="" oninput="localStorage.regex_flag_op=this.value" style="width:50px" value="i"></p>

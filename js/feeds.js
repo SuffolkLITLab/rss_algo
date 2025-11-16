@@ -506,6 +506,15 @@ var feeds_youtube = [
 
     // Elle Cordova
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCz4nLZcOvXBhLZ9Da23Z7LQ",
+
+    // Hannah Fry
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCsX5upzW0Tk2riDY1WB887w",
+
+    // Last Week Tonight
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UC3XTzVzaHQEd30rQbuvCtTQ",
+
+    // LegalEagle
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCpa-Zb0ZcQjTCPP1Dx_1M8Q"
 ]
 
 var feeds_scifi = [
