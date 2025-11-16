@@ -1,4 +1,4 @@
-var version = "v1.0.1";
+var version = "v1.1.0";
 
 var msg_text = ``
 
@@ -2586,9 +2586,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const matching_regex = document.getElementById("matching_regex");
 
-    function regex_search(newSearch) {
+    function regex_search(newSearch,and_this=null) {
 
-        window.history.replaceState({}, "", document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch));            
+        if (and_this){
+            window.history.replaceState({}, "", document.location.href.split("?")[0]+"?regex="+ encodeURIComponent(newSearch)+"&regex2="+ encodeURIComponent(and_this));           
+        } else {
+            window.history.replaceState({}, "", document.location.href.split("?")[0]+"?regex="+ encodeURIComponent(newSearch));   
+        }
         
         document.getElementById('unread-count').style.display = "none";
         document.getElementById('read-count').style.display = "none";
@@ -2605,7 +2609,22 @@ document.addEventListener("DOMContentLoaded", function() {
         saved_articles =  JSON.parse(localStorage.getItem("articles")) || [];
 
         regex = new RegExp(newSearch, "i")
-        matching_regex.innerHTML = `<a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">Regular expression</a> matching results for <span class='code_highlight'>${newSearch}</span>&nbsp;(<a href="${document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch)}" target="_blank">link to search</a>).`;
+
+        regex_html = `<a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">Regular expression</a> matching results for <span class='code_highlight'>${newSearch}</span>&nbsp;`
+        
+        if (and_this){
+            regex_html += `and <span class='code_highlight'>${and_this}</span>&nbsp;`;
+        }
+
+        regex_html += `(<a href="${document.location.href.split("?")[0]+"?regex="+encodeURIComponent(newSearch)}`
+        
+        if (and_this){
+            regex_html += `&regex2=${encodeURIComponent(and_this)}`
+        }
+
+        regex_html += `" target="_blank">link to search</a>).`;
+
+        matching_regex.innerHTML = regex_html
 
         //console.log(regex)        
 
@@ -2632,7 +2651,9 @@ document.addEventListener("DOMContentLoaded", function() {
             testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl + " hasUpvote_is_" + upvotes[articleData.link]  + " hasDownvote_is_" +  downvotes[articleData.link] + " hasFlag1_is_" + has_flag1 + " hasFlag2_is_" + has_flag2
 
             //console.log(" hasUpvote_is_" + articleData.hasUpvote)
-            if (testString.match(regex)) {
+            if (and_this && testString.match(regex) && testString.match(and_this)) {
+                searchResults.push(articleData);
+            } else if (!and_this && testString.match(regex)) {
                 //console.log(articleData)
                 searchResults.push(articleData);
             }
@@ -2675,14 +2696,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const runSearchAlways = document.getElementById("search_always");
     runSearchAlways.addEventListener("click", function() {
-        regex_search(regex_always);
+        regex_search(document.getElementById('regex_always').value);
     });
 
     const runSearchNever = document.getElementById("search_never");
     runSearchNever.addEventListener("click", function() {
-        regex_search(regex_never);
+        regex_search(document.getElementById('regex_never').value);
     });
 
+    const runSearchOverlap = document.getElementById("mute_bump_overlap");
+    runSearchOverlap.addEventListener("click", function() {
+        regex_search(document.getElementById('regex_always').value,document.getElementById('regex_never').value);
+    });
 
     async function openai_call(prompt_text) {
 
@@ -3120,7 +3145,11 @@ async function run_llm() {
         if (crossword == false){
             if (searchParams.has('regex')){
                 document.getElementById('loading').style.display = "none";
-                regex_search(decodeURI(searchParams.get('regex')))
+                if (searchParams.has('regex2')) {
+                    regex_search(searchParams.get('regex'),searchParams.get('regex2'))
+                } else {
+                    regex_search(searchParams.get('regex'))
+                }
                 document.getElementById('upwords').innerHTML = topWords(upTFIDF,downTFIDF);
                 document.getElementById('downwords').innerHTML = topWords(downTFIDF,upTFIDF);  
                 updateItemCount();

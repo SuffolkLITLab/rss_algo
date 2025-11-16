@@ -816,7 +816,7 @@ if (!localStorage.getItem("cooldown")) {
 }
 
 if (!localStorage.getItem("lookback")) {
-    localStorage.setItem("lookback",5);
+    localStorage.setItem("lookback",2);
 }
 
 if (!localStorage.getItem("cardcutoff")) {
