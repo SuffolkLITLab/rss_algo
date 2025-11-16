@@ -4103,7 +4103,6 @@ function get_cached_logo(link,mediaThumbnail) {
     } else if (link.includes("theconversation.com")) {
         mediaThumbnail = "images/cached_logos/theconversation.png"
     }
-theconversation
     
     return mediaThumbnail
 }
