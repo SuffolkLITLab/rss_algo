@@ -35,19 +35,20 @@ var feeds_nyt_sm = [
 var feeds_wapo = [
     // Washington Post
     //"https://www.washingtonpost.com/arcio/rss/",
-    "https://www.washingtonpost.com/arcio/rss/category/politics/?itid=lk_inline_manual_2",
-    "https://www.washingtonpost.com/arcio/rss/category/opinions/?itid=lk_inline_manual_7",
+    "https://www.washingtonpost.com/arcio/rss/category/politics/",
+    "https://www.washingtonpost.com/arcio/rss/category/opinions/",
+    "https://feeds.washingtonpost.com/rss/local",
     "https://www.washingtonpost.com/arcio/rss/category/sports/",
-    "https://feeds.washingtonpost.com/rss/business/technology?itid=lk_inline_manual_31", // National
-    "https://feeds.washingtonpost.com/rss/national?itid=lk_inline_manual_32",
-    "https://feeds.washingtonpost.com/rss/world?itid=lk_inline_manual_36",
-    "https://feeds.washingtonpost.com/rss/business?itid=lk_inline_manual_37",
-    "https://feeds.washingtonpost.com/rss/lifestyle?itid=lk_inline_manual_38",
-    "https://feeds.washingtonpost.com/rss/entertainment?itid=lk_inline_manual_39",
+    "https://feeds.washingtonpost.com/rss/business/technology", 
+    "http://feeds.washingtonpost.com/rss/national",
+    "https://feeds.washingtonpost.com/rss/world",
+    "http://feeds.washingtonpost.com/rss/business",
+    "https://feeds.washingtonpost.com/rss/lifestyle",
+    "http://feeds.washingtonpost.com/rss/entertainment",
 ]
 var feeds_wapo_sm = [
     // Washington Post
-    "https://www.washingtonpost.com/arcio/rss/",
+    "http://feeds.washingtonpost.com/rss/national", // the full feed is too much
 ]
 
 var feeds_wsj = [
@@ -167,6 +168,18 @@ var feeds_economist = [
 var feeds_economist_sm = [
     // The Economist
     "https://www.economist.com/leaders/rss.xml",
+]
+
+var feeds_ft = [
+    "https://www.ft.com/?format=rss",
+    "https://www.ft.com/world/?format=rss",
+    "https://www.ft.com/us/?format=rss",
+    "https://www.ft.com/technology?format=rss",
+    "https://www.ft.com/opinion?format=rss",
+    "https://www.ft.com/life-arts?format=rss",
+]
+var feeds_ft_sm = [
+    "https://www.ft.com/?format=rss",
 ]
 
 var feeds_guardian = [
@@ -351,16 +364,15 @@ var feeds_lexblog = [
     //"https://www.lexblog.com/feed/",
         "https://www.lexblog.com/access-to-justice/feed/",
         "https://www.lexblog.com/technology/feed/",
-            //"https://www.lexblog.com/author/dmk/feed/",
-            //"https://www.denniskennedy.com/feed/",
-            //"https://www.lexblog.com/author/greglambert/feed/",
-            //"https://www.geeklawblog.com/feed",
-            //"https://www.lexblog.com/author/jogrady/feed/",
-            //"https://www.deweybstrategic.com/feed",
-            //"https://www.lexblog.com/author/sembry244/feed/",
-            //"https://www.techlawcrossroads.com/feed/",
-            // Lexi Chapman, Kelsey Fayer & Gregory P. Szewczyk
-            //"https://www.cyberadviserblog.com/feed/",
+            "https://www.lexblog.com/author/dmk/feed/",
+            "https://www.denniskennedy.com/feed/",
+            "https://www.lexblog.com/author/greglambert/feed/",
+            "https://www.geeklawblog.com/feed",
+            "https://www.lexblog.com/author/jogrady/feed/",
+            "https://www.deweybstrategic.com/feed",
+            "https://www.lexblog.com/author/sembry244/feed/",
+            "https://www.techlawcrossroads.com/feed/",
+            "https://www.cyberadviserblog.com/feed/",
         "https://www.lexblog.com/ethics-professional-responsibility/feed/",
         "https://www.lexblog.com/law-library/feed/",
         "https://www.lexblog.com/government/feed/",
@@ -387,6 +399,125 @@ var feeds_hacker = [
     "https://hnrss.org/best",
 ]
 
+var feeds_blogs = [
+
+    // Pluralistic
+    "https://pluralistic.net/feed/",
+
+    // Schneier on Security
+    "https://www.schneier.com/feed/",
+
+    // Anil Dash
+    "https://www.anildash.com/feed.xml",
+
+    // Civic Innovations 
+    "https://civic.io/feed/",
+
+
+    // JOTWELL
+    "https://feedpress.me/jotwell",
+    
+    // Technology and Marketing Blog
+    "https://blog.ericgoldman.org/feed",
+
+    // AI Law Librarians
+    "https://www.ailawlibrarians.com/feed/",
+    
+    // ExMachina Newsletter
+    "https://buttondown.email/LawyerExMachina/rss",    
+
+    // Alt-counsel
+    "https://www.alt-counsel.com/rss/",
+    
+    // NonProfit Techy
+    "https://www.nonprofittechy.com/feed/",
+        
+    // Librarian of Things
+    "https://librarian.aedileworks.com/feed/",
+
+
+    // Platformer
+    "https://www.platformer.news/rss/",
+
+    // Simon Willison's Newsletter
+    "https://simonw.substack.com/feed/",
+
+    // One Usefulthing
+    "https://www.oneusefulthing.org/feed",    
+
+    // Tim Harford
+    "https://timharford.com/feed",
+
+
+    // Bad Astornomy 
+    "https://rss.beehiiv.com/feeds/t0Uscv6JDz.xml",
+
+    // Letters from an American
+    "https://heathercoxrichardson.substack.com/feed",
+
+    // Public Notice
+    //"https://www.publicnotice.co/feed",
+]
+
+var feeds_legal_tech = [
+    // Tech Policy Press
+    "https://techpolicy.press/rss/feed.xml",
+
+    // Law Next
+    "https://www.lawnext.com/feed",
+
+    // Artifical Lawyer
+    "https://www.artificiallawyer.com/feed/",
+
+    // Legal Tech Monitor
+    "https://www.legaltechmonitor.com/feed",
+
+    // Thomson Reuters Institute 
+    "https://www.thomsonreuters.com/en-us/posts/feed/",
+    
+    // Above the Law
+    "https://abovethelaw.com/feed/",
+]
+
+var feeds_math_sci = [
+    // Quanta Magazine
+    "https://api.quantamagazine.org/feed/",
+
+    // XKCD
+    "https://xkcd.com/rss.xml",
+]
+
+
+var feeds_youtube = [
+    // 3blue1brown
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", 
+
+    // Cleo Abram
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UC415bOPUcGSamy543abLmRA", 
+    
+    // Veritasium 
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA", 
+
+    // Hank Green
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCOT2iLov0V7Re7ku_3UBtcQ",
+
+    // Elle Cordova
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCz4nLZcOvXBhLZ9Da23Z7LQ",
+]
+
+var feeds_scifi = [
+    // Clarksworld
+    "https://clarkesworldmagazine.com/feed/",
+    
+    // Lightspeed
+    "https://www.lightspeedmagazine.com/rss-2/",
+    
+    // Escape Pod
+    "https://escapepod.org/feed/podcast/",
+    
+    // Tor (Reactor)
+    "https://reactormag.com/feed",   
+]
 
 var feeds_patch = [
     // Patch
@@ -436,12 +567,14 @@ var feeds_long_list = [
     // Vox
     "https://www.vox.com/rss/index.xml",
     
+    //Chronical of Higher Ed
+    "https://www.chronicle.com/index.atom",
+    
     // ProPublica
     "https://www.propublica.org/feeds/propublica/main",
     
     // The Markup
     "https://themarkup.org/feeds/rss.xml",
-    
 
     // 404 Media
     "https://www.404media.co/rss",
@@ -449,54 +582,23 @@ var feeds_long_list = [
     // Techdirt
     "https://www.techdirt.com/feed/",
 
-    // Pluralistic
-    "https://pluralistic.net/feed/",
 
 
     // Fix the News
     "https://fixthenews.com/feed/",
-
-    //Chronical of Higher Ed
-    "https://www.chronicle.com/index.atom",
-    
-    // Quanta Magazine
-    "https://api.quantamagazine.org/feed/",
-
-    // Anil Dash
-    "https://www.anildash.com/feed.xml",
-
-    // Tim Harford
-    "https://timharford.com/feed",
     
     // Media Nation (Dan Kennedy)
     "https://dankennedy.net/feed/",
 
-    // Public Notice
-    //"https://www.publicnotice.co/feed",
 
-
-    
     // MIT Tech Reviw
     "https://www.technologyreview.com/feed/",
     
-    // XKCD
-    "https://xkcd.com/rss.xml",
-
-    // Simon Willison's Newsletter
-    "https://simonw.substack.com/feed/",
-
-    // Schneier on Security
-    "https://www.schneier.com/feed/",
     
     // Citation Needed
     "https://www.citationneeded.news/rss/",
 
-    // One Usefulthing
-    "https://www.oneusefulthing.org/feed",    
     
-    // Platformer
-    "https://www.platformer.news/rss/",
-
     // The Gradient
     //"https://thegradient.pub/rss/",   // silent
 
@@ -539,102 +641,31 @@ var feeds_long_list = [
     "https://lithub.com/feed/",
     
 
-    // 3blue1brown
-    "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", 
-
-    // Cleo Abram
-    "https://www.youtube.com/feeds/videos.xml?channel_id=UC415bOPUcGSamy543abLmRA", 
-    
-    // Veritasium 
-    "https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA", 
-
-    // Hank Green
-    "https://www.youtube.com/feeds/videos.xml?channel_id=UCOT2iLov0V7Re7ku_3UBtcQ",
-
-    // Elle Cordova
-    "https://www.youtube.com/feeds/videos.xml?channel_id=UCz4nLZcOvXBhLZ9Da23Z7LQ",
-    
-
     // Law Dork
     "https://www.lawdork.com/feed",
 
     // SCOTUS Blog
     "https://www.scotusblog.com/feed/",
 
-    // Thomson Reuters Institute 
-    "https://www.thomsonreuters.com/en-us/posts/feed/",
-
-    // Tech Policy Press
-    "https://techpolicy.press/rss/feed.xml",
-    
-    // Above the Law
-    "https://abovethelaw.com/feed/",
-
-    // Law Next
-    "https://www.lawnext.com/feed",
-    
-    // AI Law Librarians
-    "https://www.ailawlibrarians.com/feed/",
-    
-    // ExMachina Newsletter
-    "https://buttondown.email/LawyerExMachina/rss",
-    
-    // Technology and Marketing Blog
-    "https://blog.ericgoldman.org/feed",
-    
+        
     // EFF Updates
     "https://www.eff.org/rss/updates.xml",
-
-    // Legal Tech Monitor
-    "https://www.legaltechmonitor.com/feed",
 
     // Suffolk LIT Lab
     "https://suffolklitlab.org/feed/",
 
-    // Artifical Lawyer
-    "https://www.artificiallawyer.com/feed/",
 
-    // Alt-counsel
-    "https://www.alt-counsel.com/rss/",
-    
-    // JOTWELL
-    "https://feedpress.me/jotwell",
-    
     // Sadly Not Havoc Dinosaur
     "https://sadlynothavocdinosaur.com/feed.xml",
-    
-    // NonProfit Techy
-    "https://www.nonprofittechy.com/feed/",
-        
-    // Civic Innovations 
-    "https://civic.io/feed/",
-    
-    // Librarian of Things
-    "https://librarian.aedileworks.com/feed/",
-
 
     
     // Astronomy Picture of the Day
     "https://apod.pixelweben.de/rss_en.xml",
     
-    // Bad Astornomy 
-    "https://rss.beehiiv.com/feeds/t0Uscv6JDz.xml",
     
     // Space News
     "https://spacenews.com/feed/",
     
-    // Clarksworld
-    "https://clarkesworldmagazine.com/feed/",
-    
-    // Lightspeed
-    "https://www.lightspeedmagazine.com/rss-2/",
-    
-    // Escape Pod
-    "https://escapepod.org/feed/podcast/",
-    
-    // Tor (Reactor)
-    "https://reactormag.com/feed",   
-
 ]
 
 var default_feeds = feeds_long_list
@@ -646,6 +677,7 @@ var default_feeds = feeds_long_list
 .concat(feeds_npr_sm)
 .concat(feeds_wgbh_sm)
 .concat(feeds_economist_sm)
+.concat(feeds_ft_sm)
 .concat(feeds_guardian_sm)
 .concat(feeds_bbc_sm)
 .concat(feeds_politico_sm)
@@ -672,6 +704,7 @@ var feeds_long_list = feeds_long_list
 .concat(feeds_npr)
 .concat(feeds_wgbh)
 .concat(feeds_economist)
+.concat(feeds_ft)
 .concat(feeds_guardian)
 .concat(feeds_bbc)
 .concat(feeds_politico)
@@ -687,6 +720,11 @@ var feeds_long_list = feeds_long_list
 
 .concat(feeds_arxiv)
 .concat(feeds_hacker)
+.concat(feeds_blogs)
+.concat(feeds_legal_tech)
+.concat(feeds_youtube)
+.concat(feeds_math_sci)
+.concat(feeds_scifi)
 .concat(feeds_patch)
 .concat(feeds_arlington)
 .concat(feeds_malawyers)

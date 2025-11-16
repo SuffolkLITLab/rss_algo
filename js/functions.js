@@ -4096,8 +4096,13 @@ function get_cached_logo(link,mediaThumbnail) {
         mediaThumbnail = "images/cached_logos/legal_tech_mon.png"
     } else if (link.includes("theinformation.com")) {
         mediaThumbnail = "images/cached_logos/theinformation.png"
+    } else if (link.includes("anildash.com")) {
+        mediaThumbnail = "images/cached_logos/anildash.png"
+    } else if (link.includes("heathercoxrichardson")) {
+        mediaThumbnail = "images/cached_logos/heathercoxrichardson.png"
     }
 
+    
     return mediaThumbnail
 }
 
