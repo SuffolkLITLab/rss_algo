@@ -835,7 +835,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const simcutValueElement = document.getElementById("sim-cutoff-value");
     
     // Retrieve lookback value from localStorage (if available)
-    decluter_cut = localStorage.getItem("decluter_cut") || 1;
+    decluter_cut = localStorage.getItem("decluter_cut") || 0.6;
     if (decluter_cut) {
         simcutSlider.value = decluter_cut;
         simcutValueElement.textContent = decluter_cut;
