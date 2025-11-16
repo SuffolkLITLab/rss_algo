@@ -2193,7 +2193,7 @@ document.addEventListener("DOMContentLoaded", function() {
         score = up_score - down_score*savednegativity;
 
         if (match==1) {
-            score = score + 1;
+            score = score + 2;
         }
 
         //console.log(score)
