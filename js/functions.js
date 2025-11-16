@@ -4100,8 +4100,10 @@ function get_cached_logo(link,mediaThumbnail) {
         mediaThumbnail = "images/cached_logos/anildash.png"
     } else if (link.includes("heathercoxrichardson")) {
         mediaThumbnail = "images/cached_logos/heathercoxrichardson.png"
+    } else if (link.includes("theconversation.com")) {
+        mediaThumbnail = "images/cached_logos/theconversation.png"
     }
-
+theconversation
     
     return mediaThumbnail
 }
