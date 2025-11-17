@@ -132,6 +132,10 @@
 
             <div class="row" style="margin-bottom: 10px;">
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
+                                        <h4>Images</h4>
+                    <p>
+                        <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Exclude preview images and <a href="https://en.wikipedia.org/wiki/Favicon" target="_blank">favicons</a> (i.e., load w/o thumbnails and site icons). <i>Refresh page to see results</i>.</label>
+                    </p>
                     <h4>A Note on Performance</h4>
                     <p>
                         The options you choose here will effect this site's performance. Generally speaking, the more you ask the site to do (e.g., show a lot of cards) the slower it will load, reorder, and the like. Of course, the number of feeds you follow will also influence this. The trick is finding the right balance for you and your device.
@@ -139,17 +143,14 @@
  
                 </div>
                 <div class="col-md-6 col-sm-12" style="overflow:hidden;">
-                    <h4>Images</h4>
-                    <p>
-                        <label for="ignore-images"><input type="checkbox" id="ignore-images" value="1"> Exclude preview images and <a href="https://en.wikipedia.org/wiki/Favicon" target="_blank">favicons</a> (i.e., load w/o thumbnails and site icons). <i>Refresh page to see results</i>.</label>
-                    </p>
+
                     <h4>Weather</h4>
                     <p>
                         <label for="weather-report"><input type="checkbox" id="weather-report" value="1"> Show local weather in degrees <select oninput="localStorage.setItem('temp', this.value)" id="temp" style="width:45px;"><option value="fahrenheit">F</option><option value="celsius">C</option></select> (shares location with <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a>'s weather <a href="https://en.wikipedia.org/wiki/API" target="_blank">API</a>). <i>Refresh page to see results</i>.</label>
                     </p>
                     <h4>Crosswords</h4>
                     <p>
-                        <label for="show-crosswords"><input type="checkbox" id="show-crosswords" value="1"> Display a <a href="./?crossword=2025-11-17">mini</a> (~5X5 crossword) on Mondays at the end of your finite scroll. <i>Refresh page to see results</i>.</label>
+                        <label for="show-crosswords"><input type="checkbox" id="show-crosswords" value="1"> Display a <a href="./?crossword=2025-11-17">mini</a> (~5X5 crossword) on Mondays at the end of your finite scroll. FWIW, you can find old minis by clicking the <i>Minis</i> link in the footer. <i>Refresh page to see results</i>.</label>
                     </p>
                     
                 </div>
@@ -404,7 +405,7 @@
         </div>
 
         <div id="refresh-all">
-            <button id="mark-above-seen" class="btn btn-primary btn-block" style="margin: 15px 0 0;" onClick="sync_and_refresh()">↺ Refresh</button>
+            <button id="mark-above-seen" class="btn btn-primary btn-block" style="margin: 15px 0 0;" onClick="sync_and_refresh()">↺ Refresh Feed</button>
         </div>
 
         <div class="footer">
