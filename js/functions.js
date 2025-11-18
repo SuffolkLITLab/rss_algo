@@ -1,4 +1,4 @@
-var version = "v1.1.0";
+var version = "v1.2.0";
 
 var msg_text = ``
 
@@ -716,13 +716,13 @@ document.addEventListener("DOMContentLoaded", function() {
             if (((n_feeds>=rssFeeds.length) || ((n_feeds==0) && (crunch_numbers))) && regex_flag_2!="") {
                 regex = new RegExp(regex_flag_2, regex_flag_2_op); 
                 if (match_text.match(regex) && !articleContainer.querySelector(".card-title").innerText.includes("🏁")) {
-                    articleContainer.querySelector(".card-title").innerHTML = "<a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a> " + articleContainer.querySelector(".card-title").innerHTML
+                    articleContainer.querySelector(".card-title").innerHTML = "<a href='./?regex=flag2_is_true' style='text-decoration:none;'>🏁</a> " + articleContainer.querySelector(".card-title").innerHTML
                 }
             }
             if (((n_feeds>=rssFeeds.length) || ((n_feeds==0) && (crunch_numbers))) && regex_flag!="") {
                 regex = new RegExp(regex_flag, regex_flag_op); 
                 if (match_text.match(regex) && !articleContainer.querySelector(".card-title").innerText.includes("🚩")) {
-                    articleContainer.querySelector(".card-title").innerHTML = "<a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a> " + articleContainer.querySelector(".card-title").innerHTML
+                    articleContainer.querySelector(".card-title").innerHTML = "<a href='./?regex=has_flag1_is_true' style='text-decoration:none;'>🚩</a> " + articleContainer.querySelector(".card-title").innerHTML
                 }
             }
 
@@ -2636,21 +2636,28 @@ document.addEventListener("DOMContentLoaded", function() {
             if (regex_flag_2!="") {
                 flag_regex = new RegExp(regex_flag_2, regex_flag_2_op); 
                 if (match_text.match(flag_regex) && !articleData.title.includes("🏁")) {
-                    articleData.title = "<a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a> " + articleData.title;
+                    articleData.title = "<a href='./?regex=flag2_is_true' style='text-decoration:none;'>🏁</a> " + articleData.title;
                     has_flag2 = true;
                 }
             }
             if (regex_flag!="") {
                 flag_regex = new RegExp(regex_flag, regex_flag_op); 
                 if (match_text.match(flag_regex) && !articleData.title.includes("🚩")) {
-                    articleData.title = "<a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a> " + articleData.title;
+                    articleData.title = "<a href='./?regex=has_flag1_is_true' style='text-decoration:none;'>🚩</a> " + articleData.title;
                     has_flag1 = false;
                 }
             }
 
-            testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl + " hasUpvote_is_" + upvotes[articleData.link]  + " hasDownvote_is_" +  downvotes[articleData.link] + " hasFlag1_is_" + has_flag1 + " hasFlag2_is_" + has_flag2
+            if (articleData.isRead!=false | (typeof readArticles[articleData.itemId] !== 'undefined')) {
+                article_is_read = true
+            } else {
+                article_is_read = false
+            }
+            //console.log("read:"+readArticles[articleData.itemId])
 
-            //console.log(" hasUpvote_is_" + articleData.hasUpvote)
+            testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl + " up_vote_is_" + upvotes[articleData.link]  + " down_vote_is_" +  downvotes[articleData.link] + "flag1_is_" + has_flag1 + " flag2_is_" + has_flag2  + " read_is_" + article_is_read
+
+            //console.log(" up_vote_is_" + articleData.hasUpvote)
             if (and_this && testString.match(regex) && testString.match(and_this)) {
                 searchResults.push(articleData);
             } else if (!and_this && testString.match(regex)) {

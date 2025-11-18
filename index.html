@@ -17,11 +17,11 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="images/blue-icon-180x180.png">
 
-    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.1.0">
-	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.1.0">
-    <script src="js/spin/spin.min.js?v=v1.1.0"></script>
+    <link rel="stylesheet" type="text/css" href="style/main.css?v=v1.2.0">
+	<link rel="stylesheet" type="text/css" href="style/spin.css?v=v1.2.0">
+    <script src="js/spin/spin.min.js?v=v1.2.0"></script>
 
-    <script src="js/report.js?v=v1.1.0"></script>    
+    <script src="js/report.js?v=v1.2.0"></script>    
     <script src="js/feeds.js?trained_on=2024-08-13b"></script>
     <script src="js/puzzles.js?trained_on=2024-08-13b"></script>
 
@@ -217,13 +217,13 @@
             
             </div>
             <div class="row" style="margin-bottom: 10px;">
-                <h4>Flag with a Regular Expression <a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a><a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a></h4>
+                <h4>Flag with a Regular Expressions <a href='./?regex=flag1_is_true' style='text-decoration:none;'>🚩</a><a href='./?regex=has_flag2_is_true' style='text-decoration:none;'>🏁</a></h4>
                 <p>To draw attention to content using a regular expression without bumping or muting, add a RegEx below. If an article's (1) title; (2) description; (3) feed name; or (3) link matches this RegEx, a flag will be placed before its title.</p>
-                <p>You can click on the RegEx1 (<a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a>) or RegEx2 (<a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a>) flag to run a search for either collection.</p>
-                <p>RegEx to add <a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a> <br>
+                <p>You can click on the RegEx1 (<a href='./?regex=flag1_is_true' style='text-decoration:none;'>🚩</a>) or RegEx2 (<a href='./?regex=has_flag2_is_true' style='text-decoration:none;'>🏁</a>) flag to run a search for either collection.</p>
+                <p>RegEx to add <a href='./?regex=flag1_is_true' style='text-decoration:none;'>🚩</a> <br>
                 <input id="regex_flag" value="" oninput="localStorage.regex_flag=this.value" style="width: calc(100% - 65px);">
                 <input id="regex_flag_op" value="" oninput="localStorage.regex_flag_op=this.value" style="width:50px" value="i"></p>
-                <p>RegEx to add <a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a><br>
+                <p>RegEx to add <a href='./?regex=has_flag2_is_true' style='text-decoration:none;'>🏁</a><br>
                 <input id="regex_flag_2" value="" oninput="localStorage.regex_flag_2=this.value" style="width: calc(100% - 65px);">
                 <input id="regex_flag_2_op" value="" oninput="localStorage.regex_flag_2_op=this.value" style="width:50px" value="i"></p>
                 
@@ -381,7 +381,7 @@
                     <p>
                         Here are your <b><i>most-positive</i></b> words and their approximate TF-IDF, treating all up-voted cards as a single document: <span id="upwords">not enough data</span>
                     </p>
-                    <p><a href="./?regex=hasUpvote_is_true">See recent articles with up votes</a></p>
+                    <p>See recent: <a href="./?regex=up_vote_is_true">up votes</a> | <a href="./?regex=up_vote_is_true&regex2=read_is_false">unread up votes</a></p>
                     <button id="clear-upvotes" class="btn btn-danger btn-block">Clear Upvotes</button>
 
                 </div>
@@ -390,7 +390,7 @@
                     <p>
                         Here are your <b><i>most-negative</i></b> words and their approximate TF-IDF, treating all down-voted cards as a single document: <span id="downwords">not enough data</span>
                     </p>
-                    <p><a href="./?regex=hasDownvote_is_true">See recent articles with down votes</a></p>
+                    <p>See recent: <a href="./?regex=down_vote_is_true">down votes</a> | <a href="./?regex=down_vote_is_true&regex2=read_is_false">unread down votes</a></p>
                     <button id="clear-downvotes" class="btn btn-danger btn-block">Clear Downvotes</button>
                 </div>
             </div>
@@ -430,6 +430,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 
-<script src="js/functions.js?v=v1.1.0"></script>    
+<script src="js/functions.js?v=v1.2.0"></script>    
 
 </html>
