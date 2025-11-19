@@ -2655,9 +2655,9 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             //console.log("read:"+readArticles[articleData.itemId])
 
-            testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl + " up_vote_is_" + upvotes[articleData.link]  + " down_vote_is_" +  downvotes[articleData.link] + "flag1_is_" + has_flag1 + " flag2_is_" + has_flag2  + " read_is_" + article_is_read
+            testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl + " upvote_is_" + upvotes[articleData.link]  + " downvote_is_" +  downvotes[articleData.link] + "flag1_is_" + has_flag1 + " flag2_is_" + has_flag2  + " read_is_" + article_is_read
 
-            //console.log(" up_vote_is_" + articleData.hasUpvote)
+            //console.log(" upvote_is_" + articleData.hasUpvote)
             if (and_this && testString.match(regex) && testString.match(and_this)) {
                 searchResults.push(articleData);
             } else if (!and_this && testString.match(regex)) {
