@@ -1,4 +1,4 @@
-var version = "v1.2.0";
+var version = "v1.3.0";
 
 var msg_text = ``
 
@@ -2002,9 +2002,19 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
         if (!searching){
-            document.getElementById("mark-all").innerHTML = `<button id="mark-above-seen" class="btn btn-danger btn-block" style="margin: 15px 0 0;" onClick="document.getElementById('sum_msg').style.display = 'none';document.getElementById('news-feed').style.display = 'none';document.getElementById('spin_container').innerHTML = \`<div style='float:left;width:100%;height:115px;'><div id='spinner_here' style='margin:0 auto;width:65px;'>&nbsp;</div></div>\`;">Mark Above as Seen</button>`
-            const markAboveSeen = document.getElementById("mark-above-seen");
+            mark_read_html = `<button id="mark-above-seen" class="btn btn-danger btn-block" style="margin: 15px 0 0;" onClick="document.getElementById('sum_msg').style.display = 'none';document.getElementById('news-feed').style.display = 'none';document.getElementById('spin_container').innerHTML = \`<div style='float:left;width:100%;height:115px;'><div id='spinner_here' style='margin:0 auto;width:65px;'>&nbsp;</div></div>\`;">Mark Above as Seen</button>`
 
+            if (!voteViewModeState) {
+                mark_read_html += `<button id="mark-untouched-seen" class="btn btn-danger btn-block" style="margin: 15px 0 0;"`;
+            } else {
+                mark_read_html += `<button id="mark-untouched-seen" class="btn btn-danger btn-block" style="display:none;"`;
+            }
+            mark_read_html += ` onClick="document.getElementById('sum_msg').style.display = 'none';document.getElementById('news-feed').style.display = 'none';document.getElementById('spin_container').innerHTML = \`<div style='float:left;width:100%;height:115px;'><div id='spinner_here' style='margin:0 auto;width:65px;'>&nbsp;</div></div>\`;">Mark Untouched as Seen</button>`
+            
+            
+            document.getElementById("mark-all").innerHTML = mark_read_html
+            
+            const markAboveSeen = document.getElementById("mark-above-seen");
             markAboveSeen.addEventListener("click", function() {
 
                 document.getElementById("mark-all").innerHTML = "";
@@ -2017,6 +2027,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 setTimeout( function() {
                     const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
+                    i=1;
                     articleContainers.forEach(articleContainer => {
                         const itemId = articleContainer.getAttribute("data-item-id");
                         const articleIndex = parseInt(articleContainer.getAttribute("data-article-index"));
@@ -2034,11 +2045,75 @@ document.addEventListener("DOMContentLoaded", function() {
                             // Move the article container to the end of the list
                             moveCardToEnd(articleContainer);
         
-                            // Update the unread count
-                            updateItemCount();
-                            get_quote();
-                            dirty();
+                            if (i==articleContainers.length) {
+                                // Update the unread count
+                                updateItemCount();
+                                get_quote();
+                                dirty();
+                            }
                         }
+                        i+=1;
+                    });
+                }, 150); 
+
+            });
+
+            const markUntouchedSeen = document.getElementById("mark-untouched-seen");
+            markUntouchedSeen.addEventListener("click", function() {
+
+                document.getElementById("mark-all").innerHTML = "";
+                if (localStorage.getItem("darkMode")=="enabled") {
+                    tickcolor = '#ddd';		
+                } else {
+                    tickcolor = '#000';		
+                }
+                start_spinner('spinner_here',tickcolor);
+
+                setTimeout( function() {
+                    const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
+                    i=1;
+                    articleContainers.forEach(articleContainer => {
+                        const itemId = articleContainer.getAttribute("data-item-id");
+                        const articleIndex = parseInt(articleContainer.getAttribute("data-article-index"));
+                        //console.log(articleIndex)
+
+
+                        if ((typeof upvotes[itemId] !== 'undefined') | (typeof downvotes[itemId] !== 'undefined')) {
+                            untouched = false
+                        } else {
+                            untouched = true
+                        }
+
+                        console.log("untouched:"+i,articleContainers.length)
+
+                        if (!isNaN(articleIndex) && articles[articleIndex].isRead == false) {
+                            
+                            if (untouched) {
+                                readArticles[itemId] = new Date().toISOString();                    
+                                localStorage.setItem("read", JSON.stringify(readArticles));
+                                // Mark the article as read in the articles array
+                                articles[articleIndex].isRead = true;
+                            }        
+
+                            if (i==articleContainers.length) {
+                                // Update the Open button behavior
+                                updateOpenButton(articleContainer);
+            
+                                // Move the article container to the end of the list
+                                moveCardToEnd(articleContainer);
+            
+                                // Update the unread count
+                                updateItemCount();
+                                unreadCount = (countUnreadArticles() - document.querySelectorAll(".article-container[data-article-index='sponsor']").length).toLocaleString("en-US"); 
+                                if (unreadCount==0) {
+                                    get_quote();
+                                } else {
+                                    loadNews();
+                                }
+                                dirty();
+                            }
+                        }
+                        i+=1;
                     });
                 }, 150); 
 
@@ -2648,14 +2723,33 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
 
-            if (articleData.isRead!=false | (typeof readArticles[articleData.itemId] !== 'undefined')) {
+            if ((articleData.isRead!=false) | (typeof readArticles[articleData.itemId] !== 'undefined')) {
                 article_is_read = true
             } else {
                 article_is_read = false
             }
+
+            if (upvotes[articleData.link]) {
+                article_upvote = true
+            } else {
+                article_upvote = false
+            }
+
+            if (downvotes[articleData.link]) {
+                article_downvote = true
+            } else {
+                article_downvote = false
+            }
+
+            untouched = true
+            if (article_upvote | article_downvote | article_is_read) {
+                untouched = false
+            }
+
+
             //console.log("read:"+readArticles[articleData.itemId])
 
-            testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl + " upvote_is_" + upvotes[articleData.link]  + " downvote_is_" +  downvotes[articleData.link] + "flag1_is_" + has_flag1 + " flag2_is_" + has_flag2  + " read_is_" + article_is_read
+            testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl + " upvote_is_" + article_upvote  + " downvote_is_" +  article_downvote + "flag1_is_" + has_flag1 + " flag2_is_" + has_flag2  + " read_is_" + article_is_read + " untouched_is_" + untouched
 
             //console.log(" upvote_is_" + articleData.hasUpvote)
             if (and_this && testString.match(regex) && testString.match(and_this)) {
