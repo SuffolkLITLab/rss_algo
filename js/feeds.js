@@ -679,7 +679,7 @@ var feeds_long_list = [
 
     
     // Astronomy Picture of the Day
-    "https://apod.pixelweben.de/rss_en.xml",
+    "https://apod.com/feed.rss",
     
     
     // Space News

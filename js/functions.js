@@ -2741,7 +2741,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 article_downvote = false
             }
 
-            untouched = true
+            //untouched = true
             if (article_upvote | article_downvote | article_is_read) {
                 untouched = false
             }
@@ -4232,6 +4232,8 @@ function get_cached_logo(link,mediaThumbnail,source_feed="") {
         mediaThumbnail = "images/cached_logos/theconversation.png"
     } else if (source_feed.includes("hnrss.org")) {
          mediaThumbnail =  "images/cached_logos/hackernews.jpeg";
+    } else if (source_feed.includes("cloudcroftreader.com")) {
+         mediaThumbnail =  "images/cached_logos/cloudcroftreader.png";
     }
     return mediaThumbnail
 }
