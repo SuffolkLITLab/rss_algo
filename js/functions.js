@@ -1,6 +1,28 @@
 var version = "v1.4.1";
 
-var msg_text = ``
+var gist_file_name = "the_finite_scroll";
+if (window.location.host=="myrssalgo.org") {
+    
+    var msg_text = `We are forking <i>My RSS Algo</i> and moving our focus to <a href="https://thefinitescroll.org" target="_blank" style="color:rgb(75, 75, 255)">The Finite Scroll.org</a>—because it's a better name. There's no plan to sunset <i>My RSS Algo</i> at this time. Note: Your full-data exports from <i>My RSS Algo</i> can be uploaded at <i>The Finite Scroll</i> and we've reset the version numbers here to match <i>The Finite Scroll</i>'s.`
+    
+    document.title = "My RSS Algo";
+    const text_elements = document.getElementsByClassName("page_title");
+    for (let i = 0; i < text_elements.length; i++) {
+        // Set the innerHTML of each element
+        text_elements[i].innerHTML = "My RSS Algo";
+    }
+    const href_elements = document.getElementsByClassName("page_github");
+    for (let i = 0; i < href_elements.length; i++) {
+        // Set the innerHTML of each element
+        href_elements[i].href = "https://github.com/SuffolkLITLab/rss_algo";
+    }
+    document.getElementById("page_json").innerHTML = "my_rss_algo.json"
+    gist_file_name = "my_rss_algo.json";
+
+} else {
+    var msg_text = ``
+    gist_file_name = "the_finite_scroll.json";
+}
 
 document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
 
@@ -3723,7 +3745,7 @@ async function save_gists_data(silent=false) {
         const gist = gistClient({ token });
 
         if (!silent) {
-            gist_text = await gist.readFile(localStorage.getItem("gist_name"), "the_finite_scroll.json") || "0"
+            gist_text = await gist.readFile(localStorage.getItem("gist_name"), gist_file_name) || "0"
 
             gist_text = await decryptData(gist_text);
 
@@ -3732,10 +3754,10 @@ async function save_gists_data(silent=false) {
             console.log("Save Gist:",gist_json["lastChange"],"<",localStorage.getItem("lastChange"),gist_json["lastChange"]<localStorage.getItem("lastChange"))
 
             if (gist_json["lastChange"]<localStorage.getItem("lastChange")) {
-                written = await gist.writeFile(localStorage.getItem("gist_name"), "the_finite_scroll.json", await encryptData(JSON.stringify(localStorage,null,2)) );
+                written = await gist.writeFile(localStorage.getItem("gist_name"), gist_file_name, await encryptData(JSON.stringify(localStorage,null,2)) );
             }
         } else {
-                written = await gist.writeFile(localStorage.getItem("gist_name"), "the_finite_scroll.json", await encryptData(JSON.stringify(localStorage,null,2)) );
+                written = await gist.writeFile(localStorage.getItem("gist_name"), gist_file_name, await encryptData(JSON.stringify(localStorage,null,2)) );
 
         }
         notdirty();
@@ -3763,7 +3785,7 @@ async function load_gists_data() {
             const token = localStorage.getItem("gist_token"); // Must have "gist" permission
             const gist = gistClient({ token });
 
-            gist_text = await gist.readFile(localStorage.getItem("gist_name"), "the_finite_scroll.json");
+            gist_text = await gist.readFile(localStorage.getItem("gist_name"), gist_file_name);
 
             gist_text = await decryptData(gist_text);
 
@@ -3815,7 +3837,7 @@ async function push_gists_data() {
                 const token = localStorage.getItem("gist_token"); // Must have "gist" permission
                 const gist = gistClient({ token });
 
-                written = await gist.writeFile(localStorage.getItem("gist_name"), "the_finite_scroll.json", await encryptData(JSON.stringify(localStorage,null,2)) );
+                written = await gist.writeFile(localStorage.getItem("gist_name"), gist_file_name, await encryptData(JSON.stringify(localStorage,null,2)) );
                 alert("Local data has been copied to the cloud.")
 
             } catch (error) {
@@ -3837,7 +3859,7 @@ async function pull_gists_data() {
                 const token = localStorage.getItem("gist_token"); // Must have "gist" permission
                 const gist = gistClient({ token });
 
-                gist_text = await gist.readFile(localStorage.getItem("gist_name"), "the_finite_scroll.json");
+                gist_text = await gist.readFile(localStorage.getItem("gist_name"), gist_file_name);
 
                 gist_text = await decryptData(gist_text);
 
