@@ -1,4 +1,4 @@
-var version = "v1.3.0";
+var version = "v1.4.0";
 
 var msg_text = ``
 
@@ -3730,10 +3730,10 @@ async function save_gists_data(silent=false) {
             console.log("Save Gist:",gist_json["lastChange"],"<",localStorage.getItem("lastChange"),gist_json["lastChange"]<localStorage.getItem("lastChange"))
 
             if (gist_json["lastChange"]<localStorage.getItem("lastChange")) {
-                written = await gist.writeFile(localStorage.getItem("gist_name"), "the_finite_scroll.json", JSON.stringify(localStorage,null,2) );
+                written = await gist.writeFile(localStorage.getItem("gist_name"), "the_finite_scroll.json", await encryptData(JSON.stringify(localStorage,null,2)) );
             }
         } else {
-                written = await gist.writeFile(localStorage.getItem("gist_name"), "the_finite_scroll.json", JSON.stringify(localStorage,null,2) );
+                written = await gist.writeFile(localStorage.getItem("gist_name"), "the_finite_scroll.json", await encryptData(JSON.stringify(localStorage,null,2)) );
 
         }
         notdirty();
@@ -3762,6 +3762,8 @@ async function load_gists_data() {
             const gist = gistClient({ token });
 
             gist_text = await gist.readFile(localStorage.getItem("gist_name"), "the_finite_scroll.json");
+
+            gist_text = await decryptData(gist_text);
 
             gist_json = JSON.parse(gist_text)
 
@@ -3811,7 +3813,7 @@ async function push_gists_data() {
                 const token = localStorage.getItem("gist_token"); // Must have "gist" permission
                 const gist = gistClient({ token });
 
-                written = await gist.writeFile(localStorage.getItem("gist_name"), "the_finite_scroll.json", JSON.stringify(localStorage,null,2) );
+                written = await gist.writeFile(localStorage.getItem("gist_name"), "the_finite_scroll.json", await encryptData(JSON.stringify(localStorage,null,2)) );
                 alert("Local data has been copied to the cloud.")
 
             } catch (error) {
@@ -3834,6 +3836,8 @@ async function pull_gists_data() {
                 const gist = gistClient({ token });
 
                 gist_text = await gist.readFile(localStorage.getItem("gist_name"), "the_finite_scroll.json");
+
+                gist_text = await decryptData(gist_text);
 
                 var data_dump = {}
                 try {
@@ -3962,6 +3966,7 @@ return {
 
 const timer = startSpanCountdownAsync('#countdown', localStorage.getItem("lastLoad"), localStorage.getItem("lastcooldown"));
 
+password = localStorage.getItem("password") || "";
 function sync_and_refresh(){
 
     toggle_settings(clear=true);
@@ -3979,6 +3984,10 @@ function sync_and_refresh(){
     if (isDirty==true && document.getElementById('gist_name').value.length>0 && document.getElementById('gist_token').value.length>0) {
         document.getElementById('loading').innerHTML = '&nbsp;Syncing with cloud . . .&nbsp;';
         document.getElementById('loading').style.display = 'block';
+        if (password!="") {
+            password = prompt("Password for Cloud Sync?");
+            localStorage.setItem("password", password)
+        }
         save_gists_data();
     } else {
         notdirty();
