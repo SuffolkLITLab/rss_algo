@@ -3984,7 +3984,7 @@ function sync_and_refresh(){
     if (isDirty==true && document.getElementById('gist_name').value.length>0 && document.getElementById('gist_token').value.length>0) {
         document.getElementById('loading').innerHTML = '&nbsp;Syncing with cloud . . .&nbsp;';
         document.getElementById('loading').style.display = 'block';
-        if (password!="") {
+        if (password=="") {
             password = prompt("Password for Cloud Sync?");
             localStorage.setItem("password", password)
         }
