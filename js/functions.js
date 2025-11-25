@@ -2741,9 +2741,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 article_downvote = false
             }
 
-            //untouched = true
+            
             if (article_upvote | article_downvote | article_is_read) {
                 untouched = false
+            } else {
+                untouched = true
             }
 
 
