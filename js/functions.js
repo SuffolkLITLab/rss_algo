@@ -1,6 +1,28 @@
-var version = "v1.40.0";
+var version = "v1.4.1";
 
-var msg_text = `We are forking <i>My RSS Algo</i> and moving our focus to <a href="https://thefinitescroll.org" target="_blank" style="color:rgb(75, 75, 255)">The Finite Scroll.org</a>—because it's a better name. There's no plan to sunset <i>My RSS Algo</i> at this time, but we may not continue to release updates here. Note: Your full-data exports from <i>My RSS Algo</i> can be uploaded at <i>The Finite Scroll</i>.`
+var gist_file_name = "the_finite_scroll";
+if (window.location.host=="myrssalgo.org") {
+    
+    var msg_text = `We are forking <i>My RSS Algo</i> and moving our focus to <a href="https://thefinitescroll.org" target="_blank" style="color:rgb(75, 75, 255)">The Finite Scroll.org</a>—because it's a better name. There's no plan to sunset <i>My RSS Algo</i> at this time. Note: Your full-data exports from <i>My RSS Algo</i> can be uploaded at <i>The Finite Scroll</i> and we've reset the version numbers here to match <i>The Finite Scroll</i>'s.`
+    
+    document.title = "My RSS Algo";
+    const text_elements = document.getElementsByClassName("page_title");
+    for (let i = 0; i < text_elements.length; i++) {
+        // Set the innerHTML of each element
+        text_elements[i].innerHTML = "My RSS Algo";
+    }
+    const href_elements = document.getElementsByClassName("page_github");
+    for (let i = 0; i < href_elements.length; i++) {
+        // Set the innerHTML of each element
+        href_elements[i].href = "https://github.com/SuffolkLITLab/rss_algo";
+    }
+    document.getElementById("page_json").innerHTML = "my_rss_algo.json"
+    gist_file_name = "my_rss_algo.json";
+
+} else {
+    var msg_text = ``
+    gist_file_name = "the_finite_scroll.json";
+}
 
 document.getElementById('version').innerHTML = "<a href='https://www.geeksforgeeks.org/introduction-semantic-versioning/' target='_blank'>"+version+"</a>";
 
@@ -716,13 +738,13 @@ document.addEventListener("DOMContentLoaded", function() {
             if (((n_feeds>=rssFeeds.length) || ((n_feeds==0) && (crunch_numbers))) && regex_flag_2!="") {
                 regex = new RegExp(regex_flag_2, regex_flag_2_op); 
                 if (match_text.match(regex) && !articleContainer.querySelector(".card-title").innerText.includes("🏁")) {
-                    articleContainer.querySelector(".card-title").innerHTML = "<a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a> " + articleContainer.querySelector(".card-title").innerHTML
+                    articleContainer.querySelector(".card-title").innerHTML = "<a href='./?regex=flag2_is_true' style='text-decoration:none;'>🏁</a> " + articleContainer.querySelector(".card-title").innerHTML
                 }
             }
             if (((n_feeds>=rssFeeds.length) || ((n_feeds==0) && (crunch_numbers))) && regex_flag!="") {
                 regex = new RegExp(regex_flag, regex_flag_op); 
                 if (match_text.match(regex) && !articleContainer.querySelector(".card-title").innerText.includes("🚩")) {
-                    articleContainer.querySelector(".card-title").innerHTML = "<a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a> " + articleContainer.querySelector(".card-title").innerHTML
+                    articleContainer.querySelector(".card-title").innerHTML = "<a href='./?regex=has_flag1_is_true' style='text-decoration:none;'>🚩</a> " + articleContainer.querySelector(".card-title").innerHTML
                 }
             }
 
@@ -835,7 +857,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const simcutValueElement = document.getElementById("sim-cutoff-value");
     
     // Retrieve lookback value from localStorage (if available)
-    decluter_cut = localStorage.getItem("decluter_cut") || 1;
+    decluter_cut = localStorage.getItem("decluter_cut") || 0.6;
     if (decluter_cut) {
         simcutSlider.value = decluter_cut;
         simcutValueElement.textContent = decluter_cut;
@@ -1331,7 +1353,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                     
                                     if (Object.is(mediaThumbnail, null) || mediaThumbnail.includes("favicon")) {
 
-                                        mediaThumbnail =  get_cached_logo(link,mediaThumbnail)   
+                                        mediaThumbnail =  get_cached_logo(link,mediaThumbnail,feedUrl)   
 
                                         //} else if (link.includes("")) {
                                         //    mediaThumbnail = "images/cached_logos/"
@@ -1596,7 +1618,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <div class="card">
                             ${img_html}
                             <div class="card-body">
-                                    <h5 class="card-title">Support the People Who Built <i>My RSS Algo</i>!</h5>
+                                    <h5 class="card-title">Support the People Who Built <i>The Finite Scroll</i>!</h5>
                                     <p class="card-text">
                                         Your support empowers students and staff at Suffolk's Legal Innovation &amp; Technology Lab (LIT Lab) to create cutting-edge legal tech solutions that make a real impact in communities, while giving students hands-on experience at one of the nation's top clinical programs. Your gift fuels innovation, access to justice, and the future of legal services.
                                     </p>
@@ -2002,9 +2024,19 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
         if (!searching){
-            document.getElementById("mark-all").innerHTML = `<button id="mark-above-seen" class="btn btn-danger btn-block" style="margin: 15px 0 0;" onClick="document.getElementById('sum_msg').style.display = 'none';document.getElementById('news-feed').style.display = 'none';document.getElementById('spin_container').innerHTML = \`<div style='float:left;width:100%;height:115px;'><div id='spinner_here' style='margin:0 auto;width:65px;'>&nbsp;</div></div>\`;">Mark Above as Seen</button>`
-            const markAboveSeen = document.getElementById("mark-above-seen");
+            mark_read_html = `<button id="mark-above-seen" class="btn btn-danger btn-block" style="margin: 15px 0 0;" onClick="document.getElementById('sum_msg').style.display = 'none';document.getElementById('news-feed').style.display = 'none';document.getElementById('spin_container').innerHTML = \`<div style='float:left;width:100%;height:115px;'><div id='spinner_here' style='margin:0 auto;width:65px;'>&nbsp;</div></div>\`;">Mark Above as Seen</button>`
 
+            if (!voteViewModeState) {
+                mark_read_html += `<button id="mark-untouched-seen" class="btn btn-danger btn-block" style="margin: 15px 0 0;"`;
+            } else {
+                mark_read_html += `<button id="mark-untouched-seen" class="btn btn-danger btn-block" style="display:none;"`;
+            }
+            mark_read_html += ` onClick="document.getElementById('sum_msg').style.display = 'none';document.getElementById('news-feed').style.display = 'none';document.getElementById('spin_container').innerHTML = \`<div style='float:left;width:100%;height:115px;'><div id='spinner_here' style='margin:0 auto;width:65px;'>&nbsp;</div></div>\`;">Mark Untouched as Seen</button>`
+            
+            
+            document.getElementById("mark-all").innerHTML = mark_read_html
+            
+            const markAboveSeen = document.getElementById("mark-above-seen");
             markAboveSeen.addEventListener("click", function() {
 
                 document.getElementById("mark-all").innerHTML = "";
@@ -2017,6 +2049,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 setTimeout( function() {
                     const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
+                    i=1;
                     articleContainers.forEach(articleContainer => {
                         const itemId = articleContainer.getAttribute("data-item-id");
                         const articleIndex = parseInt(articleContainer.getAttribute("data-article-index"));
@@ -2034,11 +2067,75 @@ document.addEventListener("DOMContentLoaded", function() {
                             // Move the article container to the end of the list
                             moveCardToEnd(articleContainer);
         
-                            // Update the unread count
-                            updateItemCount();
-                            get_quote();
-                            dirty();
+                            if (i==articleContainers.length) {
+                                // Update the unread count
+                                updateItemCount();
+                                get_quote();
+                                dirty();
+                            }
                         }
+                        i+=1;
+                    });
+                }, 150); 
+
+            });
+
+            const markUntouchedSeen = document.getElementById("mark-untouched-seen");
+            markUntouchedSeen.addEventListener("click", function() {
+
+                document.getElementById("mark-all").innerHTML = "";
+                if (localStorage.getItem("darkMode")=="enabled") {
+                    tickcolor = '#ddd';		
+                } else {
+                    tickcolor = '#000';		
+                }
+                start_spinner('spinner_here',tickcolor);
+
+                setTimeout( function() {
+                    const articleContainers = newsFeedContainer.querySelectorAll(".article-container");
+                    i=1;
+                    articleContainers.forEach(articleContainer => {
+                        const itemId = articleContainer.getAttribute("data-item-id");
+                        const articleIndex = parseInt(articleContainer.getAttribute("data-article-index"));
+                        //console.log(articleIndex)
+
+
+                        if ((typeof upvotes[itemId] !== 'undefined') | (typeof downvotes[itemId] !== 'undefined')) {
+                            untouched = false
+                        } else {
+                            untouched = true
+                        }
+
+                        console.log("untouched:"+i,articleContainers.length)
+
+                        if (!isNaN(articleIndex) && articles[articleIndex].isRead == false) {
+                            
+                            if (untouched) {
+                                readArticles[itemId] = new Date().toISOString();                    
+                                localStorage.setItem("read", JSON.stringify(readArticles));
+                                // Mark the article as read in the articles array
+                                articles[articleIndex].isRead = true;
+                            }        
+
+                            if (i==articleContainers.length) {
+                                // Update the Open button behavior
+                                updateOpenButton(articleContainer);
+            
+                                // Move the article container to the end of the list
+                                moveCardToEnd(articleContainer);
+            
+                                // Update the unread count
+                                updateItemCount();
+                                unreadCount = (countUnreadArticles() - document.querySelectorAll(".article-container[data-article-index='sponsor']").length).toLocaleString("en-US"); 
+                                if (unreadCount==0) {
+                                    get_quote();
+                                } else {
+                                    loadNews();
+                                }
+                                dirty();
+                            }
+                        }
+                        i+=1;
                     });
                 }, 150); 
 
@@ -2193,7 +2290,7 @@ document.addEventListener("DOMContentLoaded", function() {
         score = up_score - down_score*savednegativity;
 
         if (match==1) {
-            score = score + 1;
+            score = score + 2;
         }
 
         //console.log(score)
@@ -2352,7 +2449,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             <p>Sometimes there are issues reaching a feed. If this error persists, you can remove this feed using the "Feeds" button.</p>
                         </div>
                         <div class="modal-footer">
-                            <button id="manage-feeds" class="btn btn-primary" style="width:100%" onClick="window.open('https://github.com/colarusso/rss_algo/tree/main#troubleshooting');">Troubleshoot this error</button>
+                            <button id="manage-feeds" class="btn btn-primary" style="width:100%" onClick="window.open('https://github.com/SuffolkLITLab/the_finite_scroll/blob/main/README.md#troubleshooting');">Troubleshoot this error</button>
                         </div>
                     </div>
                 </div>
@@ -2586,9 +2683,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const matching_regex = document.getElementById("matching_regex");
 
-    function regex_search(newSearch) {
+    function regex_search(newSearch,and_this=null) {
 
-        window.history.pushState({}, "", document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch));
+        if (and_this){
+            window.history.replaceState({}, "", document.location.href.split("?")[0]+"?regex="+ encodeURIComponent(newSearch)+"&regex2="+ encodeURIComponent(and_this));           
+        } else {
+            window.history.replaceState({}, "", document.location.href.split("?")[0]+"?regex="+ encodeURIComponent(newSearch));   
+        }
         
         document.getElementById('unread-count').style.display = "none";
         document.getElementById('read-count').style.display = "none";
@@ -2605,7 +2706,22 @@ document.addEventListener("DOMContentLoaded", function() {
         saved_articles =  JSON.parse(localStorage.getItem("articles")) || [];
 
         regex = new RegExp(newSearch, "i")
-        matching_regex.innerHTML = `<a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">Regular expression</a> matching results for <span class='code_highlight'>${newSearch}</span>&nbsp;(<a href="${document.location.href.split("?")[0]+"?regex="+encodeURI(newSearch)}" target="_blank">link to search</a>).`;
+
+        regex_html = `<a href="https://www.codingthelaw.org/Fall_2020/level/5/#intro_vid" target="_blank">Regular expression</a> matching results for <span class='code_highlight'>${newSearch}</span>&nbsp;`
+        
+        if (and_this){
+            regex_html += `and <span class='code_highlight'>${and_this}</span>&nbsp;`;
+        }
+
+        regex_html += `(<a href="${document.location.href.split("?")[0]+"?regex="+encodeURIComponent(newSearch)}`
+        
+        if (and_this){
+            regex_html += `&regex2=${encodeURIComponent(and_this)}`
+        }
+
+        regex_html += `" target="_blank">link to search</a>).`;
+
+        matching_regex.innerHTML = regex_html
 
         //console.log(regex)        
 
@@ -2617,22 +2733,52 @@ document.addEventListener("DOMContentLoaded", function() {
             if (regex_flag_2!="") {
                 flag_regex = new RegExp(regex_flag_2, regex_flag_2_op); 
                 if (match_text.match(flag_regex) && !articleData.title.includes("🏁")) {
-                    articleData.title = "<a href='./?regex=hasFlag2_is_true' style='text-decoration:none;'>🏁</a> " + articleData.title;
+                    articleData.title = "<a href='./?regex=flag2_is_true' style='text-decoration:none;'>🏁</a> " + articleData.title;
                     has_flag2 = true;
                 }
             }
             if (regex_flag!="") {
                 flag_regex = new RegExp(regex_flag, regex_flag_op); 
                 if (match_text.match(flag_regex) && !articleData.title.includes("🚩")) {
-                    articleData.title = "<a href='./?regex=hasFlag1_is_true' style='text-decoration:none;'>🚩</a> " + articleData.title;
+                    articleData.title = "<a href='./?regex=has_flag1_is_true' style='text-decoration:none;'>🚩</a> " + articleData.title;
                     has_flag1 = false;
                 }
             }
 
-            testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl + " hasUpvote_is_" + upvotes[articleData.link]  + " hasDownvote_is_" +  downvotes[articleData.link] + " hasFlag1_is_" + has_flag1 + " hasFlag2_is_" + has_flag2
+            if ((articleData.isRead!=false) | (typeof readArticles[articleData.itemId] !== 'undefined')) {
+                article_is_read = true
+            } else {
+                article_is_read = false
+            }
 
-            //console.log(" hasUpvote_is_" + articleData.hasUpvote)
-            if (testString.match(regex)) {
+            if (upvotes[articleData.link]) {
+                article_upvote = true
+            } else {
+                article_upvote = false
+            }
+
+            if (downvotes[articleData.link]) {
+                article_downvote = true
+            } else {
+                article_downvote = false
+            }
+
+            
+            if (article_upvote | article_downvote | article_is_read) {
+                untouched = false
+            } else {
+                untouched = true
+            }
+
+
+            //console.log("read:"+readArticles[articleData.itemId])
+
+            testString = articleData.title + " " + articleData.description + " " + articleData.link  + " " + articleData.feedTitle + " " + articleData.feedUrl + " upvote_is_" + article_upvote  + " downvote_is_" +  article_downvote + "flag1_is_" + has_flag1 + " flag2_is_" + has_flag2  + " read_is_" + article_is_read + " untouched_is_" + untouched
+
+            //console.log(" upvote_is_" + articleData.hasUpvote)
+            if (and_this && testString.match(regex) && testString.match(and_this)) {
+                searchResults.push(articleData);
+            } else if (!and_this && testString.match(regex)) {
                 //console.log(articleData)
                 searchResults.push(articleData);
             }
@@ -2675,14 +2821,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const runSearchAlways = document.getElementById("search_always");
     runSearchAlways.addEventListener("click", function() {
-        regex_search(regex_always);
+        regex_search(document.getElementById('regex_always').value);
     });
 
     const runSearchNever = document.getElementById("search_never");
     runSearchNever.addEventListener("click", function() {
-        regex_search(regex_never);
+        regex_search(document.getElementById('regex_never').value);
     });
 
+    const runSearchOverlap = document.getElementById("mute_bump_overlap");
+    runSearchOverlap.addEventListener("click", function() {
+        regex_search(document.getElementById('regex_always').value,document.getElementById('regex_never').value);
+    });
 
     async function openai_call(prompt_text) {
 
@@ -2825,7 +2975,7 @@ async function run_llm() {
                                 You can import and overwrite the current feed list by <a href="javascript:upload_file()">uploading an OPLM file</a>, or you can use any of the options below.
                             </p>
                             <p>
-                                Remove individual feeds using the "Remove" buttons below, OR wipe and/or replace your existing list of feeds. If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/rss_algo/tree/main#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>. Add feeds with the blue + button on the main page.
+                                Remove individual feeds using the "Remove" buttons below, OR wipe and/or replace your existing list of feeds. If you need help finding feeds, check out our <a href="https://github.com/SuffolkLITLab/the_finite_scroll/blob/main/README.md#notes-on-rss-feeds" target="_blank">notes on RSS feeds</a>. Add feeds with the blue + button on the main page.
                             </p> 
                             <p>
                                 Consider starting with a premade list. Then over time you can whittle it down and add new feeds as you like. <i>Note: If you "remove" a feed or selection of feeds, <b>old articles will remain on your timeline and in your history by default</b>. You must use <i>Settings</i> to clear your history or one of the "wipe" options to remove old saved feed data</b>.</i>
@@ -2860,7 +3010,7 @@ async function run_llm() {
                             <p>
                             <hr>
                             <p>
-                                <b>Current Feeds</b>: Your experience was built on top of <a href="?feeds=${localStorage.getItem("votelib")}">myrssalgo.org/?feeds=${localStorage.getItem("votelib")}</a>. Share that link to have folks start where you did.
+                                <b>Current Feeds</b>: Your experience was built on top of <a href="?feeds=${localStorage.getItem("votelib")}">thefinitescroll.org/?feeds=${localStorage.getItem("votelib")}</a>. Share that link to have folks start where you did.
                             </p>
                             <table cellpadding="5px" width="100%">${feedList}</table>
                         </div>
@@ -3091,8 +3241,7 @@ async function run_llm() {
 
         puzzle_html +=  `</p><iframe style="height: 90vh; width: 100%;" src="${puzzles[Object.keys(puzzles)[j]]}" frameborder="0" allowfullscreen="true" allowtransparency="true" allow="clipboard-write *"></iframe>`
 
-
-        window.history.pushState({}, "", document.location.href.split("?")[0]+"?crossword="+Object.keys(puzzles)[j]);
+        window.history.replaceState({}, "", document.location.href.split("?")[0]+"?crossword="+Object.keys(puzzles)[j]);
         
         return puzzle_html
     }
@@ -3121,17 +3270,22 @@ async function run_llm() {
         if (crossword == false){
             if (searchParams.has('regex')){
                 document.getElementById('loading').style.display = "none";
-                regex_search(decodeURI(searchParams.get('regex')))
+                if (searchParams.has('regex2')) {
+                    regex_search(searchParams.get('regex'),searchParams.get('regex2'))
+                } else {
+                    regex_search(searchParams.get('regex'))
+                }
                 document.getElementById('upwords').innerHTML = topWords(upTFIDF,downTFIDF);
                 document.getElementById('downwords').innerHTML = topWords(downTFIDF,upTFIDF);  
                 updateItemCount();
                 if (savedWeather){
                     getUserWeather();
                 } 
-            } else if (data_dump) {         
-                window.location.reload();  
+            } else if (data_dump) {      
+                //window.location.reload();  
+                window.location.replace(document.URL);
             } else {
-                window.history.pushState({}, '',  document.location.href.split('?')[0]);
+                window.history.replaceState({}, '',  document.location.href.split('?')[0]);
                 loadNews(true);
                 updateItemCount();
                 if (savedWeather){
@@ -3591,17 +3745,19 @@ async function save_gists_data(silent=false) {
         const gist = gistClient({ token });
 
         if (!silent) {
-            gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json") || "0"
+            gist_text = await gist.readFile(localStorage.getItem("gist_name"), gist_file_name) || "0"
+
+            gist_text = await decryptData(gist_text);
 
             gist_json = JSON.parse(gist_text)
 
             console.log("Save Gist:",gist_json["lastChange"],"<",localStorage.getItem("lastChange"),gist_json["lastChange"]<localStorage.getItem("lastChange"))
 
             if (gist_json["lastChange"]<localStorage.getItem("lastChange")) {
-                written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+                written = await gist.writeFile(localStorage.getItem("gist_name"), gist_file_name, await encryptData(JSON.stringify(localStorage,null,2)) );
             }
         } else {
-                written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+                written = await gist.writeFile(localStorage.getItem("gist_name"), gist_file_name, await encryptData(JSON.stringify(localStorage,null,2)) );
 
         }
         notdirty();
@@ -3617,7 +3773,8 @@ async function save_gists_data(silent=false) {
     }
 
     if (!silent) {
-        window.location.reload();
+        //window.location.reload();
+        window.location.replace(document.URL);
     }
 }
 
@@ -3628,7 +3785,9 @@ async function load_gists_data() {
             const token = localStorage.getItem("gist_token"); // Must have "gist" permission
             const gist = gistClient({ token });
 
-            gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json");
+            gist_text = await gist.readFile(localStorage.getItem("gist_name"), gist_file_name);
+
+            gist_text = await decryptData(gist_text);
 
             gist_json = JSON.parse(gist_text)
 
@@ -3678,7 +3837,7 @@ async function push_gists_data() {
                 const token = localStorage.getItem("gist_token"); // Must have "gist" permission
                 const gist = gistClient({ token });
 
-                written = await gist.writeFile(localStorage.getItem("gist_name"), "my_rss_algo.json", JSON.stringify(localStorage,null,2) );
+                written = await gist.writeFile(localStorage.getItem("gist_name"), gist_file_name, await encryptData(JSON.stringify(localStorage,null,2)) );
                 alert("Local data has been copied to the cloud.")
 
             } catch (error) {
@@ -3700,7 +3859,9 @@ async function pull_gists_data() {
                 const token = localStorage.getItem("gist_token"); // Must have "gist" permission
                 const gist = gistClient({ token });
 
-                gist_text = await gist.readFile(localStorage.getItem("gist_name"), "my_rss_algo.json");
+                gist_text = await gist.readFile(localStorage.getItem("gist_name"), gist_file_name);
+
+                gist_text = await decryptData(gist_text);
 
                 var data_dump = {}
                 try {
@@ -3829,6 +3990,7 @@ return {
 
 const timer = startSpanCountdownAsync('#countdown', localStorage.getItem("lastLoad"), localStorage.getItem("lastcooldown"));
 
+password = localStorage.getItem("password") || "";
 function sync_and_refresh(){
 
     toggle_settings(clear=true);
@@ -3837,6 +3999,7 @@ function sync_and_refresh(){
     document.getElementById('news-feed').style.display = 'none';
     document.getElementById('mark-all').style.display = 'none';
     document.getElementById('refresh-all').style.display = 'none';
+
     window.history.pushState({}, '',  document.location.href.split('?')[0]);
 
     document.getElementById("read-count").textContent = `Seen: ?`;
@@ -3845,12 +4008,18 @@ function sync_and_refresh(){
     if (isDirty==true && document.getElementById('gist_name').value.length>0 && document.getElementById('gist_token').value.length>0) {
         document.getElementById('loading').innerHTML = '&nbsp;Syncing with cloud . . .&nbsp;';
         document.getElementById('loading').style.display = 'block';
+        if (password=="") {
+            password = prompt("Password for Cloud Sync?");
+            localStorage.setItem("password", password)
+        }
         save_gists_data();
     } else {
         notdirty();
         document.getElementById('loading').innerHTML = '&nbsp;One moment . . .&nbsp;';
         document.getElementById('loading').style.display = 'block';
+        //window.location.href = "."
         window.location.reload();
+        //window.location.replace(document.URL);
     }
 }
 
@@ -3862,7 +4031,6 @@ function update_feed_errors() {
         })
     }
 }
-
 
 function remove_feed(feedTitle,feedUrl) {
     let text = "Choose OK to remove: "+feedTitle+"\n\n"+feedUrl+"\n\nChoose Cancel to keep things as they are. Note: If you remove this feed, old posts will remain visable in your timeline, but we will not fetch new ones.";
@@ -3922,7 +4090,7 @@ function flagLinksNotInText(html, plainText) {
           const regexValue = `\\b${escaped.replaceAll("\.","\.\?")}\\b`;
 
           // Resolve relative URLs against current location if available; otherwise fall back to a dummy base
-          const base = (typeof location !== 'undefined' && location.href) ? location.href : 'https://myrssalgo.org/';
+          const base = (typeof location !== 'undefined' && location.href) ? location.href : 'https://thefinitescroll.org/';
           const u = new URL(href, base);
 
           u.searchParams.set('regex', regexValue); // URLSearchParams will encode backslashes, spaces, etc.
@@ -4009,7 +4177,7 @@ function hide_msg() {
     localStorage.setItem("msgText", msg_text);        
 }
 
-function get_cached_logo(link,mediaThumbnail) {
+function get_cached_logo(link,mediaThumbnail,source_feed="") {
 
     if(link.includes("washingtonpost.com")){
         mediaThumbnail =  "images/cached_logos/wapo.webp";
@@ -4049,8 +4217,6 @@ function get_cached_logo(link,mediaThumbnail) {
         mediaThumbnail =  "images/cached_logos/escapepod.jpg";
     } else if (link.includes("rollingstone.com")) {
         mediaThumbnail =  "images/cached_logos/rollingstone.png";
-   // } else if (feedTitle.trim().startsWith("Hacker News")) {
-   //     mediaThumbnail =  "images/cached_logos/hackernews.jpeg";
     } else if (link.includes("ssrn.com")) {
         mediaThumbnail = "images/cached_logos/ssrn.png"
     } else if (link.includes("arstechnica.com")) {
@@ -4089,8 +4255,21 @@ function get_cached_logo(link,mediaThumbnail) {
         mediaThumbnail = "images/cached_logos/chronicle.png"
     } else if (link.includes("timharford.com")) {
         mediaThumbnail = "images/cached_logos/timharford.png"
+    } else if (link.includes("legaltechmonitor.com")) {
+        mediaThumbnail = "images/cached_logos/legal_tech_mon.png"
+    } else if (link.includes("theinformation.com")) {
+        mediaThumbnail = "images/cached_logos/theinformation.png"
+    } else if (link.includes("anildash.com")) {
+        mediaThumbnail = "images/cached_logos/anildash.png"
+    } else if (link.includes("heathercoxrichardson")) {
+        mediaThumbnail = "images/cached_logos/heathercoxrichardson.png"
+    } else if (link.includes("theconversation.com")) {
+        mediaThumbnail = "images/cached_logos/theconversation.png"
+    } else if (source_feed.includes("hnrss.org")) {
+         mediaThumbnail =  "images/cached_logos/hackernews.jpeg";
+    } else if (source_feed.includes("cloudcroftreader.com")) {
+         mediaThumbnail =  "images/cached_logos/cloudcroftreader.png";
     }
-
     return mediaThumbnail
 }
 
@@ -4188,6 +4367,13 @@ for (const m of mutations) {
 });
 domObserver.observe(document.documentElement, { childList: true, subtree: true });
 
+
+window.addEventListener('popstate', function(event) {
+  // This function runs when the back/forward button is clicked.
+  // The browser changes the URL back to the previous one before firing popstate.
+  // To force a full page reload for the URL now in the address bar, call reload().
+  window.location.reload();
+});
 
 //delete upTFIDF["the-new-yorker"];localStorage.setItem("upTFIDF", JSON.stringify(upTFIDF));
 
