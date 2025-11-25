@@ -1,4 +1,4 @@
-var version = "v1.4.0";
+var version = "v1.4.1";
 
 var msg_text = ``
 
@@ -3724,6 +3724,8 @@ async function save_gists_data(silent=false) {
 
         if (!silent) {
             gist_text = await gist.readFile(localStorage.getItem("gist_name"), "the_finite_scroll.json") || "0"
+
+            gist_text = await decryptData(gist_text);
 
             gist_json = JSON.parse(gist_text)
 
